@@ -39,16 +39,16 @@ namespace Bot_Application1.Cardatt_achment
         }
 
 
-        private List<CardAction> GetListCardAction(Dictionary<string, string> dataMap )
-        {
-            List<CardAction> listcars = new List<CardAction>();
-            foreach (var item in myDictionary)
-            {
-                CardAction ca = new CardAction(ActionTypes.PostBack,dataMap.G , value: "start");
+        //private List<CardAction> GetListCardAction(Dictionary<string, string> dataMap )
+        //{
+        //    List<CardAction> listcars = new List<CardAction>();
+        //    foreach (var item in myDictionary)
+        //    {
+        //        CardAction ca = new CardAction(ActionTypes.PostBack,dataMap.G , value: "start");
 
-            }
+        //    }
 
-        }
+        //}
         public Attachment GetCardAction(String[] titles )
         {
             List<CardAction> cardButtons = new List<CardAction>();
