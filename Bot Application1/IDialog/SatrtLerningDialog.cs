@@ -44,25 +44,30 @@ namespace Bot_Application1.IDialog
 
         public async Task SubCategory(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            var selectedMainHS = await result;
             
-             if(selectedMainHS.Text == "hsA")
-             {
+
+            var message = await result;
+            if (message.Text == "hsA")
+            {
                 await context.PostAsync("יפה מאוד!");
                 await context.PostAsync("בחר עכשיו תת נושא");
-                var attachment = ManagerCard.GetCardSubCategoryAction();
 
-                context.Wait(this.SubSubCategory);
+                message = context.MakeMessage();
+                var attachment = ManagerCard.GetCardSubCategoryAction();
+                message.Attachments.Add(attachment);
+                await context.PostAsync(message);
+                context.Wait(this.SubCategory);
             }
 
-            
-          
+
+
         }
 
         public async Task SubSubCategory(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
             await context.PostAsync("יפה מאוד!");
             await context.PostAsync("בוא נתחיל עם השאלות");
+           
         }
 
     }
