@@ -12,7 +12,7 @@ using Bot_Application1.dataBase;
 namespace Bot_Application1.IDialog
 {
     [Serializable]
-    public class MainDialog : IDialog<object>
+    public class MainDialog: IDialog<object>
     {
         private const string Continue = "להמשיך מהמקום האחרון שבו למדנו (1  ";
         private const string New = "לבחור חומר לימוד אחר";
@@ -23,9 +23,9 @@ namespace Bot_Application1.IDialog
 
         public async Task StartAsync(IDialogContext context)
         {
-            
+
             context.Wait(this.MessageReceivedAsync);
-           
+
         }
 
         public async virtual Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
@@ -37,16 +37,29 @@ namespace Bot_Application1.IDialog
              var message = await result;
             String userId = message.From.Id;
             bool user = DataBaseControler.isUserExist(userId);
+            String userName = DataBaseControler.getUserName(userId);
+            message = context.MakeMessage();
 
-            if(user)
+            if (user)
             {
 
-                      
-                      ManagerCard MC = new ManagerCard();
-                      var attachment = MC.GetMainMenuChoice("","","","",buttonMessage);
-                      message.Attachments.Add(attachment);
-                      await context.PostAsync(message);
-                      context.Wait(this.MessageReceivedAsync);
+                Dictionary<String, String> data = new Dictionary<string, string>();
+                await context.PostAsync("הי "+ userName + "שמח שחזרת");
+              // await context.PostAsync("בבקשה תבחר תחום לימוד כדי שנוכל להתחיל");
+
+                // var attachment = ManagerCard.getFacebookButtons();
+                //var attachment = ManagerCard.GetMainMenuChoice("כותרת","כותרת משנה","הודעה","url",data);
+
+
+                //  var attachment = ManagerCard.GetCardAction();
+                // message.Attachments.Add(attachment);
+
+
+                //   await context.PostAsync(message);
+
+                //   context.Wait(this.SubCategory);
+
+                context.Forward<object, IMessageActivity >(new SatrtLerningDialog(), aaa,message,System.Threading.CancellationToken.None);
 
 
             }
@@ -69,46 +82,50 @@ namespace Bot_Application1.IDialog
 
         }
 
-
-        public async  Task newUser(IDialogContext context, IAwaitable<IMessageActivity> result)
+        public async Task aaa(IDialogContext context, IAwaitable<object> result)
         {
-            String[] buttonMessage = new string[20];
+            await context.PostAsync("סוף");
+        }
 
+        public async Task SubCategory(IDialogContext context, IAwaitable<IMessageActivity> result)
+        {
+            var selectedMainHS = await result;
+           // if(selectedMainHS == "hsA")
+           // {
 
-             var message = await result;
-             await context.PostAsync("You said: " + message.Text);
-             context.Wait(MessageReceivedAsync);
+//            }
 
-            
-
-            //var message = context.MakeMessage();
-            //ManagerCard MC = new ManagerCard();
-            //var attachment = MC.GetMainMenuChoice("","","","",buttonMessage);
-            //message.Attachments.Add(attachment);
-            //await context.PostAsync(message);
-            //context.Wait(this.MessageReceivedAsync);
+            await context.PostAsync("יפה מאוד!");
+            await context.PostAsync("בחר עכשיו תת נושא");
 
         }
 
 
-        public async Task userExist(IDialogContext context, IAwaitable<String> result)
+
+        private static Attachment GetHeroCard()
         {
-            String[] buttonMessage = new string[20];
+            var heroCard = new HeroCard
+            {
+                Title = "BotFramework Hero Card",
+                Subtitle = "Your bots — wherever your users are talking",
+                Text = "Build and connect intelligent bots to interact with your users naturally wherever they are, from text/sms to Skype, Slack, Office 365 mail and other popular services.",
+                Images = new List<CardImage> { new CardImage("https://sec.ch9.ms/ch9/7ff5/e07cfef0-aa3b-40bb-9baa-7c9ef8ff7ff5/buildreactionbotframework_960.jpg") },
+                Buttons = new List<CardAction> { new CardAction(ActionTypes.OpenUrl, "Get Started", value: "https://docs.botframework.com/en-us/") }
+            };
 
-            //var message = await result;
-            //await context.PostAsync("ברוך הבא חיים טןב לראותך שוב!");
-            //context.Wait(this.MessageReceivedAsync);
-
-
-
-            var message = context.MakeMessage();
-            ManagerCard mc = new ManagerCard();
-            var attachment = mc.GetMainMenuChoice("", "", "", "", buttonMessage);
-            message.Attachments.Add(attachment);
-            await context.PostAsync(message);
-            context.Wait(this.MessageReceivedAsync);
-
+            return heroCard.ToAttachment();
         }
+
+
+       
+
+
+
+
+
+
+
+
 
 
 

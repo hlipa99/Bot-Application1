@@ -17,6 +17,13 @@ namespace Bot_Application1
         /// POST: api/Messages
         /// Receive a message from a user and reply to it
         /// </summary>
+        /// 
+        public async Task<HttpResponseMessage> Get([FromBody]Activity activity)
+        {
+            await Conversation.SendAsync(activity, () => new MainDialog());
+            var response = Request.CreateResponse(HttpStatusCode.OK);
+            return response;
+        }
         public async Task<HttpResponseMessage> Post([FromBody]Activity activity)
         {
             

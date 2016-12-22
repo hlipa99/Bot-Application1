@@ -16,6 +16,12 @@ namespace Bot_Application1.dataBase
         public static void addNewUser(int userId)
         {
 
+
+        }
+
+        public static String getUserName(String userId)
+        {
+            return "חיים";
         }
 
 

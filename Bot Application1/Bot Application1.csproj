@@ -178,6 +178,7 @@
     <Content Include="default.htm" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="images\MainBot.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
@@ -206,6 +207,7 @@
     </Compile>
     <Compile Include="IDialog\MainDialog.cs" />
     <Compile Include="IDialog\QuestionDialog.cs" />
+    <Compile Include="IDialog\SatrtLerningDialog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
