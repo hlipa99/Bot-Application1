@@ -172,14 +172,13 @@ namespace NLPtest
 
         public static string[] letsLearn()
         {
-<<<<<<< HEAD
+
             return new string[]
 {
                              "אז קדימה, בוא נתחיל ללמוד",
 };
-=======
-            throw new NotImplementedException();
->>>>>>> 7af2de2... NLP project Added
+
+
         }
 
         public static string[] howAreYou(User user)

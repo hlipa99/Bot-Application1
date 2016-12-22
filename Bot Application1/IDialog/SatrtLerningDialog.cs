@@ -10,7 +10,7 @@ using Microsoft.Bot.Connector;
 namespace Bot_Application1.IDialog
 {
     [Serializable]
-    public class SatrtLerningDialog: IDialog<object>
+    public class StartLerningDialog: IDialog<object>
     {
 
         public async Task StartAsync(IDialogContext context)
