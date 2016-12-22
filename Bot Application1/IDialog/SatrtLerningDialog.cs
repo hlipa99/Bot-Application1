@@ -37,7 +37,7 @@ namespace Bot_Application1.IDialog
             await context.PostAsync(message);
             context.Wait(this.SubCategory);
                          
-                 
+                   
 
         }
 

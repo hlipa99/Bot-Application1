@@ -51,15 +51,15 @@ namespace Bot_Application1.IDialog
                 //var attachment = ManagerCard.GetMainMenuChoice("כותרת","כותרת משנה","הודעה","url",data);
 
 
-                //  var attachment = ManagerCard.GetCardAction();
-                // message.Attachments.Add(attachment);
+                  var attachment = ManagerCard.GetCardAction();
+                 message.Attachments.Add(attachment);
 
 
-                //   await context.PostAsync(message);
+                   await context.PostAsync(message);
 
-                //   context.Wait(this.SubCategory);
+                   context.Wait(this.SubCategory);
 
-                context.Forward<object, IMessageActivity >(new SatrtLerningDialog(), aaa,message,System.Threading.CancellationToken.None);
+            //    context.Forward<object, IMessageActivity >(new SatrtLerningDialog(), aaa,message,System.Threading.CancellationToken.None);
 
 
             }
@@ -90,10 +90,10 @@ namespace Bot_Application1.IDialog
         public async Task SubCategory(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
             var selectedMainHS = await result;
-           // if(selectedMainHS == "hsA")
-           // {
+            if(selectedMainHS.Text == "hsA")
+            {
 
-//            }
+            }
 
             await context.PostAsync("יפה מאוד!");
             await context.PostAsync("בחר עכשיו תת נושא");
