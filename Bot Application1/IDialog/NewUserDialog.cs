@@ -13,7 +13,7 @@ using NLPtest;
 namespace Bot_Application1.IDialog
 {
     [Serializable]
-    public class NewUserDialog : IDialog<User>
+    public class NewUserDialog : IDialog<object>
     {
         User user;
         public async Task StartAsync(IDialogContext context)
@@ -129,7 +129,7 @@ namespace Bot_Application1.IDialog
         public async virtual Task NewUserGetClass(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
      
-            context.UserData.TryGetValue<string>("class", out user.userClass);
+            context.UserData.TryGetValue<User>("user", out user);
  
 
             if (user.userClass == "" || user.userClass == null)
@@ -176,7 +176,7 @@ namespace Bot_Application1.IDialog
             //user class
 
             await writeMessageToUser(context, BotControler.LetsStart());
-
+           
         }
 
 

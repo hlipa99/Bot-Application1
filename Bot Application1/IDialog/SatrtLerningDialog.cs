@@ -6,72 +6,126 @@ using System.Web;
 using System.Threading.Tasks;
 using Bot_Application1.Cardatt_achment;
 using Microsoft.Bot.Connector;
+using NLPtest;
+using Bot_Application1.Models;
 
 namespace Bot_Application1.IDialog
 {
     [Serializable]
     public class StartLerningDialog: IDialog<object>
     {
-
+        StudySession studySession;
+        User user;
+        EducationController eduC = new EducationController();
         public async Task StartAsync(IDialogContext context)
         {
-            context.Wait(this.MessageReceivedAsync);
-        }
-
-
-
-
-        public async virtual Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
-        {
-            String[] buttonMessage = new string[20];
-             var message = await result;
-            message = context.MakeMessage();
-           Dictionary<String, String> data = new Dictionary<string, string>();
-           await context.PostAsync("בבקשה תבחר תחום לימוד כדי שנוכל להתחיל");
-
-                // var attachment = ManagerCard.getFacebookButtons();
-                //var attachment = ManagerCard.GetMainMenuChoice("כותרת","כותרת משנה","הודעה","url",data);
-
-            var attachment = ManagerCard.GetCardAction();
-            message.Attachments.Add(attachment);
-            await context.PostAsync(message);
-            context.Wait(this.SubCategory);
-                         
-                   
-
-        }
-
-
-        public async Task SubCategory(IDialogContext context, IAwaitable<IMessageActivity> result)
-        {
-            
-
-            var message = await result;
-            if (message.Text == "hsA")
+            context.UserData.TryGetValue<User>("user", out user);
+            if(user == null)
             {
-                await context.PostAsync("יפה מאוד!");
-                await context.PostAsync("בחר עכשיו תת נושא");
-
-                message = context.MakeMessage();
-                var attachment = ManagerCard.GetCardSubCategoryAction();
-                message.Attachments.Add(attachment);
-                await context.PostAsync(message);
-                context.Wait(this.SubCategory);
+                throw new unknownUserException();
             }
 
 
+                    var menu = new PromptDialog.PromptChoice<string>(
+                    eduC.getStudyUnits(),
+                    BotControler.chooseStudyUnits(user),
+                    BotControler.wrongOption()[0],
+                    3);
+            context.UserData.SetValue<StudySession>("studySession",new StudySession());
+            context.Call(menu, chooseCategory);
+
 
         }
 
-        public async Task SubSubCategory(IDialogContext context, IAwaitable<IMessageActivity> result)
+        public async virtual Task chooseCategory(IDialogContext context, IAwaitable<string> result)
         {
-            await context.PostAsync("יפה מאוד!");
-            await context.PostAsync("בוא נתחיל עם השאלות");
-           
+            var message = await result;
+
+            context.UserData.TryGetValue<StudySession>("studySession",out studySession);
+            studySession.StudyUnit = message;
+
+            context.UserData.SetValue<StudySession>("studySession", new StudySession());
+
+            var menu = new PromptDialog.PromptChoice<string>(
+                 eduC.getStudyCategory(message),
+                 BotControler.chooseStudyUnits(user),
+                 BotControler.wrongOption()[0],
+                 3);
+
+            context.Call(menu, StartLearning);
         }
+
+
+
+        public async virtual Task StartLearning(IDialogContext context, IAwaitable<string> result)
+        {
+            var message = await result;
+            
+            context.UserData.TryGetValue<StudySession>("studySession", out studySession);
+            studySession.StudySubject = message;
+            context.UserData.SetValue<StudySession>("studySession", studySession);
+            await writeMessageToUser(context, BotControler.areUReaddyToLearn(user, message));
+            context.Wait(askQuestion);
+        }
+
+
+
+
+        public async Task askQuestion(IDialogContext context, IAwaitable<IMessageActivity> result)
+        {
+            var message = await result;
+
+            context.UserData.TryGetValue<StudySession>("studySession", out studySession);
+            if (BotControler.isStopSession(message.Text))
+            {
+                await writeMessageToUser(context, BotControler.stopLearningSession(user));
+                return;
+            }
+
+            context.UserData.TryGetValue<StudySession>("studySession", out studySession);
+            await writeMessageToUser(context, BotControler.beforAskQuestion(user,studySession.QuestionAsked.Count + 1));
+
+            //var question = EducationController.getQuestion(studySession.StudySubject);
+
+            await writeMessageToUser(context, new string[] { " שאלה כלשהי בנושא " + studySession.StudySubject });
+            studySession.currentQuestion = " שאלה כלשהי בנושא " + studySession.StudySubject;
+            studySession.QuestionAsked.Add(studySession.currentQuestion + studySession.QuestionAsked.Count);
+            context.UserData.SetValue<StudySession>("studySession", studySession);
+            context.Wait(answerQuestion);
+        }
+
+
+        public async Task answerQuestion(IDialogContext context, IAwaitable<IMessageActivity> result)
+        {
+            var message = await result;
+            context.UserData.TryGetValue<StudySession>("studySession", out studySession);
+            if (BotControler.isStopSession(message.Text))
+            {
+                await writeMessageToUser(context, BotControler.stopLearningSession(user));
+                return;
+            }
+
+            await writeMessageToUser(context, BotControler.MyAnswerToQuestion());
+            //var question = EducationController.getQuestion(studySession.StudySubject);
+            await writeMessageToUser(context, new string[] { "תשובה לשאלה:" + studySession.currentQuestion });
+
+            context.Wait(askQuestion);
+        }
+
+
+
+
+        private static async Task writeMessageToUser(IDialogContext context, string[] newMessage)
+        {
+            foreach (var m in newMessage)
+            {
+                await context.PostAsync(m);
+            }
+        }
+
 
     }
 
 
-  
+
 }

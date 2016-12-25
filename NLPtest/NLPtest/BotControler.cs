@@ -34,6 +34,23 @@ namespace NLPtest
 
         }
 
+        public static string[] NotImplamented(User user)
+        {
+            return new string[]
+{
+                             "אני מצטער  :(" + user.getUserName() + " אבל התכונה הזאת עדיין בפיתוח",
+                             "אני עוד בוט קטן, אולי כשאני אגדל אני אבין"
+};
+        }
+
+        public static string chooseStudyUnits(User user)
+        {
+
+            return "יאללה לבחור יחידת לימוד";
+
+          
+        }
+
         public static string[] areYouSure()
         {
             return new string[]
@@ -63,6 +80,47 @@ namespace NLPtest
 
             return outMessage;
 
+        }
+
+        public static T FindMatchFromOptions<T>(string str, IEnumerable<T> options)
+        {
+            var res = "";
+           foreach(var o in options as IEnumerable<string>)
+            {
+
+                if (str.Contains(o)) res =  o;
+                if (o.Contains(str)) res =  o;
+            }
+
+
+           //bypass to keep the type T
+            foreach (var o in options)
+            {
+               if (o.Equals(res)) return o;
+            }
+
+            return default(T);
+        }
+
+        public static string[] areUReaddyToLearn(User user, string subject)
+        {
+            return new string[]
+                {
+                    "אוקיי, מתחילים. מוכן ללמוד קצת " +subject + "?"
+                };
+        }
+
+        public static string[] beforAskQuestion(User user, int questionAsked)
+        {
+            return new string[]
+                 {
+                    "אוקיי, שאלה מס " +questionAsked + "'"
+                 };
+        }
+
+        public static string chooseSubjectForLearn(User user)
+        {
+            return "אוקיי, מה תרצה ללמוד?";
         }
 
         public static string[] Happy()
@@ -109,6 +167,67 @@ namespace NLPtest
 
         }
 
+        public static bool isStopSession(string answer)
+        {
+            var stop =  new string[]
+         {
+                "מספיק",
+                "די",
+                "נמאס",
+                "אין לי כח",
+                "לא בא לי",
+                "נמשיך מחר",
+                "תשתוק"
+         };
+
+            foreach(var s in stop)
+            {
+                if (answer.Contains(s))
+                {
+                    return true;
+                }
+            }
+
+
+            return false;
+        }
+
+        public static string[] stopLearningSession(User user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static string[] MyAnswerToQuestion()
+        {
+            return new string[]
+           {
+                "תשובה יפה",
+                " התשובה שלי לשאולה היא"
+           };
+        }
+
+        public static string[] wrongOption()
+        {
+            return new string[]
+           {
+                "יפה, התשובה שלי לשאולה היא" +":"
+           };
+        }
+
+        public static string[] MainMenuOptions()
+        {
+            return new string[]
+            {
+                "בוא נלמד",
+                "עריכת פרופיל",
+                "כלום. אין לי כח ללמוד",
+            };
+        }
+
+        public static string MainMenuText(User user)
+        {
+           return "טוב, " + user.userName + " אז מה עושים היום? ";
+        }
 
         public static string getGeneralFeeling(string text)   //TODO: real feeling
         {
@@ -131,7 +250,7 @@ namespace NLPtest
         {
                         return new string[]
                {
-                                      "היי " + user + " בחיי שהתגעגעתי ",
+                                      "היי " + user.userName + " בחיי שהתגעגעתי ",
                };
         }
 
@@ -141,7 +260,7 @@ namespace NLPtest
         {
             return new string[]
      {
-                             "בוט ללימוד היסטוריה,H שלום, אני מר",
+                            " שלום, אני" + " Mr.H " + " בוט ללימוד היסטוריה",
      };
         }
 
@@ -246,7 +365,7 @@ namespace NLPtest
                 return new string[]
       {
               
-                        ":P תתפלאי, אבל כבר הקרתי בנים עם השם הזה"
+                        ":P תתפלאי, אבל כבר הכרתי בנים עם השם הזה"
             };
                
             }else
