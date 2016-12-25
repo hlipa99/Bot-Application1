@@ -1,6 +1,4 @@
-﻿using HebMorph;
-using HebMorph.DataStructures;
-using HebMorph.HSpell;
+﻿
 using hebrewNER;
 using NLPtest.view;
 using System;
