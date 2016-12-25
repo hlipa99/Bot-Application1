@@ -67,6 +67,27 @@ namespace Bot_Application1.Cardatt_achment
 
         }
 
+        public static Attachment GetCardAction(string title,string[] options)
+        {
+            List<CardAction> cardButtons = new List<CardAction>();
+            int idx = 0;
+            foreach(var o in options)
+            {
+                CardAction plButton = new CardAction()
+                {
+                    Value = idx.ToString(),
+                    Type = "imBack",
+                    Title = o
+                };
+                cardButtons.Add(plButton);
+            }
+          
+    
+            SigninCard plCard = new SigninCard(title, cardButtons);
+            Attachment plAttachment = plCard.ToAttachment();
+            return plAttachment;
+        }
+
 
         public static Attachment GetCardSubCategoryAction()
         {

@@ -10,7 +10,6 @@ using Bot_Application1.Cardatt_achment;
 using Bot_Application1.dataBase;
 using System.Threading;
 using NLPtest;
-using Bot_Application1.IDialog;
 
 namespace Bot_Application1.IDialog
 {
@@ -34,60 +33,21 @@ namespace Bot_Application1.IDialog
 
 
             var message = await result;
-            
-          //  BotData userData = await botState.GetUserDataAsync(activity.ChannelId, activity.From.Id);
-
-
-
             String userId = message.From.Id;
-            //bool user = DataBaseControler.isUserExist(userId);
-         //   String userName = DataBaseControler.getUserName(userId);
-       //     message = context.MakeMessage();
+            String userName = DataBaseControler.getUserName(userId);
+            //     message = context.MakeMessage();
 
+            context.UserData.TryGetValue<User>("user", out user);
 
-                Dictionary<String, String> data = new Dictionary<string, string>();
-       //         await context.PostAsync("הי "+ userName + "שמח שחזרת");
-                // await context.PostAsync("בבקשה תבחר תחום לימוד כדי שנוכל להתחיל");
-
-                context.UserData.TryGetValue<User>("user", out user);
-
-            //bool user = DataBaseControler.isUserExist(userId);
-
-            //  var attachment = ManagerCard.GetCardAction();
-            //     message.Attachments.Add(attachment);
             if (user != null)
             {
 
-                //   context.Wait(this.MessageReceivedAsync);
                 await Greeting(context, result);
-                await MainMenu(context, result);
             }
             else
             {
-                await context.Forward<object, IMessageActivity>(new NewUserDialog(),
-                MainMenu,
-                message,
-                System.Threading.CancellationToken.None);
+                context.Call(new NewUserDialog(), MainMenu);
             }
-                //   await context.PostAsync(message);
-
-            // message = context.MakeMessage();
-            //ManagerCard MC = new ManagerCard();
-            //var attachment = MC.GetMainMenuChoice("", "", "", "", buttonMessage);
-            //message.Attachments.Add(attachment);
-            //await context.PostAsync(message);
-            //context.Wait(this.MessageReceivedAsync);
-                //   context.Wait(this.SubCategory);
-
-               // await Conversation.SendAsync((Activity)context, () => new SatrtLerningDialog());
-                
-               //context.Forward(new SatrtLerningDialog(), aaa,message, CancellationToken.None);
-                // context.Forward<object, IMessageActivity >(new SatrtLerningDialog(), aaa,message,System.Threading.CancellationToken.None);
-
-            //var message = await result;
-            //await context.PostAsync("You said: " + message.Text);
-            //context.Wait(MessageReceivedAsync);
-
         }
 
         private async Task Greeting(IDialogContext context, IAwaitable<object> result)
@@ -100,51 +60,109 @@ namespace Bot_Application1.IDialog
 
         private async Task HowAreYouRes(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-
-            // var text = await result;
+            var text = await result;
+            await writeMessageToUser(context, BotControler.OK(user));
+            await MainMenu(context, result);
         }
-
-        public async Task aaa(IDialogContext context, IAwaitable<object> result)
-        {
-            await context.PostAsync("סוף");
-        }
-
-        public async Task SubCategory(IDialogContext context, IAwaitable<IMessageActivity> result)
-        {
-            var selectedMainHS = await result;
-            if(selectedMainHS.Text == "hsA")
-            {
-
-            }
-
-            await context.PostAsync("יפה מאוד!");
-            await context.PostAsync("בחר עכשיו תת נושא");
-
-        }
-
-
 
 
         private async Task MainMenu(IDialogContext context, IAwaitable<object> result)
         {
-            await writeMessageToUser(context, new string[] { "תפריט: בחר מה תרצה לעשות" });
-            await writeMessageToUser(context, new string[] { "ללמוד" });
-            context.Wait(MainMenuChooseOption);
+
+            //  var message = await result;
+            context.UserData.TryGetValue<User>("user", out user);
+            if (user != null)
+            {
+                var menu = new MenuOptionDialog<string>(
+                    BotControler.MainMenuOptions(),
+                    BotControler.MainMenuText(user),
+                    BotControler.wrongOption()[0],
+                    3,new IDialog<object>[] {
+                    new StartLerningDialog(),
+                    new NotImplamentedDialog(),
+                    new NotImplamentedDialog(),
+                    new NotImplamentedDialog()},
+                    MainMenu
+                     );
+
+                context.Call(menu, MainMenu);
+
+            }
+            else
+            {
+                context.Call(new NewUserDialog(), MainMenu);
+            }
+
+            
+            //await context.Forward<object,MenuObject>(new MenuOptionDialog(), MainMenuChooseOption,
+            //    new MenuObject(), CancellationToken.None);
+            //await OptionsMenu(context,result, BotControler.MainMenuText(user), BotControler.MainMenuOptions());
+            //context.Wait(MainMenuChooseOption);
+
         }
 
-        private async Task MainMenuChooseOption(IDialogContext context, IAwaitable<IMessageActivity> result)
+        private async Task MainMenuChooseOption(IDialogContext context, IAwaitable<object> result)
         {
             var message = await result;
-            await writeMessageToUser(context, BotControler.letsLearn());
-         //   await context.Forward<object, IMessageActivity>(new StartLerningDialog(),
-           //    MainMenu,
+            var text = result as IMessageActivity;
+            var choosen = BotControler.MainMenuText(user);
+            switch (BotControler.MainMenuOptions().ToList().IndexOf(text.Text))
+            {
+                case 1:
+                    //StartAsync learning session
+                    context.Call(new StartLerningDialog(), MainMenu);
+                    break;
+                case 2:
+                    //Edit User Data
+                    context.Call(new NotImplamentedDialog(), MainMenu);
+                    break;
+                default:
+                    context.Call(new NotImplamentedDialog(), MainMenu);
+                    break;
+            }
+
+
+
+            //await writeMessageToUser(context, BotControler.letsLearn());
+            //await context.Forward<object, IMessageActivity>(new StartLerningDialog(),
+            //   MainMenu,
             //   message,
             //   System.Threading.CancellationToken.None);
-
-            context.Call(new StartLerningDialog(), MainMenu);
         }
 
 
+
+        private async Task OptionsMenu(IDialogContext context, IAwaitable<object> result,string headline,string[] options)
+        {
+
+            //  var message = await result;
+            var message = context.MakeMessage();
+            var attachment = ManagerCard.GetCardAction(headline, options);
+            message.Attachments.Add(attachment);
+            await context.PostAsync(message);
+            context.ConversationData.SetValue<string[]>("optionsMenu", options);
+            context.Wait(OptionsMenuChoose);
+        }
+
+        private async Task OptionsMenuChoose(IDialogContext context, IAwaitable<IMessageActivity> result)
+        {
+            var message = await result;
+            var text = message.Text;
+            string[] options;
+            context.ConversationData.TryGetValue<string[]>("optionsMenu", out options);
+            if(options != null)
+            {
+               
+                int num = -1;
+                int.TryParse(text, out num);
+                if(num >= 0 && num < options.Length)
+                {
+                    context.Done<string>(options[num]);
+                }
+             
+            }
+            context.Done<string>(text);
+        }
 
 
 
