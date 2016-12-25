@@ -10,6 +10,7 @@ using Bot_Application1.Cardatt_achment;
 using Bot_Application1.dataBase;
 using System.Threading;
 using NLPtest;
+using Bot_Application1.IDialog;
 
 namespace Bot_Application1.IDialog
 {
@@ -33,27 +34,33 @@ namespace Bot_Application1.IDialog
 
 
             var message = await result;
+            
+          //  BotData userData = await botState.GetUserDataAsync(activity.ChannelId, activity.From.Id);
+
+
+
             String userId = message.From.Id;
-            bool user = DataBaseControler.isUserExist(userId);
-            String userName = DataBaseControler.getUserName(userId);
+            //bool user = DataBaseControler.isUserExist(userId);
+         //   String userName = DataBaseControler.getUserName(userId);
        //     message = context.MakeMessage();
 
 
                 Dictionary<String, String> data = new Dictionary<string, string>();
-                await context.PostAsync("הי "+ userName + "שמח שחזרת");
+       //         await context.PostAsync("הי "+ userName + "שמח שחזרת");
                 // await context.PostAsync("בבקשה תבחר תחום לימוד כדי שנוכל להתחיל");
 
-            context.UserData.TryGetValue<User>("user", out user);
+                context.UserData.TryGetValue<User>("user", out user);
 
             //bool user = DataBaseControler.isUserExist(userId);
 
-                //  var attachment = ManagerCard.GetCardAction();
-                //     message.Attachments.Add(attachment);
+            //  var attachment = ManagerCard.GetCardAction();
+            //     message.Attachments.Add(attachment);
             if (user != null)
             {
 
-                context.Wait(this.MessageReceivedAsync);
+                //   context.Wait(this.MessageReceivedAsync);
                 await Greeting(context, result);
+                await MainMenu(context, result);
             }
             else
             {
@@ -61,7 +68,7 @@ namespace Bot_Application1.IDialog
                 MainMenu,
                 message,
                 System.Threading.CancellationToken.None);
-
+            }
                 //   await context.PostAsync(message);
 
             // message = context.MakeMessage();
@@ -73,7 +80,7 @@ namespace Bot_Application1.IDialog
                 //   context.Wait(this.SubCategory);
 
                // await Conversation.SendAsync((Activity)context, () => new SatrtLerningDialog());
-                 context.Call(new SatrtLerningDialog(),aaa);
+                
                //context.Forward(new SatrtLerningDialog(), aaa,message, CancellationToken.None);
                 // context.Forward<object, IMessageActivity >(new SatrtLerningDialog(), aaa,message,System.Threading.CancellationToken.None);
 
@@ -94,8 +101,8 @@ namespace Bot_Application1.IDialog
         private async Task HowAreYouRes(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
 
-            var text = await result;
-
+            // var text = await result;
+        }
 
         public async Task aaa(IDialogContext context, IAwaitable<object> result)
         {
@@ -129,12 +136,12 @@ namespace Bot_Application1.IDialog
         {
             var message = await result;
             await writeMessageToUser(context, BotControler.letsLearn());
-            await context.Forward<object, IMessageActivity>(new StartLerningDialog(),
-               MainMenu,
-               message,
-               System.Threading.CancellationToken.None);
+         //   await context.Forward<object, IMessageActivity>(new StartLerningDialog(),
+           //    MainMenu,
+            //   message,
+            //   System.Threading.CancellationToken.None);
 
-
+            context.Call(new StartLerningDialog(), MainMenu);
         }
 
 

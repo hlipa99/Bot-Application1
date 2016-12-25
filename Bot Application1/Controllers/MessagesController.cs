@@ -6,7 +6,7 @@ using System.Web.Http;
 using Microsoft.Bot.Connector;
 using Microsoft.Bot.Builder.Dialogs;
 using Bot_Application1.IDialog;
-
+using Bot_Application1.dataBase;
 
 namespace Bot_Application1
 {
@@ -29,8 +29,25 @@ namespace Bot_Application1
             
             if (activity.Type == ActivityTypes.Message)
             {
-                
-                await Conversation.SendAsync(activity, () => new MainDialog());
+
+
+                Models.BotDataEntities1 DB = new Models.BotDataEntities1();
+                Models.UserLog NewUserLog = new Models.UserLog();
+
+                NewUserLog.Channel = activity.ChannelId;
+                NewUserLog.UserID = activity.From.Id;
+                NewUserLog.UserName = activity.From.Name;
+                NewUserLog.created = DateTime.UtcNow;
+                NewUserLog.Message = activity.Text.Truncate(500);
+
+                DB.UserLogs.Add(NewUserLog);
+                DB.SaveChanges();
+
+                DataBaseControler DC = new DataBaseControler();
+                // DC.isUserExist(activity.From.Id);
+                DC.getUser(activity.From.Id);
+
+               await Conversation.SendAsync(activity, () => new MainDialog());
                 //ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
                 //// calculate something for us to return
                 //int length = (activity.Text ?? string.Empty).Length;

@@ -1,19 +1,19 @@
-﻿using HebMorph;
+﻿
 using static NLPtest.Word.WordType;
-using HebMorph.HSpell;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using HebMorph.DataStructures;
+
 using NLPtest.WorldObj;
 using vohmm.application;
 using hebrewNER;
 using yg.sentence;
 using yg.chunker;
-using java.io;
+
 using static vohmm.corpus.Sentence;
 using vohmm.corpus;
 using System.Text.RegularExpressions;
@@ -24,19 +24,13 @@ namespace NLPtest
     {
 
 
-
-
-
-
-
-
         SimpleTagger3 tagger;
 
         string hspellPath = "";
-        StreamLemmatizer m_lemmatizer = null;
+      //  StreamLemmatizer m_lemmatizer = null;
 
 
-        private DictRadix<MorphData> radix;
+     //   private DictRadix<MorphData> radix;
         NERTagger nerTagger;
         MeniTaggeedSentenceFactory sentenceFactory;
         TaggerBasedHebrewChunker chunker;
