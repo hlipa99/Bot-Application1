@@ -97,6 +97,7 @@ namespace Bot_Application1.IDialog
 
         public async Task answerQuestion(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
+
             var message = await result;
             context.UserData.TryGetValue<StudySession>("studySession", out studySession);
             if (BotControler.isStopSession(message.Text))

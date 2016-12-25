@@ -32,7 +32,7 @@ namespace NLPtest
 
         SimpleTagger3 tagger;
 
-        string hspellPath = "";
+      //  string hspellPath = "";
         StreamLemmatizer m_lemmatizer = null;
 
 

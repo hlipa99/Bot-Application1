@@ -29,8 +29,15 @@ namespace Bot_Application1
             
             if (activity.Type == ActivityTypes.Message)
             {
+
+
+                //create typing replay
+                var connector = new ConnectorClient(new Uri(activity.ServiceUrl));
+                var typingReplay = activity.CreateReply();
+                typingReplay.Type = ActivityTypes.Typing;
+                await connector.Conversations.ReplyToActivityAsync(typingReplay);
                 
-                await Conversation.SendAsync(activity, () => new MainDialog());
+               await Conversation.SendAsync(activity, () => new MainDialog());
                 //ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
                 //// calculate something for us to return
                 //int length = (activity.Text ?? string.Empty).Length;

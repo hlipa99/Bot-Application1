@@ -32,7 +32,6 @@ namespace Bot_Application1.IDialog
         protected async override Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> message)
         {
 
-
         //    var message = await result;
 
          T result;

@@ -107,6 +107,7 @@
     <Compile Include="Context1.cs" />
     <Compile Include="MessageComposer.cs" />
     <Compile Include="MessageObject.cs" />
+    <Compile Include="QAEngin.cs" />
     <Compile Include="User.cs" />
     <Compile Include="WorldObj\ConjunctionObject.cs" />
     <Compile Include="HebWords\gufObject.cs" />
