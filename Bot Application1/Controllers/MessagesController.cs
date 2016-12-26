@@ -45,8 +45,7 @@ namespace Bot_Application1
 
                 DataBaseControler DC = new DataBaseControler();
                 // DC.isUserExist(activity.From.Id);
-                //DC.getUser(activity.From.Id);
-                DC.getQuestion("לאומיות", "התפתחות התנועות הלאומיות באירופה");
+                DC.getUser(activity.From.Id);
 
                await Conversation.SendAsync(activity, () => new MainDialog());
                 //ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));

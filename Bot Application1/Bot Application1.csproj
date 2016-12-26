@@ -243,6 +243,7 @@
     <Compile Include="IDialog\MainDialog.cs" />
     <Compile Include="IDialog\NewUserDialog.cs" />
     <Compile Include="IDialog\QuestionDialog.cs" />
+    <Compile Include="IDialog\SatrtLerningDialog.cs" />
     <Compile Include="Models\BotData.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -291,6 +292,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Message\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NLPtest\NLPtest\NLPtest.csproj">
+      <Project>{F1B355E1-3B6E-423D-8225-DC400CFF395D}</Project>
+      <Name>NLPtest</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
