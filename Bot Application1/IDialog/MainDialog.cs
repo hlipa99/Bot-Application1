@@ -34,7 +34,7 @@ namespace Bot_Application1.IDialog
 
             var message = await result;
             String userId = message.From.Id;
-            String userName = DataBaseControler.getUserName(userId);
+   //        String userName = DataBaseControler.getUserName(userId);
             //     message = context.MakeMessage();
 
             context.UserData.TryGetValue<User>("user", out user);
@@ -73,6 +73,7 @@ namespace Bot_Application1.IDialog
             context.UserData.TryGetValue<User>("user", out user);
             if (user != null)
             {
+                /*
                 var menu = new MenuOptionDialog<string>(
                     BotControler.MainMenuOptions(),
                     BotControler.MainMenuText(user),
@@ -86,7 +87,7 @@ namespace Bot_Application1.IDialog
                      );
 
                 context.Call(menu, MainMenu);
-
+                */
             }
             else
             {
@@ -110,14 +111,14 @@ namespace Bot_Application1.IDialog
             {
                 case 1:
                     //StartAsync learning session
-                    context.Call(new StartLerningDialog(), MainMenu);
+                //    context.Call(new StartLerningDialog(), MainMenu);
                     break;
                 case 2:
                     //Edit User Data
-                    context.Call(new NotImplamentedDialog(), MainMenu);
+              //      context.Call(new NotImplamentedDialog(), MainMenu);
                     break;
                 default:
-                    context.Call(new NotImplamentedDialog(), MainMenu);
+               //     context.Call(new NotImplamentedDialog(), MainMenu);
                     break;
             }
 
