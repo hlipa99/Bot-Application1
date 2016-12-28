@@ -36,27 +36,11 @@ namespace NLPtest
         TaggerBasedHebrewChunker chunker;
         public MorfAnalizer()
         {
-            //    hspellPath = Directory.GetCurrentDirectory() + "..\\..\\..\\hspell-data-files";
-            //   radix = Loader.LoadDictionaryFromHSpellFolder(hspellPath, true);
-            //if (m_lemmatizer == null || !m_lemmatizer.IsInitialized || !(m_lemmatizer is StreamLemmatizer))
-            //{
 
-            //    if (hspellPath == null) throw new Exception("hspellPath");
-
-
-            //    radix.AllowValueOverride = true;
-            //    var md = new MorphData();
-            //    md.Lemmas = new string[] { "היי" };
-            //    md.Prefixes = 0;
-            //    md.DescFlags = new DMask[] { DMask.D_CUSTOM };
-            //    radix.AddNode("היי", md);
-
-            //    m_lemmatizer = new HebMorph.StreamLemmatizer(radix, false);
-            //}
 
             var path = "C:/Program Files (x86)/IIS Express/botServer/hebdata/";
-            tagger = new SimpleTagger3(path);
-            nerTagger = new NERTagger(path, tagger);
+           // tagger = new SimpleTagger3(path);
+           // nerTagger = new NERTagger(path, tagger);
             // create the noun-phrase chunker
             sentenceFactory = new MeniTaggeedSentenceFactory(null, MeniTokenExpander.expander);
             String chunkModelPrefix = path + vohmm.util.Dir.CHUNK_MODEL_PREF;
@@ -92,7 +76,7 @@ namespace NLPtest
                     nerTagger.addNerLabels(sentence);
 
                     //Noun-phrase chunking for the given tagged sentence (will be available soon in Java)
-              //      chunker.addBIOLabels(sentence);
+                    chunker.addBIOLabels(sentence);
 
                     // print tagged sentence by using AnalysisInterface, as follows:
                     foreach (TokenExt tokenExt in sentence.getTokens().toArray())

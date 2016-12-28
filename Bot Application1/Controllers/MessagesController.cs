@@ -7,6 +7,9 @@ using Microsoft.Bot.Connector;
 using Microsoft.Bot.Builder.Dialogs;
 using Bot_Application1.IDialog;
 using Bot_Application1.dataBase;
+using System.Diagnostics;
+using System.Drawing;
+using Bot_Application1.log;
 
 namespace Bot_Application1
 {
@@ -45,9 +48,16 @@ namespace Bot_Application1
 
                 DataBaseControler DC = new DataBaseControler();
                 // DC.isUserExist(activity.From.Id);
-                DC.getUser(activity.From.Id);
+                //DC.getUser(activity.From.Id);
+                // DC.getQuestion("התנועה", "התנועה הציונית");
+                //DC.getAllCategory("התנועה הציונית");
+                //DC.getAllSubCategory("התנועה הציונית");
 
-               await Conversation.SendAsync(activity, () => new MainDialog());
+
+                
+                
+
+                await Conversation.SendAsync(activity, () => new MainDialog());
                 //ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
                 //// calculate something for us to return
                 //int length = (activity.Text ?? string.Empty).Length;
