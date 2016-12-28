@@ -35,7 +35,7 @@ namespace Bot_Application1.IDialog
 
             var message = await result;
             String userId = message.From.Id;
-
+            String userName = "";//DataBaseControler.getUserName(userId);
             //     message = context.MakeMessage();
 
             context.UserData.TryGetValue<User>("user", out user);

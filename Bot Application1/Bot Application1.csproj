@@ -239,6 +239,7 @@
     <Compile Include="Controllers\UserControler.cs" />
     <Compile Include="dataBase\DataBaseControler.cs" />
     <Compile Include="dataBase\Utility.cs" />
+    <Compile Include="Exceptions\unknownUserException.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -249,6 +250,7 @@
     <Compile Include="IDialog\NotImplamentedDialog.cs" />
     <Compile Include="IDialog\QuestionDialog.cs" />
     <Compile Include="IDialog\SatrtLerningDialog.cs" />
+    <Compile Include="log\Logger.cs" />
     <Compile Include="Models\BotData.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -292,9 +294,11 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </None>
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>

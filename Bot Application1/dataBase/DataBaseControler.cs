@@ -1,16 +1,15 @@
-﻿using System;
+﻿using Bot_Application1.log;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Web;
-using Bot_Application1.Models;
 
 namespace Bot_Application1.dataBase
 {
-
-    [Serializable]
     public class DataBaseControler
     {
-      
+
         public bool isUserExist(string userId)
         {
             bool exist = false;
@@ -21,8 +20,8 @@ namespace Bot_Application1.dataBase
            }
             catch(Exception e)
             {
-                //add loger
-                
+                Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
+
             }
 
             return exist;
@@ -30,20 +29,7 @@ namespace Bot_Application1.dataBase
            
         }
 
-        internal void addNewUser(UserLog user)
-        {
-            try
-            {
-                Models.BotDataEntities1 DB = new Models.BotDataEntities1();
-                DB.UserLogs.Add(user);
-                DB.SaveChanges();
-            }
-            catch (Exception e)
-            {
-                //add loger
-            }
-
-        }
+        
 
         public  void addNewUser(string channelId,string id,string name,string text)
         {
@@ -53,24 +39,26 @@ namespace Bot_Application1.dataBase
                 Models.UserLog NewUserLog = new Models.UserLog();
 
 
-                //NewUserLog.Channel = channelId;
-                //NewUserLog.UserID = id;
-                //NewUserLog.UserName = name;
-                //NewUserLog.created = DateTime.UtcNow;
-                //NewUserLog.Message = text.Truncate(500);
+                NewUserLog.Channel = channelId;
+                NewUserLog.UserID = id;
+                NewUserLog.UserName = name;
+                NewUserLog.created = DateTime.UtcNow;
+                NewUserLog.Message = text.Truncate(500);
 
                 DB.UserLogs.Add(NewUserLog);
                 DB.SaveChanges();
 
             }catch(Exception e)
             {
-                //add loger
+                Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name,e.ToString());
             }
 
 
 
         }
 
+
+              
         public Models.UserLog getUser(string userId)
         {
             Models.UserLog NewUserLog = new Models.UserLog();
@@ -80,27 +68,54 @@ namespace Bot_Application1.dataBase
             {
                 Models.BotDataEntities1 DB = new Models.BotDataEntities1();
                 NewUserLog = new Models.UserLog();
+                
 
                 visitors = (from t in DB.UserLogs
                             where t.UserID == userId
                             select t).ToList();
-
-                
-
-                
-
-            }
+       }
             catch (Exception e)
             {
-                //add loger
+                Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
 
             }
 
            
-
             return visitors[0] ;
 
         }
+
+
+
+        public void deleteUser(string userId)
+        {
+            Models.UserLog NewUserLog = new Models.UserLog();
+            List<Models.UserLog> visitors = new List<Models.UserLog>();
+
+            try
+            {
+                Models.BotDataEntities1 DB = new Models.BotDataEntities1();
+                NewUserLog = new Models.UserLog();
+
+                var itemToRemove = DB.UserLogs.SingleOrDefault(x => x.UserID == userId);
+
+                if (itemToRemove != null)
+                {
+                    DB.UserLogs.Remove(itemToRemove);
+                    DB.SaveChanges();
+                }
+
+            }
+            catch (Exception e)
+            {
+                Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
+
+            }
+
+                       
+
+        }
+
 
 
         public List<Models.Question> getQuestion(string catgoty, string subCategory)
@@ -114,19 +129,62 @@ namespace Bot_Application1.dataBase
                  visitors = (from t in DB.Questions
                             where t.Category == catgoty && t.SubCategory == subCategory
                             select t).ToList();
+                                                
+            }
+            catch (Exception e)
+            {
+                Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
+
+            }
 
 
 
+            return visitors;
 
+        }
+
+
+        public List<string> getAllCategory(string catgoty)
+        {
+            Models.Question question = new Models.Question();
+            List<String> visitors = new List<string>();
+
+            try
+            {
+                Models.BotDataEntities1 DB = new Models.BotDataEntities1();
+                visitors = (from t in DB.Questions
+                                    select t.Category).ToList();
 
             }
             catch (Exception e)
             {
-                //add loger
+                Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
 
             }
+            
+            return visitors;
+
+        }
 
 
+        public List<string> getAllSubCategory(string catgoty)
+        {
+            Models.Question question = new Models.Question();
+            List<String> visitors = new List<string>();
+
+            try
+            {
+                Models.BotDataEntities1 DB = new Models.BotDataEntities1();
+                visitors = (from t in DB.Questions
+                            where t.Category == catgoty 
+                            select t.SubCategory).ToList();
+
+            }
+            catch (Exception e)
+            {
+                Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
+
+            }
 
             return visitors;
 
