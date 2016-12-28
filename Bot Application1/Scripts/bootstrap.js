@@ -1001,7 +1001,7 @@ if (!jQuery) { throw new Error("Bootstrap requires jQuery") }
 
       this.$element.on('click.dismiss.modal', $.proxy(function (e) {
         if (e.target !== e.currentTarget) return
-        this.options.backdrop == 'static'
+        this.options.backdrop == ''
           ? this.$element[0].focus.call(this.$element[0])
           : this.hide.call(this)
       }, this))

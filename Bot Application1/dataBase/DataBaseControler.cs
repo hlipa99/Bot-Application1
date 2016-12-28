@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Bot_Application1.Models;
 
 namespace Bot_Application1.dataBase
 {
+
+    [Serializable]
     public class DataBaseControler
     {
-
+      
         public bool isUserExist(string userId)
         {
             bool exist = false;
@@ -27,6 +30,21 @@ namespace Bot_Application1.dataBase
            
         }
 
+        internal void addNewUser(UserLog user)
+        {
+            try
+            {
+                Models.BotDataEntities1 DB = new Models.BotDataEntities1();
+                DB.UserLogs.Add(user);
+                DB.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                //add loger
+            }
+
+        }
+
         public  void addNewUser(string channelId,string id,string name,string text)
         {
             try
@@ -35,11 +53,11 @@ namespace Bot_Application1.dataBase
                 Models.UserLog NewUserLog = new Models.UserLog();
 
 
-                NewUserLog.Channel = channelId;
-                NewUserLog.UserID = id;
-                NewUserLog.UserName = name;
-                NewUserLog.created = DateTime.UtcNow;
-                NewUserLog.Message = text.Truncate(500);
+                //NewUserLog.Channel = channelId;
+                //NewUserLog.UserID = id;
+                //NewUserLog.UserName = name;
+                //NewUserLog.created = DateTime.UtcNow;
+                //NewUserLog.Message = text.Truncate(500);
 
                 DB.UserLogs.Add(NewUserLog);
                 DB.SaveChanges();

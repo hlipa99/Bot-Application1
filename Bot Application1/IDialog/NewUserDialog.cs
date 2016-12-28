@@ -13,10 +13,10 @@ using NLPtest;
 namespace Bot_Application1.IDialog
 {
     [Serializable]
-    public class NewUserDialog : IDialog<object>
+    public class NewUserDialog : AbsDialog
     {
-        User user;
-        public async Task StartAsync(IDialogContext context)
+     
+        public override async Task StartAsync(IDialogContext context)
         {
 
             context.UserData.TryGetValue<User>("user", out user);
@@ -35,7 +35,7 @@ namespace Bot_Application1.IDialog
             
             var message = await result;
 
-            var newMessage = BotControler.selfIntroduction();
+            var newMessage = conv.selfIntroduction();
             await writeMessageToUser(context, newMessage);
             await NewUserGetName(context, result);
             //user Name
@@ -48,13 +48,13 @@ namespace Bot_Application1.IDialog
             context.UserData.TryGetValue<User>("user", out user);
             if (user.userName == "" || user.userName == null)
             {
-                await writeMessageToUser(context, BotControler.NewUserGetName());
+                await writeMessageToUser(context, conv.NewUserGetName());
                 context.Wait(CheckName);
 
             }
             else
             {
-                await writeMessageToUser(context, BotControler.NewUserGreeting(user.userName));
+                await writeMessageToUser(context, conv.NewUserGreeting(user.userName));
                 await NewUserGetGender(context, result);
             }
         }
@@ -66,9 +66,9 @@ namespace Bot_Application1.IDialog
             var userText = await result;
 
       
-            if ((user.userName = BotControler.getName(userText.Text)) != null)
+            if ((user.userName = conv.getName(userText.Text)) != null)
             {
-                var newMessage = BotControler.NewUserGreeting(user.userName);
+                var newMessage = conv.NewUserGreeting(user.userName);
 
                 context.UserData.SetValue<User>("user", user);
 
@@ -78,7 +78,7 @@ namespace Bot_Application1.IDialog
             }
             else
             {
-                var newMessage = BotControler.MissingUserInfo("name");
+                var newMessage = conv.MissingUserInfo("name");
                 await writeMessageToUser(context, newMessage);
                 context.Wait(CheckName);
             }
@@ -93,7 +93,7 @@ namespace Bot_Application1.IDialog
             //user Gender
             if (user.gender == "" || user.gender == null)
             {
-                await writeMessageToUser(context, BotControler.NewUserGetGender());
+                await writeMessageToUser(context, conv.NewUserGetGender());
                 context.Wait(CheckGender);
 
             }else
@@ -108,11 +108,11 @@ namespace Bot_Application1.IDialog
             var userText = await result;
 
          
-            if ((user.gender = BotControler.getGender(userText.Text)) != null)
+            if ((user.gender = conv.getGender(userText.Text)) != null)
             {
                 context.UserData.SetValue<User>("user", user);
 
-                await writeMessageToUser(context, BotControler.GenderAck(user.gender));
+                await writeMessageToUser(context, conv.GenderAck(user.gender));
         
              
                 await NewUserGetClass(context, result);
@@ -120,7 +120,7 @@ namespace Bot_Application1.IDialog
             }
             else
             {
-                var newMessage = BotControler.MissingUserInfo("gender");
+                var newMessage = conv.MissingUserInfo("gender");
                 await writeMessageToUser(context, newMessage);
                 context.Wait(CheckGender);
             }
@@ -134,7 +134,7 @@ namespace Bot_Application1.IDialog
 
             if (user.userClass == "" || user.userClass == null)
             {
-                await writeMessageToUser(context, BotControler.NewUserGetClass(user));
+                await writeMessageToUser(context, conv.NewUserGetClass(user));
                 context.Wait(CheckClass);
 
             }else
@@ -151,11 +151,11 @@ namespace Bot_Application1.IDialog
             //user class
             var userText = await result;
 
-            if ((user.userClass = BotControler.getClass(userText.Text)) != null)
+            if ((user.userClass = conv.getClass(userText.Text)) != null)
             {
                 context.UserData.SetValue<User>("user", user);
 
-                await writeMessageToUser(context, BotControler.GeneralAck(user.userClass));
+                await writeMessageToUser(context, conv.GeneralAck(user.userClass));
 
 
                 await LetsStart(context, result);
@@ -164,7 +164,7 @@ namespace Bot_Application1.IDialog
             else
             {
 
-                await writeMessageToUser(context, BotControler.MissingUserInfo("class"));
+                await writeMessageToUser(context, conv.MissingUserInfo("class"));
                 context.Wait(CheckClass);
             }
 
@@ -175,19 +175,12 @@ namespace Bot_Application1.IDialog
         {
             //user class
 
-            await writeMessageToUser(context, BotControler.LetsStart());
-           
+            await writeMessageToUser(context, conv.LetsStart());
+            context.Done("");
         }
 
 
 
-        private static async Task writeMessageToUser(IDialogContext context, string[] newMessage)
-        {
-            foreach (var m in newMessage)
-            {
-                await context.PostAsync(m);
-            }
-        }
 
 
         

@@ -14,30 +14,22 @@ using NLPtest;
 namespace Bot_Application1.IDialog
 {
     [Serializable]
-    public class NotImplamentedDialog : IDialog<object>
+    public class NotImplamentedDialog : AbsDialog
     {
 
-        User user;
-
-        public async Task StartAsync(IDialogContext context)
+      
+        public override async Task StartAsync(IDialogContext context)
         {
 
             context.UserData.TryGetValue<User>("user", out user);
 
 
-            await context.PostAsync(BotControler.NotImplamented(user)[0]);
+            await context.PostAsync(conv.NotImplamented(user)[0]);
             context.Done("");
 
         }
 
      
-        private static async Task writeMessageToUser(IDialogContext context, string[] newMessage)
-        {
-            foreach (var m in newMessage)
-            {
-                await context.PostAsync(m);
-            }
-        }
 
     }
 }

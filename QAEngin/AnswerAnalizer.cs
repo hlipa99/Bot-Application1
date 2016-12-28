@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace NLPtest
+namespace QAEngin
 {
-    class QAEngin
+    public class Class1
     {
-        public Answer createAnswerObject(string text);
-
+        
     }
 }

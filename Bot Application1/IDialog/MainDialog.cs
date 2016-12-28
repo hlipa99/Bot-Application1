@@ -14,17 +14,18 @@ using NLPtest;
 namespace Bot_Application1.IDialog
 {
     [Serializable]
-    public class MainDialog : IDialog<object>
+    public class MainDialog : AbsDialog
     {
 
-        User user;
 
-        public async Task StartAsync(IDialogContext context)
+
+        public override async Task StartAsync(IDialogContext context)
         {
 
             context.Wait(this.MessageReceivedAsync);
 
         }
+
 
         public async virtual Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
@@ -34,7 +35,7 @@ namespace Bot_Application1.IDialog
 
             var message = await result;
             String userId = message.From.Id;
-            String userName = DataBaseControler.getUserName(userId);
+
             //     message = context.MakeMessage();
 
             context.UserData.TryGetValue<User>("user", out user);
@@ -52,8 +53,8 @@ namespace Bot_Application1.IDialog
 
         private async Task Greeting(IDialogContext context, IAwaitable<object> result)
         {
-            await writeMessageToUser(context, BotControler.greetings(user));
-            await writeMessageToUser(context, BotControler.howAreYou(user));
+            await writeMessageToUser(context, conv.greetings(user));
+            await writeMessageToUser(context, conv.howAreYou(user));
             context.Wait(HowAreYouRes);
         }
 
@@ -61,7 +62,7 @@ namespace Bot_Application1.IDialog
         private async Task HowAreYouRes(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
             var text = await result;
-            await writeMessageToUser(context, BotControler.OK(user));
+            await writeMessageToUser(context, conv.OK(user));
             await MainMenu(context, result);
         }
 
@@ -74,9 +75,9 @@ namespace Bot_Application1.IDialog
             if (user != null)
             {
                 var menu = new MenuOptionDialog<string>(
-                    BotControler.MainMenuOptions(),
-                    BotControler.MainMenuText(user),
-                    BotControler.wrongOption()[0],
+                    conv.MainMenuOptions(),
+                    conv.MainMenuText(user),
+                    conv.wrongOption()[0],
                     3,new IDialog<object>[] {
                     new StartLerningDialog(),
                     new NotImplamentedDialog(),
@@ -105,8 +106,8 @@ namespace Bot_Application1.IDialog
         {
             var message = await result;
             var text = result as IMessageActivity;
-            var choosen = BotControler.MainMenuText(user);
-            switch (BotControler.MainMenuOptions().ToList().IndexOf(text.Text))
+            var choosen = conv.MainMenuText(user);
+            switch (conv.MainMenuOptions().ToList().IndexOf(text.Text))
             {
                 case 1:
                     //StartAsync learning session
@@ -164,7 +165,7 @@ namespace Bot_Application1.IDialog
             context.Done<string>(text);
         }
 
-
+   
 
         //public async Task userExist(IDialogContext context, IAwaitable<String> result)
         //{
@@ -185,13 +186,6 @@ namespace Bot_Application1.IDialog
 
         //}
 
-        private static async Task writeMessageToUser(IDialogContext context, string[] newMessage)
-        {
-            foreach (var m in newMessage)
-            {
-                await context.PostAsync(m);
-            }
-        }
 
     }
 }

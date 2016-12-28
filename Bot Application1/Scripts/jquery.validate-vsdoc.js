@@ -173,18 +173,18 @@ $.extend($.fn, {
 		
 		if (command) {
 			var settings = $.data(element.form, 'validator').settings;
-			var staticRules = settings.rules;
-			var existingRules = $.validator.staticRules(element);
+			var Rules = settings.rules;
+			var existingRules = $.validator.Rules(element);
 			switch(command) {
 			case "add":
 				$.extend(existingRules, $.validator.normalizeRule(argument));
-				staticRules[element.name] = existingRules;
+				Rules[element.name] = existingRules;
 				if (argument.messages)
 					settings.messages[element.name] = $.extend( settings.messages[element.name], argument.messages );
 				break;
 			case "remove":
 				if (!argument) {
-					delete staticRules[element.name];
+					delete Rules[element.name];
 					return existingRules;
 				}
 				var filtered = {};
@@ -202,7 +202,7 @@ $.extend($.fn, {
 			$.validator.metadataRules(element),
 			$.validator.classRules(element),
 			$.validator.attributeRules(element),
-			$.validator.staticRules(element)
+			$.validator.Rules(element)
 		), element);
 		
 		// make sure required is at front
@@ -922,7 +922,7 @@ $.extend($.validator, {
 			$(element).metadata();
 	},
 	
-	staticRules: function(element) {
+	Rules: function(element) {
 		var rules = {};
 		var validator = $.data(element.form, 'validator');
 		if (validator.settings.rules) {

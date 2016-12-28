@@ -1921,7 +1921,7 @@ textarea.input-lg {
   border-color: #468847;
 }
 
-.form-control-static {
+.form-control- {
   padding-top: 7px;
   margin-bottom: 0;
 }
@@ -4156,12 +4156,12 @@ textarea.input-group-sm > .input-group-btn > .btn {
   }
 }
 
-.navbar-static-top {
+.navbar--top {
   border-width: 0 0 1px;
 }
 
 @media (min-width: 768px) {
-  .navbar-static-top {
+  .navbar--top {
     border-radius: 0;
   }
 }
@@ -4250,7 +4250,7 @@ textarea.input-group-sm > .input-group-btn > .btn {
 
 @media (max-width: 767px) {
   .navbar-nav .open .dropdown-menu {
-    position: static;
+    position: ;
     float: none;
     width: auto;
     margin-top: 0;
