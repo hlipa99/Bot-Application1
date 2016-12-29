@@ -10,6 +10,8 @@ using Bot_Application1.dataBase;
 using System.Diagnostics;
 using System.Drawing;
 using Bot_Application1.log;
+using Bot_Application1.google;
+using Bot_Application1.YAndex;
 
 namespace Bot_Application1
 {
@@ -53,9 +55,10 @@ namespace Bot_Application1
                 //DC.getAllCategory("התנועה הציונית");
                 //DC.getAllSubCategory("התנועה הציונית");
 
+               // ControlerTranslate.Start("","");
 
-                
-                
+
+
 
                 await Conversation.SendAsync(activity, () => new MainDialog());
                 //ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
