@@ -73,6 +73,24 @@ namespace NLPtest.view
                     }
                     return null;
                 }
+                else if (word.isA(copulaWord))
+                {
+                    var objective = Tag(ref prevObj, ref sentence, ref context);
+
+                    if (objective != null)
+                    {
+                        var guf = (gufObject) word.WorldObject;
+                        prevObj.addRelation(new copulaRelObject(objective, guf));
+                        prevObj = objective;
+                        return null;
+                    }
+                    else
+                    {
+                        throw new SemanticException("prep without objective");
+                    }
+                    return null;
+                }
+
                 else if (word.isA(gufWord))
                 {
                     return word.WorldObject;
@@ -113,7 +131,8 @@ namespace NLPtest.view
                 {
                     var objective = new VerbObject(word.word);
                     prevObj.addRelation(new VerbRelObject(objective));
-                    return objective;
+                    prevObj =  objective;
+                    return null;
                 }
                 else if (word.isA(timeWord))
                 {

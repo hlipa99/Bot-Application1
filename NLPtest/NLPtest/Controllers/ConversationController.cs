@@ -404,7 +404,7 @@ namespace NLPtest
         }
 
 
-        internal String[] testAnalizer(string inputText)
+        internal ContentTurn testAnalizer(string inputText)
         {
 
             //    var a = MorfAnalizer.createSentence(inputText);
@@ -427,7 +427,7 @@ namespace NLPtest
             //  return outMessage;
 
 
-            return new string[] { input.ToString() } ;
+            return input;
 
         }
 

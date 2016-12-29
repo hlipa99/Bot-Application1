@@ -9,6 +9,20 @@ namespace NLPtest
     {
         private WorldObject worldObject;
 
+        public string root;
+        internal string guf;
+        internal string time;
+        internal string amount;
+        internal string gender;
+        internal object prefix;
+        internal bool le;
+        internal bool me;
+        internal bool ce;
+        internal bool be;
+        internal bool ha;
+        internal bool kshe;
+        internal bool ve;
+        internal bool sh;
 
 
         WordType wordType;
@@ -51,6 +65,9 @@ namespace NLPtest
                     {
                         case dateWord:
                             worldObject = getDateFromWord(word);
+                            break;
+                        case copulaWord:
+                            worldObject = getGufFromWord(word);
                             break;
                         case eventWord:
                             worldObject = getEventFromWord(word);
@@ -203,8 +220,8 @@ namespace NLPtest
 
         private WorldObject getGufFromWord(string word)
         {
-            var res = new gufObject(word);
-            return res;
+            var gufObj = new gufObject(word, time,amount, guf);
+            return gufObj;
         }
 
         private WorldObject getEventFromWord(string word)
@@ -224,20 +241,6 @@ namespace NLPtest
 
 
 
-        public string root;
-        internal string guf;
-        internal string time;
-        internal string amount;
-        internal string gender;
-        internal object prefix;
-        internal bool le;
-        internal bool me;
-        internal bool ce;
-        internal bool be;
-        internal bool ha;
-        internal bool kshe;
-        internal bool ve;
-        internal bool sh;
 
         public Word(string word, WordType t)
         {

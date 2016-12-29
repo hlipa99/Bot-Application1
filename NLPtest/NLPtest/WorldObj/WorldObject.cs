@@ -40,18 +40,11 @@ namespace NLPtest.WorldObj
 
         public override string ToString()
         {
-            var res = "";
-            res += GetType() + "(" + word + ") {" + Environment.NewLine + "\t";
-                foreach (var r in relations)
-                {
-                  res += r + Environment.NewLine ;
-                }
-            return res + "}" ;
+
+                return word + "(" + GetType() + ")" ;
         }
 
-
-
-
+  
     }
 
 

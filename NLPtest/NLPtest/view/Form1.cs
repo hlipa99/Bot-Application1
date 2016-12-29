@@ -1,4 +1,6 @@
-﻿using System;
+﻿using NLPtest.WorldObj;
+using NLPtest.WorldObj.ObjectsWrappers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -49,14 +51,50 @@ namespace NLPtest
             input_TB.Text = String.Empty;
             text_TB.AppendText("Bot:" + Environment.NewLine);
             var botResualt = conv.testAnalizer(inputText);
-            foreach (var line in botResualt)
-            {
-                text_TB.AppendText(line + Environment.NewLine);
-            }
-
-
+            //foreach (var line in new string[] { input.ToString() })
+            //{
+            //    text_TB.AppendText(line + Environment.NewLine);
+            //}
+            drawTree(botResualt);
+            text_TB.AppendText("בוצע" + Environment.NewLine);
 
         }
+
+        private void drawTree(ContentTurn content)
+        {
+            treeView.Nodes.Clear();
+            while (!content.empty())
+            {
+                var c = content.pop();
+                var objectNode = drawObject(c);
+                treeView.Nodes.Add(objectNode);
+            }
+        }
+
+        private TreeNode drawObject(WorldObject obj)
+        {
+            var objectNode = new TreeNode();
+            objectNode.Text = obj.ToString();
+            foreach(var r in obj.Relations)
+            {
+                var rNode = drawObject(r);
+                var objec = drawObject(r.Objective);
+                rNode.Nodes.Add(objec);
+                objectNode.Nodes.Add(rNode);
+            }
+
+            if(obj is ObjectWrapper)
+            {
+                var o = obj as ObjectWrapper;
+                var objec = drawObject(o.Objective);
+                objectNode.Nodes.Add(objec);
+            }
+
+            return objectNode;
+        }
+
+
+
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {

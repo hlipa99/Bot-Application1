@@ -12,14 +12,26 @@ namespace NLPtest.WorldObj.ObjectsWrappers
         WorldObject objective;
         public ObjectWrapper(WorldObject objective)
         {
-            this.objective = objective;
+            this.Objective = objective;
         }
 
+        public WorldObject Objective
+        {
+            get
+            {
+                return objective;
+            }
+
+            set
+            {
+                objective = value;
+            }
+        }
 
         public override string ToString()
         {
 
-            return GetType() + "(" +objective +")";
+            return GetType() +"";
         }
     }
 }

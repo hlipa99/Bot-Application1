@@ -217,6 +217,7 @@
     <Compile Include="WorldObj\MessageDictionary.cs" />
     <Compile Include="WorldObj\OrginazationObject.cs" />
     <Compile Include="WorldObj\EventObject.cs" />
+    <Compile Include="WorldObj\relations\copulaRelObject.cs" />
     <Compile Include="WorldObj\relations\expansionRelObject.cs" />
     <Compile Include="WorldObj\relations\adjectiveRelObject.cs" />
     <Compile Include="Controllers\ConversationController.cs" />

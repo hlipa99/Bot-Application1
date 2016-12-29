@@ -26,7 +26,7 @@ namespace NLPtest.WorldObj
 
         public override string ToString()
         {
-            return "rel->(" + GetType().ToString() + ")->" + Environment.NewLine + "\t" + objective;
+            return "rel->(" + GetType().ToString() + ")";
         }
     }
 }

@@ -255,7 +255,7 @@ namespace NLPtest
                         {
 
                             word = new Word(token.getOrigStr(), copulaWord);
-                            word.guf = bitmaskResolver.getSuffixPerson();
+                            word.guf = bitmaskResolver.getPerson();
                             word.time = bitmaskResolver.getTense();
                             word.amount = bitmaskResolver.getNumber();
                             word.gender = bitmaskResolver.getGender();
