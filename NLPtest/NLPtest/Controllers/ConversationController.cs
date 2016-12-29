@@ -22,14 +22,15 @@ namespace NLPtest
         Dictionary<string, string[]> PraseDictionary;
 
 
-         public void initialize()
+         public ConversationController()
         {
             composer = new MessageComposer();
             responder = new Responder();
             sa = new SemanticAnalizer();
             PraseDictionary = loadDictionary();
-
         }
+
+
 
        
 
@@ -403,7 +404,7 @@ namespace NLPtest
         }
 
 
-        internal List<string> testAnalizer(string inputText)
+        internal String[] testAnalizer(string inputText)
         {
 
             //    var a = MorfAnalizer.createSentence(inputText);
@@ -418,12 +419,15 @@ namespace NLPtest
 
 
 
-            var output = responder.respone(input, context);
+            //       var output = responder.respone(input, context);
 
-            var outMessage = composer.compose(output, new User("יוחאי"));
+            //      var outMessage = composer.compose(output, new User("יוחאי"));
 
 
-            return outMessage;
+            //  return outMessage;
+
+
+            return new string[] { input.ToString() } ;
 
         }
 

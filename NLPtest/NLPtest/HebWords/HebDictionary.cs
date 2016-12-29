@@ -85,20 +85,20 @@ namespace NLPtest
             addTime("מוצש");
             addTime("מוצ\"ש");
 
-            addPrep("ל", new PrepForObject());
-            addPrep("של", new PrepOfObject());
-            addPrep("את", new PrepNoneObject());
-            addPrep("עם", new PrepWithObject());
-            addPrep("ב", new PrepInObject());
-            addPrep("מ", new PrepFromObject());
-            addPrep("אצל", new PrepAtObject());
-            addPrep("בשביל", new PrepForObject());
-            addPrep("בגלל", new PrepBecauseOfObject());
-            addPrep("במשך", new PrepDurationObject());
-            addPrep("לאחר", new PrepAfterObject());
-            addPrep("כמו", new PrepLikeObject());
-            addPrep("על", new PrepAboutObject());
-            addPrep("אל", new PrepNoneObject());
+            //addPrep("ל", new PrepForObject());
+            //addPrep("של", new PrepOfObject());
+            //addPrep("את", new PrepNoneObject());
+            //addPrep("עם", new PrepWithObject());
+            //addPrep("ב", new PrepInObject());
+            //addPrep("מ", new PrepFromObject());
+            //addPrep("אצל", new PrepAtObject());
+            //addPrep("בשביל", new PrepForObject());
+            //addPrep("בגלל", new PrepBecauseOfObject());
+            //addPrep("במשך", new PrepDurationObject());
+            //addPrep("לאחר", new PrepAfterObject());
+            //addPrep("כמו", new PrepLikeObject());
+            //addPrep("על", new PrepAboutObject());
+            //addPrep("אל", new PrepNoneObject());
             //addPrep("לפני", new PrepositionObject());
             //addPrep("אחרי", new PrepositionObject());
             //addPrep("מעל", new PrepositionObject());
@@ -137,6 +137,7 @@ namespace NLPtest
 
             return true;
         }
+
 
         private void addPrep(string v, RelationObject prepositionObject)
         {

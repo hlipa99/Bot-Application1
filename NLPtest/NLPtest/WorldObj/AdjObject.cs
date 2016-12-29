@@ -4,16 +4,16 @@ namespace NLPtest.WorldObj
 {
     internal class AdjObject : WorldObject
     {
-        private string word;
+
 
         public AdjObject()
         {
     
         }
 
-        public AdjObject(string word)
+        public AdjObject(string word) : base(word)
         {
-            this.word = word;
+          
         }
     }
 }

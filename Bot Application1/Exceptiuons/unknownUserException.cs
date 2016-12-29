@@ -1,25 +1,25 @@
-﻿using System;
-using System.Runtime.Serialization;
+﻿//using System;
+//using System.Runtime.Serialization;
 
-namespace Bot_Application1.IDialog
-{
-    [Serializable]
-    internal class unknownUserException : Exception
-    {
-        public unknownUserException()
-        {
-        }
+//namespace Bot_Application1.IDialog
+//{
+//    [Serializable]
+//    internal class unknownUserException : Exception
+//    {
+//        public unknownUserException()
+//        {
+//        }
 
-        public unknownUserException(string message) : base(message)
-        {
-        }
+//        public unknownUserException(string message) : base(message)
+//        {
+//        }
 
-        public unknownUserException(string message, Exception innerException) : base(message, innerException)
-        {
-        }
+//        public unknownUserException(string message, Exception innerException) : base(message, innerException)
+//        {
+//        }
 
-        protected unknownUserException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
-    }
-}
+//        protected unknownUserException(SerializationInfo info, StreamingContext context) : base(info, context)
+//        {
+//        }
+//    }
+//}

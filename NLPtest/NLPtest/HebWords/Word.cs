@@ -1,4 +1,5 @@
 ﻿using System;
+using static NLPtest.WorldObj.PrepRelObject;
 using NLPtest.WorldObj;
 using vohmm.corpus;
 using static NLPtest.Word.WordType;
@@ -49,72 +50,73 @@ namespace NLPtest
                     switch (wordType)
                     {
                         case dateWord:
-                            res = getDateFromWord(word);
+                            worldObject = getDateFromWord(word);
                             break;
                         case eventWord:
-                            res = getEventFromWord(word);
+                            worldObject = getEventFromWord(word);
                             break;
-                        case gufWord:
-                            res = getGufFromWord(word);
+                        case gufWord | nounWord:
+                            worldObject = getGufFromWord(word);
                             break;
                         case adverbWord:
-                            res = getadverbFromWord(word);
+                            worldObject = getadverbFromWord(word);
                             break;
                         case helloWord:
-                            res = getHelloFromWord(word);
+                            worldObject = getHelloFromWord(word);
                             break;
                         case identityWord:
                             throw new NotImplementedException();
                             break;
-                        case   locationWord:
-                            res =  new LocationObject(word);
+                        case   locationWord | nounWord:
+                            worldObject =  new LocationObject(word);
                             break;
                         case   markWord:
-                            res =  new toneObject("mark");
+                            worldObject =  new toneObject("mark");
                             break;
                         case   adjectiveWord:
-                            res =  new AdjObject(word);
+                            worldObject =  new AdjObject(word);
                             break;
                         case   moneyWord:
-                            res = getMoneyFromWord(word);
+                            worldObject = getMoneyFromWord(word);
                             break;
                         case conjunction:
-                            res = getConjunctionFromWord(word);
+                            worldObject = new ConjunctionRelObject(null);
                             break;
                         case   nounWord:
-                            res = getNounFromWord(word);
+                            worldObject = getNounFromWord(word);
                             break;
-                        case   orginazationWord:
-                            res = getOrginazationFromWord(word);
+                        case orginazationWord | nounWord:
+                            worldObject = getOrginazationFromWord(word);
                             break;
-                        case   personWord:
-                            res = getPersonFromWord(word);
+                        case personWord | nounWord:
+                            worldObject = getPersonFromWord(word);
                             break;
                         case   precentWord:
-                            res = getPrecentageFromWord(word);
+                            worldObject = getPrecentageFromWord(word);
                             break;
                         case   prepWord:
-                            throw new NotImplementedException();
+                            worldObject = new PrepRelObject(null);
                             break;
                         case   questionWord:
-                            res = getQuestionFromWord(word);
+                            worldObject = getQuestionFromWord(word);
                             break;
                         case   timeWord:
-                            res = getTimeFromWord(word);
+                            worldObject = getTimeFromWord(word);
                             break;
                         case   unknownWord:
-                            throw new NotImplementedException();
+                            worldObject = new WorldObject(word);
                             break;
                         case   verbWord:
-                            res = getVerbFromWord(word);
+                            worldObject = getVerbFromWord(word);
                             break;
+
                         default:
                             break;
                     }
 
-                    if(res == null)
+                    if(worldObject == null)
                     {
-                        throw new WorldObjectException(this);
+                      //  throw new WorldObjectException(this);
                     }
 
                 }
@@ -134,11 +136,6 @@ namespace NLPtest
             }
         }
 
-        private WorldObject getConjunctionFromWord(string word)
-        {
-            var res = new ConjunctionObject(word);
-            return res;
-        }
 
         private WorldObject getVerbFromWord(string word)
         {
@@ -240,7 +237,7 @@ namespace NLPtest
         internal bool ha;
         internal bool kshe;
         internal bool ve;
-
+        internal bool sh;
 
         public Word(string word, WordType t)
         {
@@ -289,6 +286,7 @@ namespace NLPtest
             conjunction = 1048576,
             numeralWord = 2097152,
             properName = 4194304,
+            hyphenWord = 8388608,
 
         }
 

@@ -4,11 +4,11 @@ namespace NLPtest
 {
     internal class EventObject : WorldObject
     {
-        private string word;
+    
 
-        public EventObject(string word)
+        public EventObject(string word) : base(word)
         {
-            this.word = word;
+           
         }
     }
 }

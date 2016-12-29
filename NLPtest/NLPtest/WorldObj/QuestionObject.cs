@@ -6,11 +6,11 @@ namespace NLPtest.WorldObj
     {
         private QuestionType isIt;
         private QuestionType questionType;
-        private string word;
 
-        public QuestionObject(string word)
+
+        public QuestionObject(string word) : base(word)
         {
-            this.word = word;
+         
         }
 
         public QuestionObject(QuestionType isIt)

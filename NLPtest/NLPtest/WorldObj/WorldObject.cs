@@ -8,14 +8,45 @@ namespace NLPtest.WorldObj
 {
     public class WorldObject
     {
-    
-        List<Tuple<RelationObject, WorldObject>> relatigffgons = new List<Tuple<RelationObject, WorldObject>>();
+       
+        List<RelationObject> relations = new List<RelationObject>();
+        string word;
 
+        public WorldObject(){}
 
-
-       public void addRelation(RelationObject type,WorldObject obj)
+        public WorldObject(string word) 
         {
-            relatigffgons.Add(new Tuple<RelationObject, WorldObject>(type, obj));
+            this.word = word;
+        }
+
+        public List<RelationObject> Relations
+        {
+            get
+            {
+                return relations;
+            }
+
+            set
+            {
+                relations = value;
+            }
+        }
+
+        public void addRelation(RelationObject type)
+        {
+            relations.Add(type);
+        }
+
+
+        public override string ToString()
+        {
+            var res = "";
+            res += GetType() + "(" + word + ") {" + Environment.NewLine + "\t";
+                foreach (var r in relations)
+                {
+                  res += r + Environment.NewLine ;
+                }
+            return res + "}" ;
         }
 
 

@@ -11,9 +11,9 @@ namespace NLPtest.WorldObj
           
         }
 
-        public VerbObject(string v)
+        public VerbObject(string v) : base(v)
         {
-            this.type = v;
+        
         }
     }
 }

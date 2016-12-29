@@ -2,13 +2,13 @@
 
 namespace NLPtest
 {
-    internal class OrginazationObject : WorldObject
+    internal class OrginazationObject : NounObject
     {
-        private string word;
+       
 
-        public OrginazationObject(string word)
+        public OrginazationObject(string word) : base(word)
         {
-            this.word = word;
+        
         }
     }
 }

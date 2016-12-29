@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.text_TB = new System.Windows.Forms.TextBox();
             this.input_TB = new System.Windows.Forms.TextBox();
             this.send_BTN = new System.Windows.Forms.Button();
@@ -57,7 +56,7 @@
             this.input_TB.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.input_TB.Size = new System.Drawing.Size(840, 26);
             this.input_TB.TabIndex = 1;
-            this.input_TB.Text = resources.GetString("input_TB.Text");
+            this.input_TB.Text = "מקלט לילה – פתרון זמני לפליטים";
             this.input_TB.TextChanged += new System.EventHandler(this.input_TB_TextChanged);
             this.input_TB.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.input_TB_KeyPress);
             // 
