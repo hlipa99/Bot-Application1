@@ -1,8 +1,12 @@
 ﻿using NLPtest.WorldObj;
+using System;
 using System.Collections.Generic;
 
 namespace NLPtest
 {
+
+
+    [Serializable]
     internal class MessageComposer
     {
 

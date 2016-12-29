@@ -4,12 +4,11 @@ using System.Collections.Generic;
 
 namespace Bot_Application1.IDialog
 {
-    [Serializable]
-    internal class EducationController
+ 
+    internal static class EducationController
     {
-        DataBaseControler dc = new DataBaseControler();
-  
-        internal string[] getStudyUnits()
+      
+        internal static string[] getStudyUnits()
         {
 
             return new string[]
@@ -18,7 +17,7 @@ namespace Bot_Application1.IDialog
             };
         }
 
-        internal IEnumerable<string> getStudyCategory(string unit)
+        internal static IEnumerable<string> getStudyCategory(string unit)
         {
             return new string[]
             {

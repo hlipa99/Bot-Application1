@@ -32,7 +32,7 @@ namespace Bot_Application1.IDialog
 
         public async virtual Task NewUser(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            
+            ConversationController conv = new ConversationController();
             var message = await result;
 
             var newMessage = conv.selfIntroduction();
@@ -44,7 +44,7 @@ namespace Bot_Application1.IDialog
 
         public async virtual Task NewUserGetName(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-        
+            ConversationController conv = new ConversationController();
             context.UserData.TryGetValue<User>("user", out user);
             if (user.userName == "" || user.userName == null)
             {
@@ -61,7 +61,7 @@ namespace Bot_Application1.IDialog
 
         public async virtual Task CheckName(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-
+            ConversationController conv = new ConversationController();
             var message = await result;
             var userText = await result;
 
@@ -88,7 +88,7 @@ namespace Bot_Application1.IDialog
         public async virtual Task NewUserGetGender(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
             //user Name
-         
+            ConversationController conv = new ConversationController();
             context.UserData.TryGetValue<User>("user", out user);
             //user Gender
             if (user.gender == "" || user.gender == null)
@@ -104,7 +104,7 @@ namespace Bot_Application1.IDialog
 
         public async virtual Task CheckGender(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-           
+            ConversationController conv = new ConversationController();
             var userText = await result;
 
          
@@ -128,7 +128,7 @@ namespace Bot_Application1.IDialog
 
         public async virtual Task NewUserGetClass(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-     
+            ConversationController conv = new ConversationController();
             context.UserData.TryGetValue<User>("user", out user);
  
 
@@ -150,7 +150,7 @@ namespace Bot_Application1.IDialog
         {
             //user class
             var userText = await result;
-
+            ConversationController conv = new ConversationController();
             if ((user.userClass = conv.getClass(userText.Text)) != null)
             {
                 context.UserData.SetValue<User>("user", user);
@@ -174,7 +174,7 @@ namespace Bot_Application1.IDialog
         public async virtual Task LetsStart(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
             //user class
-
+            ConversationController conv = new ConversationController();
             await writeMessageToUser(context, conv.LetsStart());
             context.Done("");
         }

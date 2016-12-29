@@ -12,6 +12,8 @@ using yg.sentence;
 
 namespace NLPtest
 {
+
+
     public class ConversationController
     {
 
