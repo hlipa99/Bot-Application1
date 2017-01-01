@@ -4,16 +4,16 @@ namespace NLPtest.WorldObj
 {
     internal class TimeObject : WorldObject
     {
-        private string word;
+
 
         public TimeObject()
         {
           
         }
 
-        public TimeObject(string word)
+        public TimeObject(string word) : base(word)
         {
-            this.word = word;
+          
         }
     }
 }

@@ -7,11 +7,7 @@ using Microsoft.Bot.Connector;
 using Microsoft.Bot.Builder.Dialogs;
 using Bot_Application1.IDialog;
 using Bot_Application1.dataBase;
-using System.Diagnostics;
-using System.Drawing;
-using Bot_Application1.log;
-using Bot_Application1.google;
-using Bot_Application1.YAndex;
+using System.Collections.Generic;
 
 namespace Bot_Application1
 {
@@ -23,12 +19,14 @@ namespace Bot_Application1
         /// Receive a message from a user and reply to it
         /// </summary>
         /// 
-        public async Task<HttpResponseMessage> Get([FromBody]Activity activity)
+        public async Task<HttpResponseMessage> Get()
         {
-            await Conversation.SendAsync(activity, () => new MainDialog());
-            var response = Request.CreateResponse(HttpStatusCode.OK);
+            var response = Request.CreateResponse(HttpStatusCode.Forbidden,"ok");
             return response;
         }
+
+
+
         public async Task<HttpResponseMessage> Post([FromBody]Activity activity)
         {
             
@@ -36,31 +34,32 @@ namespace Bot_Application1
             {
 
 
-                Models.BotDataEntities1 DB = new Models.BotDataEntities1();
+    //            Models.BotDataEntities1 DB = new Models.BotDataEntities1();
                 Models.UserLog NewUserLog = new Models.UserLog();
 
-                NewUserLog.Channel = activity.ChannelId;
-                NewUserLog.UserID = activity.From.Id;
-                NewUserLog.UserName = activity.From.Name;
-                NewUserLog.created = DateTime.UtcNow;
-                NewUserLog.Message = activity.Text.Truncate(500);
+                //NewUserLog.Channel = activity.ChannelId;
+                //NewUserLog.UserID = activity.From.Id;
+                //NewUserLog.UserName = activity.From.Name;
+                //NewUserLog.created = DateTime.UtcNow;
+                //NewUserLog.Message = activity.Text.Truncate(500);
 
-                DB.UserLogs.Add(NewUserLog);
-                DB.SaveChanges();
+            //    DB.UserLogs.Add(NewUserLog);
+         //       DB.SaveChanges();
 
-                DataBaseControler DC = new DataBaseControler();
+    //            DataBaseControler DC = new DataBaseControler();
                 // DC.isUserExist(activity.From.Id);
-                //DC.getUser(activity.From.Id);
-                // DC.getQuestion("התנועה", "התנועה הציונית");
-                //DC.getAllCategory("התנועה הציונית");
-                //DC.getAllSubCategory("התנועה הציונית");
-
-               // ControlerTranslate.Start("","");
+           //     DC.getUser(activity.From.Id);
 
 
 
 
-                await Conversation.SendAsync(activity, () => new MainDialog());
+                //create typing replay
+                var connector = new ConnectorClient(new Uri(activity.ServiceUrl));
+                var typingReplay = activity.CreateReply();
+                typingReplay.Type = ActivityTypes.Typing;
+                await connector.Conversations.ReplyToActivityAsync(typingReplay);
+                
+               await Conversation.SendAsync(activity, () => new MainDialog());
                 //ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
                 //// calculate something for us to return
                 //int length = (activity.Text ?? string.Empty).Length;
@@ -81,6 +80,8 @@ namespace Bot_Application1
             var response = Request.CreateResponse(HttpStatusCode.OK);
             return response;
         }
+
+
 
         private Activity HandleSystemMessage(Activity message)
         {

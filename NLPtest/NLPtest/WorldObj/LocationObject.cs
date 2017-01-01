@@ -2,13 +2,13 @@
 
 namespace NLPtest.WorldObj
 {
-    internal class LocationObject : WorldObject
+    internal class LocationObject : NounObject
     {
-        private string word;
+   
 
-        public LocationObject(string word)
+        public LocationObject(string word) : base(word)
         {
-            this.word = word;
+     
         }
     }
 }

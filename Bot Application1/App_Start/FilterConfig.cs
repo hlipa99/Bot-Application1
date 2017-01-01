@@ -5,7 +5,7 @@ namespace Bot_Application1
 {
     public class FilterConfig
     {
-        public static void RegisterGlobalFilters(GlobalFilterCollection filters)
+        public  void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());
         }

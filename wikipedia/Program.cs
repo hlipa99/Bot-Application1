@@ -6,13 +6,13 @@ using System.Windows.Forms;
 
 namespace wikipedia
 {
-    static class Program
+     class Program
     {
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+         void Main()
         {
 
              Application.EnableVisualStyles();

@@ -8,14 +8,14 @@ using NLPtest.WorldObj;
 using static NLPtest.Word.WordType;
 namespace NLPtest
 {
-    static class HebDictionary
+     class HebDictionary
     {
-        static Dictionary<string,Word> hebDic = new Dictionary<string, Word>();
+         Dictionary<string,Word> hebDic = new Dictionary<string, Word>();
         internal enum Guf { Rishon, Sheny, Shlishi };
         internal enum Kamot { Yahid, Rabim};
         internal enum Min { Zahar, Nekeva , Both, None };
-
-        public static bool loadWords()
+     
+        public  bool loadWords()
         {
 
 
@@ -85,20 +85,20 @@ namespace NLPtest
             addTime("מוצש");
             addTime("מוצ\"ש");
 
-            addPrep("ל", new PrepForObject());
-            addPrep("של", new PrepOfObject());
-            addPrep("את", new PrepNoneObject());
-            addPrep("עם", new PrepWithObject());
-            addPrep("ב", new PrepInObject());
-            addPrep("מ", new PrepFromObject());
-            addPrep("אצל", new PrepAtObject());
-            addPrep("בשביל", new PrepForObject());
-            addPrep("בגלל", new PrepBecauseOfObject());
-            addPrep("במשך", new PrepDurationObject());
-            addPrep("לאחר", new PrepAfterObject());
-            addPrep("כמו", new PrepLikeObject());
-            addPrep("על", new PrepAboutObject());
-            addPrep("אל", new PrepNoneObject());
+            //addPrep("ל", new PrepForObject());
+            //addPrep("של", new PrepOfObject());
+            //addPrep("את", new PrepNoneObject());
+            //addPrep("עם", new PrepWithObject());
+            //addPrep("ב", new PrepInObject());
+            //addPrep("מ", new PrepFromObject());
+            //addPrep("אצל", new PrepAtObject());
+            //addPrep("בשביל", new PrepForObject());
+            //addPrep("בגלל", new PrepBecauseOfObject());
+            //addPrep("במשך", new PrepDurationObject());
+            //addPrep("לאחר", new PrepAfterObject());
+            //addPrep("כמו", new PrepLikeObject());
+            //addPrep("על", new PrepAboutObject());
+            //addPrep("אל", new PrepNoneObject());
             //addPrep("לפני", new PrepositionObject());
             //addPrep("אחרי", new PrepositionObject());
             //addPrep("מעל", new PrepositionObject());
@@ -138,29 +138,30 @@ namespace NLPtest
             return true;
         }
 
-        private static void addPrep(string v, RelationObject prepositionObject)
+
+        private void addPrep(string v, RelationObject prepositionObject)
         {
             hebDic.Add(v, new Word(v, prepWord, prepositionObject));
         }
 
-        //private static void addGuf(string v1, string v2, Guf rishon, Kamot yahid, Min both)
+        //private  void addGuf(string v1, string v2, Guf rishon, Kamot yahid, Min both)
         //{
         //    hebDic.Add(v1, new Word( v1,  v2,  rishon,  yahid,  both));
         //}
 
-        private static void addHello(string s,WorldObject obj) { 
+        private  void addHello(string s,WorldObject obj) { 
             hebDic.Add(s, new Word(s,helloWord,obj));
         
         }
 
 
-        //private static void addQuestion(string s, QuestionObject.QuestionType q)
+        //private  void addQuestion(string s, QuestionObject.QuestionType q)
         //{
         //    hebDic.Add(s, new Word(s,questionWord));
         //}
 
 
-        private static void addTime(string s)
+        private  void addTime(string s)
         {
             hebDic.Add(s, new Word(s,timeWord));
         }
@@ -169,12 +170,12 @@ namespace NLPtest
 
 
 
-        internal static bool contains(string lemma)
+        internal  bool contains(string lemma)
         {
             return hebDic.ContainsKey(lemma);
         }
 
-        internal static Word get(string lemma)
+        internal  Word get(string lemma)
         {
             if (hebDic.ContainsKey(lemma))
             {

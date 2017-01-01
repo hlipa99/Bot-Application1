@@ -1,4 +1,5 @@
 ﻿using Bot_Application1.log;
+using Bot_Application1.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +32,7 @@ namespace Bot_Application1.dataBase
 
         
 
-        public  void addNewUser(string channelId,string id,string name,string text)
+        public void addNewUser(string channelId,string id,string name,string text)
         {
             try
             {
@@ -57,8 +58,27 @@ namespace Bot_Application1.dataBase
 
         }
 
+        public void addNewUser(UserLog user)
+        {
+            try
+            {
+                Models.BotDataEntities1 DB = new Models.BotDataEntities1();
 
-              
+                DB.UserLogs.Add(user);
+                DB.SaveChanges();
+
+            }
+            catch (Exception e)
+            {
+                Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
+            }
+
+
+
+        }
+
+
+
         public Models.UserLog getUser(string userId)
         {
             Models.UserLog NewUserLog = new Models.UserLog();

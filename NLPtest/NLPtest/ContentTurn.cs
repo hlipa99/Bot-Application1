@@ -44,5 +44,16 @@ namespace NLPtest
         {
             return list;
         }
+
+
+        public override string ToString()
+        {
+            var res = "";
+            foreach(var o in list)
+            {
+                    res += o + " | ";
+            }
+            return res;
+        }
     }
 }

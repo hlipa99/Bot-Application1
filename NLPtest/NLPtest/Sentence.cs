@@ -4,7 +4,7 @@ using NLPtest.WorldObj;
 
 namespace NLPtest
 {
-    internal class Sentence
+    public class Sentence
     {
 
         internal enum SentenceType {Question ,Regular ,Exclamation};

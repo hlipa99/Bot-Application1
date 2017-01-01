@@ -19,7 +19,7 @@ namespace Bot_Application1.IDialog
         private T[] options;
         private IDialog<object>[] dialogOptions;
         private ResumeAfter<object> contFunction;
-
+        ConversationController conv = new ConversationController();
 
         public MenuOptionDialog(T[] options, string prompt, string retry, int attempts, IDialog<object>[] dialogOptions, ResumeAfter<object> contFunction)
             : base (options, prompt, retry,attempts)
@@ -31,7 +31,6 @@ namespace Bot_Application1.IDialog
 
         protected async override Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> message)
         {
-
 
         //    var message = await result;
 
@@ -79,7 +78,7 @@ namespace Bot_Application1.IDialog
 
       protected override bool TryParse(IMessageActivity message, out T result)
         {
-            result = BotControler.FindMatchFromOptions<T>(message.Text, promptOptions.Options);
+            result = conv.FindMatchFromOptions<T>(message.Text, promptOptions.Options);
             return result != null;
         }
 

@@ -345,7 +345,7 @@ public class TypeMapper
     private readonly CodeGenerationTools _code;
     private readonly MetadataTools _ef;
 
-    public static string FixNamespaces(string typeName)
+    public  string FixNamespaces(string typeName)
     {
         return typeName.Replace("System.Data.Spatial.", "System.Data.Entity.Spatial.");
     }
@@ -626,7 +626,7 @@ public class TypeMapper
     }
 }
 
-public static void ArgumentNotNull<T>(T arg, string name) where T : class
+public  void ArgumentNotNull<T>(T arg, string name) where T : class
 {
     if (arg == null)
     {

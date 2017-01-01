@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace NLPtest.WorldObj
 {
-    public class PersonObject : WorldObject
+    public class PersonObject : NounObject
     {
   
         string name;
 
-        public PersonObject(string pers)
+        public PersonObject(string pers) : base(pers)
         {
-            this.name = pers;
+
         }
     }
 }

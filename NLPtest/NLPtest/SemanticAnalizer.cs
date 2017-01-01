@@ -7,28 +7,29 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using vohmm.application;
+using NLPtest.WorldObj.ObjectsWrappers;
 
 namespace NLPtest.view
 {
     class SemanticAnalizer
     {
-      
+
 
         public ContentTurn tagWords(Sentence sentence, ref NLPtest.Context context)
         {
             var contextTurn = new ContentTurn();
             //deal with questions
-            var first = sentence.Words.FirstOrDefault();
+       //     var first = sentence.Words.FirstOrDefault();
             WorldObject prevObj = null;
             while (sentence.Words.Count > 0)
             {
 
-                 var newObj = Tag(ref prevObj,ref sentence);
-                    if(newObj != null)
-                    {
-                        prevObj = newObj;
-                        contextTurn.Add(prevObj);
-                    }
+                var newObj = Tag(ref prevObj, ref sentence, ref contextTurn);
+                if (newObj != null)
+                {
+                    prevObj = newObj;
+                    contextTurn.Add(prevObj);
+                }
 
             }
 
@@ -36,8 +37,13 @@ namespace NLPtest.view
         }
 
 
-        public WorldObject Tag(ref WorldObject prevObj,ref Sentence sentence) {
 
+     
+
+
+        public WorldObject Tag(ref WorldObject prevObj,ref Sentence sentence, ref ContentTurn context) {
+
+            //   var word = sentence.Words.FirstOrDefault();
             var word = sentence.Words.FirstOrDefault();
 
             if (word != null)
@@ -52,16 +58,65 @@ namespace NLPtest.view
                     return (QuestionObject)word.WorldObject;
 
                 }
+                else if (word.isA(hyphenWord))
+                {
+                    var objective = Tag(ref prevObj, ref sentence, ref context);
+
+                    if (objective != null)
+                    {
+                        prevObj.addRelation(new expansionRelObject(objective));
+                        prevObj = objective;
+                    }
+                    else
+                    {
+                        throw new SemanticException("prep without objective");
+                    }
+                    return null;
+                }
+                else if (word.isA(copulaWord))
+                {
+                    var objective = Tag(ref prevObj, ref sentence, ref context);
+
+                    if (objective != null)
+                    {
+                        var guf = (gufObject) word.WorldObject;
+                        prevObj.addRelation(new copulaRelObject(objective, guf));
+                        prevObj = objective;
+                        return null;
+                    }
+                    else
+                    {
+                        throw new SemanticException("prep without objective");
+                    }
+                    return null;
+                }
+
                 else if (word.isA(gufWord))
                 {
                     return word.WorldObject;
                 }
                 else if (word.isA(nounWord))
                 {
-                    if (word.WorldObject != null) return word.WorldObject;
-                    else
+                    if (word.prefix == null)
                     {
-                        return new NounObject(word.word);
+                        if (word.WorldObject != null) return word.WorldObject;
+                        else
+                        {
+                            return new NounObject(word.word);
+                        }
+                    }else
+                    {
+                        if (word.le)
+                        {
+                            prevObj.addRelation(new PrepRelObject(new NounObject(word.word),PrepType.toPrep));
+                            return null;
+                        }else if (word.ha)
+                        {
+                            return new DefiniteArticleWrap(new NounObject(word.word));
+                        }
+
+
+                        throw new SemanticException("unknown prefix");
                     }
                 }
                 else if (word.isA(personWord))
@@ -74,7 +129,10 @@ namespace NLPtest.view
                 }
                 else if (word.isA(verbWord))
                 {
-                    return new VerbObject(word.word);
+                    var objective = new VerbObject(word.word);
+                    prevObj.addRelation(new VerbRelObject(objective));
+                    prevObj =  objective;
+                    return null;
                 }
                 else if (word.isA(timeWord))
                 {
@@ -87,18 +145,39 @@ namespace NLPtest.view
                 }
                 else if (word.isA(adjectiveWord | adverbWord))
                 {
-                    prevObj.addRelation(new adjectiveRelObject(), new AdjObject(word.word));
-                    return Tag(ref prevObj, ref sentence);
+                    prevObj.addRelation(new adjectiveRelObject(new AdjObject(word.word)));
+                    return null;
                 }
                 else if (word.isA(prepWord))
                 {
-                    prevObj.addRelation((RelationObject)word.WorldObject, Tag(ref prevObj, ref sentence));
-                    return Tag(ref prevObj, ref sentence);
+                    var objective = Tag(ref prevObj, ref sentence, ref context);
+                    if (objective != null) {
+                        prevObj.addRelation(new PrepRelObject(objective, ((PrepRelObject)word.WorldObject).Type));
+                        prevObj = objective;
+                    }
+                    else
+                    {
+                  //      throw new SemanticException("prep without objective");
+                    }
+                    return null;
+                }
+                else if (word.isA(locationWord))
+                {
+                    return word.WorldObject;
                 }
                 else if (word.isA(conjunction))
                 {
-                    prevObj.addRelation((RelationObject)word.WorldObject, Tag(ref prevObj, ref sentence));
-                    return Tag(ref prevObj, ref sentence);
+                    var objective = Tag(ref prevObj, ref sentence, ref context);
+                    if (objective != null)
+                    {
+                        prevObj.addRelation(new PrepRelObject(objective, ((PrepRelObject)word.WorldObject).Type));
+                        prevObj = objective;
+                    }
+                    else
+                    {
+                   //     throw new SemanticException("prep without objective");
+                    }
+                    return null;
                 }
 
                 else

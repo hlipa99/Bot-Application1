@@ -12,12 +12,12 @@ using Bot_Application1.Models;
 namespace Bot_Application1.IDialog
 {
     [Serializable]
-    public class StartLerningDialog: IDialog<object>
+    public class StartLerningDialog: AbsDialog
     {
         StudySession studySession;
-        User user;
         EducationController eduC = new EducationController();
-        public async Task StartAsync(IDialogContext context)
+
+        public override async Task StartAsync(IDialogContext context)
         {
             context.UserData.TryGetValue<User>("user", out user);
             if(user == null)
@@ -28,8 +28,8 @@ namespace Bot_Application1.IDialog
 
                     var menu = new PromptDialog.PromptChoice<string>(
                     eduC.getStudyUnits(),
-                    BotControler.chooseStudyUnits(user),
-                    BotControler.wrongOption()[0],
+                    conv.chooseStudyUnits(user),
+                    conv.wrongOption()[0],
                     3);
             context.UserData.SetValue<StudySession>("studySession",new StudySession());
             context.Call(menu, chooseCategory);
@@ -48,8 +48,8 @@ namespace Bot_Application1.IDialog
 
             var menu = new PromptDialog.PromptChoice<string>(
                  eduC.getStudyCategory(message),
-                 BotControler.chooseStudyUnits(user),
-                 BotControler.wrongOption()[0],
+                 conv.chooseStudyUnits(user),
+                 conv.wrongOption()[0],
                  3);
 
             context.Call(menu, StartLearning);
@@ -64,7 +64,7 @@ namespace Bot_Application1.IDialog
             context.UserData.TryGetValue<StudySession>("studySession", out studySession);
             studySession.StudySubject = message;
             context.UserData.SetValue<StudySession>("studySession", studySession);
-            await writeMessageToUser(context, BotControler.areUReaddyToLearn(user, message));
+            await writeMessageToUser(context, conv.areUReaddyToLearn(user, message));
             context.Wait(askQuestion);
         }
 
@@ -76,14 +76,14 @@ namespace Bot_Application1.IDialog
             var message = await result;
 
             context.UserData.TryGetValue<StudySession>("studySession", out studySession);
-            if (BotControler.isStopSession(message.Text))
+            if (conv.isStopSession(message.Text))
             {
-                await writeMessageToUser(context, BotControler.stopLearningSession(user));
+                await writeMessageToUser(context, conv.stopLearningSession(user));
                 return;
             }
 
             context.UserData.TryGetValue<StudySession>("studySession", out studySession);
-            await writeMessageToUser(context, BotControler.beforAskQuestion(user,studySession.QuestionAsked.Count + 1));
+            await writeMessageToUser(context, conv.beforAskQuestion(user,studySession.QuestionAsked.Count + 1));
 
             //var question = EducationController.getQuestion(studySession.StudySubject);
 
@@ -97,15 +97,16 @@ namespace Bot_Application1.IDialog
 
         public async Task answerQuestion(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
+
             var message = await result;
             context.UserData.TryGetValue<StudySession>("studySession", out studySession);
-            if (BotControler.isStopSession(message.Text))
+            if (conv.isStopSession(message.Text))
             {
-                await writeMessageToUser(context, BotControler.stopLearningSession(user));
+                await writeMessageToUser(context, conv.stopLearningSession(user));
                 return;
             }
 
-            await writeMessageToUser(context, BotControler.MyAnswerToQuestion());
+            await writeMessageToUser(context, conv.MyAnswerToQuestion());
             //var question = EducationController.getQuestion(studySession.StudySubject);
             await writeMessageToUser(context, new string[] { "תשובה לשאלה:" + studySession.currentQuestion });
 
@@ -115,13 +116,6 @@ namespace Bot_Application1.IDialog
 
 
 
-        private static async Task writeMessageToUser(IDialogContext context, string[] newMessage)
-        {
-            foreach (var m in newMessage)
-            {
-                await context.PostAsync(m);
-            }
-        }
 
 
     }
