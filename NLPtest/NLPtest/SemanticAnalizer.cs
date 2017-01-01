@@ -11,10 +11,10 @@ using NLPtest.WorldObj.ObjectsWrappers;
 
 namespace NLPtest.view
 {
+
+    [Serializable]
     class SemanticAnalizer
     {
-
-
         public ContentTurn tagWords(Sentence sentence, ref NLPtest.Context context)
         {
             var contextTurn = new ContentTurn();

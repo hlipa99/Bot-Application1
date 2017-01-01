@@ -53,7 +53,8 @@ namespace Bot_Application1.IDialog
 
         private async Task Greeting(IDialogContext context, IAwaitable<object> result)
         {
-            await writeMessageToUser(context, conv.greetings(user));
+              ConversationController conv = new ConversationController();
+             await writeMessageToUser(context, conv.greetings(user));
             await writeMessageToUser(context, conv.howAreYou(user));
             context.Wait(HowAreYouRes);
         }
@@ -61,6 +62,7 @@ namespace Bot_Application1.IDialog
 
         private async Task HowAreYouRes(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
+            ConversationController conv = new ConversationController();
             var text = await result;
             await writeMessageToUser(context, conv.OK(user));
             await MainMenu(context, result);
@@ -69,7 +71,7 @@ namespace Bot_Application1.IDialog
 
         private async Task MainMenu(IDialogContext context, IAwaitable<object> result)
         {
-
+            ConversationController conv = new ConversationController();
             //  var message = await result;
             context.UserData.TryGetValue<User>("user", out user);
             if (user != null)
@@ -104,6 +106,7 @@ namespace Bot_Application1.IDialog
 
         private async Task MainMenuChooseOption(IDialogContext context, IAwaitable<object> result)
         {
+            ConversationController conv = new ConversationController();
             var message = await result;
             var text = result as IMessageActivity;
             var choosen = conv.MainMenuText(user);

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace NLPtest
 {
+    [Serializable]
     class Responder
     {
         public ContentTurn respone(ContentTurn input,Context context)

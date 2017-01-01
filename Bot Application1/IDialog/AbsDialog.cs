@@ -8,11 +8,13 @@ using NLPtest;
 
 namespace Bot_Application1.IDialog
 {
+
+    [Serializable]
     public abstract class AbsDialog : IDialog<object>
     {
         public abstract Task StartAsync(IDialogContext context);
         internal User user;
-        internal ConversationController conv = new ConversationController();
+       
 
         internal async Task writeMessageToUser(IDialogContext context, string[] newMessage)
         {

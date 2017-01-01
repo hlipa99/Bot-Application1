@@ -20,7 +20,7 @@ namespace Bot_Application1.IDialog
       
         public override async Task StartAsync(IDialogContext context)
         {
-
+            ConversationController conv = new ConversationController();
             context.UserData.TryGetValue<User>("user", out user);
 
 

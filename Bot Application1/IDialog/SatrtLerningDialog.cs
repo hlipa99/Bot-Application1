@@ -15,10 +15,11 @@ namespace Bot_Application1.IDialog
     public class StartLerningDialog: AbsDialog
     {
         StudySession studySession;
-        EducationController eduC = new EducationController();
+      
 
         public override async Task StartAsync(IDialogContext context)
         {
+            ConversationController conv = new ConversationController();
             context.UserData.TryGetValue<User>("user", out user);
             if(user == null)
             {
@@ -27,7 +28,7 @@ namespace Bot_Application1.IDialog
 
 
                     var menu = new PromptDialog.PromptChoice<string>(
-                    eduC.getStudyUnits(),
+                    EducationController.getStudyUnits(),
                     conv.chooseStudyUnits(user),
                     conv.wrongOption()[0],
                     3);
@@ -40,14 +41,14 @@ namespace Bot_Application1.IDialog
         public async virtual Task chooseCategory(IDialogContext context, IAwaitable<string> result)
         {
             var message = await result;
-
+            ConversationController conv = new ConversationController();
             context.UserData.TryGetValue<StudySession>("studySession",out studySession);
             studySession.StudyUnit = message;
 
             context.UserData.SetValue<StudySession>("studySession", new StudySession());
 
             var menu = new PromptDialog.PromptChoice<string>(
-                 eduC.getStudyCategory(message),
+                 EducationController.getStudyCategory(message),
                  conv.chooseStudyUnits(user),
                  conv.wrongOption()[0],
                  3);
@@ -60,7 +61,7 @@ namespace Bot_Application1.IDialog
         public async virtual Task StartLearning(IDialogContext context, IAwaitable<string> result)
         {
             var message = await result;
-            
+            ConversationController conv = new ConversationController();
             context.UserData.TryGetValue<StudySession>("studySession", out studySession);
             studySession.StudySubject = message;
             context.UserData.SetValue<StudySession>("studySession", studySession);
@@ -74,7 +75,7 @@ namespace Bot_Application1.IDialog
         public async Task askQuestion(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
             var message = await result;
-
+            ConversationController conv = new ConversationController();
             context.UserData.TryGetValue<StudySession>("studySession", out studySession);
             if (conv.isStopSession(message.Text))
             {
@@ -97,7 +98,7 @@ namespace Bot_Application1.IDialog
 
         public async Task answerQuestion(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-
+            ConversationController conv = new ConversationController();
             var message = await result;
             context.UserData.TryGetValue<StudySession>("studySession", out studySession);
             if (conv.isStopSession(message.Text))
