@@ -15,6 +15,7 @@ using java.io;
 using static vohmm.corpus.Sentence;
 using vohmm.corpus;
 using System.Text.RegularExpressions;
+using NLPtest.view;
 
 namespace NLPtest
 {
@@ -120,7 +121,7 @@ namespace NLPtest
                         var origString = token.getOrigStr();
                         var gender = bitmaskResolver.getGender();
                         var gender2 = bitmaskResolver.getSuffixGender();
-
+                        var ner = tokenExt.getNER();
                         if (hebDictionary.contains(token.getOrigStr()))
                         {
                             word = hebDictionary.get(token.getOrigStr());
@@ -197,31 +198,43 @@ namespace NLPtest
                         else if (bitmaskResolver.getPOS() == "verb" || bitmaskResolver.getPOS() == "participle")
                         {
                             word = new Word(token.getOrigStr(), verbWord);
-                            word.guf = bitmaskResolver.getSuffixPerson();
-                            word.time = bitmaskResolver.getTense();
-                            word.amount = bitmaskResolver.getNumber();
-                            word.gender = bitmaskResolver.getGender();
+                            word.setGuf(bitmaskResolver.getSuffixPerson());
+                            word.setTime(bitmaskResolver.getTense());
+                            word.setAmount(bitmaskResolver.getNumber());
+                            word.setGender(bitmaskResolver.getGender());
                         }
                         else if (bitmaskResolver.getPOS() == "adverb")
                         {
                             word = new Word(token.getOrigStr(), adverbWord);
-                            word.time = bitmaskResolver.getTense();
+                            word.setTime(bitmaskResolver.getTense());
                         }
                         else if (bitmaskResolver.getPOS() == "noun")
                         {
 
                                 word = new Word(token.getOrigStr(), nounWord);
-                                word.guf = bitmaskResolver.getSuffixPerson();
-                                word.amount = bitmaskResolver.getNumber();
-                                word.gender = bitmaskResolver.getGender();
+                            word.setGuf(bitmaskResolver.getSuffixPerson());
+                            word.setAmount(bitmaskResolver.getNumber());
+                            word.setGender(bitmaskResolver.getGender());
                         }
+                        else if (bitmaskResolver.getPOS() == "negation")
+                        {
+
+                            word = new Word(token.getOrigStr(), negationWord);
+                            word.setGuf(bitmaskResolver.getSuffixPerson());
+                            word.setAmount(bitmaskResolver.getNumber());
+                            word.setGender(bitmaskResolver.getGender());
+                        }
+
+
+                        
                         else if (bitmaskResolver.getPOS() == "pronoun" && bitmaskResolver.getPOSType() == "personal")
                         {
 
                             word = new Word(token.getOrigStr(), gufWord | nounWord);
-                            word.guf = bitmaskResolver.getPerson();
-                            word.gender = bitmaskResolver.getGender();
-                            word.amount = bitmaskResolver.getNumber();
+
+                            word.setGuf(bitmaskResolver.getPerson());
+                            word.setAmount(bitmaskResolver.getNumber());
+                            word.setGender(bitmaskResolver.getGender());
 
                         }
                         else if (bitmaskResolver.getPOS() == "preposition")
@@ -255,15 +268,15 @@ namespace NLPtest
                         {
 
                             word = new Word(token.getOrigStr(), copulaWord);
-                            word.guf = bitmaskResolver.getPerson();
-                            word.time = bitmaskResolver.getTense();
-                            word.amount = bitmaskResolver.getNumber();
-                            word.gender = bitmaskResolver.getGender();
+                            word.setGuf(bitmaskResolver.getPerson());
+                            word.setTime(bitmaskResolver.getTense());
+                            word.setAmount(bitmaskResolver.getNumber());
+                            word.setGender(bitmaskResolver.getGender());
                         }
                         else if (bitmaskResolver.getPOS() == "conjunction")
                         {
 
-                            word = new Word(token.getOrigStr(), conjunction);
+                            word = new Word(token.getOrigStr(), conjunctionWord);
 
                         }
                         else if (bitmaskResolver.getPOS() == "adjective")
@@ -281,7 +294,7 @@ namespace NLPtest
                         else if (bitmaskResolver.getPOS() == "propername")
                         {
 
-                            word = new Word(token.getOrigStr(), properName);
+                            word = new Word(token.getOrigStr(), properNameWord);
                         }
                         else if (bitmaskResolver.getPOS() == "unknown")
                         {
@@ -795,6 +808,36 @@ namespace NLPtest
         }
 
 
+
+        public static String getName(string inputText)
+        {
+
+            //    var a = MorfAnalizer.createSentence(inputText);
+            var context = new Context();
+            var sen = meniAnalize(inputText);
+            var sa = new SemanticAnalizer();
+
+            if (sen.Count == 1 && sen[0].Words.Count == 1 && sen[0].Words[0].isA(nounWord))
+            {
+                return sen[0].Words[0].word;
+            }
+
+            ContentTurn input = new ContentTurn();
+            foreach (var s in sen)
+            {
+                foreach (var w in s.Words)
+                {
+                    if (sa.isAName(w))
+                    {
+                        return w.word;
+                    }
+                }
+            }
+
+            return null;
+
+        }
+
         public static string GetGender(string text)
         {
             //    var a = MorfAnalizer.createSentence(inputText);
@@ -810,9 +853,9 @@ namespace NLPtest
                     {
                         return "masculine";
                     }
-                    if (w.gender != null & w.gender != "" & w.gender != "unspecified")
+                    if (w.gender != gufObject.genderType.unspecified)
                     {
-                        return w.gender;
+                        return w.gender.ToString();
                     }
                 }
             }

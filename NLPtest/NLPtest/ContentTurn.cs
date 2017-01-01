@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace NLPtest
 {
     //fifo stack
-    class ContentTurn //: ICollection<WorldObject>
+    class ContentTurn
     {
         List<WorldObject> list = new List<WorldObject>();
         
@@ -35,6 +35,14 @@ namespace NLPtest
             return next;
         }
 
+        public IEnumerator<WorldObject> GetEnumerator()
+        {
+            //return copy allow change as enumarating 
+            return list.ToList<WorldObject>().GetEnumerator();
+        }
+
+
+
         internal void Add(ContentTurn contentTurn)
         {
             list.AddRange(contentTurn.getList());
@@ -54,6 +62,13 @@ namespace NLPtest
                     res += o + " | ";
             }
             return res;
+        }
+
+        internal void replace(WorldObject o, WorldObject g)
+        {
+            var i = list.IndexOf(o);
+            list.RemoveAt(i);
+            list.Insert(i,g);
         }
     }
 }

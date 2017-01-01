@@ -19,7 +19,7 @@ namespace NLPtest.view
         {
             var contextTurn = new ContentTurn();
             //deal with questions
-       //     var first = sentence.Words.FirstOrDefault();
+            //     var first = sentence.Words.FirstOrDefault();
             WorldObject prevObj = null;
             while (sentence.Words.Count > 0)
             {
@@ -37,11 +37,75 @@ namespace NLPtest.view
         }
 
 
+        public ContentTurn findGufContext(ContentTurn last, ContentTurn current)
+        {
+            return findGufContextHlpr(last, current);
+        }
 
-     
+        public ContentTurn findGufContext(ContentTurn objects)
+        {
+            return findGufContextHlpr(objects, objects);
+        }
 
+        private ContentTurn findGufContextHlpr(ContentTurn context, ContentTurn target)
+        {
+            foreach (var o in target)
+            {
+                if(o is gufObject)
+                {
+                    var g = getGuf(o as gufObject, context);
+                    target.replace(o, g);
+                }
+            }
+            return target;
+        }
 
-        public WorldObject Tag(ref WorldObject prevObj,ref Sentence sentence, ref ContentTurn context) {
+        private WorldObject getGuf(gufObject gufObject, ContentTurn objects)
+        {
+            if(gufObject.Guf == gufObject.gufType.First)
+            {
+                if (gufObject.Amount == gufObject.amountType.singular)
+                {
+                    return new UserObject("");//TODO get user name
+                }else
+                {
+                    return new multyPersoneObject(new WorldObject[] { new UserObject(""), new BotObject("") }); //TODO det
+                }
+              
+            }else if(gufObject.Guf == gufObject.gufType.First)
+            {
+                if (gufObject.Amount == gufObject.amountType.singular)
+                {
+                    return new BotObject("");//TODO get user name
+                }
+                else
+                {
+                    throw new GufException(gufObject);
+                }
+            }else
+            {
+                foreach (var o in objects)
+                {
+                    if(o is PersonObject)
+                    {
+                        var p = o as PersonObject;
+                        if(p.Gender == gufObject.Gender)
+                        {
+                            return p;
+                        }
+                    }else if(o is OrginazationObject && gufObject.Amount == gufObject.amountType.plural)
+                    {
+                        return o;
+                    }
+                }
+           //     throw new GufException(gufObject);
+           return null;
+            }
+           
+        }
+
+        public WorldObject Tag(ref WorldObject prevObj, ref Sentence sentence, ref ContentTurn context)
+        {
 
             //   var word = sentence.Words.FirstOrDefault();
             var word = sentence.Words.FirstOrDefault();
@@ -79,14 +143,15 @@ namespace NLPtest.view
 
                     if (objective != null)
                     {
-                        var guf = (gufObject) word.WorldObject;
+                        var guf = (gufObject)word.WorldObject;
                         prevObj.addRelation(new copulaRelObject(objective, guf));
                         prevObj = objective;
                         return null;
                     }
                     else
                     {
-                        throw new SemanticException("prep without objective");
+                        return prevObj;
+                      //  throw new SemanticException("prep without objective");
                     }
                     return null;
                 }
@@ -104,19 +169,21 @@ namespace NLPtest.view
                         {
                             return new NounObject(word.word);
                         }
-                    }else
+                    }
+                    else
                     {
                         if (word.le)
                         {
-                            prevObj.addRelation(new PrepRelObject(new NounObject(word.word),PrepType.toPrep));
+                            prevObj.addRelation(new PrepRelObject(new NounObject(word.word), PrepType.toPrep));
                             return null;
-                        }else if (word.ha)
+                        }
+                        else if (word.ha)
                         {
                             return new DefiniteArticleWrap(new NounObject(word.word));
                         }
 
-
-                        throw new SemanticException("unknown prefix");
+                        return null;
+                        //        throw new SemanticException("unknown prefix");
                     }
                 }
                 else if (word.isA(personWord))
@@ -127,11 +194,17 @@ namespace NLPtest.view
                         return new PersonObject(word.word);
                     }
                 }
+                else if (word.isA(negationWord))
+                {
+                    var objective = Tag(ref prevObj, ref sentence, ref context);
+                    objective.Negat = true;
+                    return objective;
+                }
                 else if (word.isA(verbWord))
                 {
                     var objective = new VerbObject(word.word);
                     prevObj.addRelation(new VerbRelObject(objective));
-                    prevObj =  objective;
+                    prevObj = objective;
                     return null;
                 }
                 else if (word.isA(timeWord))
@@ -145,27 +218,38 @@ namespace NLPtest.view
                 }
                 else if (word.isA(adjectiveWord | adverbWord))
                 {
-                    prevObj.addRelation(new adjectiveRelObject(new AdjObject(word.word)));
-                    return null;
+                    if (prevObj != null)
+                    {
+                        prevObj.addRelation(new adjectiveRelObject(new AdjObject(word.word)));
+                        return null;
+                    }else
+                    {
+                        var objective = Tag(ref prevObj, ref sentence, ref context);
+                        objective.addRelation(new adjectiveRelObject(new AdjObject(word.word)));
+                        return objective;
+                    }
                 }
                 else if (word.isA(prepWord))
                 {
                     var objective = Tag(ref prevObj, ref sentence, ref context);
-                    if (objective != null) {
+                    if (objective != null & prevObj != null)
+                    {
                         prevObj.addRelation(new PrepRelObject(objective, ((PrepRelObject)word.WorldObject).Type));
-                        prevObj = objective;
+                        return prevObj;
                     }
                     else
                     {
-                  //      throw new SemanticException("prep without objective");
+                        var objective2 = Tag(ref prevObj, ref sentence, ref context);
+                        objective2.addRelation(new PrepRelObject(objective, ((PrepRelObject)word.WorldObject).Type));
+                        return objective2;
                     }
-                    return null;
+                  
                 }
                 else if (word.isA(locationWord))
                 {
                     return word.WorldObject;
                 }
-                else if (word.isA(conjunction))
+                else if (word.isA(conjunctionWord))
                 {
                     var objective = Tag(ref prevObj, ref sentence, ref context);
                     if (objective != null)
@@ -175,7 +259,7 @@ namespace NLPtest.view
                     }
                     else
                     {
-                   //     throw new SemanticException("prep without objective");
+                        //     throw new SemanticException("prep without objective");
                     }
                     return null;
                 }
@@ -191,13 +275,13 @@ namespace NLPtest.view
                 return null;
             }
 
-         
+
 
         }
 
         internal bool isAName(Word w)
         {
-            return w.isA(personWord) || w.isA(properName);
+            return w.isA(personWord) || w.isA(properNameWord);
         }
 
         private Sentence nose(Sentence sentence, Word word)
@@ -209,11 +293,6 @@ namespace NLPtest.view
 
 
     }
-
-
-
-
-
-
-
 }
+
+

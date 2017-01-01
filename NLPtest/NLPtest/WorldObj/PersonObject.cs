@@ -15,5 +15,7 @@ namespace NLPtest.WorldObj
         {
 
         }
+
+        internal gufObject.genderType Gender { get; set; }
     }
 }
