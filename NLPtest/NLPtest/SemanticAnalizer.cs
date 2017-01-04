@@ -202,9 +202,20 @@ namespace NLPtest.view
                 }
                 else if (word.isA(verbWord))
                 {
-                    var objective = new VerbObject(word.word);
-                    prevObj.addRelation(new VerbRelObject(objective));
-                    prevObj = objective;
+                    if(prevObj != null)
+                    {
+                        var objective = new VerbObject(word.word);
+                        prevObj.addRelation(new VerbRelObject(objective));
+                        prevObj = objective;
+                    }
+                    else
+                    {
+                        var prev = Tag(ref prevObj, ref sentence, ref context);
+                        var objective = new VerbObject(word.word);
+                        prev.addRelation(new VerbRelObject(objective));
+                        return prevObj;
+                    }
+                   
                     return null;
                 }
                 else if (word.isA(timeWord))
