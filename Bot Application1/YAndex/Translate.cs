@@ -16,19 +16,19 @@ namespace Bot_Application1.YAndex
 
         
 
-        public static string Start(string str)
+        public static string Translate(string str)
         {
 
             string strUrl = "https://translate.yandex.net/api/v1.5/tr.json/translate ?";
             strUrl += "key = trnsl.1.1.20161229T103726Z.33fde522ea363785.a069a5219ef7414abd5b7042ee5812951fc317a4";
-            strUrl += " & text = ילד";
+            strUrl += " & text = " + str;
             strUrl += "&lang = en - he";
 
             WebClient wc = new WebClient();
            wc.Encoding = Encoding.UTF8;
             string strJson = wc.DownloadString(strUrl);
 
-            return "Fd";   
+            return strJson;   
         }
 
     }
