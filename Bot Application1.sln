@@ -8,8 +8,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bot Application1", "Bot App
 		{F1B355E1-3B6E-423D-8225-DC400CFF395D} = {F1B355E1-3B6E-423D-8225-DC400CFF395D}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wikipedia", "wikipedia\wikipedia.csproj", "{1313A394-B242-4922-A76D-460D3241E9A6}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLPtest", "NLPtest\NLPtest\NLPtest.csproj", "{F1B355E1-3B6E-423D-8225-DC400CFF395D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestProject1", "UnitTestProject1\UnitTestProject1.csproj", "{21F6D15B-BC13-417A-858F-7C82A2FD2142}"

@@ -50,19 +50,19 @@ namespace NLPtest
             //    m_lemmatizer = new HebMorph.StreamLemmatizer(radix, false);
             //}
 
-            var path = "C:/Program Files (x86)/IIS Express/botServer/hebdata/";
-            tagger = new SimpleTagger3(path);
-            nerTagger = new NERTagger(path, tagger);
+      //      var path = "C:/Program Files (x86)/IIS Express/botServer/hebdata/";
+      //      tagger = new SimpleTagger3(path);
+      //      nerTagger = new NERTagger(path, tagger);
            //  create the noun-phrase chunker
-            sentenceFactory = new MeniTaggeedSentenceFactory(null, MeniTokenExpander.expander);
-            String chunkModelPrefix = path + vohmm.util.Dir.CHUNK_MODEL_PREF;
-            chunker = new TaggerBasedHebrewChunker(sentenceFactory, chunkModelPrefix);
-            hebDictionary = new HebDictionary();
+       //     sentenceFactory = new MeniTaggeedSentenceFactory(null, MeniTokenExpander.expander);
+      //      String chunkModelPrefix = path + vohmm.util.Dir.CHUNK_MODEL_PREF;
+      //      chunker = new TaggerBasedHebrewChunker(sentenceFactory, chunkModelPrefix);
+      //      hebDictionary = new HebDictionary();
         }
 
         public static List<Sentence> meniAnalize(String str)
         {
-
+            return new List<Sentence>();
             // The follwoing object constructions are heavy - SHOULD BE APPLIED ONLY ONCE!
             // create the morphological analyzer and disambiguator 
 
