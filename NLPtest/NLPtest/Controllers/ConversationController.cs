@@ -23,18 +23,16 @@ namespace NLPtest
          SemanticAnalizer sa;
         Dictionary<string, string[]> PraseDictionary;
         private ContentTurn last;
+        INLPControler nlpControler;
 
         public ConversationController()
         {
             composer = new MessageComposer();
             responder = new Responder();
-            sa = new SemanticAnalizer();
+           // sa = new SemanticAnalizer();
             PraseDictionary = loadDictionary();
+            nlpControler = NLPControler.getInstence();
         }
-
-
-
-       
 
         public  string[] NotImplamented(User user)
         {
@@ -174,18 +172,7 @@ namespace NLPtest
                 "בוא נלמד",
                 "עריכת פרופיל",
                 "כלום. אין לי כח ללמוד",
-                  "אופציהה",
-                    "אופציההה 3",
-                      "בוא נלמד",
-                "עריכת פרופיל",
-                "כלום. אין לי כח ללמוד",
-                  "אופציהה",
-                    "אופציההה 3",
-                      "בוא נלמד",
-                "עריכת פרופיל",
-                "כלום. אין לי כח ללמוד",
-                  "אופציהה",
-                    "אופציההה 3",
+
             };
         }
 
@@ -376,18 +363,17 @@ namespace NLPtest
 
         public  string getGender(string text)
         {
-            return MorfAnalizer.GetGender(text);
+            return nlpControler.GetGender(text);
         }
-
 
         public  string getClass(string text)
         {
-            return MorfAnalizer.getClass(text);
+            return nlpControler.getClass(text);
         }
 
         public string getGeneralFeeling(string text)   //TODO: real feeling
         {
-            return MorfAnalizer.GetGeneralFeeling(text);
+            return nlpControler.GetGeneralFeeling(text);
         }
 
 
@@ -396,7 +382,7 @@ namespace NLPtest
 
             //    var a = MorfAnalizer.createSentence(inputText);
             var context = new Context();
-            var sen = MorfAnalizer.meniAnalize(inputText);
+            var sen = nlpControler.Analize(inputText);
 
             ContentTurn input = new ContentTurn();
             foreach (var s in sen)

@@ -19,18 +19,18 @@ using NLPtest.view;
 
 namespace NLPtest
 {
-    static public class MorfAnalizer
+      public class MorfAnalizer
     {
 
-        static SimpleTagger3 tagger;
+          SimpleTagger3 tagger;
 
 
-        static NERTagger nerTagger;
-        static MeniTaggeedSentenceFactory sentenceFactory;
-        static TaggerBasedHebrewChunker chunker;
-        private static HebDictionary hebDictionary;
+          NERTagger nerTagger;
+          MeniTaggeedSentenceFactory sentenceFactory;
+          TaggerBasedHebrewChunker chunker;
+        private   HebDictionary hebDictionary;
 
-        static public void initialize()
+          public void initialize()
         {
             //    hspellPath = Directory.GetCurrentDirectory() + "..\\..\\..\\hspell-data-files";
             //   radix = Loader.LoadDictionaryFromHSpellFolder(hspellPath, true);
@@ -60,7 +60,7 @@ namespace NLPtest
       //      hebDictionary = new HebDictionary();
         }
 
-        public static List<Sentence> meniAnalize(String str)
+        public   List<Sentence> meniAnalize(String str)
         {
             return new List<Sentence>();
             // The follwoing object constructions are heavy - SHOULD BE APPLIED ONLY ONCE!
@@ -465,12 +465,12 @@ namespace NLPtest
             return allRes;
         }
 
-        private static Word tryGetUnknown(string token)
+        private   Word tryGetUnknown(string token)
         {
             return null;
         }
 
-        public  static string getClass(string text)
+        public    string getClass(string text)
         {
             //    var a = ma.createSentence(inputText);
             var context = new Context();
@@ -585,7 +585,7 @@ namespace NLPtest
 
 
 
-        public static string removeParentheses(string input, char start, char end)
+        public   string removeParentheses(string input, char start, char end)
         {
             string res = input;
             while (res.Contains(start) && res.Contains(end))
@@ -771,7 +771,7 @@ namespace NLPtest
 
 
         //ceack if part of the sentence is a prase
-        private static Sentence checkPhrases(Sentence sentence)
+        private   Sentence checkPhrases(Sentence sentence)
         {
 
             var words = sentence.Words;
@@ -809,7 +809,7 @@ namespace NLPtest
 
 
 
-        public static String getName(string inputText)
+        public   String getName(string inputText)
         {
 
             //    var a = MorfAnalizer.createSentence(inputText);
@@ -838,11 +838,11 @@ namespace NLPtest
 
         }
 
-        public static string GetGender(string text)
+        public   string GetGender(string text)
         {
             //    var a = MorfAnalizer.createSentence(inputText);
             var context = new Context();
-            var sen = MorfAnalizer.meniAnalize(text);
+            var sen = meniAnalize(text);
 
             ContentTurn input = new ContentTurn();
             foreach (var s in sen)
@@ -863,7 +863,7 @@ namespace NLPtest
             return null;
         }
 
-        public static string GetGeneralFeeling(string text)
+        public   string GetGeneralFeeling(string text)
         {
             //    var a = MorfAnalizer.createSentence(inputText);
             if (text.Contains("לא טוב") || text.Contains("רע") || text.Contains("גרוע") || text.Contains("על הפנים"))

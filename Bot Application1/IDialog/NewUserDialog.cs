@@ -9,6 +9,7 @@ using System.Web.UI.WebControls;
 using Bot_Application1.Cardatt_achment;
 using Bot_Application1.dataBase;
 using NLPtest;
+using Bot_Application1.YAndex;
 
 namespace Bot_Application1.IDialog
 {
@@ -44,12 +45,31 @@ namespace Bot_Application1.IDialog
 
         public async virtual Task NewUserGetName(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
+         
+
+
+
             ConversationController conv = new ConversationController();
             context.UserData.TryGetValue<User>("user", out user);
             if (user.userName == "" || user.userName == null)
             {
+                if (context.Activity.ChannelId == "facebook")
+                {
+                    var userFBname = context.Activity.From.Name;
+                    var userTranslation = ControlerTranslate.Translate(userFBname);
+                    if(userTranslation != "")
+                    {
+                        user.userName = userTranslation;
+                        context.UserData.SetValue<User>("user", user);
+                        await NewUserGetName(context, result);
+                    }
+                }
+                else
+                {
                 await writeMessageToUser(context, conv.NewUserGetName());
                 context.Wait(CheckName);
+
+                } 
 
             }
             else
@@ -66,7 +86,7 @@ namespace Bot_Application1.IDialog
             var userText = await result;
 
       
-            if ((user.userName = MorfAnalizer.getName(userText.Text)) != null)
+            if ((user.userName = NLPControler.getInstence().getName(userText.Text)) != null)
             {
                 var newMessage = conv.NewUserGreeting(user.userName);
 

@@ -15,7 +15,7 @@ namespace Bot_Application1.YAndex
 
         
 
-        public static Translate Start(string str)
+        public static string Translate(string str)
         {
             Translate tr = new Translate();
             try
@@ -30,13 +30,13 @@ namespace Bot_Application1.YAndex
                 wc.Encoding = Encoding.UTF8;
                 string strJson = wc.DownloadString(strUrl);
                 tr  = Newtonsoft.Json.JsonConvert.DeserializeObject<Translate>(strJson);
-                return tr;
+                return tr.text[0];
             }catch(Exception e)
             {
                 Logger.log("ControlerTranslate", MethodBase.GetCurrentMethod().Name, e.ToString());
             }
 
-            return tr;
+            return tr.text[0];
              
         }
 

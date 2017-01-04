@@ -30,7 +30,7 @@ namespace NLPtest
         private void Form1_Load(object sender, EventArgs e)
         {
             input_TB.Select();
-            MorfAnalizer.initialize();
+            
 
         }
 
