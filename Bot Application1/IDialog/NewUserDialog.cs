@@ -66,7 +66,7 @@ namespace Bot_Application1.IDialog
             var userText = await result;
 
       
-            if ((user.userName = conv.getName(userText.Text)) != null)
+            if ((user.userName = MorfAnalizer.getName(userText.Text)) != null)
             {
                 var newMessage = conv.NewUserGreeting(user.userName);
 

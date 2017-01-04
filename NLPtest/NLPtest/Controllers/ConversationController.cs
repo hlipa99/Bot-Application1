@@ -22,9 +22,9 @@ namespace NLPtest
          Responder responder;
          SemanticAnalizer sa;
         Dictionary<string, string[]> PraseDictionary;
+        private ContentTurn last;
 
-
-         public ConversationController()
+        public ConversationController()
         {
             composer = new MessageComposer();
             responder = new Responder();
@@ -119,33 +119,6 @@ namespace NLPtest
 };
         }
 
-         public String getName(string inputText)
-        {
-
-            //    var a = MorfAnalizer.createSentence(inputText);
-            var context = new Context();
-            var sen = MorfAnalizer.meniAnalize(inputText);
-
-            if(sen.Count == 1 && sen[0].Words.Count == 1)
-            {
-                return sen[0].Words[0].word;
-            }
-
-            ContentTurn input = new ContentTurn();
-            foreach (var s in sen)
-            {
-                foreach (var w in s.Words)
-                {
-                    if (sa.isAName(w))
-                    {
-                        return w.word;
-                    }
-                }
-            }
-
-            return null;
-
-        }
 
         public  bool isStopSession(string answer)
         {
@@ -201,6 +174,18 @@ namespace NLPtest
                 "בוא נלמד",
                 "עריכת פרופיל",
                 "כלום. אין לי כח ללמוד",
+                  "אופציהה",
+                    "אופציההה 3",
+                      "בוא נלמד",
+                "עריכת פרופיל",
+                "כלום. אין לי כח ללמוד",
+                  "אופציהה",
+                    "אופציההה 3",
+                      "בוא נלמד",
+                "עריכת פרופיל",
+                "כלום. אין לי כח ללמוד",
+                  "אופציהה",
+                    "אופציההה 3",
             };
         }
 
@@ -225,7 +210,7 @@ namespace NLPtest
         {
             return new string[]
      {
-                            " שלום, אני" + ", 'מיסטר אייצ " + " בוט ללימוד היסטוריה",
+                            "שלום, אני " + " מיסטר אייצ" +"'" + ", " + "בוט ללימוד היסטוריה",
      };
         }
 
@@ -417,14 +402,15 @@ namespace NLPtest
             foreach (var s in sen)
             {
                 input.Add(sa.tagWords(s, ref context));
+                input = sa.findGufContext(input);
             }
-
+            input = sa.findGufContext(last, input);
 
 
             //       var output = responder.respone(input, context);
 
             //      var outMessage = composer.compose(output, new User("יוחאי"));
-
+    
 
             //  return outMessage;
 

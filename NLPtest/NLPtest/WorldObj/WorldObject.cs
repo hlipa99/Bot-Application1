@@ -11,6 +11,7 @@ namespace NLPtest.WorldObj
        
         List<RelationObject> relations = new List<RelationObject>();
         string word;
+        private bool negat;
 
         public WorldObject(){}
 
@@ -32,6 +33,19 @@ namespace NLPtest.WorldObj
             }
         }
 
+        public bool Negat
+        {
+            get
+            {
+                return negat;
+            }
+
+            set
+            {
+                negat = value;
+            }
+        }
+
         public void addRelation(RelationObject type)
         {
             relations.Add(type);
@@ -40,8 +54,8 @@ namespace NLPtest.WorldObj
 
         public override string ToString()
         {
-
-                return word + "(" + GetType() + ")" ;
+            var n = negat ? "!" : "";
+                return word + "(" + GetType() + ")" + n ;
         }
 
   

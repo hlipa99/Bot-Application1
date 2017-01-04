@@ -3,17 +3,23 @@ using static NLPtest.WorldObj.PrepRelObject;
 using NLPtest.WorldObj;
 using vohmm.corpus;
 using static NLPtest.Word.WordType;
+using static NLPtest.gufObject;
+
 namespace NLPtest
 {
     public class Word
     {
         private WorldObject worldObject;
+        internal string word;
+        private AnalysisInterface analysisInterface;
+
+
 
         public string root;
-        internal string guf;
-        internal string time;
-        internal string amount;
-        internal string gender;
+        internal gufType guf = gufType.unspecified;
+        internal timeType time = timeType.unspecified;
+        internal amountType amount = amountType.unspecified;
+        internal genderType gender = genderType.unspecified;
         internal object prefix;
         internal bool le;
         internal bool me;
@@ -25,7 +31,7 @@ namespace NLPtest
         internal bool sh;
 
 
-        WordType wordType;
+        WordType wordType = unknownWord;
         public AnalysisInterface AnalysisInterface
         {
             get
@@ -61,79 +67,80 @@ namespace NLPtest
                 if (worldObject == null)
                 {
 
-                    switch (wordType)
+                        if (isA(dateWord)) {
+                        worldObject = getDateFromWord();
+                         }else if (isA(copulaWord))
                     {
-                        case dateWord:
-                            worldObject = getDateFromWord(word);
-                            break;
-                        case copulaWord:
-                            worldObject = getGufFromWord(word);
-                            break;
-                        case eventWord:
-                            worldObject = getEventFromWord(word);
-                            break;
-                        case gufWord | nounWord:
-                            worldObject = getGufFromWord(word);
-                            break;
-                        case adverbWord:
-                            worldObject = getadverbFromWord(word);
-                            break;
-                        case helloWord:
-                            worldObject = getHelloFromWord(word);
-                            break;
-                        case identityWord:
-                            throw new NotImplementedException();
-                            break;
-                        case   locationWord | nounWord:
-                            worldObject =  new LocationObject(word);
-                            break;
-                        case   markWord:
-                            worldObject =  new toneObject("mark");
-                            break;
-                        case   adjectiveWord:
-                            worldObject =  new AdjObject(word);
-                            break;
-                        case   moneyWord:
-                            worldObject = getMoneyFromWord(word);
-                            break;
-                        case conjunction:
-                            worldObject = new ConjunctionRelObject(null);
-                            break;
-                        case   nounWord:
-                            worldObject = getNounFromWord(word);
-                            break;
-                        case orginazationWord | nounWord:
-                            worldObject = getOrginazationFromWord(word);
-                            break;
-                        case personWord | nounWord:
-                            worldObject = getPersonFromWord(word);
-                            break;
-                        case   precentWord:
-                            worldObject = getPrecentageFromWord(word);
-                            break;
-                        case   prepWord:
-                            worldObject = new PrepRelObject(null);
-                            break;
-                        case   questionWord:
-                            worldObject = getQuestionFromWord(word);
-                            break;
-                        case   timeWord:
-                            worldObject = getTimeFromWord(word);
-                            break;
-                        case   unknownWord:
-                            worldObject = new WorldObject(word);
-                            break;
-                        case   verbWord:
-                            worldObject = getVerbFromWord(word);
-                            break;
-
-                        default:
-                            break;
+                        worldObject = getGufFromWord();
+                    }
+                    else if (isA(eventWord))
+                    {
+                        worldObject = getEventFromWord();
+                    }
+                    else if (isA(gufWord) | isA(nounWord))
+                    {
+                        worldObject = getGufFromWord();
+                    }
+                    else if (isA(adverbWord))
+                    {
+                        worldObject = getadverbFromWord();
+                    }
+                    else if (isA(helloWord))
+                    {
+                        worldObject = getHelloFromWord();
+                    }
+                    else if (isA(locationWord | nounWord))
+                    {
+                        worldObject = new LocationObject(word);
+                    }
+                    else if (isA(markWord))
+                    {
+                        worldObject = new toneObject("mark");
+                    }
+                    else if (isA(adjectiveWord))
+                    {
+                        worldObject = new AdjObject(word);
+                    }
+                    else if (isA(conjunctionWord))
+                    {
+                        worldObject = new ConjunctionRelObject(null);
+                    }
+                  
+                    else if (isA(orginazationWord))
+                    {
+                        worldObject = getOrginazationFromWord();
+                    }
+                    else if (isA(personWord))
+                    {
+                        worldObject = getPersonFromWord();
+                    }
+                    else if (isA(prepWord))
+                    {
+                        worldObject = new PrepRelObject(null);
+                    }
+                    else if (isA(questionWord))
+                    {
+                        worldObject = getQuestionFromWord();
+                    }
+                    else if (isA(timeWord))
+                    {
+                        worldObject = getTimeFromWord();
+                    }
+                    else if (isA(unknownWord))
+                    {
+                        worldObject = new WorldObject();
+                    }
+                    else if (isA(verbWord))
+                    {
+                        worldObject = getVerbFromWord();
                     }
 
-                    if(worldObject == null)
+                    else if (isA(nounWord))
                     {
-                      //  throw new WorldObjectException(this);
+                        worldObject = getNounFromWord();
+                    }else
+                    {
+                        worldObject = new WorldObject(word);
                     }
 
                 }
@@ -154,91 +161,87 @@ namespace NLPtest
         }
 
 
-        private WorldObject getVerbFromWord(string word)
+        private WorldObject getVerbFromWord( )
         {
             var res = new VerbObject(word);
             return res;
         }
 
-        private WorldObject getTimeFromWord(string word)
+        private WorldObject getTimeFromWord( )
         {
             var res = new TimeObject(word);
             return res;
         }
 
-        private WorldObject getQuestionFromWord(string word)
+        private WorldObject getQuestionFromWord( )
         {
             var res = new QuestionObject(word);
             return res;
         }
 
-        private WorldObject getPrecentageFromWord(string word)
+        private WorldObject getPrecentageFromWord( )
         {
             throw new NotImplementedException();
         }
 
-        private WorldObject getPersonFromWord(string word)
+        private WorldObject getPersonFromWord( )
         {
             var res = new PersonObject(word);
             return res;
         }
 
-        private WorldObject getOrginazationFromWord(string word)
+        private WorldObject getOrginazationFromWord( )
         {
             var res = new OrginazationObject(word);
             return res;
         }
 
-        private WorldObject getNounFromWord(string word)
+        private WorldObject getNounFromWord( )
         {
             var res = new NounObject(word);
             return res;
         }
 
-        private WorldObject getMoneyFromWord(string word)
+        private WorldObject getMoneyFromWord( )
         {
             throw new NotImplementedException();
         }
 
-        private WorldObject getLocationWord(string word)
+        private WorldObject getLocationWord( )
         {
             var res = new LocationObject(word);
             return res;
         }
 
-        private WorldObject getHelloFromWord(string word)
+        private WorldObject getHelloFromWord( )
         {
             var res = new HelloObject(word);
             return res;
         }
 
-        private WorldObject getadverbFromWord(string word)
+        private WorldObject getadverbFromWord( )
         {
             var res = new VerbObject(word);
             return res;
         }
 
-        private WorldObject getGufFromWord(string word)
+        private WorldObject getGufFromWord( )
         {
-            var gufObj = new gufObject(word, time,amount, guf);
+            var gufObj = new gufObject(amount, guf, time, gender, word);
             return gufObj;
         }
 
-        private WorldObject getEventFromWord(string word)
+        private WorldObject getEventFromWord( )
         {
             var res = new EventObject(word);
             return res;
         }
 
-        private WorldObject getDateFromWord(string word)
+        private WorldObject getDateFromWord( )
         {
             var res = new TimeObject(word);
             return res;
         }
-
-        internal string word;
-        private AnalysisInterface analysisInterface;
-
 
 
 
@@ -286,13 +289,41 @@ namespace NLPtest
             unknownWord = 131072,
             verbWord = 262144,
             copulaWord = 524288,
-            conjunction = 1048576,
+            conjunctionWord = 1048576,
             numeralWord = 2097152,
-            properName = 4194304,
+            properNameWord = 4194304,
             hyphenWord = 8388608,
-
+            negationWord = 16777216
         }
 
+        internal void setGender(string gen)
+        {
+            if (gen == "masculine") gender =  genderType.masculine;
+            else if(gen == "feminine") gender = genderType.feminine;
+            else gender = genderType.unspecified;
+        }
 
+        internal void setAmount(string am)
+        {
+            if (am == "singular") amount = amountType.singular;
+            else if (am == "plural") amount = amountType.plural;
+            else amount = amountType.unspecified;
+        }
+
+        internal void setTime(string time)
+        {
+            if (time == "future") this.time = timeType.future;
+            else if (time == "past") this.time = timeType.past;
+            else if (time == "present") this.time = timeType.present;
+            else this.time = timeType.unspecified;
+        }
+
+        internal void setGuf(string guf)
+        {
+            if (guf == "1") this.guf = gufType.First;
+            else if (guf == "2") this.guf = gufType.Second;
+            else if (guf == "3") this.guf = gufType.Third;
+            else this.guf = gufType.unspecified;
+        }
     }
 }

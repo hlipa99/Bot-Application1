@@ -80,7 +80,7 @@ namespace Bot_Application1.IDialog
             if (conv.isStopSession(message.Text))
             {
                 await writeMessageToUser(context, conv.stopLearningSession(user));
-                return;
+                context.Done("");
             }
 
             context.UserData.TryGetValue<StudySession>("studySession", out studySession);
@@ -104,7 +104,7 @@ namespace Bot_Application1.IDialog
             if (conv.isStopSession(message.Text))
             {
                 await writeMessageToUser(context, conv.stopLearningSession(user));
-                return;
+                context.Done("");
             }
 
             await writeMessageToUser(context, conv.MyAnswerToQuestion());

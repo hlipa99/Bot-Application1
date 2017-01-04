@@ -4,21 +4,123 @@ namespace NLPtest
 {
     internal class gufObject :WorldObject
     {
-        private string amount;
-        private string guf;
-        private string time;
+        private  amountType amount;
+        private  gufType guf;
+        private  timeType time;
+        private genderType gender;
         private string word;
+
+        internal amountType Amount
+        {
+            get
+            {
+                return amount;
+            }
+
+            set
+            {
+                amount = value;
+            }
+        }
+
+        internal gufType Guf
+        {
+            get
+            {
+                return guf;
+            }
+
+            set
+            {
+                guf = value;
+            }
+        }
+
+        internal timeType Time
+        {
+            get
+            {
+                return time;
+            }
+
+            set
+            {
+                time = value;
+            }
+        }
+
+        internal genderType Gender
+        {
+            get
+            {
+                return gender;
+            }
+
+            set
+            {
+                gender = value;
+            }
+        }
+
+        public string Word
+        {
+            get
+            {
+                return word;
+            }
+
+            set
+            {
+                word = value;
+            }
+        }
 
         public gufObject(string word)
         {
-            this.word = word;
+            this.Word = word;
         }
 
-        public gufObject(string word,string time,string amount,string guf)
+        public gufObject(amountType amount, gufType guf, timeType time, genderType gender, string word)
         {
-            this.time = time;
-            this.guf = guf;
-            this.amount = amount;
+            this.Amount = amount;
+            this.Guf = guf;
+            this.Time = time;
+            this.Gender = gender;
+            this.Word = word;
         }
+
+
+
+        public enum amountType
+        {
+            singular,
+            plural,
+            unspecified
+        }
+
+        public enum gufType
+        {
+            unspecified,
+            First,
+            Second,
+            Third
+        }
+
+        public enum genderType
+        {
+            masculine,
+            feminine,
+            unspecified
+        }
+
+        public enum timeType
+        {
+            past,
+            present,
+            future,
+            none,
+            unspecified
+        }
+
     }
 }

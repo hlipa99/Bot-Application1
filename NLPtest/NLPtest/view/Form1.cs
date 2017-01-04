@@ -74,23 +74,29 @@ namespace NLPtest
         private TreeNode drawObject(WorldObject obj)
         {
             var objectNode = new TreeNode();
-            objectNode.Text = obj.ToString();
-            foreach(var r in obj.Relations)
+            if (obj != null)
             {
-                var rNode = drawObject(r);
-                var objec = drawObject(r.Objective);
-                rNode.Nodes.Add(objec);
-                objectNode.Nodes.Add(rNode);
-            }
+                objectNode.Text = obj.ToString();
+                foreach (var r in obj.Relations)
+                {
+                    var rNode = drawObject(r);
+                    var objec = drawObject(r.Objective);
+                    rNode.Nodes.Add(objec);
+                    objectNode.Nodes.Add(rNode);
+                }
 
-            if(obj is ObjectWrapper)
+                if (obj is ObjectWrapper)
+                {
+                    var o = obj as ObjectWrapper;
+                    var objec = drawObject(o.Objective);
+                    objectNode.Nodes.Add(objec);
+                }
+
+            }else
             {
-                var o = obj as ObjectWrapper;
-                var objec = drawObject(o.Objective);
-                objectNode.Nodes.Add(objec);
+                objectNode.Text = "null object";
             }
-
-            return objectNode;
+                return objectNode;
         }
 
 
