@@ -221,6 +221,9 @@
   <ItemGroup>
     <Compile Include="Answer.cs" />
     <Compile Include="GufException.cs" />
+    <Compile Include="Controllers\INLPController.cs" />
+    <Compile Include="Controllers\NLPController.cs" />
+    <Compile Include="Controllers\NLPControllerTestStub.cs" />
     <Compile Include="WorldObj\multyPersoneObject.cs" />
     <Compile Include="WorldObj\BotObject.cs" />
     <Compile Include="Exceptions\CantResponeException.cs" />
