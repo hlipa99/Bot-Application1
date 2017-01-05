@@ -20,5 +20,7 @@ namespace Bot_Application1.Models
         public string Channel { get; set; }
         public System.DateTime created { get; set; }
         public string Message { get; set; }
+        public Nullable<int> CountOfTurnsToWin { get; set; }
+        public string WinnerUserName { get; set; }
     }
 }

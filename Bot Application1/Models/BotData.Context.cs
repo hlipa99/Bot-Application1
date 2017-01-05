@@ -13,10 +13,10 @@ namespace Bot_Application1.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class BotDataEntities1 : DbContext
+    public partial class mindcetEntities : DbContext
     {
-        public BotDataEntities1()
-            : base("name=BotDataEntities1")
+        public mindcetEntities()
+            : base("name=mindcetEntities")
         {
         }
     
@@ -25,7 +25,7 @@ namespace Bot_Application1.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<UserLog> UserLogs { get; set; }
-        public virtual DbSet<Question> Questions { get; set; }
+        public virtual DbSet<UserLog> UserLog { get; set; }
+        public virtual DbSet<Table> Table { get; set; }
     }
 }

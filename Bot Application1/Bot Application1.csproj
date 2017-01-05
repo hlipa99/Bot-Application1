@@ -197,10 +197,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\BotData.mdf" />
-    <Content Include="App_Data\BotData_log.ldf">
-      <DependentUpon>BotData.mdf</DependentUpon>
-    </Content>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Site.css" />
@@ -227,6 +223,7 @@
     <Content Include="Models\BotData.edmx.diagram">
       <DependentUpon>BotData.edmx</DependentUpon>
     </Content>
+    <None Include="Properties\PublishProfiles\BotApplication120170104113209 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -279,13 +276,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>BotData.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Models\ComplexType1.cs">
-      <DependentUpon>BotData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Question.cs">
-      <DependentUpon>BotData.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\StudySession.cs" />
+    <Compile Include="Models\Table.cs">
+      <DependentUpon>BotData.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\UserLog.cs">
       <DependentUpon>BotData.tt</DependentUpon>
     </Compile>
@@ -318,6 +312,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App_Data\" />
     <Folder Include="UnitTests\" />
     <Folder Include="Views\Message\" />
     <Folder Include="Views\User\" />
@@ -330,6 +325,9 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

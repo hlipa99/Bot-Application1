@@ -4,36 +4,38 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="BotDataModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="Question">
+    <Schema Namespace="mindcetModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Table">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" Nullable="false" />
-          <Property Name="Category" Type="nvarchar" MaxLength="150" />
-          <Property Name="SubCategory" Type="nvarchar" MaxLength="150" />
-          <Property Name="Text" Type="nvarchar" MaxLength="500" />
-          <Property Name="Answer" Type="nvarchar" MaxLength="500" />
+          <Property Name=" Category" Type="text" />
+          <Property Name="SubCategory" Type="text" />
+          <Property Name=" Text" Type="text" />
+          <Property Name="Answer" Type="text" />
         </EntityType>
         <EntityType Name="UserLog">
           <Key>
-            <PropertyRef Name="id" />
+            <PropertyRef Name="Id" />
           </Key>
-          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserID" Type="nvarchar" MaxLength="150" Nullable="false" />
           <Property Name="UserName" Type="nvarchar" MaxLength="150" Nullable="false" />
           <Property Name="Channel" Type="nvarchar" MaxLength="150" Nullable="false" />
           <Property Name="created" Type="datetime" Nullable="false" />
           <Property Name="Message" Type="nvarchar" MaxLength="500" />
+          <Property Name="CountOfTurnsToWin" Type="int" />
+          <Property Name="WinnerUserName" Type="nvarchar" MaxLength="150" />
         </EntityType>
-        <EntityContainer Name="BotDataModelStoreContainer">
-          <EntitySet Name="Question" EntityType="Self.Question" Schema="dbo" store:Type="Tables" />
+        <EntityContainer Name="mindcetModelStoreContainer">
+          <EntitySet Name="Table" EntityType="Self.Table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserLog" EntityType="Self.UserLog" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="BotDataModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="mindcetModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="UserLog">
           <Key>
             <PropertyRef Name="Id" />
@@ -44,47 +46,50 @@
           <Property Name="Channel" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="created" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Message" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="CountOfTurnsToWin" Type="Int32" />
+          <Property Name="WinnerUserName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityContainer Name="BotDataEntities1" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="UserLogs" EntityType="Self.UserLog" />
-          <EntitySet Name="Questions" EntityType="BotDataModel.Question" />
+        <EntityContainer Name="mindcetEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="UserLog" EntityType="Self.UserLog" />
+          <EntitySet Name="Table" EntityType="mindcetModel.Table" />
         </EntityContainer>
-        <ComplexType Name="ComplexType1" />
-        <EntityType Name="Question">
+        <EntityType Name="Table">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="Category" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="SubCategory" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="Text" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Answer" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="C_Category" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="SubCategory" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="C_Text" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Answer" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="BotDataModelStoreContainer" CdmEntityContainer="BotDataEntities1">
-          <EntitySetMapping Name="UserLogs">
-            <EntityTypeMapping TypeName="BotDataModel.UserLog">
+        <EntityContainerMapping StorageEntityContainer="mindcetModelStoreContainer" CdmEntityContainer="mindcetEntities">
+          <EntitySetMapping Name="UserLog">
+            <EntityTypeMapping TypeName="mindcetModel.UserLog">
               <MappingFragment StoreEntitySet="UserLog">
-                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
                 <ScalarProperty Name="Channel" ColumnName="Channel" />
                 <ScalarProperty Name="created" ColumnName="created" />
                 <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="CountOfTurnsToWin" ColumnName="CountOfTurnsToWin" />
+                <ScalarProperty Name="WinnerUserName" ColumnName="WinnerUserName" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Questions">
-            <EntityTypeMapping TypeName="BotDataModel.Question">
-              <MappingFragment StoreEntitySet="Question">
+          <EntitySetMapping Name="Table">
+            <EntityTypeMapping TypeName="mindcetModel.Table">
+              <MappingFragment StoreEntitySet="Table">
                 <ScalarProperty Name="Answer" ColumnName="Answer" />
-                <ScalarProperty Name="Text" ColumnName="Text" />
+                <ScalarProperty Name="C_Text" ColumnName=" Text" />
                 <ScalarProperty Name="SubCategory" ColumnName="SubCategory" />
-                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="C_Category" ColumnName=" Category" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -103,7 +108,7 @@
     <Options>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />

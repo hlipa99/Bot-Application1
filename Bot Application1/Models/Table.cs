@@ -10,8 +10,14 @@
 namespace Bot_Application1.Models
 {
     using System;
+    using System.Collections.Generic;
     
-    public partial class ComplexType1
+    public partial class Table
     {
+        public int Id { get; set; }
+        public string C_Category { get; set; }
+        public string SubCategory { get; set; }
+        public string C_Text { get; set; }
+        public string Answer { get; set; }
     }
 }

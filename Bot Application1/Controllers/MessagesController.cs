@@ -33,22 +33,31 @@ namespace Bot_Application1
             if (activity.Type == ActivityTypes.Message)
             {
 
+                try
+                {
+                    Models.mindcetEntities DB = new Models.mindcetEntities();
+                    Models.UserLog NewUserLog = new Models.UserLog();
 
-    //            Models.BotDataEntities1 DB = new Models.BotDataEntities1();
-                Models.UserLog NewUserLog = new Models.UserLog();
+                    NewUserLog.Channel = activity.ChannelId;
+                    NewUserLog.UserID = activity.From.Id;
+                    NewUserLog.UserName = activity.From.Name;
+                    NewUserLog.created = DateTime.UtcNow;
+                    NewUserLog.Message = activity.Text.Truncate(500);
 
-                //NewUserLog.Channel = activity.ChannelId;
-                //NewUserLog.UserID = activity.From.Id;
-                //NewUserLog.UserName = activity.From.Name;
-                //NewUserLog.created = DateTime.UtcNow;
-                //NewUserLog.Message = activity.Text.Truncate(500);
+                    DB.UserLog.Add(NewUserLog);
+                    DB.SaveChanges();
 
-            //    DB.UserLogs.Add(NewUserLog);
-         //       DB.SaveChanges();
+                //    DataBaseControler DC = new DataBaseControler();
+                //    DC.isUserExist(activity.From.Id);
+                 //   DC.getUser(activity.From.Id);
 
-    //            DataBaseControler DC = new DataBaseControler();
-                // DC.isUserExist(activity.From.Id);
-           //     DC.getUser(activity.From.Id);
+                  //  string s = "dfdfed";
+
+                }catch(Exception e)
+                {
+
+                }
+
 
 
 
