@@ -10,6 +10,7 @@ using Bot_Application1.Cardatt_achment;
 using Bot_Application1.dataBase;
 using System.Threading;
 using NLPtest;
+using Model.dataBase;
 
 namespace Bot_Application1.IDialog
 {
@@ -39,8 +40,8 @@ namespace Bot_Application1.IDialog
             //     message = context.MakeMessage();
           //  User user1 = new User();
 
-        //    context.UserData.SetValue<User>("user", user1);
-            context.UserData.TryGetValue<User>("user", out user);
+        //    context.UserData.SetValue<Users >("user", user1);
+            context.UserData.TryGetValue<Users >("user", out user);
 
             if (user != null)
             {
@@ -55,32 +56,35 @@ namespace Bot_Application1.IDialog
 
         private async Task Greeting(IDialogContext context, IAwaitable<object> result)
         {
-              ConversationController conv = new ConversationController();
-             await writeMessageToUser(context, conv.greetings(user));
-            await writeMessageToUser(context, conv.howAreYou(user));
+            context.UserData.TryGetValue<Users>("user", out user);
+            ConversationController conv = new ConversationController(user.UserName, user.UserGender);
+            await writeMessageToUser(context, conv.greetings());
+            await writeMessageToUser(context, conv.howAreYou());
             context.Wait(HowAreYouRes);
         }
 
 
         private async Task HowAreYouRes(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            ConversationController conv = new ConversationController();
+            context.UserData.TryGetValue<Users>("user", out user);
+            ConversationController conv = new ConversationController(user.UserName, user.UserGender);
             var text = await result;
-            await writeMessageToUser(context, conv.OK(user));
+            await writeMessageToUser(context, conv.OK());
             await MainMenu(context, result);
         }
 
 
         private async Task MainMenu(IDialogContext context, IAwaitable<object> result)
         {
-            ConversationController conv = new ConversationController();
+            context.UserData.TryGetValue<Users>("user", out user);
+            ConversationController conv = new ConversationController(user.UserName, user.UserGender);
             //  var message = await result;
-            context.UserData.TryGetValue<User>("user", out user);
+            context.UserData.TryGetValue<Users>("user", out user);
             if (user != null)
             {
                 var menu = new MenuOptionDialog<string>(
                     conv.MainMenuOptions(),
-                    conv.MainMenuText(user),
+                    conv.MainMenuText(),
                     conv.wrongOption()[0],
                     3,new IDialog<object>[] {
                     new StartLerningDialog(),
@@ -101,17 +105,18 @@ namespace Bot_Application1.IDialog
             
             //await context.Forward<object,MenuObject>(new MenuOptionDialog(), MainMenuChooseOption,
             //    new MenuObject(), CancellationToken.None);
-            //await OptionsMenu(context,result, BotControler.MainMenuText(user), BotControler.MainMenuOptions());
+            //await OptionsMenu(context,result, BotControler.MainMenuText(), BotControler.MainMenuOptions());
             //context.Wait(MainMenuChooseOption);
 
         }
 
         private async Task MainMenuChooseOption(IDialogContext context, IAwaitable<object> result)
         {
-            ConversationController conv = new ConversationController();
+            context.UserData.TryGetValue<Users>("user", out user);
+            ConversationController conv = new ConversationController(user.UserName, user.UserGender);
             var message = await result;
             var text = result as IMessageActivity;
-            var choosen = conv.MainMenuText(user);
+            var choosen = conv.MainMenuText();
             switch (conv.MainMenuOptions().ToList().IndexOf(text.Text))
             {
                 case 1:

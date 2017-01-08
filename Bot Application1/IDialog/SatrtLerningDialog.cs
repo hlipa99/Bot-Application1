@@ -7,7 +7,11 @@ using System.Threading.Tasks;
 using Bot_Application1.Cardatt_achment;
 using Microsoft.Bot.Connector;
 using NLPtest;
-using Bot_Application1.Models;
+using NLPtest.WorldObj;
+using Bot_Application1.dataBase;
+using Catharsis.Commons;
+using NLPtest.Models;
+using Model.dataBase;
 
 namespace Bot_Application1.IDialog
 {
@@ -15,57 +19,61 @@ namespace Bot_Application1.IDialog
     public class StartLerningDialog: AbsDialog
     {
         StudySession studySession;
-      
+        EducationController ec = new EducationController();
 
         public override async Task StartAsync(IDialogContext context)
         {
-            ConversationController conv = new ConversationController();
-            context.UserData.TryGetValue<User>("user", out user);
+            context.UserData.TryGetValue<Users>("user", out user);
             if(user == null)
             {
                 throw new unknownUserException();
             }
 
+            ConversationController conv = new ConversationController(user.UserName,user.UserGender);
 
                     var menu = new PromptDialog.PromptChoice<string>(
-                    EducationController.getStudyUnits(),
-                    conv.chooseStudyUnits(user),
+                    ec.getStudyCategory(),
+                    conv.chooseStudyUnits(),
                     conv.wrongOption()[0],
                     3);
-            context.UserData.SetValue<StudySession>("studySession",new StudySession());
-            context.Call(menu, chooseCategory);
-
-
-        }
-
-        public async virtual Task chooseCategory(IDialogContext context, IAwaitable<string> result)
-        {
-            var message = await result;
-            ConversationController conv = new ConversationController();
-            context.UserData.TryGetValue<StudySession>("studySession",out studySession);
-            studySession.StudyUnit = message;
-
-            context.UserData.SetValue<StudySession>("studySession", new StudySession());
-
-            var menu = new PromptDialog.PromptChoice<string>(
-                 EducationController.getStudyCategory(message),
-                 conv.chooseStudyUnits(user),
-                 conv.wrongOption()[0],
-                 3);
-
+            context.UserData.RemoveValue("studySession");
+            studySession = new StudySession();
+       //    context.UserData.SetValue<StudySession>("studySession",new StudySession());
             context.Call(menu, StartLearning);
+
+
         }
+
+    //    public async virtual Task chooseCategory(IDialogContext context, IAwaitable<string> result)
+    //    {
+    //        var message = await result;
+    ////        context.UserData.TryGetValue<Users>("user", out user);
+    //        ConversationController conv = new ConversationController(user.UserName, user.UserGender);
+    //  //      context.UserData.TryGetValue<StudySession>("studySession",out studySession);
+    //        studySession.Category = message;
+
+    // //       context.UserData.SetValue<StudySession>("studySession", new StudySession());
+
+    //        var menu = new PromptDialog.PromptChoice<string>(
+    //             ec.getStudyCategory(message),
+    //             conv.chooseStudyUnits(),
+    //             conv.wrongOption()[0],
+    //             3);
+
+    //        context.Call(menu, StartLearning);
+    //    }
 
 
 
         public async virtual Task StartLearning(IDialogContext context, IAwaitable<string> result)
         {
+            ConversationController conv = new ConversationController(user.UserName, user.UserGender);
             var message = await result;
-            ConversationController conv = new ConversationController();
-            context.UserData.TryGetValue<StudySession>("studySession", out studySession);
-            studySession.StudySubject = message;
-            context.UserData.SetValue<StudySession>("studySession", studySession);
-            await writeMessageToUser(context, conv.areUReaddyToLearn(user, message));
+    //        context.UserData.TryGetValue<Users>("user", out user);
+   //         context.UserData.TryGetValue<StudySession>("studySession", out studySession);
+            studySession.Category = message;
+   //         context.UserData.SetValue<StudySession>("studySession", studySession);
+            await writeMessageToUser(context, conv.areUReaddyToLearn( message));
             context.Wait(askQuestion);
         }
 
@@ -75,41 +83,43 @@ namespace Bot_Application1.IDialog
         public async Task askQuestion(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
             var message = await result;
-            ConversationController conv = new ConversationController();
-            context.UserData.TryGetValue<StudySession>("studySession", out studySession);
+      //      context.UserData.TryGetValue<Users>("user", out user);
+            ConversationController conv = new ConversationController(user.UserName, user.UserGender);
+   //         context.UserData.TryGetValue<StudySession>("studySession", out studySession);
             if (conv.isStopSession(message.Text))
             {
-                await writeMessageToUser(context, conv.stopLearningSession(user));
+                await writeMessageToUser(context, conv.stopLearningSession());
                 context.Done("");
             }
 
-            context.UserData.TryGetValue<StudySession>("studySession", out studySession);
-            await writeMessageToUser(context, conv.beforAskQuestion(user,studySession.QuestionAsked.Count + 1));
+   //         context.UserData.TryGetValue<StudySession>("studySession", out studySession);
+            await writeMessageToUser(context, conv.beforAskQuestion(studySession));
 
-            //var question = EducationController.getQuestion(studySession.StudySubject);
+            var question = ec.getQuestion(studySession.Category, studySession.SubCategory, studySession);
 
-            await writeMessageToUser(context, new string[] { " שאלה כלשהי בנושא " + studySession.StudySubject });
-            studySession.currentQuestion = " שאלה כלשהי בנושא " + studySession.StudySubject;
-            studySession.QuestionAsked.Add(studySession.currentQuestion + studySession.QuestionAsked.Count);
-            context.UserData.SetValue<StudySession>("studySession", studySession);
+            await writeMessageToUser(context, new string[] { question.QuestionText});
+            studySession.currentQuestion = question;
+            studySession.QuestionAsked.Add(studySession.currentQuestion);
+        //    context.UserData.SetValue<StudySession>("studySession", studySession);
             context.Wait(answerQuestion);
         }
 
 
         public async Task answerQuestion(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            ConversationController conv = new ConversationController();
+            ConversationController conv = new ConversationController(user.UserName, user.UserGender);
             var message = await result;
-            context.UserData.TryGetValue<StudySession>("studySession", out studySession);
+      //      context.UserData.TryGetValue<StudySession>("studySession", out studySession);
             if (conv.isStopSession(message.Text))
             {
-                await writeMessageToUser(context, conv.stopLearningSession(user));
+                await writeMessageToUser(context, conv.stopLearningSession());
                 context.Done("");
             }
 
+            var question = studySession.currentQuestion;
+
             await writeMessageToUser(context, conv.MyAnswerToQuestion());
-            //var question = EducationController.getQuestion(studySession.StudySubject);
-            await writeMessageToUser(context, new string[] { "תשובה לשאלה:" + studySession.currentQuestion });
+            await writeMessageToUser(context, new string[] { question.AnswerText });
 
             context.Wait(askQuestion);
         }

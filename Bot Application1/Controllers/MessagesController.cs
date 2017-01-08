@@ -8,6 +8,7 @@ using Microsoft.Bot.Builder.Dialogs;
 using Bot_Application1.IDialog;
 using Bot_Application1.dataBase;
 using System.Collections.Generic;
+using Model.dataBase;
 
 namespace Bot_Application1
 {
@@ -35,16 +36,16 @@ namespace Bot_Application1
 
                 try
                 {
-                    Models.mindcetEntities DB = new Models.mindcetEntities();
-                    Models.UserLog NewUserLog = new Models.UserLog();
+                    var DB = new Entities();
+                    Users NewUsers = new Users();
 
-                    NewUserLog.Channel = activity.ChannelId;
-                    NewUserLog.UserID = activity.From.Id;
-                    NewUserLog.UserName = activity.From.Name;
-                    NewUserLog.created = DateTime.UtcNow;
-                    NewUserLog.Message = activity.Text.Truncate(500);
+                    NewUsers.Channel = activity.ChannelId;
+                    NewUsers.UserID = activity.From.Id;
+                    NewUsers.UserName = activity.From.Name;
+                    NewUsers.created = DateTime.UtcNow;
+                    NewUsers.Message = activity.Text.Truncate(500);
 
-                    DB.UserLog.Add(NewUserLog);
+                    DB.Users.Add(NewUsers);
                     DB.SaveChanges();
 
                 //    DataBaseControler DC = new DataBaseControler();

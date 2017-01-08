@@ -7,10 +7,9 @@ using static NLPtest.gufObject;
 
 namespace NLPtest
 {
-    public class Word
+    public class Word : WorldObject
     {
-        private WorldObject worldObject;
-        internal string word;
+        private WorldObject worldObject = null;
         private AnalysisInterface analysisInterface;
 
 
@@ -69,7 +68,7 @@ namespace NLPtest
 
                         if (isA(dateWord)) {
                         worldObject = getDateFromWord();
-                         }else if (isA(copulaWord))
+               }else if (isA(copulaWord))
                     {
                         worldObject = getGufFromWord();
                     }
@@ -77,10 +76,7 @@ namespace NLPtest
                     {
                         worldObject = getEventFromWord();
                     }
-                    else if (isA(gufWord) | isA(nounWord))
-                    {
-                        worldObject = getGufFromWord();
-                    }
+                   
                     else if (isA(adverbWord))
                     {
                         worldObject = getadverbFromWord();
@@ -89,9 +85,9 @@ namespace NLPtest
                     {
                         worldObject = getHelloFromWord();
                     }
-                    else if (isA(locationWord | nounWord))
+                    else if (isA(locationWord & nounWord))
                     {
-                        worldObject = new LocationObject(word);
+                        worldObject = new LocationObject(Word);
                     }
                     else if (isA(markWord))
                     {
@@ -99,7 +95,7 @@ namespace NLPtest
                     }
                     else if (isA(adjectiveWord))
                     {
-                        worldObject = new AdjObject(word);
+                        worldObject = new AdjObject(Word);
                     }
                     else if (isA(conjunctionWord))
                     {
@@ -134,13 +130,12 @@ namespace NLPtest
                     {
                         worldObject = getVerbFromWord();
                     }
-
                     else if (isA(nounWord))
                     {
                         worldObject = getNounFromWord();
                     }else
                     {
-                        worldObject = new WorldObject(word);
+                        worldObject = new WorldObject(Word);
                     }
 
                 }
@@ -163,19 +158,19 @@ namespace NLPtest
 
         private WorldObject getVerbFromWord( )
         {
-            var res = new VerbObject(word);
+            var res = new VerbObject(Word);
             return res;
         }
 
         private WorldObject getTimeFromWord( )
         {
-            var res = new TimeObject(word);
+            var res = new TimeObject(Word);
             return res;
         }
 
         private WorldObject getQuestionFromWord( )
         {
-            var res = new QuestionObject(word);
+            var res = new QuestionObject(Word);
             return res;
         }
 
@@ -186,19 +181,19 @@ namespace NLPtest
 
         private WorldObject getPersonFromWord( )
         {
-            var res = new PersonObject(word);
+            var res = new PersonObject(Word);
             return res;
         }
 
         private WorldObject getOrginazationFromWord( )
         {
-            var res = new OrginazationObject(word);
+            var res = new OrginazationObject(Word);
             return res;
         }
 
         private WorldObject getNounFromWord( )
         {
-            var res = new NounObject(word);
+            var res = new NounObject(Word);
             return res;
         }
 
@@ -209,37 +204,37 @@ namespace NLPtest
 
         private WorldObject getLocationWord( )
         {
-            var res = new LocationObject(word);
+            var res = new LocationObject(Word);
             return res;
         }
 
         private WorldObject getHelloFromWord( )
         {
-            var res = new HelloObject(word);
+            var res = new HelloObject(Word);
             return res;
         }
 
         private WorldObject getadverbFromWord( )
         {
-            var res = new VerbObject(word);
+            var res = new VerbObject(Word);
             return res;
         }
 
         private WorldObject getGufFromWord( )
         {
-            var gufObj = new gufObject(amount, guf, time, gender, word);
+            var gufObj = new gufObject(amount, guf, time, gender, Word);
             return gufObj;
         }
 
         private WorldObject getEventFromWord( )
         {
-            var res = new EventObject(word);
+            var res = new EventObject(Word);
             return res;
         }
 
         private WorldObject getDateFromWord( )
         {
-            var res = new TimeObject(word);
+            var res = new TimeObject(Word);
             return res;
         }
 
@@ -247,8 +242,9 @@ namespace NLPtest
 
         public Word(string word, WordType t)
         {
-            this.word = word;
+            this.Word = word;
             this.WordT = t;
+
         }
 
         public Word(string word, WordType t, WorldObject worldObject) : this(word, t)
@@ -258,7 +254,7 @@ namespace NLPtest
 
         public override string ToString()
         {
-            return word;
+            return Word;
 
         }
         public bool isA(WordType t)
@@ -269,6 +265,7 @@ namespace NLPtest
 
         public enum WordType
         {
+            everyword = int.MaxValue,
             dateWord = 1,
             eventWord = 2,
             gufWord = 4,
@@ -324,6 +321,12 @@ namespace NLPtest
             else if (guf == "2") this.guf = gufType.Second;
             else if (guf == "3") this.guf = gufType.Third;
             else this.guf = gufType.unspecified;
+        }
+
+
+        internal new int ObjectType()
+        {
+            return (int)WordT;
         }
     }
 }

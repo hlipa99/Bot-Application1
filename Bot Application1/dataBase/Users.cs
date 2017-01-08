@@ -7,17 +7,22 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Bot_Application1.Models
+namespace Bot_Application1.dataBase
 {
     using System;
     using System.Collections.Generic;
-    
-    public partial class Table
+
+
+    [Serializable]
+    public partial class Users
     {
         public int Id { get; set; }
-        public string C_Category { get; set; }
-        public string SubCategory { get; set; }
-        public string C_Text { get; set; }
-        public string Answer { get; set; }
+        public string UserID { get; set; }
+        public string UserName { get; set; }
+        public string Channel { get; set; }
+        public System.DateTime created { get; set; }
+        public string Message { get; set; }
+        public string UserGender { get; set; }
+        public string UserClass { get; set; }
     }
 }

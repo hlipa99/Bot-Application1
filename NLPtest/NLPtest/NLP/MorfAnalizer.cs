@@ -30,39 +30,47 @@ namespace NLPtest
           TaggerBasedHebrewChunker chunker;
         private   HebDictionary hebDictionary;
 
-          public void initialize()
+
+        public MorfAnalizer()
         {
-            //    hspellPath = Directory.GetCurrentDirectory() + "..\\..\\..\\hspell-data-files";
-            //   radix = Loader.LoadDictionaryFromHSpellFolder(hspellPath, true);
-            //if (m_lemmatizer == null || !m_lemmatizer.IsInitialized || !(m_lemmatizer is StreamLemmatizer))
-            //{
-
-            //    if (hspellPath == null) throw new Exception("hspellPath");
-
-
-            //    radix.AllowValueOverride = true;
-            //    var md = new MorphData();
-            //    md.Lemmas = new string[] { "היי" };
-            //    md.Prefixes = 0;
-            //    md.DescFlags = new DMask[] { DMask.D_CUSTOM };
-            //    radix.AddNode("היי", md);
-
-            //    m_lemmatizer = new HebMorph.StreamLemmatizer(radix, false);
-            //}
-
-      //      var path = "C:/Program Files (x86)/IIS Express/botServer/hebdata/";
-      //      tagger = new SimpleTagger3(path);
-      //      nerTagger = new NERTagger(path, tagger);
-           //  create the noun-phrase chunker
-       //     sentenceFactory = new MeniTaggeedSentenceFactory(null, MeniTokenExpander.expander);
-      //      String chunkModelPrefix = path + vohmm.util.Dir.CHUNK_MODEL_PREF;
-      //      chunker = new TaggerBasedHebrewChunker(sentenceFactory, chunkModelPrefix);
-      //      hebDictionary = new HebDictionary();
+            var path = "C:/Program Files (x86)/IIS Express/botServer/hebdata/";
+            tagger = new SimpleTagger3(path);
+            nerTagger = new NERTagger(path, tagger);
+            //   create the noun-phrase chunker
+            sentenceFactory = new MeniTaggeedSentenceFactory(null, MeniTokenExpander.expander);
+            String chunkModelPrefix = path + vohmm.util.Dir.CHUNK_MODEL_PREF;
+            chunker = new TaggerBasedHebrewChunker(sentenceFactory, chunkModelPrefix);
+            hebDictionary = new HebDictionary();
         }
+
+
+
+        //  public void initialize()
+        //{
+        //    //    hspellPath = Directory.GetCurrentDirectory() + "..\\..\\..\\hspell-data-files";
+        //    //   radix = Loader.LoadDictionaryFromHSpellFolder(hspellPath, true);
+        //    //if (m_lemmatizer == null || !m_lemmatizer.IsInitialized || !(m_lemmatizer is StreamLemmatizer))
+        //    //{
+
+        //    //    if (hspellPath == null) throw new Exception("hspellPath");
+
+
+        //    //    radix.AllowValueOverride = true;
+        //    //    var md = new MorphData();
+        //    //    md.Lemmas = new string[] { "היי" };
+        //    //    md.Prefixes = 0;
+        //    //    md.DescFlags = new DMask[] { DMask.D_CUSTOM };
+        //    //    radix.AddNode("היי", md);
+
+        //    //    m_lemmatizer = new HebMorph.StreamLemmatizer(radix, false);
+        //    //}
+
+   
+        //}
 
         public   List<Sentence> meniAnalize(String str)
         {
-            return new List<Sentence>();
+
             // The follwoing object constructions are heavy - SHOULD BE APPLIED ONLY ONCE!
             // create the morphological analyzer and disambiguator 
 
@@ -177,7 +185,7 @@ namespace NLPtest
                             {
                                 if (res.Words.LastOrDefault().WordT.HasFlag(word.WordT))
                                 {
-                                    res.Words.LastOrDefault().word += " " + word.word;
+                                    res.Words.LastOrDefault().Word += " " + word.Word;
                                     continue;
                                 }
                             }
@@ -322,7 +330,7 @@ namespace NLPtest
                         {
                             var last = res.Words.LastOrDefault();
                             res.Words.RemoveAt(res.Words.Count - 1);
-                            last.word = last.word + " " + token.getOrigStr();
+                            last.Word = last.Word + " " + token.getOrigStr();
                             last.WordT = last.WordT | word.WordT; //combin flages
                             word = last;
                         }
@@ -482,7 +490,7 @@ namespace NLPtest
                 foreach (var w in s.Words)
                 {
                     
-                    switch (w.word)
+                    switch (w.Word)
                     {
                         case "א":
                         case "'א":
@@ -788,7 +796,7 @@ namespace NLPtest
                     //accemulate
                     for (int j = 0; j < i && k + j < words.Count; j++)
                     {
-                        str += words[k + j].word + " ";
+                        str += words[k + j].Word + " ";
                     }
 
 
@@ -819,7 +827,7 @@ namespace NLPtest
 
             if (sen.Count == 1 && sen[0].Words.Count == 1 && sen[0].Words[0].isA(nounWord))
             {
-                return sen[0].Words[0].word;
+                return sen[0].Words[0].Word;
             }
 
             ContentTurn input = new ContentTurn();
@@ -829,7 +837,7 @@ namespace NLPtest
                 {
                     if (sa.isAName(w))
                     {
-                        return w.word;
+                        return w.Word;
                     }
                 }
             }
@@ -849,7 +857,7 @@ namespace NLPtest
             {
                 foreach (var w in s.Words)
                 {
-                    if (w.word == "בן")
+                    if (w.Word == "בן")
                     {
                         return "masculine";
                     }

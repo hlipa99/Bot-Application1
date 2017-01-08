@@ -21,7 +21,7 @@ namespace NLPtest
             InitializeComponent();
             heb = new HebDictionary();
             heb.loadWords();
-            conv = new ConversationController();
+            conv = new ConversationController("testName", "testgender");
 
         }
 

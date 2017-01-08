@@ -7,12 +7,14 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Bot_Application1.Models
+namespace Bot_Application1.dataBase
 {
     using System;
     using System.Collections.Generic;
-    
-    public partial class UserLog
+
+
+    [Serializable]
+    public partial class Users
     {
         public int Id { get; set; }
         public string UserID { get; set; }
@@ -20,7 +22,7 @@ namespace Bot_Application1.Models
         public string Channel { get; set; }
         public System.DateTime created { get; set; }
         public string Message { get; set; }
-        public Nullable<int> CountOfTurnsToWin { get; set; }
-        public string WinnerUserName { get; set; }
+        public string UserGender { get; set; }
+        public string UserClass { get; set; }
     }
 }

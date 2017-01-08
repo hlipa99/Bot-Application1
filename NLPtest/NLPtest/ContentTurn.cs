@@ -48,6 +48,18 @@ namespace NLPtest
             list.AddRange(contentTurn.getList());
         }
 
+        internal WorldObject Get(int idx)
+        {
+            try
+            {
+                return list.ElementAt(idx);
+            }catch(Exception ex)
+            {
+                return null;
+            }
+        }
+
+
         private IEnumerable<WorldObject> getList()
         {
             return list;
@@ -69,6 +81,11 @@ namespace NLPtest
             var i = list.IndexOf(o);
             list.RemoveAt(i);
             list.Insert(i,g);
+        }
+
+        internal int Count()
+        {
+            return list.Count;
         }
     }
 }

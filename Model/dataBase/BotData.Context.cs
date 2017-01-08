@@ -7,15 +7,15 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Bot_Application1.Models
+namespace Model.dataBase
 {
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class mindcetEntities : DbContext
+    public partial class Entities : DbContext
     {
-        public mindcetEntities()
+        public Entities()
             : base("name=mindcetEntities")
         {
         }
@@ -25,7 +25,7 @@ namespace Bot_Application1.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<UserLog> UserLog { get; set; }
-        public virtual DbSet<Table> Table { get; set; }
+        public virtual DbSet<Users> Users { get; set; }
+        public virtual DbSet<Question> Question { get; set; }
     }
 }

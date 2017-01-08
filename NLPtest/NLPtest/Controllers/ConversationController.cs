@@ -1,6 +1,9 @@
 ﻿
+
 using hebrewNER;
+using NLPtest.Models;
 using NLPtest.view;
+using NLPtest.WorldObj;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,17 +27,18 @@ namespace NLPtest
         Dictionary<string, string[]> PraseDictionary;
         private ContentTurn last;
         INLPControler nlpControler;
-
-        public ConversationController()
+        UserObject user;
+        public ConversationController(string userName,string userGender)
         {
             composer = new MessageComposer();
             responder = new Responder();
-           // sa = new SemanticAnalizer();
+            sa = new SemanticAnalizer();
             PraseDictionary = loadDictionary();
             nlpControler = NLPControler.getInstence();
+            user = new UserObject(userName, userGender);
         }
 
-        public  string[] NotImplamented(User user)
+        public  string[] NotImplamented()
         {
             return new string[]
             {
@@ -43,7 +47,7 @@ namespace NLPtest
             };
         }
 
-        public  string chooseStudyUnits(User user)
+        public  string chooseStudyUnits()
         {
 
             return "יאללה לבחור יחידת לימוד";
@@ -80,7 +84,7 @@ namespace NLPtest
             return default(T);
         }
 
-        public  string[] areUReaddyToLearn(User user, string subject)
+        public  string[] areUReaddyToLearn( string subject)
         {
             return new string[]
                 {
@@ -88,15 +92,15 @@ namespace NLPtest
                 };
         }
 
-        public  string[] beforAskQuestion(User user, int questionAsked)
+        public  string[] beforAskQuestion(StudySession studySession)
         {
             return new string[]
                  {
-                    "אוקיי, שאלה מס " +questionAsked + "'"
+                    "אוקיי, שאלה מס " +(studySession.questionAsked.Count + 1) +"'"
                  };
         }
 
-        public  string chooseSubjectForLearn(User user)
+        public  string chooseSubjectForLearn()
         {
             return "אוקיי, מה תרצה ללמוד?";
         }
@@ -143,17 +147,25 @@ namespace NLPtest
             return false;
         }
 
-        public  string[] stopLearningSession(User user)
+        public  string[] stopLearningSession()
         {
-            throw new NotImplementedException();
+            return new string[]
+         {
+                "עבודה יפה, נמשיך בפעם אחרת",
+             
+         };
         }
+
+     
+
+  
 
         public  string[] MyAnswerToQuestion()
         {
             return new string[]
            {
                 "תשובה יפה",
-                " התשובה שלי לשאולה היא"
+                ":התשובה שלי לשאולה היא"
            };
         }
 
@@ -176,18 +188,18 @@ namespace NLPtest
             };
         }
 
-        public  string MainMenuText(User user)
+        public  string MainMenuText()
         {
-           return "טוב, " + user.userName + " אז מה עושים היום? ";
+           return "טוב, " + user.getUserName() + " אז מה עושים היום? ";
         }
 
       
 
-        public  string[] greetings(User user)
+        public  string[] greetings()
         {
                         return new string[]
                {
-                                      "היי " + user.userName + " בחיי שהתגעגעתי ",
+                                      "היי " + user.getUserName() + " בחיי שהתגעגעתי ",
                };
         }
 
@@ -201,7 +213,7 @@ namespace NLPtest
      };
         }
 
-        public  string[] SoSorry(User user)
+        public  string[] SoSorry()
         {
             return new string[]
 {
@@ -210,7 +222,7 @@ namespace NLPtest
          
         }
 
-        public  string[] OK(User user)
+        public  string[] OK()
         {
             return new string[]
 {
@@ -218,7 +230,7 @@ namespace NLPtest
 };
         }
 
-        public  string[] veryGood(User user)
+        public  string[] veryGood()
         {
             return new string[]
 {
@@ -237,7 +249,7 @@ namespace NLPtest
 
         }
 
-        public  string[] howAreYou(User user)
+        public  string[] howAreYou()
         {
             return new string[]
 {
@@ -314,16 +326,16 @@ namespace NLPtest
             }
         }
         
-        public  string[] NewUserGetClass(User user)
+        public  string[] NewUserGetClass()
         {
 
             return new string[]
         {
-                     "עוד משהו.. באיזה כיתה " + getGufSecond(user) + "?"
+                     "עוד משהו.. באיזה כיתה " + getGufSecond() + "?"
             };
         }
 
-        private  string getGufSecond(User user)
+        private  string getGufSecond()
         {
             if(user.getGender() == "feminine")
             {
@@ -387,20 +399,27 @@ namespace NLPtest
             ContentTurn input = new ContentTurn();
             foreach (var s in sen)
             {
-                input.Add(sa.tagWords(s, ref context));
-                input = sa.findGufContext(input);
+                input.Add(sa.tagWords2(s, ref context));
+         //       input = sa.findGufContext(input);
             }
-            input = sa.findGufContext(last, input);
+
+
+          //  input = sa.findRelations(input);
+
+            if (last != null)
+            {
+       //         input = sa.findGufContext(last, input);
+            }
 
 
             //       var output = responder.respone(input, context);
 
             //      var outMessage = composer.compose(output, new User("יוחאי"));
-    
+
 
             //  return outMessage;
 
-
+            last = input;
             return input;
 
         }

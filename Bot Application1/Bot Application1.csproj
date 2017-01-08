@@ -204,25 +204,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="images\MainBot.png" />
-    <Content Include="Models\BotData.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>BotData.edmx</DependentUpon>
-      <LastGenOutput>BotData.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Models\BotData.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>BotData.edmx</DependentUpon>
-      <LastGenOutput>BotData.cs</LastGenOutput>
-    </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <EntityDeploy Include="Models\BotData.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>BotData.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\BotData.edmx.diagram">
-      <DependentUpon>BotData.edmx</DependentUpon>
-    </Content>
     <None Include="Properties\PublishProfiles\BotApplication120170104113209 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -243,11 +226,11 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Carda_factory\ManagerCard.cs" />
+    <Compile Include="Controllers\CategoryOutOfQuestionException.cs" />
+    <Compile Include="Controllers\DataBaseControler.cs" />
     <Compile Include="Controllers\EducationController.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Controllers\UserControler.cs" />
-    <Compile Include="dataBase\DataBaseControler.cs" />
-    <Compile Include="dataBase\Utility.cs" />
     <Compile Include="Exceptions\unknownUserException.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -261,28 +244,6 @@
     <Compile Include="IDialog\SatrtLerningDialog.cs" />
     <Compile Include="Json\Translate.cs" />
     <Compile Include="log\Logger.cs" />
-    <Compile Include="Models\BotData.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>BotData.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\BotData.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>BotData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\BotData.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>BotData.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Models\StudySession.cs" />
-    <Compile Include="Models\Table.cs">
-      <DependentUpon>BotData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\UserLog.cs">
-      <DependentUpon>BotData.tt</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="YAndex\ControlerGrammar.cs" />
     <Compile Include="YAndex\ControlerTranslate.cs" />
@@ -313,11 +274,16 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Models\" />
     <Folder Include="UnitTests\" />
     <Folder Include="Views\Message\" />
     <Folder Include="Views\User\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Model\Models.csproj">
+      <Project>{77834157-486A-4ECD-98F6-0D8F9783077A}</Project>
+      <Name>Models</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NLPtest\NLPtest\NLPtest.csproj">
       <Project>{F1B355E1-3B6E-423D-8225-DC400CFF395D}</Project>
       <Name>NLPtest</Name>

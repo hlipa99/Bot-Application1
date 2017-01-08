@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 
 namespace NLPtest.view
 {
-    [Serializable]
+ 
     internal class GufException : Exception
     {
         private gufObject gufObject;

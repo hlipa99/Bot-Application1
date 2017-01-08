@@ -204,7 +204,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="parser">
-      <HintPath>..\..\Bot Application1\bin\parser.dll</HintPath>
+      <HintPath>..\..\..\Bot-Application1\NLPtest\NLPtest\parser.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -220,24 +220,26 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Answer.cs" />
-    <Compile Include="GufException.cs" />
+    <Compile Include="Controllers\TemplateController.cs" />
+    <Compile Include="Exceptions\GufException.cs" />
     <Compile Include="Controllers\INLPController.cs" />
     <Compile Include="Controllers\NLPController.cs" />
     <Compile Include="Controllers\NLPControllerTestStub.cs" />
+    <Compile Include="HebWords\HebTemplate.cs" />
+    <Compile Include="Exceptions\TemplateException.cs" />
     <Compile Include="WorldObj\multyPersoneObject.cs" />
     <Compile Include="WorldObj\BotObject.cs" />
     <Compile Include="Exceptions\CantResponeException.cs" />
     <Compile Include="Context1.cs" />
     <Compile Include="Exceptions\unknownUserException.cs" />
-    <Compile Include="MessageComposer.cs" />
-    <Compile Include="MessageObject.cs" />
-    <Compile Include="User.cs" />
+    <Compile Include="NLP\MessageComposer.cs" />
+    <Compile Include="MorfObjects\MessageObject.cs" />
+    <Compile Include="WorldObj\relations\VerbObjRelObject.cs" />
     <Compile Include="WorldObj\UserObject.cs" />
     <Compile Include="WorldObj\ObjectsWrappers\NegationWrap.cs" />
-    <Compile Include="WorldObj\ObjectsWrappers\DefiniteArticleWrap.cs" />
     <Compile Include="WorldObj\ObjectsWrappers\ObjectWrapper.cs" />
     <Compile Include="WorldObj\relations\ConjunctionObject.cs" />
-    <Compile Include="HebWords\gufObject.cs" />
+    <Compile Include="WorldObj\gufObject.cs" />
     <Compile Include="Exceptions\EmptyWorldObjectException.cs" />
     <Compile Include="WorldObj\greetings\HisStatusObject.cs" />
     <Compile Include="WorldObj\greetings\MyStatusObject.cs" />
@@ -252,9 +254,9 @@
     <Compile Include="Context.cs" />
     <Compile Include="Exceptions\WorldObjectException.cs" />
     <Compile Include="HebWords\toneObject.cs" />
-    <Compile Include="MorfAnalizer.cs" />
+    <Compile Include="NLP\MorfAnalizer.cs" />
     <Compile Include="WorldObj\NounObject.cs" />
-    <Compile Include="Responder.cs" />
+    <Compile Include="NLP\Responder.cs" />
     <Compile Include="Exceptions\SemanticException.cs" />
     <Compile Include="WorldObj\ConversationFlow\ConversationFlowObject.cs" />
     <Compile Include="WorldObj\ConversationFlow\HelloConFlowObject.cs" />
@@ -268,7 +270,7 @@
     <Compile Include="WorldObj\VerbObject.cs" />
     <Compile Include="WorldObj\greetings\HelloObject.cs" />
     <Compile Include="WorldObj\QuestionObject.cs" />
-    <Compile Include="Sentence.cs" />
+    <Compile Include="MorfObjects\Sentence.cs" />
     <Compile Include="view\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -278,7 +280,7 @@
     <Compile Include="HebWords\HebDictionary.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SemanticAnalizer.cs" />
+    <Compile Include="NLP\SemanticAnalizer.cs" />
     <Compile Include="HebWords\Word.cs" />
     <Compile Include="WorldObj\WorldObject.cs" />
     <Compile Include="WorldObj\PersonObject.cs" />
@@ -319,6 +321,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Model\Models.csproj">
+      <Project>{77834157-486a-4ecd-98f6-0d8f9783077a}</Project>
+      <Name>Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

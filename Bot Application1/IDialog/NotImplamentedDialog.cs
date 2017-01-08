@@ -10,6 +10,8 @@ using Bot_Application1.Cardatt_achment;
 using Bot_Application1.dataBase;
 using System.Threading;
 using NLPtest;
+using NLPtest.WorldObj;
+using Model.dataBase;
 
 namespace Bot_Application1.IDialog
 {
@@ -20,11 +22,11 @@ namespace Bot_Application1.IDialog
       
         public override async Task StartAsync(IDialogContext context)
         {
-            ConversationController conv = new ConversationController();
-            context.UserData.TryGetValue<User>("user", out user);
+            ConversationController conv = new ConversationController(user.UserName, user.UserGender);
+            context.UserData.TryGetValue<Users>("user", out user);
 
 
-            await context.PostAsync(conv.NotImplamented(user)[0]);
+            await context.PostAsync(conv.NotImplamented()[0]);
             context.Done("");
 
         }

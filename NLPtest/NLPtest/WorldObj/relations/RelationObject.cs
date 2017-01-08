@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace NLPtest.WorldObj
 {
@@ -24,9 +25,34 @@ namespace NLPtest.WorldObj
             }
         }
 
+      
         public override string ToString()
         {
             return "rel->(" + GetType().ToString() + ")";
+        }
+
+        internal void addObjective(WorldObject[] paramObjects)
+        {
+            Objective = paramObjects[0];
+        }
+
+
+        internal void Copy(RelationObject first)
+        {
+            base.Copy(first);
+            objective = first.objective;
+        }
+
+
+        internal new void CopyFromTemplate(WorldObject[] objects)
+        {
+            var index = int.Parse(Word);
+            Copy(objects[index]);
+            objective.CopyFromTemplate(objects);
+            foreach (var r in Relations)
+            {
+                r.CopyFromTemplate(objects);
+            }
         }
     }
 }

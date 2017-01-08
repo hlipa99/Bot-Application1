@@ -6,7 +6,6 @@ namespace NLPtest
 {
 
 
-    [Serializable]
     internal class MessageComposer
     {
 
@@ -31,7 +30,7 @@ namespace NLPtest
 
         }
 
-        public List<string> compose(ContentTurn content, User user)
+        public List<string> compose(ContentTurn content,UserObject user)
         {
             List<string> res = new List<string>();
             while (!content.empty())
@@ -41,7 +40,7 @@ namespace NLPtest
             return res;
         }
 
-            private string createMessage(WorldObject worldObject, User user)
+            private string createMessage(WorldObject worldObject,UserObject user)
             {
 
                 var en = messageDictionary.getRandomEnumerator(worldObject.GetType().ToString());

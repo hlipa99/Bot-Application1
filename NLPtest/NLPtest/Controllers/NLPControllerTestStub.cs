@@ -31,7 +31,7 @@ public class NLPControlerTestStub : INLPControler
 
     public void Initialize()
     {
-        throw new NotImplementedException();
+
     }
 }
         

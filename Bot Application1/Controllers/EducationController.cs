@@ -1,36 +1,50 @@
 ﻿using Bot_Application1.dataBase;
+using Model.dataBase;
+using NLPtest.Models;
 using System;
 using System.Collections.Generic;
 
 namespace Bot_Application1.IDialog
 {
  
-    internal static class EducationController
+    [Serializable]
+    internal class EducationController
     {
-      
-        internal static string[] getStudyUnits()
+         DataBaseControler db = new DataBaseControler();
+        internal string[] getStudyCategory()
         {
-
-            return new string[]
-            {
-               "היסטוריה א'","היסטוריה ב'"
-            };
+            var res = db.getAllCategory();
+            return res.ToArray();
         }
 
-        internal static IEnumerable<string> getStudyCategory(string unit)
+        internal IEnumerable<string> getStudySubCategory(string category)
         {
-            return new string[]
-            {
-               "בית שני","ציונות"
-            };
+            var res = db.getAllSubCategory(category);
+            return res.ToArray();
         }
 
-        internal static string[] getQuestion(string studySubject)
+
+        internal Question getQuestion(string category, string subCategory, StudySession studySession)
         {
-            return new string[]
+            List<Question> res;
+            if(subCategory == null)
             {
-               "שאלה כלשהי"
-            };
+                res = db.getQuestion(category);
+            }
+            else
+            {
+                 res = db.getQuestion(category, subCategory);
+            }
+            res.RemoveAll(x => studySession.QuestionAsked.Contains(x));
+            var r = new Random();
+            if (res.Count > 0)
+            {
+                return res[r.Next(res.Count)];
+            }
+            else
+            {
+                throw new CategoryOutOfQuestionException();
+            }
         }
     }
 }

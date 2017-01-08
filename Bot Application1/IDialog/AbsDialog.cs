@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Threading.Tasks;
-using NLPtest;
+using Bot_Application1.dataBase;
+using Model.dataBase;
 
 namespace Bot_Application1.IDialog
 {
@@ -13,7 +14,7 @@ namespace Bot_Application1.IDialog
     public abstract class AbsDialog : IDialog<object>
     {
         public abstract Task StartAsync(IDialogContext context);
-        internal User user;
+        internal Users user;
        
 
         internal async Task writeMessageToUser(IDialogContext context, string[] newMessage)
