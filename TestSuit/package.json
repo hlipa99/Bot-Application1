@@ -1,0 +1,33 @@
+{
+  "name": "test-suit",
+  "version": "0.0.0",
+  "description": "TestSuit",
+  "main": "app.js",
+  "author": {
+    "name": "yochai"
+  },
+  "devDependencies": {
+    "mocha": "^3.2.0",
+    "ts-node": "^2.0.0",
+    "@reactivex/rxjs": "5.0.0-rc.1",
+    "async": "2.1.2",
+    "base64url": "2.0.0",
+    "electron-debug": "1.0.1",
+    "es6-shim": "0.35.1",
+    "formidable": "1.0.17",
+    "http-status-codes": "1.0.6",
+    "jsonwebtoken": "7.1.9",
+    "lock": "0.1.2",
+    "mkdirp": "0.5.1",
+    "msbotchat": "git+https://github.com/fuselabs/botchat#f9c96e00b0ce600865d6ea931d2dd1ff4cd79492",
+    "node-uuid": "1.4.3",
+    "react": "15.3.2",
+    "react-dom": "15.3.2",
+    "react-split-pane": "0.1.51",
+    "redux": "3.6.0",
+    "request": "2.75.0",
+    "restify": "4.1.1",
+    "rsa-pem-from-mod-exp": "0.8.4",
+    "xtend": "4.0.1"
+  }
+}

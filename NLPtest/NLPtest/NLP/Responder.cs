@@ -1,4 +1,5 @@
-﻿using NLPtest.WorldObj;
+﻿using NLPtest.view;
+using NLPtest.WorldObj;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace NLPtest
 
     class Responder
     {
-        public ContentTurn respone(ContentTurn input,Context context)
+        public ContentTurn respone(ContentTurn input,ConversationContext context)
         {
 
             ContentTurn res = new ContentTurn();

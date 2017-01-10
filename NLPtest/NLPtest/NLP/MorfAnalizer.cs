@@ -43,31 +43,7 @@ namespace NLPtest
             hebDictionary = new HebDictionary();
         }
 
-
-
-        //  public void initialize()
-        //{
-        //    //    hspellPath = Directory.GetCurrentDirectory() + "..\\..\\..\\hspell-data-files";
-        //    //   radix = Loader.LoadDictionaryFromHSpellFolder(hspellPath, true);
-        //    //if (m_lemmatizer == null || !m_lemmatizer.IsInitialized || !(m_lemmatizer is StreamLemmatizer))
-        //    //{
-
-        //    //    if (hspellPath == null) throw new Exception("hspellPath");
-
-
-        //    //    radix.AllowValueOverride = true;
-        //    //    var md = new MorphData();
-        //    //    md.Lemmas = new string[] { "היי" };
-        //    //    md.Prefixes = 0;
-        //    //    md.DescFlags = new DMask[] { DMask.D_CUSTOM };
-        //    //    radix.AddNode("היי", md);
-
-        //    //    m_lemmatizer = new HebMorph.StreamLemmatizer(radix, false);
-        //    //}
-
-   
-        //}
-
+        
         public   List<Sentence> meniAnalize(String str)
         {
 
@@ -481,7 +457,7 @@ namespace NLPtest
         public    string getClass(string text)
         {
             //    var a = ma.createSentence(inputText);
-            var context = new Context();
+            var context = new TextContext();
             var sen = meniAnalize(text);
             string res = null;
             ContentTurn input = new ContentTurn();
@@ -821,7 +797,7 @@ namespace NLPtest
         {
 
             //    var a = MorfAnalizer.createSentence(inputText);
-            var context = new Context();
+            var context = new TextContext();
             var sen = meniAnalize(inputText);
             var sa = new SemanticAnalizer();
 
@@ -849,7 +825,7 @@ namespace NLPtest
         public   string GetGender(string text)
         {
             //    var a = MorfAnalizer.createSentence(inputText);
-            var context = new Context();
+            var context = new TextContext();
             var sen = meniAnalize(text);
 
             ContentTurn input = new ContentTurn();

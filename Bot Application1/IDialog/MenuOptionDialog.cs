@@ -18,10 +18,10 @@ namespace Bot_Application1.IDialog
     {
         private T[] options;
         private IDialog<object>[] dialogOptions;
-        private ResumeAfter<object> contFunction;
+        private ResumeAfter<object>[] contFunction;
      
 
-        public MenuOptionDialog(T[] options, string prompt, string retry, int attempts, IDialog<object>[] dialogOptions, ResumeAfter<object> contFunction)
+        public MenuOptionDialog(T[] options, string prompt, string retry, int attempts, IDialog<object>[] dialogOptions, ResumeAfter<object>[] contFunction)
             : base (options, prompt, retry,attempts)
         {
             this.dialogOptions = dialogOptions;
@@ -43,14 +43,14 @@ namespace Bot_Application1.IDialog
                 {
                     if (o.Equals(resultMA))
                     {
-                        context.Call(dialogOptions[i], contFunction);
+                        context.Call(dialogOptions[i], contFunction[i]);
                         return;
                     }
                     i++;
                 }
 
                 //defualt
-                context.Call(dialogOptions[dialogOptions.Length - 1], contFunction);
+                context.Call(dialogOptions[dialogOptions.Length - 1], contFunction[i]);
 
               }
              else

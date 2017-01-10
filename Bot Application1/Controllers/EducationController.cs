@@ -11,6 +11,15 @@ namespace Bot_Application1.IDialog
     internal class EducationController
     {
          DataBaseControler db = new DataBaseControler();
+        private Users user;
+        private StudySession studySession;
+
+        public EducationController(Users user, StudySession studySession)
+        {
+            this.user = user;
+            this.studySession = studySession;
+        }
+
         internal string[] getStudyCategory()
         {
             var res = db.getAllCategory();
@@ -23,6 +32,20 @@ namespace Bot_Application1.IDialog
             return res.ToArray();
         }
 
+        public string getRamdomImg(string mediaKey)
+        {
+            var media = db.getMedia(mediaKey, "img", "");
+            var r = new Random();
+
+            if(media.Count > 0)
+            {
+                return media[r.Next(media.Count - 1)];
+
+            }else
+            {
+                return "https://img.clipartfest.com/d82385630de0b6201f6a6bd5d2367726_clipart-question-mark-clip-art-clipart-question-mark-3d_494-743.jpeg";
+            }
+        }
 
         internal Question getQuestion(string category, string subCategory, StudySession studySession)
         {
@@ -45,6 +68,19 @@ namespace Bot_Application1.IDialog
             {
                 throw new CategoryOutOfQuestionException();
             }
+        }
+
+        internal Question checkAnswer(Question question, string text)
+        {
+            if(text.Split(' ').Length > 2)
+            {
+                question.answerScore = 100;
+            }
+            else
+            {
+                question.answerScore = 0;
+            }
+            return question;
         }
     }
 }

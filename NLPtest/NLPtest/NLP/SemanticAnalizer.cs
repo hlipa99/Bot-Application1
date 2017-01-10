@@ -18,7 +18,7 @@ namespace NLPtest.view
     class SemanticAnalizer
     {
 
-        public ContentTurn tagWords2(Sentence sentence, ref NLPtest.Context context)
+        public ContentTurn tagWords2(Sentence sentence, ref TextContext context)
         {
             var contextTurn = new ContentTurn();
             //deal with questions
@@ -210,7 +210,7 @@ namespace NLPtest.view
 
 
 
-        public ContentTurn tagWords(Sentence sentence, ref NLPtest.Context context)
+        public ContentTurn tagWords(Sentence sentence, ref TextContext context)
         {
             var contextTurn = new ContentTurn();
             //deal with questions

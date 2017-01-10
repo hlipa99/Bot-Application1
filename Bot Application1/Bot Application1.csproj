@@ -226,8 +226,8 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Carda_factory\ManagerCard.cs" />
-    <Compile Include="Controllers\CategoryOutOfQuestionException.cs" />
     <Compile Include="Controllers\DataBaseControler.cs" />
+    <Compile Include="Exceptions\CategoryOutOfQuestionException.cs" />
     <Compile Include="Controllers\EducationController.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Controllers\UserControler.cs" />
@@ -247,7 +247,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="YAndex\ControlerGrammar.cs" />
     <Compile Include="YAndex\ControlerTranslate.cs" />
-    <Compile Include="Exceptiuons\unknownUserException.cs" />
     <Compile Include="YAndex\UnknownEncodingException.cs" />
   </ItemGroup>
   <ItemGroup>

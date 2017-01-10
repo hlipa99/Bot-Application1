@@ -22,6 +22,12 @@ namespace Bot_Application1.IDialog
       
         public override async Task StartAsync(IDialogContext context)
         {
+            if(user == null)
+            {
+                user = new Users();
+                user.UserName = "";
+                user.UserGender = "masculine";
+            }
             ConversationController conv = new ConversationController(user.UserName, user.UserGender);
             context.UserData.TryGetValue<Users>("user", out user);
 

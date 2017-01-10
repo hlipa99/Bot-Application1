@@ -10,7 +10,7 @@ namespace Model.dataBase
     [Serializable]
     public partial class Question
     {
-
+        public int answerScore;
         public override bool Equals(object other)
         {
             if (other is Question)

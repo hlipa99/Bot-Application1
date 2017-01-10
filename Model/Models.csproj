@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="ConversationContext.cs" />
     <Compile Include="dataBase\BotData.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -70,6 +71,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>BotData.edmx</DependentUpon>
     </Compile>
+    <Compile Include="dataBase\media.cs">
+      <DependentUpon>BotData.tt</DependentUpon>
+    </Compile>
     <Compile Include="dataBase\Question.cs">
       <DependentUpon>BotData.tt</DependentUpon>
     </Compile>
@@ -79,6 +83,7 @@
     </Compile>
     <Compile Include="dataBase\UsersS.cs" />
     <Compile Include="dataBase\Utility.cs" />
+    <Compile Include="Emoji.cs" />
     <Compile Include="Models\StudySession.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

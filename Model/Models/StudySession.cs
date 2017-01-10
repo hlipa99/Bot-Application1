@@ -14,6 +14,8 @@ namespace NLPtest.Models
 
         public HashSet<Question> questionAsked = new HashSet<Question>();
         public Question currentQuestion = null;
+        public int sessionLength = 3;
+
         public string SubCategory { get; set; }
         public string Category { get; set; }
 

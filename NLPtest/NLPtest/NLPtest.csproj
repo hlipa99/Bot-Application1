@@ -230,7 +230,6 @@
     <Compile Include="WorldObj\multyPersoneObject.cs" />
     <Compile Include="WorldObj\BotObject.cs" />
     <Compile Include="Exceptions\CantResponeException.cs" />
-    <Compile Include="Context1.cs" />
     <Compile Include="Exceptions\unknownUserException.cs" />
     <Compile Include="NLP\MessageComposer.cs" />
     <Compile Include="MorfObjects\MessageObject.cs" />
@@ -251,7 +250,7 @@
     <Compile Include="WorldObj\relations\adjectiveRelObject.cs" />
     <Compile Include="Controllers\ConversationController.cs" />
     <Compile Include="ContentTurn.cs" />
-    <Compile Include="Context.cs" />
+    <Compile Include="TextContext.cs" />
     <Compile Include="Exceptions\WorldObjectException.cs" />
     <Compile Include="HebWords\toneObject.cs" />
     <Compile Include="NLP\MorfAnalizer.cs" />

@@ -11,7 +11,8 @@ using System.Text;
 using vohmm.application;
 using yg.chunker;
 using yg.sentence;
-
+using Model.dataBase;
+using Model;
 
 namespace NLPtest
 {
@@ -28,6 +29,8 @@ namespace NLPtest
         private ContentTurn last;
         INLPControler nlpControler;
         UserObject user;
+        private Users user1;
+
         public ConversationController(string userName,string userGender)
         {
             composer = new MessageComposer();
@@ -36,6 +39,11 @@ namespace NLPtest
             PraseDictionary = loadDictionary();
             nlpControler = NLPControler.getInstence();
             user = new UserObject(userName, userGender);
+        }
+
+        public ConversationController(Users user1)
+        {
+            this.user1 = user1;
         }
 
         public  string[] NotImplamented()
@@ -88,7 +96,7 @@ namespace NLPtest
         {
             return new string[]
                 {
-                    "אוקיי, מתחילים. מוכן ללמוד קצת " +subject + "?"
+                    "מוכן ללמוד קצת " +subject + "?"
                 };
         }
 
@@ -96,13 +104,15 @@ namespace NLPtest
         {
             return new string[]
                  {
-                    "אוקיי, שאלה מס " +(studySession.questionAsked.Count + 1) +"'"
+                    "אוקיי, שאלה מס " +(studySession.questionAsked.Count + 1) +"'" + " מתוך "+ studySession.sessionLength
                  };
         }
 
-        public  string chooseSubjectForLearn()
+        public  string[] chooseSubjectForLearn()
         {
-            return "אוקיי, מה תרצה ללמוד?";
+            return new string[]
+{ "אוקיי, מה תרצה ללמוד?"
+};
         }
 
         public  string[] Happy()
@@ -156,36 +166,69 @@ namespace NLPtest
          };
         }
 
-     
 
-  
+        public string[] goodAnswer()
+        {
+            return new string[]
+           {
+                "תשובה טובה"
+           };
+        }
+
 
         public  string[] MyAnswerToQuestion()
         {
             return new string[]
            {
-                "תשובה יפה",
-                ":התשובה שלי לשאולה היא"
+                ":התשובה לשאלה היא"
            };
+        }
+
+        public string[] goodbye()
+        {
+                return new string[]
+             {
+                     "ביי, נתראה בקרוב"
+            };
+           
         }
 
         public  string[] wrongOption()
         {
             return new string[]
            {
-                "יפה, התשובה שלי לשאולה היא" +":"
+                "מצטער, זו אף פעם לא הייתה אופציה"
            };
         }
 
         public  string[] MainMenuOptions()
         {
+            
             return new string[]
             {
-                "בוא נלמד",
-                "עריכת פרופיל",
+                "בוא נלמד" +   Emoji.get("student") ,
                 "כלום. אין לי כח ללמוד",
 
             };
+        }
+
+        public string[] getGenderOptions()
+        {
+            return new string[]
+           {
+                "בת","בן"
+
+           };
+        }
+
+        public string[] getClassOptions()
+        {
+            return new string[]
+           {
+                "י" + "'",
+                "יא"+ "'",
+                "יב"+ "'"
+           };
         }
 
         public  string MainMenuText()
@@ -193,7 +236,24 @@ namespace NLPtest
            return "טוב, " + user.getUserName() + " אז מה עושים היום? ";
         }
 
-      
+
+
+        public string[] notAnAnswer()
+        {
+            return new string[]
+           {
+               Emoji.get("dizzy") +  "טוב, אני אגיד לך" 
+           };
+        }
+
+        public string[] partialAnswer()
+        {
+            return new string[]
+           {
+                "אוקיי, תשובה מעניינת"
+           };
+        }
+
 
         public  string[] greetings()
         {
@@ -203,13 +263,19 @@ namespace NLPtest
                };
         }
 
-      
+        public string[] moveToNextQuestion()
+        {
+            return new string[]
+                 {
+                            "שנמשיך לשאלה הבאה" + "?",
+                 };
+        }
 
         public  string[] selfIntroduction()
         {
             return new string[]
      {
-                            "שלום, אני " + " מיסטר אייצ" +"'" + ", " + "בוט ללימוד היסטוריה",
+                            "שלום, אני " + " מיסטר אייצ" +"'" + ", " + "בוט ללימוד היסטוריה" + Emoji.get("robot")
      };
         }
 
@@ -238,6 +304,14 @@ namespace NLPtest
 };
         }
 
+        public string[] giveYourFeedback()
+        {
+            return new string[]
+{
+                             "איזה ציון היית נותן לעצמך על התשובה שענית" + "?"  + Emoji.get("sunglasses")
+};
+        }
+
         public  string[] letsLearn()
         {
 
@@ -249,6 +323,14 @@ namespace NLPtest
 
         }
 
+        public string[] endOfSession(Users user)
+        {
+            return new string[]
+{
+                             "היה נפלא :) להתראות מחר",
+};
+        }
+
         public  string[] howAreYou()
         {
             return new string[]
@@ -257,13 +339,72 @@ namespace NLPtest
 };
         }
 
+        public string[] endOfSession(Users user, StudySession studySession)
+        {
+            if (studySession.questionAsked.Count <= 1)
+            {
+                return new string[]
+               {
+                            "מה? כבר הולכים" + Emoji.get("crying")
+                };
+            } else
+            {
+                var average = 0;
+                foreach (var q in studySession.questionAsked)
+                {
+                    average += q.answerScore / studySession.questionAsked.Count;
+                }
+
+                if (average > 60)
+                {
+                    return new string[]
+           {
+                            "טוב, היה סבב מוצלח",
+                            "הממוצע שלך היה " + average  + Emoji.get("smiling")
+                };
+            }else
+                {
+                    return new string[]
+           {
+                            "אני רואה שאתה עובד קשה, בסיבוב הבא אני בטוח שתקבל יותר מ" + average  + Emoji.get("grinning")
+
+            };
+                }
+
+
+              
+            }
+        }
+
         public  string[] NewUserGreeting(string username)
         {
             return new string[]
           {
                             "היי " + username +  " אני חושב שעוד לא הכרנו ,",
-                           '\u263a' + "נחמד לפגוש אותך",
+                         Emoji.get("smiling") + "נחמד לפגוש אותך",
           };
+        }
+
+        public string[] notNumber()
+        {
+            return new string[]
+                {
+                             "זה לא מספר.. משהו בין 0 ל 100"
+                };
+        }
+
+        public int getNum(string conv)
+        {
+            int res = -1;
+            if(int.TryParse(conv, out res))
+            {
+                if (res <= 10) return res * 10;
+                else if (res <= 100) return res;
+                else return -1;
+            }
+            return -1;
+
+            //  return nlpControler.getNum(text);
         }
 
         public  string[] NewUserGetName()
@@ -301,7 +442,7 @@ namespace NLPtest
 
             return new string[]
            {
-                          '\u263a'  + "אני מצטער, אבל בלי ה" + info + " שלך לא נוכל להמשיך " 
+                         '\u263a'  + "אני מצטער, אבל בלי ה" + info + " שלך לא נוכל להמשיך " 
            };
 
 
@@ -326,18 +467,18 @@ namespace NLPtest
             }
         }
         
-        public  string[] NewUserGetClass()
+        public  string[] NewUserGetClass(Users user)
         {
 
             return new string[]
         {
-                     "עוד משהו.. באיזה כיתה " + getGufSecond() + "?"
+                     "עוד משהו.. באיזה כיתה " + getGufSecond(user) + "?"
             };
         }
 
-        private  string getGufSecond()
+        private  string getGufSecond(Users user)
         {
-            if(user.getGender() == "feminine")
+            if(user.UserGender == "feminine")
             {
                 return "את";
             }else
@@ -372,15 +513,29 @@ namespace NLPtest
        };
         }
 
-
-        public  string getGender(string text)
+        public string getName(string text)
         {
-            return nlpControler.GetGender(text);
+            return text;
+          //  return nlpControler.getName(text);
+        }
+
+        public string getGender(string text)
+        {
+            if (text == "בן")
+            {
+                return "masculine";
+            }
+            else
+            {
+                return "feminine";
+            }
+           // return nlpControler.GetGender(text);
         }
 
         public  string getClass(string text)
         {
-            return nlpControler.getClass(text);
+            return text;
+          //  return nlpControler.getClass(text);
         }
 
         public string getGeneralFeeling(string text)   //TODO: real feeling
@@ -393,7 +548,7 @@ namespace NLPtest
         {
 
             //    var a = MorfAnalizer.createSentence(inputText);
-            var context = new Context();
+            var context = new TextContext();
             var sen = nlpControler.Analize(inputText);
 
             ContentTurn input = new ContentTurn();
@@ -423,6 +578,7 @@ namespace NLPtest
             return input;
 
         }
+
 
 
         private Dictionary<string, string[]> loadDictionary()  //TODO

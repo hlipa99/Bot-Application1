@@ -26,6 +26,7 @@ namespace Model.dataBase
         }
     
         public virtual DbSet<Users> Users { get; set; }
+        public virtual DbSet<media> media { get; set; }
         public virtual DbSet<Question> Question { get; set; }
     }
 }

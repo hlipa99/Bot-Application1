@@ -1,8 +1,8 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Bot_Application1.YAndex;
-using Bot_Application1.Json;
-
+using System.Net.Http;
+using System.Threading;
+using System.Net;
 namespace UnitTestProject1
 {
     [TestClass]
@@ -11,11 +11,23 @@ namespace UnitTestProject1
         [TestMethod]
         public void TestMethod1()
         {
+            using (var client = new HttpClient())
+            {
+               
 
-            ControlerGrammar.start("אני הוהב");
 
+                using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "https://directline.botframework.com/v3/directline/tokens/generate"))
+                {
+                    //     var secret = new Requ
+                    request.Headers.Add("Authorization", "Bearer IK1o_f1fBYc.cwA.LZs.ZrbtNGSTAYzcLqc6DPbq_0bBOV_zzyMSYn7KCaoVdpI");
 
-            string d = "DFdfd";
+                    using (HttpResponseMessage response = client.SendAsync(request, CancellationToken.None).Result)
+                    {
+                        Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
+                    }
+                }
+            }
         }
     }
 }
+    

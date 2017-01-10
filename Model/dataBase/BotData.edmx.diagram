@@ -6,7 +6,8 @@
     <edmx:Diagrams>
       <Diagram DiagramId="b14d548c9e63478a990aeef620a1dabd" Name="Diagram1">
         <EntityTypeShape EntityType="mindcetModel.Users" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="mindcetModel.Question" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="mindcetModel.media" Width="1.5" PointX="5" PointY="0.625" />
+        <EntityTypeShape EntityType="mindcetModel.Question" Width="1.5" PointX="3.125" PointY="1" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

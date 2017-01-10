@@ -2,6 +2,7 @@ using java.lang;
 using NLPtest;
 using System.Collections.Generic;
 using System;
+using NLPtest.view;
 
 public class NLPControlerTestStub : INLPControler
 {
@@ -32,6 +33,16 @@ public class NLPControlerTestStub : INLPControler
     public void Initialize()
     {
 
+    }
+
+    public bool checkContext(string text, ConversationContext context)
+    {
+        return true;
+    }
+
+    ContentTurn INLPControler.checkContext(string text, ConversationContext context)
+    {
+        return new ContentTurn();
     }
 }
         

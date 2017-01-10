@@ -1,6 +1,7 @@
 using NLPtest;
 using System.Collections.Generic;
 using System;
+using NLPtest.view;
 
 public class NLPControler : INLPControler
 {
@@ -11,7 +12,7 @@ public class NLPControler : INLPControler
 
     private NLPControler()
     {
-
+        this.ma = new MorfAnalizer();
     }
 
     public static INLPControler getInstence()
@@ -62,7 +63,10 @@ public class NLPControler : INLPControler
 		return ma.GetGeneralFeeling(text);
 	}
 
- 
+    public ContentTurn checkContext(string text, ConversationContext context)
+    {
+        throw new NotImplementedException();
+    }
 }
         
 	

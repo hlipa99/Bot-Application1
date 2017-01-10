@@ -1,4 +1,5 @@
-﻿using NLPtest.WorldObj;
+﻿using NLPtest.view;
+using NLPtest.WorldObj;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,10 +9,10 @@ using System.Threading.Tasks;
 namespace NLPtest
 {
     //fifo stack
-    class ContentTurn
+    public class ContentTurn
     {
         List<WorldObject> list = new List<WorldObject>();
-        
+        ConversationContext conversationContext;
 
 
         public void Add(WorldObject obj)
