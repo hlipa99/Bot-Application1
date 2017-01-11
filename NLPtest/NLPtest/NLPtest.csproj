@@ -248,7 +248,6 @@
     <Compile Include="WorldObj\relations\copulaRelObject.cs" />
     <Compile Include="WorldObj\relations\expansionRelObject.cs" />
     <Compile Include="WorldObj\relations\adjectiveRelObject.cs" />
-    <Compile Include="Controllers\ConversationController.cs" />
     <Compile Include="ContentTurn.cs" />
     <Compile Include="TextContext.cs" />
     <Compile Include="Exceptions\WorldObjectException.cs" />

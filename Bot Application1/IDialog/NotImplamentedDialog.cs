@@ -28,11 +28,11 @@ namespace Bot_Application1.IDialog
                 user.UserName = "";
                 user.UserGender = "masculine";
             }
-            ConversationController conv = new ConversationController(user.UserName, user.UserGender);
+            
             context.UserData.TryGetValue<Users>("user", out user);
 
 
-            await context.PostAsync(conv.NotImplamented()[0]);
+            await context.PostAsync(conv().getPhrase(Controllers.ConversationController.Pkey.NotImplamented)[0]);
             context.Done("");
 
         }

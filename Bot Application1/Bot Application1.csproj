@@ -226,7 +226,10 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Carda_factory\ManagerCard.cs" />
-    <Compile Include="Controllers\DataBaseControler.cs" />
+    <Compile Include="Exceptions\PhraseFormatException.cs" />
+    <Compile Include="Exceptions\botphraseException.cs" />
+    <Compile Include="Controllers\ConversationController.cs" />
+    <Compile Include="Controllers\DataBaseController.cs" />
     <Compile Include="Exceptions\CategoryOutOfQuestionException.cs" />
     <Compile Include="Controllers\EducationController.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
@@ -245,6 +248,7 @@
     <Compile Include="Json\Translate.cs" />
     <Compile Include="log\Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RandomNum.cs" />
     <Compile Include="YAndex\ControlerGrammar.cs" />
     <Compile Include="YAndex\ControlerTranslate.cs" />
     <Compile Include="YAndex\UnknownEncodingException.cs" />

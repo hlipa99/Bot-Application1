@@ -9,6 +9,8 @@ using Model.dataBase;
 using Microsoft.Bot.Connector;
 using System.Threading;
 using NLPtest;
+using Bot_Application1.Controllers;
+using NLPtest.Models;
 
 namespace Bot_Application1.IDialog
 {
@@ -18,7 +20,7 @@ namespace Bot_Application1.IDialog
     {
         public abstract Task StartAsync(IDialogContext context);
         internal Users user;
-       
+        private StudySession studySession;
 
         internal async Task writeMessageToUser(IDialogContext context, string[] newMessage)
         {
@@ -44,15 +46,16 @@ namespace Bot_Application1.IDialog
                         }
                     }else
                     {
+                        //facebook cuts messages from 300 chars
+                        if (newMessage.Count() > 1)
+                        {
+                            typingTime(context);
+                            Thread.Sleep(m.Length * 3);
+                        }
                         await context.PostAsync(m);
                     }
                 }
-                    //facebook cuts messages from 300 chars
-                    if(newMessage.Count() > 1)
-                    {
-                        typingTime(context);
-                        Thread.Sleep(2000);
-                    }
+         
 
 
             }
@@ -67,7 +70,7 @@ namespace Bot_Application1.IDialog
 
         public ConversationController conv()
         {
-            return new ConversationController(user);
+            return new ConversationController(user,studySession);
         }
 
     }

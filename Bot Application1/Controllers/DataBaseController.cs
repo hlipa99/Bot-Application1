@@ -1,4 +1,5 @@
 ﻿
+using Bot_Application1.dataBase;
 using Bot_Application1.log;
 using Model.dataBase;
 using System;
@@ -7,12 +8,13 @@ using System.Data.Entity;
 using System.Linq;
 using System.Reflection;
 using System.Web;
+using static Bot_Application1.Controllers.ConversationController;
 
-namespace Bot_Application1.dataBase
+namespace Bot_Application1.Controllers
 {
 
     [Serializable]
-    public class DataBaseControler
+    public class DataBaseController
     {
 
         public bool isUserExist(string userId)
@@ -21,10 +23,10 @@ namespace Bot_Application1.dataBase
             bool exist = false;
             try
             {
-                
+
                 exist = DB.Users.Any(x => x.UserID == userId);
-           }
-            catch(Exception e)
+            }
+            catch (Exception e)
             {
                 Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
 
@@ -32,17 +34,17 @@ namespace Bot_Application1.dataBase
 
             return exist;
 
-           
+
         }
 
-        
 
-        public void addNewUser(string channelId,string id,string name,string text)
+
+        public void addNewUser(string channelId, string id, string name, string text)
         {
             Entities DB = new Entities();
             try
             {
-               
+
                 var NewUsers = new Users();
 
 
@@ -55,9 +57,10 @@ namespace Bot_Application1.dataBase
                 DB.Users.Add(NewUsers);
                 DB.SaveChanges();
 
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
-                Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name,e.ToString());
+                Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
             }
 
 
@@ -70,7 +73,7 @@ namespace Bot_Application1.dataBase
             Entities DB = new Entities();
             try
             {
-               
+
 
                 DB.Users.Add(user);
                 DB.SaveChanges();
@@ -95,22 +98,22 @@ namespace Bot_Application1.dataBase
 
             try
             {
-               
+
                 NewUsers = new Users();
-                
+
 
                 visitors = (from t in DB.Users
                             where t.UserID == userId
                             select t).ToList();
-       }
+            }
             catch (Exception e)
             {
                 Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
 
             }
 
-           
-            return visitors[0] ;
+
+            return visitors[0];
 
         }
 
@@ -124,7 +127,7 @@ namespace Bot_Application1.dataBase
 
             try
             {
-               
+
                 NewUsers = new Users();
 
                 var itemToRemove = DB.Users.SingleOrDefault(x => x.UserID == userId);
@@ -142,23 +145,23 @@ namespace Bot_Application1.dataBase
 
             }
 
-                       
+
 
         }
 
 
-        internal List<Question> getQuestion(string category)
+        internal Question[] getQuestion(string category)
         {
             Entities DB = new Entities();
             Question question = new Question();
-            List<Question> visitors = new List<Question>();
+            Question[] questions = null;
 
             try
             {
-               
-                visitors = (from t in DB.Question
+
+                questions = (from t in DB.Question
                             where t.Category == category
-                            select t).ToList();
+                            select t).ToArray();
 
             }
             catch (Exception e)
@@ -169,22 +172,22 @@ namespace Bot_Application1.dataBase
 
 
 
-            return visitors;
+            return questions;
         }
 
-        public List<Question> getQuestion(string catgoty, string subCategory)
+        public Question[] getQuestion(string catgoty, string subCategory)
         {
             Entities DB = new Entities();
             Question question = new Question();
-            List<Question> visitors = new List<Question>();
+            Question[] questions = null;
 
             try
             {
-               
-                 visitors = (from t in DB.Question
+
+                questions = (from t in DB.Question
                             where t.Category == catgoty && t.SubCategory == subCategory
-                            select t).ToList();
-                                                
+                            select t).ToArray();
+
             }
             catch (Exception e)
             {
@@ -194,22 +197,22 @@ namespace Bot_Application1.dataBase
 
 
 
-            return visitors;
+            return questions;
 
         }
 
 
-        public List<string> getAllCategory()
+        public string[] getAllCategory()
         {
             Entities DB = new Entities();
             Question question = new Question();
-            List<String> visitors = new List<string>();
+            string[] catagories = null;
 
             try
             {
-               
-                visitors = (from t in DB.Question
-                                    select t.Category).Distinct().ToList();
+
+                catagories = (from t in DB.Question
+                            select t.Category).Distinct().ToArray();
 
             }
             catch (Exception e)
@@ -217,24 +220,24 @@ namespace Bot_Application1.dataBase
                 Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
 
             }
-            
-            return visitors;
+
+            return catagories;
 
         }
 
 
-        public List<string> getAllSubCategory(string catgoty)
+        public string[] getAllSubCategory(string catgoty)
         {
             Entities DB = new Entities();
             Question question = new Question();
-            List<String> visitors = new List<string>();
+            string[] catagory = null;
 
             try
             {
-               
-                visitors = (from t in DB.Question
-                            where t.Category == catgoty 
-                            select t.SubCategory).Distinct().ToList();
+
+                catagory = (from t in DB.Question
+                            where t.Category == catgoty
+                            select t.SubCategory).Distinct().ToArray();
 
             }
             catch (Exception e)
@@ -243,23 +246,23 @@ namespace Bot_Application1.dataBase
 
             }
 
-            return visitors;
+            return catagory;
 
         }
 
 
-        public List<string> getMedia( string key,string type,string flags)
+        public string[] getMedia(string key, string type, string flags)
         {
             Entities DB = new Entities();
             media media = new media();
-            List<String> urls = new List<string>();
+            string[] urls = new string[] { };
 
             try
             {
 
                 urls = (from t in DB.media
-                            where t.type == type && t.mediaKey == key
-                        select t.value).Distinct().ToList();
+                        where t.type == type && t.mediaKey == key
+                        select t.value).Distinct().ToArray();
 
             }
             catch (Exception e)
@@ -272,6 +275,37 @@ namespace Bot_Application1.dataBase
 
         }
 
+        public string[] getBotPhrase(Pkey pKey, string[] flags, string[] flagsNot)
+        {
+            Entities DB = new Entities();
+            media media = new media();
+            string[] phrases = null;
+            var key = Enum.GetName(typeof(Pkey), pKey);
+            try
+            {
+                //improvse runtime 
+                if(flags.Length + flagsNot.Length > 0)
+                {
+                    phrases = (from t in DB.botphrase
+                               where t.Pkey == key && flags.All(x => t.Flags.Contains(x)) && flagsNot.All(x => !t.Flags.Contains(x))
+                               select t.Text).ToArray();
+                }else
+                {
+                    phrases = (from t in DB.botphrase
+                               where t.Pkey == key
+                               select t.Text).ToArray();
+                }
+ 
+            }
+            catch (Exception e)
+            {
+                Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
+
+            }
+
+            return phrases;
+
+        }
 
     }
 }

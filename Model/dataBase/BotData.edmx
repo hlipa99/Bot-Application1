@@ -5,16 +5,15 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="mindcetModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'mindcet.dbo.botphrase' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
         <EntityType Name="botphrase">
-          <Property Name="Id" Type="nvarchar" MaxLength="100" />
-          <Property Name="Pkey" Type="nvarchar(max)" />
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Pkey" Type="nvarchar" MaxLength="200" />
           <Property Name="Text" Type="nvarchar(max)" />
           <Property Name="Flags" Type="nvarchar(max)" />
-        </EntityType>-->
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'mindcet.dbo.media' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        </EntityType>
         <EntityType Name="media">
           <Key>
             <PropertyRef Name="id" />
@@ -25,8 +24,6 @@ warning 6002: The table/view 'mindcet.dbo.media' does not have a primary key def
           <Property Name="value" Type="nvarchar" MaxLength="200" />
           <Property Name="flags" Type="nvarchar" MaxLength="200" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'mindcet.dbo.Question' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="Question">
           <Key>
             <PropertyRef Name="ID" />
@@ -51,48 +48,30 @@ warning 6002: The table/view 'mindcet.dbo.Question' does not have a primary key 
           <Property Name="UserClass" Type="nvarchar" MaxLength="150" />
         </EntityType>
         <EntityContainer Name="mindcetModelStoreContainer">
+          <EntitySet Name="botphrase" EntityType="Self.botphrase" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="media" EntityType="Self.media" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Question" EntityType="Self.Question" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="media" EntityType="Self.media" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [media].[id] AS [id], 
-    [media].[type] AS [type], 
-    [media].[mediaKey] AS [mediaKey], 
-    [media].[value] AS [value], 
-    [media].[flags] AS [flags]
-    FROM [dbo].[media] AS [media]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="Question" EntityType="Self.Question" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [Question].[ID] AS [ID], 
-    [Question].[Category] AS [Category], 
-    [Question].[SubCategory] AS [SubCategory], 
-    [Question].[QuestionText] AS [QuestionText], 
-    [Question].[AnswerText] AS [AnswerText]
-    FROM [dbo].[Question] AS [Question]</DefiningQuery>
-          </EntitySet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="mindcetModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="Users">
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="botphrase" EntityType="mindcetModel.botphrase" />
+          <EntitySet Name="media" EntityType="mindcetModel.media" />
+          <EntitySet Name="Question" EntityType="mindcetModel.Question" />
+          <EntitySet Name="Users" EntityType="mindcetModel.Users" />
+        </EntityContainer>
+        <EntityType Name="botphrase">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserID" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="UserName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Channel" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="created" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Message" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="UserGender" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="UserClass" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Pkey" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Text" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Flags" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Users" EntityType="Self.Users" />
-          <EntitySet Name="media" EntityType="mindcetModel.media" />
-          <EntitySet Name="Question" EntityType="mindcetModel.Question" />
-        </EntityContainer>
         <EntityType Name="media">
           <Key>
             <PropertyRef Name="id" />
@@ -113,28 +92,37 @@ warning 6002: The table/view 'mindcet.dbo.Question' does not have a primary key 
           <Property Name="QuestionText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="AnswerText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
-      </Schema>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Channel" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="created" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Message" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="UserGender" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UserClass" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+        </EntityType>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="mindcetModelStoreContainer" CdmEntityContainer="Entities">
-          <EntitySetMapping Name="Users">
-            <EntityTypeMapping TypeName="mindcetModel.Users">
-              <MappingFragment StoreEntitySet="Users">
+          <EntitySetMapping Name="botphrase">
+            <EntityTypeMapping TypeName="mindcetModel.botphrase">
+              <MappingFragment StoreEntitySet="botphrase">
+                <ScalarProperty Name="Flags" ColumnName="Flags" />
+                <ScalarProperty Name="Text" ColumnName="Text" />
+                <ScalarProperty Name="Pkey" ColumnName="Pkey" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="UserName" ColumnName="UserName" />
-                <ScalarProperty Name="Channel" ColumnName="Channel" />
-                <ScalarProperty Name="created" ColumnName="created" />
-                <ScalarProperty Name="Message" ColumnName="Message" />
-                <ScalarProperty Name="UserGender" ColumnName="UserGender" />
-                <ScalarProperty Name="UserClass" ColumnName="UserClass" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="media">
-            <EntityTypeMapping TypeName="IsTypeOf(mindcetModel.media)">
+            <EntityTypeMapping TypeName="mindcetModel.media">
               <MappingFragment StoreEntitySet="media">
                 <ScalarProperty Name="flags" ColumnName="flags" />
                 <ScalarProperty Name="value" ColumnName="value" />
@@ -152,6 +140,20 @@ warning 6002: The table/view 'mindcet.dbo.Question' does not have a primary key 
                 <ScalarProperty Name="SubCategory" ColumnName="SubCategory" />
                 <ScalarProperty Name="Category" ColumnName="Category" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="mindcetModel.Users">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="UserClass" ColumnName="UserClass" />
+                <ScalarProperty Name="UserGender" ColumnName="UserGender" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="created" ColumnName="created" />
+                <ScalarProperty Name="Channel" ColumnName="Channel" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

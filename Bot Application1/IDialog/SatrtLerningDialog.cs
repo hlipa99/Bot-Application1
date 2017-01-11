@@ -12,6 +12,9 @@ using Bot_Application1.dataBase;
 using Catharsis.Commons;
 using NLPtest.Models;
 using Model.dataBase;
+using Bot_Application1.Controllers;
+using static Bot_Application1.Controllers.ConversationController.Pkey;
+using static Bot_Application1.Controllers.ConversationController;
 
 namespace Bot_Application1.IDialog
 {
@@ -24,24 +27,30 @@ namespace Bot_Application1.IDialog
         public override async Task StartAsync(IDialogContext context)
         {
             context.UserData.TryGetValue<Users>("user", out user);
+            context.UserData.TryGetValue<StudySession>("studySession", out studySession);
+
             if (user == null)
             {
                 throw new unknownUserException();
             }
 
-            ConversationController conv = new ConversationController(user.UserName, user.UserGender);
+            if(studySession == null)
+            {
+                studySession = new StudySession();
+            }
+            
 
             //var menu = new PromptDialog.PromptChoice<string>(
             //ec.getStudyCategory(),
-            //conv.chooseStudyUnits(),
-            //conv.wrongOption()[0],
+            //conv().chooseStudyUnits(),
+            //conv().wrongOption()[0],
             //3);
-            await writeMessageToUser(context, conv.chooseSubjectForLearn());
+            await writeMessageToUser(context, conv().getPhrase(Pkey.chooseStudyUnits));
             var message = context.MakeMessage();
             //     List<HeroCard> hcList = new List<HeroCard>();
             foreach (var m in edc().getStudyCategory())
             {
-                var hc = new HeroCard(title: m, images: getImage(m), buttons: new CardAction[] { new CardAction(type: "imBack", value: m, title: conv.LetsStart()[0]) });
+                var hc = new HeroCard(title: m, images: getImage(m), buttons: new CardAction[] { new CardAction(type: "imBack", value: m, title: conv().getPhrase(Pkey.letsLearn)[0]) });
 
                 //  hcList.Add(hc);
                 message.Attachments.Add(hc.ToAttachment());
@@ -71,7 +80,7 @@ namespace Bot_Application1.IDialog
         //    {
         //        var message = await result;
         ////        context.UserData.TryGetValue<Users>("user", out user);
-        //        ConversationController conv = new ConversationController(user.UserName, user.UserGender);
+        //        
         //  //      context.UserData.TryGetValue<StudySession>("studySession",out studySession);
         //        studySession.Category = message;
 
@@ -79,8 +88,8 @@ namespace Bot_Application1.IDialog
 
         //        var menu = new PromptDialog.PromptChoice<string>(
         //             ec.getStudyCategory(message),
-        //             conv.chooseStudyUnits(),
-        //             conv.wrongOption()[0],
+        //             conv().chooseStudyUnits(),
+        //             conv().wrongOption()[0],
         //             3);
 
         //        context.Call(menu, StartLearning);
@@ -90,13 +99,13 @@ namespace Bot_Application1.IDialog
 
         public async virtual Task StartLearning(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            ConversationController conv = new ConversationController(user.UserName, user.UserGender);
+            
             var message = await result;
             //        context.UserData.TryGetValue<Users>("user", out user);
             //         context.UserData.TryGetValue<StudySession>("studySession", out studySession);
             studySession.Category = message.Text;
             //         context.UserData.SetValue<StudySession>("studySession", studySession);
-            await writeMessageToUser(context, conv.areUReaddyToLearn(studySession.Category));
+            await writeMessageToUser(context, conv().getPhrase(Pkey.areUReaddyToLearn));
             await askQuestion(context);
         }
 
@@ -104,11 +113,11 @@ namespace Bot_Application1.IDialog
         {
             //  var message = await result;
             //      context.UserData.TryGetValue<Users>("user", out user);
-            ConversationController conv = new ConversationController(user.UserName, user.UserGender);
+            
             //         context.UserData.TryGetValue<StudySession>("studySession", out studySession);
 
             //         context.UserData.TryGetValue<StudySession>("studySession", out studySession);
-            await writeMessageToUser(context, conv.beforAskQuestion(studySession));
+            await writeMessageToUser(context, conv().getPhrase(Pkey.beforAskQuestion));
 
             var question = edc().getQuestion(studySession.Category, studySession.SubCategory, studySession);
 
@@ -122,13 +131,13 @@ namespace Bot_Application1.IDialog
 
         public async Task answerQuestion(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            ConversationController conv = new ConversationController(user.UserName, user.UserGender);
+            
   
             var message = await result;
             //      context.UserData.TryGetValue<StudySession>("studySession", out studySession);
-            if (conv.isStopSession(message.Text))
+            if (conv().isStopSession(message.Text))
             {
-                await writeMessageToUser(context, conv.stopLearningSession());
+                await writeMessageToUser(context, conv().getPhrase(Pkey.stopLearningSession));
                 context.Done("");
             }
 
@@ -137,22 +146,22 @@ namespace Bot_Application1.IDialog
             question = edc().checkAnswer(question, message.Text);
             if(question.answerScore > 85)
             {
-                await writeMessageToUser(context, conv.goodAnswer());
+                await writeMessageToUser(context, conv().getPhrase(Pkey.goodAnswer));
 
             }
             else if(question.answerScore > 30)
             {
-                await writeMessageToUser(context, conv.partialAnswer());
+                await writeMessageToUser(context, conv().getPhrase(Pkey.partialAnswer));
             }
             else
             {
-                await writeMessageToUser(context, conv.notAnAnswer());
+                await writeMessageToUser(context, conv().getPhrase(Pkey.notAnAnswer));
             }
-            await writeMessageToUser(context, conv.MyAnswerToQuestion());
+            await writeMessageToUser(context, conv().getPhrase(Pkey.MyAnswerToQuestion));
 
          
             await writeMessageToUser(context, new string[] { question.AnswerText });
-            await writeMessageToUser(context, conv.giveYourFeedback());
+            await writeMessageToUser(context, conv().getPhrase(Pkey.giveYourFeedback));
 
             context.Wait(giveFeedback);
 
@@ -161,17 +170,17 @@ namespace Bot_Application1.IDialog
 
         public async Task giveFeedback(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            ConversationController conv = new ConversationController(user.UserName, user.UserGender);
+            
             var message = await result;
             int number;
-            if ((number = conv.getNum(message.Text)) >= 0)
+            if ((number = conv().getNum(message.Text)) >= 0)
             {
-                await writeMessageToUser(context, conv.GeneralAck(number +""));
+                await writeMessageToUser(context, conv().getPhrase(Pkey.GeneralAck,textVar:(number +"")));
                 studySession.currentQuestion.answerScore = number;
 
                 if (studySession.questionAsked.Count == studySession.sessionLength)
                 {
-                    await writeMessageToUser(context, conv.endOfSession(user, studySession));
+                    await writeMessageToUser(context, conv().endOfSession());
 
                     //TODO: save user sussion to DB
 
@@ -179,13 +188,13 @@ namespace Bot_Application1.IDialog
                 }
                 else
                 {
-                    await writeMessageToUser(context, conv.moveToNextQuestion());
+                    await writeMessageToUser(context, conv().getPhrase(Pkey.moveToNextQuestion));
                     await askQuestion(context);
                 }
             }
             else
             {
-                await writeMessageToUser(context, conv.notNumber());
+                await writeMessageToUser(context, conv().getPhrase(Pkey.notNumber));
                 context.Wait(giveFeedback);
             }
         }

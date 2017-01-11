@@ -25,8 +25,9 @@ namespace Model.dataBase
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Users> Users { get; set; }
+        public virtual DbSet<botphrase> botphrase { get; set; }
         public virtual DbSet<media> media { get; set; }
         public virtual DbSet<Question> Question { get; set; }
+        public virtual DbSet<Users> Users { get; set; }
     }
 }

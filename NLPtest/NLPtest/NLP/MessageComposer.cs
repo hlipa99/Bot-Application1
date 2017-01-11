@@ -5,8 +5,7 @@ using System.Collections.Generic;
 namespace NLPtest
 {
 
-
-    internal class MessageComposer
+    public class MessageComposer
     {
 
         MessageDictionary messageDictionary = new MessageDictionary();

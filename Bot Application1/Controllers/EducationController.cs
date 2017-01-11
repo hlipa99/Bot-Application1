@@ -1,16 +1,17 @@
 ﻿using Bot_Application1.dataBase;
+using Bot_Application1.Exceptions;
 using Model.dataBase;
 using NLPtest.Models;
 using System;
 using System.Collections.Generic;
 
-namespace Bot_Application1.IDialog
+namespace Bot_Application1.Controllers
 {
  
     [Serializable]
     internal class EducationController
     {
-         DataBaseControler db = new DataBaseControler();
+         DataBaseController db = new DataBaseController();
         private Users user;
         private StudySession studySession;
 
@@ -23,13 +24,13 @@ namespace Bot_Application1.IDialog
         internal string[] getStudyCategory()
         {
             var res = db.getAllCategory();
-            return res.ToArray();
+            return res;
         }
 
         internal IEnumerable<string> getStudySubCategory(string category)
         {
             var res = db.getAllSubCategory(category);
-            return res.ToArray();
+            return res;
         }
 
         public string getRamdomImg(string mediaKey)
@@ -37,9 +38,9 @@ namespace Bot_Application1.IDialog
             var media = db.getMedia(mediaKey, "img", "");
             var r = new Random();
 
-            if(media.Count > 0)
+            if(media.Length > 0)
             {
-                return media[r.Next(media.Count - 1)];
+                return media[r.Next(media.Length - 1)];
 
             }else
             {
@@ -49,14 +50,14 @@ namespace Bot_Application1.IDialog
 
         internal Question getQuestion(string category, string subCategory, StudySession studySession)
         {
-            List<Question> res;
+            List<Question> res = new List<Question>();
             if(subCategory == null)
             {
-                res = db.getQuestion(category);
+                res.AddRange(db.getQuestion(category));
             }
             else
             {
-                 res = db.getQuestion(category, subCategory);
+                res.AddRange(db.getQuestion(category, subCategory));
             }
             res.RemoveAll(x => studySession.QuestionAsked.Contains(x));
             var r = new Random();

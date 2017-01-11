@@ -71,6 +71,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>BotData.edmx</DependentUpon>
     </Compile>
+    <Compile Include="dataBase\botphrase.cs">
+      <DependentUpon>BotData.tt</DependentUpon>
+    </Compile>
     <Compile Include="dataBase\media.cs">
       <DependentUpon>BotData.tt</DependentUpon>
     </Compile>

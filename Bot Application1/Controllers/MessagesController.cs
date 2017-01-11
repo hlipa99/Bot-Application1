@@ -10,7 +10,7 @@ using Bot_Application1.dataBase;
 using System.Collections.Generic;
 using Model.dataBase;
 
-namespace Bot_Application1
+namespace Bot_Application1.Controllers
 {
     [BotAuthentication]
     public class MessagesController : ApiController

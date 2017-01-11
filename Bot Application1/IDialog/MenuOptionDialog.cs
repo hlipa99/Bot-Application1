@@ -10,6 +10,8 @@ using Bot_Application1.Cardatt_achment;
 using Bot_Application1.dataBase;
 using System.Threading;
 using NLPtest;
+using Bot_Application1.Controllers;
+using NLPtest.Models;
 
 namespace Bot_Application1.IDialog
 {
@@ -78,10 +80,10 @@ namespace Bot_Application1.IDialog
 
       protected override bool TryParse(IMessageActivity message, out T result)
         {
-          
-           // context.UserData.TryGetValue<Users>("user", out user);
 
-            ConversationController conv = new ConversationController("","");
+            // context.UserData.TryGetValue<Users>("user", out user);
+            ConversationController conv = new ConversationController(new Model.dataBase.Users(),new StudySession());
+           
             result = conv.FindMatchFromOptions<T>(message.Text, promptOptions.Options);
             return result != null;
         }

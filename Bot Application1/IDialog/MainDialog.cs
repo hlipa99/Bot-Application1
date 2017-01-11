@@ -12,6 +12,7 @@ using System.Threading;
 using NLPtest;
 using Model.dataBase;
 using Bot_Application1.log;
+using static Bot_Application1.Controllers.ConversationController;
 
 namespace Bot_Application1.IDialog
 {
@@ -24,7 +25,7 @@ namespace Bot_Application1.IDialog
         public override async Task StartAsync(IDialogContext context)
         {
 
-            context.UserData.TryGetValue<Users >("user", out user);
+            context.UserData.TryGetValue<Users>("user", out user);
 
             if (user != null)
             {
@@ -40,9 +41,9 @@ namespace Bot_Application1.IDialog
         private async Task Greeting(IDialogContext context)
         {
             context.UserData.TryGetValue<Users>("user", out user);
-            
-            await writeMessageToUser(context, conv().greetings());
-            await writeMessageToUser(context, conv().howAreYou());
+
+            await writeMessageToUser(context, conv().getPhrase(Pkey.greetings));
+            await writeMessageToUser(context, conv().getPhrase(Pkey.howAreYou));
             context.Wait(HowAreYouRes);
         }
 
@@ -50,9 +51,9 @@ namespace Bot_Application1.IDialog
         private async Task HowAreYouRes(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
             context.UserData.TryGetValue<Users>("user", out user);
-            
+
             var text = await result;
-            await writeMessageToUser(context, conv().OK());
+         //   await writeMessageToUser(context, conv().getPhrase(Pkey.ok));
             await MainMenu(context, result);
         }
 
@@ -62,19 +63,19 @@ namespace Bot_Application1.IDialog
             try
             {
                 context.UserData.TryGetValue<Users>("user", out user);
-                
+
                 //  var message = await result;
                 context.UserData.TryGetValue<Users>("user", out user);
                 if (user != null)
                 {
                     var menu = new MenuOptionDialog<string>(
                         conv().MainMenuOptions(),
-                        conv().MainMenuText(),
-                        conv().wrongOption()[0],
+                        conv().getPhrase(Pkey.MainMenuText)[0],
+                        conv().getPhrase(Pkey.wrongOption)[0],
                         3, new IDialog<object>[] {
                     new StartLerningDialog(),
                     new NotImplamentedDialog(),},
-                         new ResumeAfter <object>[] {
+                         new ResumeAfter<object>[] {
                        EndSession,MainMenu}
                          );
 
@@ -85,18 +86,16 @@ namespace Bot_Application1.IDialog
                 {
                     context.Call(new NewUserDialog(), MainMenu);
                 }
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
-                await writeMessageToUser(context, new string[] { "אוקיי זה מביך " + "\U0001F633", "קרתה לי תקלה בשרת ואני לא יודע מה לעשות", "אני אתחיל עכשיו מהתחלה ונעמיד פנים שלא קרה כלום, " + "\U0001F648", "טוב"+ "?" });
-                Logger.log("MainDialog","MainMenu",ex.ToString());
+                await writeMessageToUser(context, new string[] { "אוקיי זה מביך " + "\U0001F633", "קרתה לי תקלה בשרת ואני לא יודע מה לעשות", "אני אתחיל עכשיו מהתחלה ונעמיד פנים שלא קרה כלום, " + "\U0001F648", "טוב" + "?" });
+                Logger.log("MainDialog", "MainMenu", ex.ToString());
                 await StartAsync(context);
             }
 
-            
-            //await context.Forward<object,MenuObject>(new MenuOptionDialog(), MainMenuChooseOption,
-            //    new MenuObject(), CancellationToken.None);
-            //await OptionsMenu(context,result, BotControler.MainMenuText(), BotControler.MainMenuOptions());
-            //context.Wait(MainMenuChooseOption);
+
+
 
         }
 
@@ -105,38 +104,12 @@ namespace Bot_Application1.IDialog
         {
 
             context.UserData.TryGetValue<Users>("user", out user);
-            
-            await writeMessageToUser(context, conv().goodbye());
+
+            await writeMessageToUser(context, conv().getPhrase(Pkey.goodbye));
             context.Done("");
 
-            //await context.Forward<object,MenuObject>(new MenuOptionDialog(), MainMenuChooseOption,
-            //    new MenuObject(), CancellationToken.None);
-            //await OptionsMenu(context,result, BotControler.MainMenuText(), BotControler.MainMenuOptions());
-            //context.Wait(MainMenuChooseOption);
 
         }
-
-        private async Task MainMenuChooseOption(IDialogContext context, IAwaitable<object> result)
-        {
-            context.UserData.TryGetValue<Users>("user", out user);
-            
-            var message = await result;
-            var text = result as IMessageActivity;
-            var choosen = conv().MainMenuText();
-            switch (conv().MainMenuOptions().ToList().IndexOf(text.Text))
-            {
-                case 1:
-                    //StartAsync learning session
-                    context.Call(new StartLerningDialog(), MainMenu);
-                    break;
-                case 2:
-                    //Edit User Data
-                    context.Call(new NotImplamentedDialog(), MainMenu);
-                    break;
-                default:
-                    context.Call(new NotImplamentedDialog(), MainMenu);
-                    break;
-            }
 
 
     }

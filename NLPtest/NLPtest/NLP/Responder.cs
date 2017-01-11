@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace NLPtest
 {
 
-    class Responder
+    public class Responder
     {
         public ContentTurn respone(ContentTurn input,ConversationContext context)
         {

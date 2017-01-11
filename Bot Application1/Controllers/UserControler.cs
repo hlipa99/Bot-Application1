@@ -11,7 +11,7 @@ namespace Bot_Application1.Controllers
     public class UserControler
     {
 
-        DataBaseControler dc = new DataBaseControler();
+        DataBaseController dc = new DataBaseController();
         
         public Users getUser(string id)
         {
