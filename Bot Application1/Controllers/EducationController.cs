@@ -73,7 +73,7 @@ namespace Bot_Application1.Controllers
 
         internal Question checkAnswer(Question question, string text)
         {
-            if(text.Split(' ').Length > 2)
+            if(text.Split(' ').Length > 2 && !text.Contains("לא יודע"))
             {
                 question.answerScore = 100;
             }

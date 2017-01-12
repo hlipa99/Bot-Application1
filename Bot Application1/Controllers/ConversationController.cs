@@ -349,9 +349,11 @@ namespace Bot_Application1.Controllers
             phraseRes = phraseRes.Replace("<genderPostfixY>", ifGufFemenin("י"));
             phraseRes = phraseRes.Replace("<genderMany>", getGenderName("many"));
             phraseRes = phraseRes.Replace("<!genderMany>", getGenderOpositeName("many"));
-            
+            phraseRes = phraseRes.Replace("<timeOfday>", getTimeOfDay());
 
-            phraseRes = phraseRes.Replace("נ ", "ן ");
+
+
+                 phraseRes = phraseRes.Replace("נ ", "ן ");
             phraseRes = phraseRes.Replace("מ ", "מ ");
             phraseRes = phraseRes.Replace("צ ", "צ ");
             phraseRes = phraseRes.Replace("כ ", "ך ");
@@ -370,6 +372,24 @@ namespace Bot_Application1.Controllers
             return phraseRes;
 
         }
+
+        private string getTimeOfDay()
+        {
+            var now = DateTime.Now.Hour;
+            if(now > 5 && now < 11)
+            {
+                return "בוקר";
+            }
+            else if (now > 11 && now < 18)
+            {
+                return "יום";
+            }
+              else 
+                {
+                    return "לילה";
+                }
+
+            }
 
         internal IEnumerable<string> getYesNoOptions()
         {

@@ -182,8 +182,8 @@ namespace Bot_Application1.IDialog
                 if (studySession.questionAsked.Count == studySession.sessionLength)
                 {
 
-                    await writeMessageToUser(context, conv().getPhrase(Pkey.endOfSession));
                     await writeMessageToUser(context, conv().endOfSession());
+                    await writeMessageToUser(context, conv().getPhrase(Pkey.endOfSession));
 
                     //TODO: save user sussion to DB
 
