@@ -34,7 +34,7 @@ namespace Model
             d.Add("trophy", "\U0001F396");
             d.Add("musical ", "\U0001F3B6");
             d.Add("guitar", "\U0001F3B8");
-            d.Add("Israel", "\U0001F1EE\U0001F1F1");
+            d.Add("israel", "\U0001F1EE\U0001F1F1");
             d.Add("thinking", "\U0001F914");
             d.Add("monkey", "\U0001F648");
             d.Add("robot", "\U0001F916");
@@ -54,9 +54,16 @@ namespace Model
             d.Add("blush", "\U0001F60A");
             d.Add("teeth", "\U0001F62C");
             d.Add("clock", "\u23F0");
-            d.Add("greening", "");
-            d.Add("israel", "");
-
+            d.Add("winking", "\U0001F609");
+            d.Add("loving", "\U0001F60D");
+            d.Add("rollingEye", "\U0001F644");
+            d.Add("sleeping", "\U0001F634");
+            d.Add("astonished", "\U0001F632");
+            d.Add("angry", "\U0001F620");
+            d.Add("alienMonster", "\U0001F47E");
+            d.Add("poutingCat", "\U0001F63E");
+            d.Add("baby", "\U0001F476");
+            d.Add("fire", "\U0001F525");
         }
 
 

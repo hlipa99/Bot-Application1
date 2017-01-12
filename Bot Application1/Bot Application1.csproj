@@ -239,6 +239,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="IDialog\AbsDialog.cs" />
+    <Compile Include="IDialog\EndOfLearningSessionException.cs" />
+    <Compile Include="IDialog\FarewellDialog.cs" />
     <Compile Include="IDialog\MainDialog.cs" />
     <Compile Include="IDialog\MenuOptionDialog.cs" />
     <Compile Include="IDialog\NewUserDialog.cs" />

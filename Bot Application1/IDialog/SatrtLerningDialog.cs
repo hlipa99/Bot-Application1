@@ -23,7 +23,7 @@ namespace Bot_Application1.IDialog
     {
 
 
-        StudySession studySession;
+
         public override async Task StartAsync(IDialogContext context)
         {
             context.UserData.TryGetValue<Users>("user", out user);
@@ -106,6 +106,7 @@ namespace Bot_Application1.IDialog
             studySession.Category = message.Text;
             //         context.UserData.SetValue<StudySession>("studySession", studySession);
             await writeMessageToUser(context, conv().getPhrase(Pkey.areUReaddyToLearn));
+            await writeMessageToUser(context, conv().getPhrase(Pkey.firstQuestion));
             await askQuestion(context);
         }
 
@@ -117,7 +118,7 @@ namespace Bot_Application1.IDialog
             //         context.UserData.TryGetValue<StudySession>("studySession", out studySession);
 
             //         context.UserData.TryGetValue<StudySession>("studySession", out studySession);
-            await writeMessageToUser(context, conv().getPhrase(Pkey.beforAskQuestion));
+   
 
             var question = edc().getQuestion(studySession.Category, studySession.SubCategory, studySession);
 
@@ -180,15 +181,18 @@ namespace Bot_Application1.IDialog
 
                 if (studySession.questionAsked.Count == studySession.sessionLength)
                 {
+
+                    await writeMessageToUser(context, conv().getPhrase(Pkey.endOfSession));
                     await writeMessageToUser(context, conv().endOfSession());
 
                     //TODO: save user sussion to DB
 
-                    context.Done("");
+                    context.Wait(EndOfLearningSession);
                 }
                 else
                 {
                     await writeMessageToUser(context, conv().getPhrase(Pkey.moveToNextQuestion));
+                    await writeMessageToUser(context, conv().getPhrase(Pkey.beforAskQuestion));
                     await askQuestion(context);
                 }
             }
@@ -197,6 +201,15 @@ namespace Bot_Application1.IDialog
                 await writeMessageToUser(context, conv().getPhrase(Pkey.notNumber));
                 context.Wait(giveFeedback);
             }
+        }
+
+
+        public async Task EndOfLearningSession(IDialogContext context, IAwaitable<object> result)
+        {
+            await writeMessageToUser(context, conv().getPhrase(Pkey.goodbye));
+            context.Reset();
+            context.Call(new MainDialog(), EndOfLearningSession);
+
         }
 
         private EducationController edc()

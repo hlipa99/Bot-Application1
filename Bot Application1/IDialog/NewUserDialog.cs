@@ -140,11 +140,11 @@ namespace Bot_Application1.IDialog
             var userText = await result as string;
 
          
-            if ((user.UserGender = conv().getGender(userText)) != null)
+            if ((user.UserGender = conv().getGenderValue(userText)) != null)
             {
                 context.UserData.SetValue<Users >("user", user);
 
-                await writeMessageToUser(context, conv().getPhrase(Pkey.GenderAck, textVar: userText));
+                await writeMessageToUser(context, conv().getPhrase(Pkey.GenderAck, textVar: conv().getGenderName("single")));
         
              
                 await NewUserGetClass(context, null);
@@ -214,6 +214,7 @@ namespace Bot_Application1.IDialog
             //user class
             
             await writeMessageToUser(context, conv().getPhrase(Pkey.LetsStart));
+
             context.Done("");
         }
 

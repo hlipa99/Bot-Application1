@@ -20,7 +20,7 @@ namespace Bot_Application1.IDialog
     {
         public abstract Task StartAsync(IDialogContext context);
         internal Users user;
-        private StudySession studySession;
+        internal StudySession studySession;
 
         internal async Task writeMessageToUser(IDialogContext context, string[] newMessage)
         {

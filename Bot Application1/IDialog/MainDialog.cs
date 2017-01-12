@@ -76,16 +76,20 @@ namespace Bot_Application1.IDialog
                     new StartLerningDialog(),
                     new NotImplamentedDialog(),},
                          new ResumeAfter<object>[] {
-                       EndSession,MainMenu}
+                       EndSession,EndSession,EndSession}
                          );
 
-                    context.Call(menu, MainMenu);
+                    context.Call(menu, EndSession);
 
                 }
                 else
                 {
                     context.Call(new NewUserDialog(), MainMenu);
                 }
+            }
+            catch (EndOfLearningSessionException ex)
+            {
+                context.Wait(EndOfLearningSession);
             }
             catch (Exception ex)
             {
@@ -99,16 +103,14 @@ namespace Bot_Application1.IDialog
 
         }
 
+        private async Task EndOfLearningSession(IDialogContext context, IAwaitable<object> result)
+        {
+            await StartAsync(context);
+        }
 
         private async Task EndSession(IDialogContext context, IAwaitable<object> result)
         {
-
-            context.UserData.TryGetValue<Users>("user", out user);
-
-            await writeMessageToUser(context, conv().getPhrase(Pkey.goodbye));
-            context.Done("");
-
-
+            context.Call(new FarewellDialog(), MainMenu);
         }
 
 

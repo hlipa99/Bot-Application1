@@ -174,7 +174,7 @@ namespace Bot_Application1.Controllers
           //  return nlpControler.getName(text);
         }
 
-        public string getGender(string text)
+        public string getGenderValue(string text)
         {
             if (text == "בן")
             {
@@ -185,6 +185,61 @@ namespace Bot_Application1.Controllers
                 return "feminine";
             }
            // return nlpControler.GetGender(text);
+        }
+
+        public string getGenderName(string text)
+        {
+            if (text == "many")
+            {
+                if(user.UserGender == "masculine")
+                {
+                    return "בנים";
+                }
+                else
+                {
+                    return "בנות";
+                }
+            }
+            else
+            {
+                if (user.UserGender == "masculine")
+                {
+                    return "בן";
+                }
+                else
+                {
+                    return "בת";
+                }
+            }
+            // return nlpControler.GetGender(text);
+        }
+
+        public string getGenderOpositeName(string text)
+        {
+            if (text == "many")
+            {
+                if (user.UserGender == "masculine")
+                {
+                    return "בנות";
+                  
+                }
+                else
+                {
+                    return "בנים";
+                }
+            }
+            else
+            {
+                if (user.UserGender == "masculine")
+                {
+                    return "בת";
+                }
+                else
+                {
+                    return "בן";
+                }
+            }
+            // return nlpControler.GetGender(text);
         }
 
         public  string getClass(string text)
@@ -288,10 +343,13 @@ namespace Bot_Application1.Controllers
             phraseRes = phraseRes.Replace("<subject>", studySession.Category);
             phraseRes = phraseRes.Replace("<numOfQuestions>", studySession.sessionLength + "");
             phraseRes = phraseRes.Replace("<questionNum>", studySession.questionAsked.Count + "");
-            phraseRes = phraseRes.Replace("<username>", user.UserName);
+            phraseRes = phraseRes.Replace("<userName>", user.UserName);
             phraseRes = phraseRes.Replace("<botName>", BOT_NAME);
             phraseRes = phraseRes.Replace("<botSubject>", BOT_SUBJECT);
             phraseRes = phraseRes.Replace("<genderPostfixY>", ifGufFemenin("י"));
+            phraseRes = phraseRes.Replace("<genderMany>", getGenderName("many"));
+            phraseRes = phraseRes.Replace("<!genderMany>", getGenderOpositeName("many"));
+            
 
             phraseRes = phraseRes.Replace("נ ", "ן ");
             phraseRes = phraseRes.Replace("מ ", "מ ");
@@ -311,6 +369,16 @@ namespace Bot_Application1.Controllers
 
             return phraseRes;
 
+        }
+
+        internal IEnumerable<string> getYesNoOptions()
+        {
+            throw new NotImplementedException();
+        }
+
+        private char getGenderName(string userGender, string v)
+        {
+            throw new NotImplementedException();
         }
 
         private string ifGufFemenin(string v)
@@ -369,9 +437,12 @@ namespace Bot_Application1.Controllers
             earlyDiparture,
             goodSessionEnd,
             badSessionEnd,
-        letsNotLearn,
+            letsNotLearn,
             MenuLearn,
-            MenuNotLearn
+            MenuNotLearn,
+            firstQuestion,
+            endOfSession,
+            keepLearning
         }
 
     }
