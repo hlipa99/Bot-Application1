@@ -10,6 +10,8 @@ using Bot_Application1.Cardatt_achment;
 using Bot_Application1.dataBase;
 using System.Threading;
 using NLPtest;
+using Bot_Application1.Controllers;
+using NLPtest.Models;
 
 namespace Bot_Application1.IDialog
 {
@@ -18,10 +20,10 @@ namespace Bot_Application1.IDialog
     {
         private T[] options;
         private IDialog<object>[] dialogOptions;
-        private ResumeAfter<object> contFunction;
-        
+        private ResumeAfter<object>[] contFunction;
+     
 
-        public MenuOptionDialog(T[] options, string prompt, string retry, int attempts, IDialog<object>[] dialogOptions, ResumeAfter<object> contFunction)
+        public MenuOptionDialog(T[] options, string prompt, string retry, int attempts, IDialog<object>[] dialogOptions, ResumeAfter<object>[] contFunction)
             : base (options, prompt, retry,attempts)
         {
             this.dialogOptions = dialogOptions;
@@ -32,9 +34,9 @@ namespace Bot_Application1.IDialog
         protected async override Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> message)
         {
 
-        //    var message = await result;
-
-         T result;
+            //    var message = await result;
+          
+             T result;
           if (this.TryParse(await message, out result))
               {
                 var i = 0;
@@ -43,14 +45,14 @@ namespace Bot_Application1.IDialog
                 {
                     if (o.Equals(resultMA))
                     {
-                        context.Call(dialogOptions[i], contFunction);
+                        context.Call(dialogOptions[i], contFunction[i]);
                         return;
                     }
                     i++;
                 }
 
                 //defualt
-                context.Call(dialogOptions[dialogOptions.Length - 1], contFunction);
+                context.Call(dialogOptions[dialogOptions.Length - 1], contFunction[i]);
 
               }
              else
@@ -78,7 +80,10 @@ namespace Bot_Application1.IDialog
 
       protected override bool TryParse(IMessageActivity message, out T result)
         {
-            ConversationController conv = new ConversationController();
+
+            // context.UserData.TryGetValue<Users>("user", out user);
+            ConversationController conv = new ConversationController(new Model.dataBase.Users(),new StudySession());
+           
             result = conv.FindMatchFromOptions<T>(message.Text, promptOptions.Options);
             return result != null;
         }

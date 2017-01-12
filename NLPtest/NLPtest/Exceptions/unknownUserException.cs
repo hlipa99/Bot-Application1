@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace Bot_Application1.IDialog
 {
     [Serializable]
-    internal class unknownUserException : Exception
+    public class unknownUserException : Exception
     {
         public unknownUserException()
         {

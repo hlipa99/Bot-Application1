@@ -1,11 +1,32 @@
-﻿using NLPtest.WorldObj;
+﻿
+using System;
 
-namespace NLPtest.view
+namespace NLPtest.WorldObj
 {
-    internal class UserObject : PersonObject
+
+    public class UserObject : PersonObject
     {
-        public UserObject(string pers) : base(pers)
+        public string gender;
+        public string userClass;
+        private string userGender;
+
+        public UserObject(string v) : base(v)
         {
+        }
+
+        public UserObject(string v, string userGender) : this(v)
+        {
+            this.userGender = userGender;
+        }
+
+        public string getUserName()
+        {
+            return Name;
+        }
+
+        internal string getGender()
+        {
+            return gender;
         }
     }
 }

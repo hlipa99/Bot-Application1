@@ -1,4 +1,5 @@
-﻿using NLPtest.WorldObj;
+﻿using NLPtest.view;
+using NLPtest.WorldObj;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,10 +9,10 @@ using System.Threading.Tasks;
 namespace NLPtest
 {
     //fifo stack
-    class ContentTurn
+    public class ContentTurn
     {
         List<WorldObject> list = new List<WorldObject>();
-        
+        ConversationContext conversationContext;
 
 
         public void Add(WorldObject obj)
@@ -48,6 +49,18 @@ namespace NLPtest
             list.AddRange(contentTurn.getList());
         }
 
+        internal WorldObject Get(int idx)
+        {
+            try
+            {
+                return list.ElementAt(idx);
+            }catch(Exception ex)
+            {
+                return null;
+            }
+        }
+
+
         private IEnumerable<WorldObject> getList()
         {
             return list;
@@ -69,6 +82,11 @@ namespace NLPtest
             var i = list.IndexOf(o);
             list.RemoveAt(i);
             list.Insert(i,g);
+        }
+
+        internal int Count()
+        {
+            return list.Count;
         }
     }
 }

@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace NLPtest.WorldObj
 {
+
+
     public class WorldObject
     {
        
@@ -17,7 +19,7 @@ namespace NLPtest.WorldObj
 
         public WorldObject(string word) 
         {
-            this.word = word;
+            this.Word = word;
         }
 
         public List<RelationObject> Relations
@@ -46,19 +48,59 @@ namespace NLPtest.WorldObj
             }
         }
 
-        public void addRelation(RelationObject type)
+        public bool DefiniteArticle { get; internal set; }
+
+        public string Word
         {
-            relations.Add(type);
+            get
+            {
+                return word;
+            }
+
+            set
+            {
+                word = value;
+            }
+        }
+
+        public void addRelation(RelationObject relation)
+        {if (relation != null)
+            {
+                relations.Add(relation);
+            }
         }
 
 
         public override string ToString()
         {
             var n = negat ? "!" : "";
-                return word + "(" + GetType() + ")" + n ;
+                return Word + "(" + GetType() + ")" + n ;
         }
 
-  
+        internal void Copy(WorldObject first)
+        {
+            word = first.word;
+            negat = first.negat;
+            DefiniteArticle = first.DefiniteArticle;
+        }
+
+
+        internal void CopyFromTemplate(WorldObject[] objects)
+        {
+            var index = int.Parse(word);
+            Copy(objects[index]);
+            foreach (var r in relations)
+            {
+                r.CopyFromTemplate(objects);
+            }
+        }
+
+        internal int ObjectType()
+        {
+            return 0;
+        }
+
+
     }
 
 

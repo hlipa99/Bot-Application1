@@ -1,5 +1,4 @@
 ﻿using Bot_Application1.log;
-using Bot_Application1.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,16 +7,18 @@ using System.Web;
 
 namespace Bot_Application1.dataBase
 {
+
+    [Serializable]
     public class DataBaseControler
     {
-
+   
         public bool isUserExist(string userId)
         {
             bool exist = false;
             try
             {
-                Models.BotDataEntities1 DB = new Models.BotDataEntities1();
-                exist = DB.UserLogs.Any(x => x.UserID == userId);
+                var DB = new mindcetEntities();
+                exist = DB.Users.Any(x => x.UserID == userId);
            }
             catch(Exception e)
             {
@@ -36,17 +37,17 @@ namespace Bot_Application1.dataBase
         {
             try
             {
-                Models.BotDataEntities1 DB = new Models.BotDataEntities1();
-                Models.UserLog NewUserLog = new Models.UserLog();
+                var DB = new mindcetEntities();
+                var NewUsers = new Users();
 
 
-                NewUserLog.Channel = channelId;
-                NewUserLog.UserID = id;
-                NewUserLog.UserName = name;
-                NewUserLog.created = DateTime.UtcNow;
-                NewUserLog.Message = text.Truncate(500);
+                NewUsers.Channel = channelId;
+                NewUsers.UserID = id;
+                NewUsers.UserName = name;
+                NewUsers.created = DateTime.UtcNow;
+                NewUsers.Message = text.Truncate(500);
 
-                DB.UserLogs.Add(NewUserLog);
+                DB.Users.Add(NewUsers);
                 DB.SaveChanges();
 
             }catch(Exception e)
@@ -58,13 +59,14 @@ namespace Bot_Application1.dataBase
 
         }
 
-        public void addNewUser(UserLog user)
+
+        public void addNewUser(Users user)
         {
             try
             {
-                Models.BotDataEntities1 DB = new Models.BotDataEntities1();
+                mindcetEntities DB = new mindcetEntities();
 
-                DB.UserLogs.Add(user);
+                DB.Users.Add(user);
                 DB.SaveChanges();
 
             }
@@ -79,18 +81,18 @@ namespace Bot_Application1.dataBase
 
 
 
-        public Models.UserLog getUser(string userId)
+        public Users getUser(string userId)
         {
-            Models.UserLog NewUserLog = new Models.UserLog();
-            List<Models.UserLog> visitors = new List<Models.UserLog>();
+            Users NewUsers = new Users();
+            List<Users> visitors = new List<Users>();
 
             try
             {
-                Models.BotDataEntities1 DB = new Models.BotDataEntities1();
-                NewUserLog = new Models.UserLog();
+                mindcetEntities DB = new mindcetEntities();
+                NewUsers = new Users();
                 
 
-                visitors = (from t in DB.UserLogs
+                visitors = (from t in DB.Users
                             where t.UserID == userId
                             select t).ToList();
        }
@@ -109,19 +111,19 @@ namespace Bot_Application1.dataBase
 
         public void deleteUser(string userId)
         {
-            Models.UserLog NewUserLog = new Models.UserLog();
-            List<Models.UserLog> visitors = new List<Models.UserLog>();
+            Users NewUsers = new Users();
+            List<Users> visitors = new List<Users>();
 
             try
             {
-                Models.BotDataEntities1 DB = new Models.BotDataEntities1();
-                NewUserLog = new Models.UserLog();
+                mindcetEntities DB = new mindcetEntities();
+                NewUsers = new Users();
 
-                var itemToRemove = DB.UserLogs.SingleOrDefault(x => x.UserID == userId);
+                var itemToRemove = DB.Users.SingleOrDefault(x => x.UserID == userId);
 
                 if (itemToRemove != null)
                 {
-                    DB.UserLogs.Remove(itemToRemove);
+                    DB.Users.Remove(itemToRemove);
                     DB.SaveChanges();
                 }
 
@@ -137,16 +139,39 @@ namespace Bot_Application1.dataBase
         }
 
 
-
-        public List<Models.Question> getQuestion(string catgoty, string subCategory)
+        internal List<Question> getQuestion(string category)
         {
-            Models.Question question = new Models.Question();
-            List<Models.Question> visitors = new List<Models.Question>();
+            Question question = new Question();
+            List<Question> visitors = new List<Question>();
 
             try
             {
-                Models.BotDataEntities1 DB = new Models.BotDataEntities1();
-                 visitors = (from t in DB.Questions
+                mindcetEntities DB = new mindcetEntities();
+                visitors = (from t in DB.Question
+                            where t.Category == category
+                            select t).ToList();
+
+            }
+            catch (Exception e)
+            {
+                Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
+
+            }
+
+
+
+            return visitors;
+        }
+
+        public List<Question> getQuestion(string catgoty, string subCategory)
+        {
+            Question question = new Question();
+            List<Question> visitors = new List<Question>();
+
+            try
+            {
+                mindcetEntities DB = new mindcetEntities();
+                 visitors = (from t in DB.Question
                             where t.Category == catgoty && t.SubCategory == subCategory
                             select t).ToList();
                                                 
@@ -164,15 +189,15 @@ namespace Bot_Application1.dataBase
         }
 
 
-        public List<string> getAllCategory(string catgoty)
+        public List<string> getAllCategory()
         {
-            Models.Question question = new Models.Question();
+            Question question = new Question();
             List<String> visitors = new List<string>();
 
             try
             {
-                Models.BotDataEntities1 DB = new Models.BotDataEntities1();
-                visitors = (from t in DB.Questions
+                mindcetEntities DB = new mindcetEntities();
+                visitors = (from t in DB.Question
                                     select t.Category).ToList();
 
             }
@@ -189,13 +214,13 @@ namespace Bot_Application1.dataBase
 
         public List<string> getAllSubCategory(string catgoty)
         {
-            Models.Question question = new Models.Question();
+            Question question = new Question();
             List<String> visitors = new List<string>();
 
             try
             {
-                Models.BotDataEntities1 DB = new Models.BotDataEntities1();
-                visitors = (from t in DB.Questions
+                mindcetEntities DB = new mindcetEntities();
+                visitors = (from t in DB.Question
                             where t.Category == catgoty 
                             select t.SubCategory).ToList();
 

@@ -10,6 +10,9 @@ using Bot_Application1.Cardatt_achment;
 using Bot_Application1.dataBase;
 using NLPtest;
 using Bot_Application1.YAndex;
+using NLPtest.WorldObj;
+using Model.dataBase;
+using static Bot_Application1.Controllers.ConversationController;
 
 namespace Bot_Application1.IDialog
 {
@@ -20,11 +23,11 @@ namespace Bot_Application1.IDialog
         public override async Task StartAsync(IDialogContext context)
         {
 
-            context.UserData.TryGetValue<User>("user", out user);
+            context.UserData.TryGetValue<Users >("user", out user);
             if (user == null)
             {
-                user = new User();
-                context.UserData.SetValue<User>("user", user);
+                user = new Users();
+                context.UserData.SetValue<Users >("user", user);
             }
             context.Wait(this.NewUser);
         }
@@ -33,10 +36,10 @@ namespace Bot_Application1.IDialog
 
         public async virtual Task NewUser(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            ConversationController conv = new ConversationController();
+            
             var message = await result;
 
-            var newMessage = conv.selfIntroduction();
+            var newMessage = conv().getPhrase(Pkey.selfIntroduction);
             await writeMessageToUser(context, newMessage);
             await NewUserGetName(context, result);
             //user Name
@@ -49,24 +52,26 @@ namespace Bot_Application1.IDialog
 
 
 
-            ConversationController conv = new ConversationController();
-            context.UserData.TryGetValue<User>("user", out user);
-            if (user.userName == "" || user.userName == null)
+            
+            context.UserData.TryGetValue<Users >("user", out user);
+            if (user.UserName == "" || user.UserName == null)
             {
                 if (context.Activity.ChannelId == "facebook")
                 {
                     var userFBname = context.Activity.From.Name;
                     var userTranslation = ControlerTranslate.Translate(userFBname);
+
+
                     if(userTranslation != "")
                     {
-                        user.userName = userTranslation;
-                        context.UserData.SetValue<User>("user", user);
+                        user.UserName = userTranslation.Split(' ')[0];
+                        context.UserData.SetValue<Users >("user", user);
                         await NewUserGetName(context, result);
                     }
                 }
                 else
                 {
-                await writeMessageToUser(context, conv.NewUserGetName());
+                await writeMessageToUser(context, conv().getPhrase(Pkey.NewUserGetName));
                 context.Wait(CheckName);
 
                 } 
@@ -74,23 +79,23 @@ namespace Bot_Application1.IDialog
             }
             else
             {
-                await writeMessageToUser(context, conv.NewUserGreeting(user.userName));
+                await writeMessageToUser(context, conv().getPhrase(Pkey.NewUserGreeting));
                 await NewUserGetGender(context, result);
             }
         }
 
         public async virtual Task CheckName(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            ConversationController conv = new ConversationController();
+            
             var message = await result;
             var userText = await result;
 
-      
-            if ((user.userName = NLPControler.getInstence().getName(userText.Text)) != null)
+        
+            if ((user.UserName = conv().getName(userText.Text)) != null)
             {
-                var newMessage = conv.NewUserGreeting(user.userName);
+                var newMessage = conv().getPhrase(Pkey.NewUserGreeting);
 
-                context.UserData.SetValue<User>("user", user);
+                context.UserData.SetValue<Users >("user", user);
 
                  await writeMessageToUser(context, newMessage);
                  await NewUserGetGender(context, result);
@@ -98,7 +103,7 @@ namespace Bot_Application1.IDialog
             }
             else
             {
-                var newMessage = conv.MissingUserInfo("name");
+                var newMessage = conv().getPhrase(Pkey.MissingUserInfo,textVar:"name");
                 await writeMessageToUser(context, newMessage);
                 context.Wait(CheckName);
             }
@@ -108,13 +113,20 @@ namespace Bot_Application1.IDialog
         public async virtual Task NewUserGetGender(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
             //user Name
-            ConversationController conv = new ConversationController();
-            context.UserData.TryGetValue<User>("user", out user);
+            
+            context.UserData.TryGetValue<Users >("user", out user);
             //user Gender
-            if (user.gender == "" || user.gender == null)
+            if (user.UserGender == "" || user.UserGender == null)
             {
-                await writeMessageToUser(context, conv.NewUserGetGender());
-                context.Wait(CheckGender);
+             
+
+                var menu = new PromptDialog.PromptChoice<string>(
+                 conv().getGenderOptions(),
+                conv().getPhrase(Pkey.NewUserGetGender)[0],
+                conv().getPhrase(Pkey.wrongOption)[0],
+                3);
+
+                context.Call(menu, CheckGender);
 
             }else
             {
@@ -122,25 +134,25 @@ namespace Bot_Application1.IDialog
             }
         }
 
-        public async virtual Task CheckGender(IDialogContext context, IAwaitable<IMessageActivity> result)
+        public async virtual Task CheckGender(IDialogContext context, IAwaitable<object> result)
         {
-            ConversationController conv = new ConversationController();
-            var userText = await result;
+            
+            var userText = await result as string;
 
          
-            if ((user.gender = conv.getGender(userText.Text)) != null)
+            if ((user.UserGender = conv().getGenderValue(userText)) != null)
             {
-                context.UserData.SetValue<User>("user", user);
+                context.UserData.SetValue<Users >("user", user);
 
-                await writeMessageToUser(context, conv.GenderAck(user.gender));
+                await writeMessageToUser(context, conv().getPhrase(Pkey.GenderAck, textVar: conv().getGenderName("single")));
         
              
-                await NewUserGetClass(context, result);
+                await NewUserGetClass(context, null);
 
             }
             else
             {
-                var newMessage = conv.MissingUserInfo("gender");
+                var newMessage = conv().getPhrase(Pkey.MissingUserInfo,textVar:"gender");
                 await writeMessageToUser(context, newMessage);
                 context.Wait(CheckGender);
             }
@@ -148,16 +160,22 @@ namespace Bot_Application1.IDialog
 
         public async virtual Task NewUserGetClass(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            ConversationController conv = new ConversationController();
-            context.UserData.TryGetValue<User>("user", out user);
+
+            context.UserData.TryGetValue<Users >("user", out user);
  
 
-            if (user.userClass == "" || user.userClass == null)
+            if (user.UserClass == "" || user.UserClass == null)
             {
-                await writeMessageToUser(context, conv.NewUserGetClass(user));
-                context.Wait(CheckClass);
+                var menu = new PromptDialog.PromptChoice<string>(
+                 conv().getClassOptions(),
+                conv().getPhrase(Pkey.NewUserGetClass)[0],
+                conv().getPhrase(Pkey.wrongOption)[0],
+                3);
 
-            }else
+                context.Call(menu, CheckClass);
+
+            }
+            else
             {
                 await LetsStart(context, result);
             }
@@ -166,26 +184,26 @@ namespace Bot_Application1.IDialog
 
 
 
-        public async virtual Task CheckClass(IDialogContext context, IAwaitable<IMessageActivity> result)
+        public async virtual Task CheckClass(IDialogContext context, IAwaitable<string> result)
         {
             //user class
             var userText = await result;
-            ConversationController conv = new ConversationController();
-            if ((user.userClass = conv.getClass(userText.Text)) != null)
+            
+            if ((user.UserClass = conv().getClass(userText)) != null)
             {
-                context.UserData.SetValue<User>("user", user);
+                context.UserData.SetValue<Users >("user", user);
 
-                await writeMessageToUser(context, conv.GeneralAck(user.userClass));
+                await writeMessageToUser(context, conv().getPhrase(Pkey.GeneralAck,textVar:user.UserClass));
 
 
-                await LetsStart(context, result);
+                await LetsStart(context, null);
 
             }
             else
             {
 
-                await writeMessageToUser(context, conv.MissingUserInfo("class"));
-                context.Wait(CheckClass);
+                await writeMessageToUser(context, conv().getPhrase(Pkey.MissingUserInfo, textVar: "class"));
+                context.Wait<string>(CheckClass);
             }
 
         }
@@ -194,16 +212,11 @@ namespace Bot_Application1.IDialog
         public async virtual Task LetsStart(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
             //user class
-            ConversationController conv = new ConversationController();
-            await writeMessageToUser(context, conv.LetsStart());
+            
+            await writeMessageToUser(context, conv().getPhrase(Pkey.LetsStart));
+
             context.Done("");
         }
-
-
-
-
-
-        
 
     }
 }

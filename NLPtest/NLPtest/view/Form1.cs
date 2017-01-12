@@ -1,4 +1,6 @@
-﻿using NLPtest.WorldObj;
+﻿
+using Model.dataBase;
+using NLPtest.WorldObj;
 using NLPtest.WorldObj.ObjectsWrappers;
 using System;
 using System.Collections.Generic;
@@ -15,13 +17,14 @@ namespace NLPtest
     public partial class Form1 : Form
     {
         HebDictionary heb;
-        ConversationController conv;
+     //   DataBaseControler
+
         public Form1()
         {
             InitializeComponent();
             heb = new HebDictionary();
             heb.loadWords();
-            conv = new ConversationController();
+            
 
         }
 
@@ -43,6 +46,7 @@ namespace NLPtest
             }
         }
 
+
         private void send_BTN_Click(object sender, EventArgs e)
         {
             var inputText = input_TB.Text;
@@ -50,12 +54,13 @@ namespace NLPtest
             text_TB.AppendText(inputText + Environment.NewLine);
             input_TB.Text = String.Empty;
             text_TB.AppendText("Bot:" + Environment.NewLine);
-            var botResualt = conv.testAnalizer(inputText);
+    
+           // var botResualt = conv.testAnalizer(inputText);
             //foreach (var line in new string[] { input.ToString() })
             //{
             //    text_TB.AppendText(line + Environment.NewLine);
             //}
-            drawTree(botResualt);
+         //   drawTree(botResualt);
             text_TB.AppendText("בוצע" + Environment.NewLine);
 
         }
