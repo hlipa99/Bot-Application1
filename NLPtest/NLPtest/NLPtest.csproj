@@ -204,7 +204,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="parser">
-      <HintPath>..\..\Bot Application1\bin\parser.dll</HintPath>
+      <HintPath>.\parser.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
