@@ -62,70 +62,44 @@ namespace Bot_Application1.IDialog
 
             context.UserData.RemoveValue("studySession");
             studySession = new StudySession();
-            //    context.UserData.SetValue<StudySession>("studySession",new StudySession());
-            //    context.Call(menu, StartLearning);
+
             await context.PostAsync(message);
             context.Wait(StartLearning);
         }
 
         private CardImage[] getImage(string m)
         {
-  
-
             var cardImg = new CardImage(url: edc().getRamdomImg(m));
             return new CardImage[] { cardImg };
         }
-
-        //    public async virtual Task chooseCategory(IDialogContext context, IAwaitable<string> result)
-        //    {
-        //        var message = await result;
-        ////        context.UserData.TryGetValue<Users>("user", out user);
-        //        
-        //  //      context.UserData.TryGetValue<StudySession>("studySession",out studySession);
-        //        studySession.Category = message;
-
-        // //       context.UserData.SetValue<StudySession>("studySession", new StudySession());
-
-        //        var menu = new PromptDialog.PromptChoice<string>(
-        //             ec.getStudyCategory(message),
-        //             conv().chooseStudyUnits(),
-        //             conv().wrongOption()[0],
-        //             3);
-
-        //        context.Call(menu, StartLearning);
-        //    }
-
 
 
         public async virtual Task StartLearning(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
             
             var message = await result;
-            //        context.UserData.TryGetValue<Users>("user", out user);
-            //         context.UserData.TryGetValue<StudySession>("studySession", out studySession);
-            studySession.Category = message.Text;
-            //         context.UserData.SetValue<StudySession>("studySession", studySession);
-            await writeMessageToUser(context, conv().getPhrase(Pkey.areUReaddyToLearn));
-            await writeMessageToUser(context, conv().getPhrase(Pkey.firstQuestion));
-            await askQuestion(context);
+           if (edc().getStudyCategory().Contains(message.Text))
+            {
+                await writeMessageToUser(context, conv().getPhrase(Pkey.areUReaddyToLearn));
+                await writeMessageToUser(context, conv().getPhrase(Pkey.firstQuestion));
+                studySession.Category = message.Text;
+                await askQuestion(context);
+            }else
+            {
+                await writeMessageToUser(context, conv().getPhrase(Pkey.NotAnOption, textVar: message.Text));
+                await StartAsync(context);
+            }
         }
 
         public async Task askQuestion(IDialogContext context)
         {
-            //  var message = await result;
-            //      context.UserData.TryGetValue<Users>("user", out user);
-            
-            //         context.UserData.TryGetValue<StudySession>("studySession", out studySession);
 
-            //         context.UserData.TryGetValue<StudySession>("studySession", out studySession);
-   
 
             var question = edc().getQuestion(studySession.Category, studySession.SubCategory, studySession);
 
             await writeMessageToUser(context, new string[] { question.QuestionText });
             studySession.currentQuestion = question;
             studySession.QuestionAsked.Add(studySession.currentQuestion);
-            //    context.UserData.SetValue<StudySession>("studySession", studySession);
             context.Wait(answerQuestion);
         }
 
@@ -206,10 +180,7 @@ namespace Bot_Application1.IDialog
 
         public async Task EndOfLearningSession(IDialogContext context, IAwaitable<object> result)
         {
-            await writeMessageToUser(context, conv().getPhrase(Pkey.goodbye));
-            context.Reset();
-            context.Call(new MainDialog(), EndOfLearningSession);
-
+            context.Done("learningSession");
         }
 
         private EducationController edc()

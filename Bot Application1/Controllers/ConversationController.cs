@@ -297,26 +297,29 @@ namespace Bot_Application1.Controllers
  
         public string[] getPhrase(Pkey key,string[] flags = null, string[] flagesNot = null, string textVar = null)
         {
-            if (flags == null) flags = new string[] { };
-            if (flagesNot == null) flagesNot = new string[] { };
+          
+                if (flags == null) flags = new string[] { };
+                if (flagesNot == null) flagesNot = new string[] { };
 
-            var phrases = db.getBotPhrase(key, flags, flagesNot);
-            string phraseRes;
-            if(phrases.Length > 0)
-            {
+                var phrases = db.getBotPhrase(key, flags, flagesNot);
+                string phraseRes;
+                if (phrases.Length > 0)
+                {
 
-                var rundomInt = RandomNum.getNumber(phrases.Length);
-                phraseRes = phrases[rundomInt];
+                    var rundomInt = RandomNum.getNumber(phrases.Length);
+                    phraseRes = phrases[rundomInt];
+
+                }
+                else
+                {
+                    throw new botphraseException();
+                }
+
+
+                phraseRes = formateVars(phraseRes, textVar);
+
+                return phraseRes.Split('|');
             
-            }else
-            {
-                throw new botphraseException();
-            }
-
-
-            phraseRes = formateVars(phraseRes,textVar);
-
-            return phraseRes.Split('|');
         }
 
         private string formateVars(string phraseRes,string textVar)
@@ -350,10 +353,10 @@ namespace Bot_Application1.Controllers
             phraseRes = phraseRes.Replace("<genderMany>", getGenderName("many"));
             phraseRes = phraseRes.Replace("<!genderMany>", getGenderOpositeName("many"));
             phraseRes = phraseRes.Replace("<timeOfday>", getTimeOfDay());
+            phraseRes = phraseRes.Replace("<questionsLeft>", getTimeOfDay());
 
 
-
-                 phraseRes = phraseRes.Replace("נ ", "ן ");
+            phraseRes = phraseRes.Replace("נ ", "ן ");
             phraseRes = phraseRes.Replace("מ ", "מ ");
             phraseRes = phraseRes.Replace("צ ", "צ ");
             phraseRes = phraseRes.Replace("כ ", "ך ");
@@ -462,7 +465,8 @@ namespace Bot_Application1.Controllers
             MenuNotLearn,
             firstQuestion,
             endOfSession,
-            keepLearning
+            keepLearning,
+            NotAnOption
         }
 
     }

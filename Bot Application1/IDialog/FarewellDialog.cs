@@ -24,15 +24,14 @@ namespace Bot_Application1.IDialog
 
         public override async Task StartAsync(IDialogContext context)
         {
-
-            context.UserData.TryGetValue<Users>("user", out user);
-
-            await writeMessageToUser(context, conv().getPhrase(Pkey.goodbye));
-            context.Reset();
-
-
+            context.Wait(userGoodbye);
         }
 
-      
+        private async Task userGoodbye(IDialogContext context, IAwaitable<object> result)
+        {
+            
+            await writeMessageToUser(context, conv().getPhrase(Pkey.goodbye));
+            context.Done("");
+        }
     }
 }
