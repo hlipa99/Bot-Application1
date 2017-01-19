@@ -44,6 +44,11 @@ public class NLPControlerTestStub : INLPControler
     {
         return new ContentTurn();
     }
+
+    public ContentTurn testAnalizer(string text)
+    {
+        return new ContentTurn();
+    }
 }
         
 	

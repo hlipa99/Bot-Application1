@@ -1,5 +1,5 @@
 ﻿
-using static NLPtest.Word.WordType;
+using static NLPtest.WordObject.WordType;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -27,6 +27,9 @@ namespace NLPtest
           MeniTaggeedSentenceFactory sentenceFactory;
           TaggerBasedHebrewChunker chunker;
         private   HebDictionary hebDictionary;
+
+
+       
 
 
         public MorfAnalizer()
@@ -97,7 +100,7 @@ namespace NLPtest
 
 
 
-                        Word word = null;
+                        WordObject word = null;
                         var pos = bitmaskResolver.getPOS();
                         var postype = bitmaskResolver.getPOSType();
                         var origString = token.getOrigStr();
@@ -113,39 +116,39 @@ namespace NLPtest
                         {
                             if (tokenExt.getNER().Contains("ORG"))
                             {
-                                word = new Word(token.getOrigStr(), orginazationWord | nounWord);
+                                word = new WordObject(token.getOrigStr(), orginazationWord | nounWord);
                             }
                             else if (tokenExt.getNER().Contains("MISC__AFF"))
                             {
-                                word = new Word(token.getOrigStr(), identityWord | nounWord);
+                                word = new WordObject(token.getOrigStr(), identityWord | nounWord);
                             }
                             else if (tokenExt.getNER().Contains("PERS"))
                             {
-                                word = new Word(token.getOrigStr(), personWord | nounWord);
+                                word = new WordObject(token.getOrigStr(), personWord | nounWord);
                             }
                             else if (tokenExt.getNER().Contains("MISC_EVENT"))
                             {
-                                word = new Word(token.getOrigStr(), eventWord);
+                                word = new WordObject(token.getOrigStr(), eventWord);
                             }
                             else if (tokenExt.getNER().Contains("LOC"))
                             {
-                                word = new Word(token.getOrigStr(), locationWord | nounWord);
+                                word = new WordObject(token.getOrigStr(), locationWord | nounWord);
                             }
                             else if (tokenExt.getNER().Contains("DATE"))
                             {
-                                word = new Word(token.getOrigStr(), dateWord);
+                                word = new WordObject(token.getOrigStr(), dateWord);
                             }
                             else if (tokenExt.getNER().Contains("Time"))
                             {
-                                word = new Word(token.getOrigStr(), timeWord);
+                                word = new WordObject(token.getOrigStr(), timeWord);
                             }
                             else if (tokenExt.getNER().Contains("MONEY"))
                             {
-                                word = new Word(token.getOrigStr(), timeWord);
+                                word = new WordObject(token.getOrigStr(), timeWord);
                             }
                             else if (tokenExt.getNER().Contains("PERCENT"))
                             {
-                                word = new Word(token.getOrigStr(), timeWord);
+                                word = new WordObject(token.getOrigStr(), timeWord);
                             }
                             else
                             {
@@ -168,7 +171,7 @@ namespace NLPtest
 
                         else if (bitmaskResolver.getPOS() == "interrogative" || bitmaskResolver.getPOS() == "quantifier")
                         {
-                            word = new Word(token.getOrigStr(), questionWord);
+                            word = new WordObject(token.getOrigStr(), questionWord);
 
                             //if(bitmaskResolver.getPOSType == "PRONOUN" "PROADVERB" "PRODET" "PRODET" "YESNO")
 
@@ -179,7 +182,7 @@ namespace NLPtest
                         }
                         else if (bitmaskResolver.getPOS() == "verb" || bitmaskResolver.getPOS() == "participle")
                         {
-                            word = new Word(token.getOrigStr(), verbWord);
+                            word = new WordObject(token.getOrigStr(), verbWord);
                             word.setGuf(bitmaskResolver.getSuffixPerson());
                             word.setTime(bitmaskResolver.getTense());
                             word.setAmount(bitmaskResolver.getNumber());
@@ -187,13 +190,13 @@ namespace NLPtest
                         }
                         else if (bitmaskResolver.getPOS() == "adverb")
                         {
-                            word = new Word(token.getOrigStr(), adverbWord);
+                            word = new WordObject(token.getOrigStr(), adverbWord);
                             word.setTime(bitmaskResolver.getTense());
                         }
                         else if (bitmaskResolver.getPOS() == "noun")
                         {
 
-                                word = new Word(token.getOrigStr(), nounWord);
+                                word = new WordObject(token.getOrigStr(), nounWord);
                             word.setGuf(bitmaskResolver.getSuffixPerson());
                             word.setAmount(bitmaskResolver.getNumber());
                             word.setGender(bitmaskResolver.getGender());
@@ -201,7 +204,7 @@ namespace NLPtest
                         else if (bitmaskResolver.getPOS() == "negation")
                         {
 
-                            word = new Word(token.getOrigStr(), negationWord);
+                            word = new WordObject(token.getOrigStr(), negationWord);
                             word.setGuf(bitmaskResolver.getSuffixPerson());
                             word.setAmount(bitmaskResolver.getNumber());
                             word.setGender(bitmaskResolver.getGender());
@@ -212,7 +215,7 @@ namespace NLPtest
                         else if (bitmaskResolver.getPOS() == "pronoun" && bitmaskResolver.getPOSType() == "personal")
                         {
 
-                            word = new Word(token.getOrigStr(), gufWord | nounWord);
+                            word = new WordObject(token.getOrigStr(), gufWord);
 
                             word.setGuf(bitmaskResolver.getPerson());
                             word.setAmount(bitmaskResolver.getNumber());
@@ -224,32 +227,32 @@ namespace NLPtest
                             word = hebDictionary.get(token.getOrigStr());
                             if (word == null)
                             {
-                                word = new Word(token.getOrigStr(), prepWord, new PrepRelObject(null));
+                                word = new WordObject(token.getOrigStr(), prepWord, new PrepRelObject(null));
                             }
                         }
                         else if (bitmaskResolver.getPOS() == "punctuation")
                         {
                             if (bitmaskResolver.getPOSType() == "question-mark")
                             {
-                                word = new Word(token.getOrigStr(), questionWord);
+                                word = new WordObject(token.getOrigStr(), questionWord);
                             }
                             else if (bitmaskResolver.getPOSType() == "mark")
                             {
-                                word = new Word(token.getOrigStr(), markWord);
+                                word = new WordObject(token.getOrigStr(), markWord);
                             }
                             else if (token.getOrigStr() == "-" || token.getOrigStr() == "–")
                             {
-                                word = new Word(token.getOrigStr(), hyphenWord);
+                                word = new WordObject(token.getOrigStr(), hyphenWord);
                             }
                             else
                             {
-                                word = new Word(token.getOrigStr(), unknownWord);
+                                word = new WordObject(token.getOrigStr(), unknownWord);
                             }
                         }
                         else if (bitmaskResolver.getPOS() == "copula")
                         {
 
-                            word = new Word(token.getOrigStr(), copulaWord);
+                            word = new WordObject(token.getOrigStr(), copulaWord);
                             word.setGuf(bitmaskResolver.getPerson());
                             word.setTime(bitmaskResolver.getTense());
                             word.setAmount(bitmaskResolver.getNumber());
@@ -258,25 +261,25 @@ namespace NLPtest
                         else if (bitmaskResolver.getPOS() == "conjunction")
                         {
 
-                            word = new Word(token.getOrigStr(), conjunctionWord);
+                            word = new WordObject(token.getOrigStr(), conjunctionWord);
 
                         }
                         else if (bitmaskResolver.getPOS() == "adjective")
                         {
 
-                            word = new Word(token.getOrigStr(), adjectiveWord);
+                            word = new WordObject(token.getOrigStr(), adjectiveWord);
 
                         }
                         else if (bitmaskResolver.getPOS() == "numeral")
                         {
 
-                            word = new Word(token.getOrigStr(), numeralWord);
+                            word = new WordObject(token.getOrigStr(), numeralWord);
 
                         }
                         else if (bitmaskResolver.getPOS() == "propername")
                         {
 
-                            word = new Word(token.getOrigStr(), properNameWord);
+                            word = new WordObject(token.getOrigStr(), properNameWord);
                         }
                         else if (bitmaskResolver.getPOS() == "unknown")
                         {
@@ -284,7 +287,7 @@ namespace NLPtest
                             word = tryGetUnknown(token.getOrigStr());
                             if(word == null)
                             {
-                                word = new Word(token.getOrigStr(), unknownWord);
+                                word = new WordObject(token.getOrigStr(), unknownWord);
                             }
                         }
                         else
@@ -293,7 +296,7 @@ namespace NLPtest
                             //ignor unknown char, maybe nikod
                             if (token.getOrigStr().Length > 1)
                             {
-                                word = new Word(token.getOrigStr(), unknownWord);
+                                word = new WordObject(token.getOrigStr(), unknownWord);
                             }
                         }
 
@@ -447,7 +450,7 @@ namespace NLPtest
             return allRes;
         }
 
-        private   Word tryGetUnknown(string token)
+        private   WordObject tryGetUnknown(string token)
         {
             return null;
         }

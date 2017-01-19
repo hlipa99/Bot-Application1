@@ -227,6 +227,7 @@
     <Compile Include="Controllers\NLPControllerTestStub.cs" />
     <Compile Include="HebWords\HebTemplate.cs" />
     <Compile Include="Exceptions\TemplateException.cs" />
+    <Compile Include="TemplateObject.cs" />
     <Compile Include="WorldObj\multyPersoneObject.cs" />
     <Compile Include="WorldObj\BotObject.cs" />
     <Compile Include="Exceptions\CantResponeException.cs" />

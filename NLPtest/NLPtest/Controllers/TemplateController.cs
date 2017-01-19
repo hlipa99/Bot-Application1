@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NLPtest.WorldObj;
-using static NLPtest.Word.WordType;
+using static NLPtest.WordObject.WordType;
 using NLPtest.view;
 
 namespace NLPtest.Controllers
@@ -30,17 +30,17 @@ namespace NLPtest.Controllers
     
                 
                 //one object template
-                new HebTemplate(new WorldObject[] { new Word("",nounWord) },new NounObject("1"),1),
-                new HebTemplate(new WorldObject[] { new Word("",verbWord) },new VerbObject("1"),1),
-                new HebTemplate(new WorldObject[] { new Word("",personWord) },new PersonObject("1"),2),
-                new HebTemplate(new WorldObject[] { new Word("",locationWord) },new LocationObject("1"),2),
+                new HebTemplate(new ITemplate[] { new WordObject("",nounWord) },new NounObject("1"),1),
+                new HebTemplate(new ITemplate[] { new WordObject("",verbWord) },new VerbObject("1"),1),
+                new HebTemplate(new ITemplate[] { new WordObject("",personWord) },new PersonObject("1"),2),
+                new HebTemplate(new ITemplate[] { new WordObject("",locationWord) },new LocationObject("1"),2),
 
 
                 //two object template
 
-                 new HebTemplate(new WorldObject[] { new NounObject(""), new Word("", adjectiveWord) },
+                 new HebTemplate(new ITemplate[] { new NounObject(""), new WordObject("", adjectiveWord) },
                  relate(new NounObject("0"),new adjectiveRelObject(new AdjObject("1"))),-1),
-                  new HebTemplate(new WorldObject[] {new Word("", negationWord) , new VerbObject("")},
+                  new HebTemplate(new ITemplate[] {new WordObject("", negationWord) , new VerbObject("")},
                  negate(new VerbObject("1")),-1),
 
 
@@ -82,9 +82,9 @@ namespace NLPtest.Controllers
 
       
 
-        internal WorldObject checkObjects(WorldObject[] objects)
+        internal ITemplate checkObjects(ITemplate[] objects)
         {
-            WorldObject res = null;
+            ITemplate res = null;
 
             foreach (var t in templateList)
             {

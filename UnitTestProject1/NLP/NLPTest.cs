@@ -53,7 +53,6 @@ namespace NLPtest.Tests
             Assert.Equals(ma.GetGender("dffdfd"), null);
         }
 
-
         [TestMethod()]
         public void getNameTest()
         {

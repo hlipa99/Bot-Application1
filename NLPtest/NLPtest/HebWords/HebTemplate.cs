@@ -1,12 +1,12 @@
 ﻿using NLPtest;
 using NLPtest.WorldObj;
-using static NLPtest.Word.WordType;
+using static NLPtest.WordObject.WordType;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static NLPtest.Word;
+using static NLPtest.WordObject;
 using NLPtest.view;
 
 
@@ -38,7 +38,7 @@ namespace NLPtest.HebWords
 
 
 
-         public HebTemplate(WorldObject[] template,WorldObject result,int priority)
+         public HebTemplate(ITemplate[] template,WorldObject result,int priority)
         {
             resualtObject = result;
             this.priority = priority;
@@ -48,7 +48,7 @@ namespace NLPtest.HebWords
 
 
 
-        public bool Equals(Word[] words)
+        public bool Equals(WordObject[] words)
         {
             if (template.Count() != words.Count()) return false;
 
@@ -60,7 +60,7 @@ namespace NLPtest.HebWords
             return true;
         }
 
-        private WorldObject getResult(Word[] words)
+        private WorldObject getResult(WordObject[] words)
         {
             List<WorldObject> objList = new List<WorldObject>();
            foreach(var w in words)
@@ -131,7 +131,7 @@ namespace NLPtest.HebWords
             return worldObject;
         }
 
-        internal WorldObject tryMatch(WorldObject[] objects)
+        internal ITemplate tryMatch(ITemplate[] objects)
         {
             if (objectTemplate.Count() == objects.Count())
             {
@@ -145,7 +145,7 @@ namespace NLPtest.HebWords
                 }
 
                //recursive copy
-                resualtObject.CopyFromTemplate(objects);
+                resualtObject.CopyFromTemplate((WorldObject[])objects);
                 return resualtObject;
             }
             return null;

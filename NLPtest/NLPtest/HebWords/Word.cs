@@ -2,18 +2,18 @@
 using static NLPtest.WorldObj.PrepRelObject;
 using NLPtest.WorldObj;
 using vohmm.corpus;
-using static NLPtest.Word.WordType;
+using static NLPtest.WordObject.WordType;
 using static NLPtest.gufObject;
 
 namespace NLPtest
 {
-    public class Word : WorldObject
+    public class WordObject : ITemplate
     {
         private WorldObject worldObject = null;
         private AnalysisInterface analysisInterface;
 
 
-
+        string word;
         public string root;
         internal gufType guf = gufType.unspecified;
         internal timeType time = timeType.unspecified;
@@ -68,7 +68,7 @@ namespace NLPtest
 
                         if (isA(dateWord)) {
                         worldObject = getDateFromWord();
-               }else if (isA(copulaWord))
+               }else if (isA(copulaWord) || isA(gufWord))
                     {
                         worldObject = getGufFromWord();
                     }
@@ -155,6 +155,18 @@ namespace NLPtest
             }
         }
 
+        public string Word
+        {
+            get
+            {
+                return word;
+            }
+
+            set
+            {
+                word = value;
+            }
+        }
 
         private WorldObject getVerbFromWord( )
         {
@@ -240,14 +252,14 @@ namespace NLPtest
 
 
 
-        public Word(string word, WordType t)
+        public WordObject(string word, WordType t)
         {
             this.Word = word;
             this.WordT = t;
 
         }
 
-        public Word(string word, WordType t, WorldObject worldObject) : this(word, t)
+        public WordObject(string word, WordType t, WorldObject worldObject) : this(word, t)
         {
             this.WorldObject = worldObject;
         }
@@ -324,9 +336,11 @@ namespace NLPtest
         }
 
 
-        internal new int ObjectType()
+        public new int ObjectType()
         {
             return (int)WordT;
         }
+
+       
     }
 }

@@ -8,7 +8,7 @@ namespace NLPtest.WorldObj
 {
 
 
-    public class WorldObject
+    public class WorldObject : ITemplate
     {
        
         List<RelationObject> relations = new List<RelationObject>();
@@ -95,12 +95,12 @@ namespace NLPtest.WorldObj
             }
         }
 
-        internal int ObjectType()
+        public int ObjectType()
         {
             return 0;
         }
 
-
+   
     }
 
 

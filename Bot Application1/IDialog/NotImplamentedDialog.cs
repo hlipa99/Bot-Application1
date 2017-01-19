@@ -12,6 +12,7 @@ using System.Threading;
 using NLPtest;
 using NLPtest.WorldObj;
 using Model.dataBase;
+using Model;
 
 namespace Bot_Application1.IDialog
 {
@@ -32,7 +33,7 @@ namespace Bot_Application1.IDialog
             context.UserData.TryGetValue<Users>("user", out user);
 
 
-            await context.PostAsync(conv().getPhrase(Controllers.ConversationController.Pkey.NotImplamented)[0]);
+            await context.PostAsync(conv().getPhrase(Pkey.NotImplamented)[0]);
             context.Done("");
 
         }

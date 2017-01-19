@@ -1,5 +1,6 @@
 ﻿using Bot_Application1.dataBase;
 using Model.dataBase;
+using Model.Models;
 using NLPtest;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace Bot_Application1.Controllers
 
         DataBaseController dc = new DataBaseController();
         
-        public Users getUser(string id)
+        public IUser getUser(string id)
         {
             var user = dc.getUser(id);
             return user;
