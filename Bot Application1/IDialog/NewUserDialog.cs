@@ -41,12 +41,12 @@ namespace Bot_Application1.IDialog
 
             var newMessage = conv().getPhrase(Pkey.selfIntroduction);
             await writeMessageToUser(context, newMessage);
-            await NewUserGetName(context, result);
+            await NewUserGetName(context);
             //user Name
 
         }
 
-        public async virtual Task NewUserGetName(IDialogContext context, IAwaitable<IMessageActivity> result)
+        public async virtual Task NewUserGetName(IDialogContext context)
         {
          
 
@@ -56,7 +56,7 @@ namespace Bot_Application1.IDialog
             context.UserData.TryGetValue<Users >("user", out user);
             if (user.UserName == "" || user.UserName == null)
             {
-                if (context.Activity.ChannelId == "facebook")
+                if (context.Activity.ChannelId == "facebook" || context.Activity.ChannelId == "slack")
                 {
                     var userFBname = context.Activity.From.Name;
                     var userTranslation = ControlerTranslate.Translate(userFBname);
@@ -66,7 +66,7 @@ namespace Bot_Application1.IDialog
                     {
                         user.UserName = userTranslation.Split(' ')[0];
                         context.UserData.SetValue<Users >("user", user);
-                        await NewUserGetName(context, result);
+                        await NewUserGetName(context);
                     }
                 }
                 else
@@ -80,7 +80,7 @@ namespace Bot_Application1.IDialog
             else
             {
                 await writeMessageToUser(context, conv().getPhrase(Pkey.NewUserGreeting));
-                await NewUserGetGender(context, result);
+                await NewUserGetGender(context);
             }
         }
 
@@ -98,7 +98,7 @@ namespace Bot_Application1.IDialog
                 context.UserData.SetValue<Users >("user", user);
 
                  await writeMessageToUser(context, newMessage);
-                 await NewUserGetGender(context, result);
+                 await NewUserGetGender(context);
   
             }
             else
@@ -110,7 +110,7 @@ namespace Bot_Application1.IDialog
         }
 
 
-        public async virtual Task NewUserGetGender(IDialogContext context, IAwaitable<IMessageActivity> result)
+        public async virtual Task NewUserGetGender(IDialogContext context)
         {
             //user Name
             
@@ -130,7 +130,7 @@ namespace Bot_Application1.IDialog
 
             }else
             {
-                await NewUserGetClass(context, result);
+                await NewUserGetClass(context);
             }
         }
 
@@ -147,7 +147,7 @@ namespace Bot_Application1.IDialog
                 await writeMessageToUser(context, conv().getPhrase(Pkey.GenderAck, textVar: conv().getGenderName("single")));
         
              
-                await NewUserGetClass(context, null);
+                await NewUserGetClass(context);
 
             }
             else
@@ -158,10 +158,10 @@ namespace Bot_Application1.IDialog
             }
         }
 
-        public async virtual Task NewUserGetClass(IDialogContext context, IAwaitable<IMessageActivity> result)
+        public async virtual Task NewUserGetClass(IDialogContext context)
         {
 
-            context.UserData.TryGetValue<Users >("user", out user);
+   
  
 
             if (user.UserClass == "" || user.UserClass == null)
@@ -177,7 +177,7 @@ namespace Bot_Application1.IDialog
             }
             else
             {
-                await LetsStart(context, result);
+                await LetsStart(context);
             }
 
         }
@@ -196,7 +196,7 @@ namespace Bot_Application1.IDialog
                 await writeMessageToUser(context, conv().getPhrase(Pkey.GeneralAck,textVar:user.UserClass));
 
 
-                await LetsStart(context, null);
+                await LetsStart(context);
 
             }
             else
@@ -209,7 +209,7 @@ namespace Bot_Application1.IDialog
         }
 
 
-        public async virtual Task LetsStart(IDialogContext context, IAwaitable<IMessageActivity> result)
+        public async virtual Task LetsStart(IDialogContext context)
         {
             //user class
             

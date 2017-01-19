@@ -14,16 +14,16 @@ namespace Bot_Application1.log
           *  
           * @var string 
           */
-        private static string __log_file_path = @"c:\log.txt";
+        //private static string __log_file_path = Environment.CurrentDirectory + "/log/" ;
 
         /** 
          * __log_file_path get/set 
          */
-        public static string filePath
-        {
-            get { return Logger.__log_file_path; }
-            set { if (value.Length > 0) Logger.__log_file_path = value; }
-        }
+     //   public static string filePath
+    //    {
+    //        get { return Logger.__log_file_path; }
+    //        set { if (value.Length > 0) Logger.__log_file_path = value; }
+     //   }
 
         /** 
          * Flush log file contents 
@@ -32,7 +32,7 @@ namespace Bot_Application1.log
          */
         public static void flush()
         {
-            File.WriteAllText(Logger.filePath, string.Empty);
+      //      File.WriteAllText(Logger.filePath, string.Empty);
         }
 
         /** 
@@ -45,11 +45,15 @@ namespace Bot_Application1.log
         {
             if (msg.Length > 0)
             {
-              //  using (StreamWriter sw = File.AppendText(Logger.filePath))
-              //  {
-              // //     sw.WriteLine("{0} {1}: {2} {3}: {4}", DateTime.Now.ToShortDateString(), DateTime.Now.ToShortTimeString(),className,methodName, msg);
-              ////      sw.Flush();
-              //  }
+                /*      using (StreamWriter sw = File.AppendText(Logger.filePath))
+                      {
+                          sw.WriteLine("{0} {1}: {2} {3}: {4}", DateTime.Now.ToShortDateString(), DateTime.Now.ToShortTimeString(),className,methodName, msg);
+                          sw.Flush();
+                      } */
+
+            //    System.Diagnostics.Trace.WriteLine(DateTime.Now.ToShortDateString() + " " +  DateTime.Now.ToShortTimeString() + " " + className + " "+ methodName + " "+ msg);
+            //    System.Diagnostics.Trace.Flush();
+
             }
         }
 

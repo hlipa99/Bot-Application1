@@ -57,7 +57,7 @@ namespace Model
             d.Add("winking", "\U0001F609");
             d.Add("loving", "\U0001F60D");
             d.Add("rollingEye", "\U0001F644");
-            d.Add("sleeping", "\U0001F634");
+            d.Add(" ", "\U0001F634");
             d.Add("astonished", "\U0001F632");
             d.Add("angry", "\U0001F620");
             d.Add("alienMonster", "\U0001F47E");

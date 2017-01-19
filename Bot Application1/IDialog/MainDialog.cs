@@ -20,8 +20,6 @@ namespace Bot_Application1.IDialog
     public class MainDialog : AbsDialog
     {
 
-
-
         public override async Task StartAsync(IDialogContext context)
         {
 
@@ -45,6 +43,7 @@ namespace Bot_Application1.IDialog
             await writeMessageToUser(context, conv().getPhrase(Pkey.greetings));
             await writeMessageToUser(context, conv().getPhrase(Pkey.howAreYou));
             context.Wait(HowAreYouRes);
+
         }
 
 
@@ -55,6 +54,7 @@ namespace Bot_Application1.IDialog
             var text = await result;
          //   await writeMessageToUser(context, conv().getPhrase(Pkey.ok));
             await MainMenu(context, result);
+
         }
 
 
@@ -94,8 +94,9 @@ namespace Bot_Application1.IDialog
             catch (Exception ex)
             {
                 await writeMessageToUser(context, new string[] { "אוקיי זה מביך " + "\U0001F633", "קרתה לי תקלה בשרת ואני לא יודע מה לעשות", "אני אתחיל עכשיו מהתחלה ונעמיד פנים שלא קרה כלום, " + "\U0001F648", "טוב" + "?" });
-                Logger.log("MainDialog", "MainMenu", ex.ToString());
-                await StartAsync(context);
+                await writeMessageToUser(context,  new string[] { ex.Data.ToString(), ex.InnerException.ToString(), ex.StackTrace.ToString(), ex.TargetSite.ToString(), ex.ToString() });
+          //     Logger.log("MainDialog", "MainMenu", ex.ToString());
+               await StartAsync(context);
             }
 
 
@@ -110,6 +111,7 @@ namespace Bot_Application1.IDialog
 
         private async Task EndSession(IDialogContext context, IAwaitable<object> result)
         {
+         //   context.Wait(MainMenu);
             context.Call(new FarewellDialog(), MainMenu);
         }
 

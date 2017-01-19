@@ -29,7 +29,7 @@ namespace Bot_Application1.Controllers
             catch (Exception e)
             {
                 Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
-
+                throw new DBException();
             }
 
             return exist;
@@ -60,7 +60,8 @@ namespace Bot_Application1.Controllers
             }
             catch (Exception e)
             {
-                Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
+                  Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
+                throw new DBException();
             }
 
 
@@ -82,6 +83,7 @@ namespace Bot_Application1.Controllers
             catch (Exception e)
             {
                 Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
+                throw new DBException();
             }
 
 
@@ -109,7 +111,7 @@ namespace Bot_Application1.Controllers
             catch (Exception e)
             {
                 Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
-
+                throw new DBException();
             }
 
 
@@ -142,7 +144,7 @@ namespace Bot_Application1.Controllers
             catch (Exception e)
             {
                 Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
-
+                throw new DBException();
             }
 
 
@@ -167,7 +169,7 @@ namespace Bot_Application1.Controllers
             catch (Exception e)
             {
                 Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
-
+                throw new DBException();
             }
 
 
@@ -192,7 +194,7 @@ namespace Bot_Application1.Controllers
             catch (Exception e)
             {
                 Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
-
+                throw new DBException();
             }
 
 
@@ -218,7 +220,7 @@ namespace Bot_Application1.Controllers
             catch (Exception e)
             {
                 Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
-
+                throw new DBException();
             }
 
             return catagories;
@@ -243,7 +245,7 @@ namespace Bot_Application1.Controllers
             catch (Exception e)
             {
                 Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
-
+                throw new DBException();
             }
 
             return catagory;
@@ -268,7 +270,7 @@ namespace Bot_Application1.Controllers
             catch (Exception e)
             {
                 Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
-
+                throw new DBException();
             }
 
             return urls;
@@ -300,7 +302,7 @@ namespace Bot_Application1.Controllers
             catch (Exception e)
             {
                 Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
-                throw e; 
+                throw new DBException();
             }
 
             return phrases;
