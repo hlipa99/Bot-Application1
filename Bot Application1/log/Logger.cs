@@ -45,11 +45,11 @@ namespace Bot_Application1.log
         {
             if (msg.Length > 0)
             {
-                using (StreamWriter sw = File.AppendText(Logger.filePath))
-                {
-                    sw.WriteLine("{0} {1}: {2} {3}: {4}", DateTime.Now.ToShortDateString(), DateTime.Now.ToShortTimeString(),className,methodName, msg);
-                    sw.Flush();
-                }
+              //  using (StreamWriter sw = File.AppendText(Logger.filePath))
+              //  {
+              // //     sw.WriteLine("{0} {1}: {2} {3}: {4}", DateTime.Now.ToShortDateString(), DateTime.Now.ToShortTimeString(),className,methodName, msg);
+              ////      sw.Flush();
+              //  }
             }
         }
 

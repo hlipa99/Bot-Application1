@@ -5,10 +5,10 @@ using System.Threading;
 using System.Net;
 namespace UnitTestProject1
 {
-    [TestClass]
+
     public class UnitTest1
     {
-        [TestMethod]
+  
         public void TestMethod1()
         {
             using (var client = new HttpClient())

@@ -23,8 +23,6 @@ namespace NLPtest
     {
 
           SimpleTagger3 tagger;
-
-
           NERTagger nerTagger;
           MeniTaggeedSentenceFactory sentenceFactory;
           TaggerBasedHebrewChunker chunker;
