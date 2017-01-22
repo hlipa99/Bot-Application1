@@ -23,12 +23,9 @@ namespace Bot_Application1.IDialog
 
         public override async Task StartAsync(IDialogContext context)
         {
-
             context.UserData.TryGetValue<Users>("user", out user);
-
             if (user != null)
             {
-
                 await Greeting(context);
             }
             else
@@ -36,6 +33,8 @@ namespace Bot_Application1.IDialog
                 context.Call(new NewUserDialog(), MainMenu);
             }
         }
+
+   
 
         private async Task Greeting(IDialogContext context)
         {

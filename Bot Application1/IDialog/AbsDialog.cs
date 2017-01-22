@@ -23,6 +23,7 @@ namespace Bot_Application1.IDialog
         public abstract Task StartAsync(IDialogContext context);
         internal Users user;
         internal StudySession studySession;
+        internal DateTime request = DateTime.Now;
 
         internal async Task writeMessageToUser(IDialogContext context, string[] newMessage)
         {
@@ -108,10 +109,13 @@ namespace Bot_Application1.IDialog
              3);
 
             context.Call(menu, resume);
-
         }
 
-
+        public void updateRequestTime()
+        {
+            request = DateTime.UtcNow;
+        }
+      
 
         private void typingTime(IDialogContext context)
         {

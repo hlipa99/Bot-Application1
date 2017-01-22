@@ -271,6 +271,7 @@ namespace Bot_Application1.Controllers
 
         public  string getClass(string text)
         {
+            text = text.Replace("'", "");
             if (text == "יב" || text == "יא" || text == "י")
                 return text;
             else return null;

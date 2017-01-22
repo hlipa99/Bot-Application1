@@ -30,21 +30,17 @@ namespace Bot_Application1.IDialog
             {
                 studySession = new StudySession();
             }
-            
 
-            //var menu = new PromptDialog.PromptChoice<string>(
-            //ec.getStudyCategory(),
-            //conv().chooseStudyUnits(),
-            //conv().wrongOption()[0],
-            //3);
+
+   
+            await writeMessageToUser(context, conv().getPhrase(Pkey.letsLearn));
             await writeMessageToUser(context, conv().getPhrase(Pkey.chooseStudyUnits));
             var message = context.MakeMessage();
-            //     List<HeroCard> hcList = new List<HeroCard>();
+
             foreach (var m in edc().getStudyCategory())
             {
-                var hc = new HeroCard(title: m, images: getImage(m), buttons: new CardAction[] { new CardAction(type: "imBack", value: m, title: conv().getPhrase(Pkey.letsLearn)[0]) });
-
-                //  hcList.Add(hc);
+                var hc = new HeroCard(title: m, images: getImage(m), buttons:
+                    new CardAction[] { new CardAction(type: "imBack", value: m, title: m )});
                 message.Attachments.Add(hc.ToAttachment());
                 message.AttachmentLayout = "carousel";
 
@@ -56,6 +52,7 @@ namespace Bot_Application1.IDialog
             studySession = new StudySession();
 
             await context.PostAsync(message);
+            updateRequestTime();
             context.Wait(StartLearning);
         }
 
@@ -68,7 +65,12 @@ namespace Bot_Application1.IDialog
 
         public async virtual Task StartLearning(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            
+            if (context.Activity.Timestamp <= request)
+            {
+                context.Wait(StartLearning);
+                return;
+            }
+
             var message = await result;
            if (edc().getStudyCategory().Contains(message.Text))
             {
@@ -93,14 +95,20 @@ namespace Bot_Application1.IDialog
             await writeMessageToUser(context, new string[] { question.QuestionText });
             studySession.CurrentQuestion = question;
             studySession.QuestionAsked.Add(studySession.CurrentQuestion);
+
+            updateRequestTime();
             context.Wait(answerQuestion);
         }
 
 
         public async Task answerQuestion(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            
-  
+            if (context.Activity.Timestamp <= request)
+            {
+                context.Wait(StartLearning);
+                return;
+            }
+
             var message = await result;
             //      context.UserData.TryGetValue<StudySession>("studySession", out studySession);
             if (conv().isStopSession(message.Text))
@@ -131,6 +139,7 @@ namespace Bot_Application1.IDialog
             await writeMessageToUser(context, new string[] { question.AnswerText });
             await writeMessageToUser(context, conv().getPhrase(Pkey.giveYourFeedback));
 
+            updateRequestTime();
             context.Wait(giveFeedback);
 
         }
@@ -138,7 +147,12 @@ namespace Bot_Application1.IDialog
 
         public async Task giveFeedback(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            
+            if (context.Activity.Timestamp <= request)
+            {
+                context.Wait(StartLearning);
+                return;
+            }
+
             var message = await result;
             int number;
             if ((number = conv().getNum(message.Text)) >= 0)
@@ -153,7 +167,7 @@ namespace Bot_Application1.IDialog
                     await writeMessageToUser(context, conv().getPhrase(Pkey.endOfSession));
 
                     //TODO: save user sussion to DB
-
+                    updateRequestTime();
                     context.Wait(EndOfLearningSession);
                 }
                 else
@@ -166,6 +180,7 @@ namespace Bot_Application1.IDialog
             else
             {
                 await writeMessageToUser(context, conv().getPhrase(Pkey.notNumber));
+                updateRequestTime();
                 context.Wait(giveFeedback);
             }
         }
@@ -173,6 +188,11 @@ namespace Bot_Application1.IDialog
 
         public async Task EndOfLearningSession(IDialogContext context, IAwaitable<object> result)
         {
+            if (context.Activity.Timestamp <= request)
+            {
+                context.Wait(EndOfLearningSession);
+                return;
+            }
             context.Done("learningSession");
         }
 
