@@ -104,7 +104,7 @@ namespace Bot_Application1.IDialog
             }
             else
             {
-                var newMessage = conv().getPhrase(Pkey.MissingUserInfo,textVar:"name");
+                var newMessage = conv().getPhrase(Pkey.MissingUserInfo,textVar:"שם");
                 await writeMessageToUser(context, newMessage);
                 context.Wait(CheckName);
             }
@@ -129,7 +129,7 @@ namespace Bot_Application1.IDialog
 
                 //context.Call(menu, CheckGender);
 
-                createMenuOptions(context,conv().getPhrase(Pkey.NewUserGetGender)[0], conv().getGenderOptions(), CheckGender);
+                await createMenuOptions(context,conv().getPhrase(Pkey.NewUserGetGender)[0], conv().getGenderOptions(), CheckGender);
                 
 
             }
@@ -171,7 +171,7 @@ namespace Bot_Application1.IDialog
 
             if (user.UserClass == "" || user.UserClass == null)
             {
-                await createMenuOptions(context, conv().getPhrase(Pkey.NewUserGetClass)[0], conv().getClassOptions(), CheckGender);
+                await createMenuOptions(context, conv().getPhrase(Pkey.NewUserGetClass)[0], conv().getClassOptions(), CheckClass);
 
             }
             else
