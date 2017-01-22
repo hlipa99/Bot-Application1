@@ -1,15 +1,14 @@
 ﻿
 using Bot_Application1.dataBase;
-using Bot_Application1.Exceptions;
-using Model;
+using Bot_Application1.log;
 using Model.dataBase;
-using Model.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Reflection;
 using System.Web;
+using static Bot_Application1.Controllers.ConversationController;
 
 namespace Bot_Application1.Controllers
 {
@@ -18,7 +17,7 @@ namespace Bot_Application1.Controllers
     public class DataBaseController
     {
 
-        public virtual bool isUserExist(string userId)
+        public bool isUserExist(string userId)
         {
             Entities DB = new Entities();
             bool exist = false;
@@ -29,8 +28,8 @@ namespace Bot_Application1.Controllers
             }
             catch (Exception e)
             {
-         //       Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
-                throw new DBException(e.ToString());
+                Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
+                throw new DBException();
             }
 
             return exist;
@@ -40,7 +39,7 @@ namespace Bot_Application1.Controllers
 
 
 
-        public virtual void addNewUser(string channelId, string id, string name, string text)
+        public void addNewUser(string channelId, string id, string name, string text)
         {
             Entities DB = new Entities();
             try
@@ -61,8 +60,8 @@ namespace Bot_Application1.Controllers
             }
             catch (Exception e)
             {
-        //          Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
-                throw new DBException(e.ToString());
+                  Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
+                throw new DBException();
             }
 
 
@@ -70,7 +69,7 @@ namespace Bot_Application1.Controllers
         }
 
 
-        public virtual void addNewUser(Users user)
+        public void addNewUser(Users user)
         {
             Entities DB = new Entities();
             try
@@ -83,8 +82,8 @@ namespace Bot_Application1.Controllers
             }
             catch (Exception e)
             {
-          //      Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
-                throw new DBException(e.ToString());
+                Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
+                throw new DBException();
             }
 
 
@@ -93,7 +92,7 @@ namespace Bot_Application1.Controllers
 
 
 
-        public virtual IUser getUser(string userId)
+        public Users getUser(string userId)
         {
             Entities DB = new Entities();
             Users NewUsers = new Users();
@@ -111,8 +110,8 @@ namespace Bot_Application1.Controllers
             }
             catch (Exception e)
             {
-           //     Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
-                throw new DBException(e.ToString());
+                Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
+                throw new DBException();
             }
 
 
@@ -122,7 +121,7 @@ namespace Bot_Application1.Controllers
 
 
 
-        public virtual void deleteUser(string userId)
+        public void deleteUser(string userId)
         {
             Entities DB = new Entities();
             Users NewUsers = new Users();
@@ -144,8 +143,8 @@ namespace Bot_Application1.Controllers
             }
             catch (Exception e)
             {
-         //       Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
-                throw new DBException(e.ToString());
+                Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
+                throw new DBException();
             }
 
 
@@ -153,7 +152,7 @@ namespace Bot_Application1.Controllers
         }
 
 
-        public virtual IQuestion[] getQuestion(string category)
+        internal Question[] getQuestion(string category)
         {
             Entities DB = new Entities();
             Question question = new Question();
@@ -169,8 +168,8 @@ namespace Bot_Application1.Controllers
             }
             catch (Exception e)
             {
-           //     Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
-                throw new DBException(e.ToString());
+                Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
+                throw new DBException();
             }
 
 
@@ -178,7 +177,7 @@ namespace Bot_Application1.Controllers
             return questions;
         }
 
-        public virtual IQuestion[] getQuestion(string catgoty, string subCategory)
+        public Question[] getQuestion(string catgoty, string subCategory)
         {
             Entities DB = new Entities();
             Question question = new Question();
@@ -194,8 +193,8 @@ namespace Bot_Application1.Controllers
             }
             catch (Exception e)
             {
-             //   Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
-                throw new DBException(e.ToString());
+                Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
+                throw new DBException();
             }
 
 
@@ -205,7 +204,7 @@ namespace Bot_Application1.Controllers
         }
 
 
-        public virtual string[] getAllCategory()
+        public string[] getAllCategory()
         {
             Entities DB = new Entities();
             Question question = new Question();
@@ -220,8 +219,8 @@ namespace Bot_Application1.Controllers
             }
             catch (Exception e)
             {
-          //      Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
-                throw new DBException(e.ToString());
+                Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
+                throw new DBException();
             }
 
             return catagories;
@@ -229,7 +228,7 @@ namespace Bot_Application1.Controllers
         }
 
 
-        public virtual string[] getAllSubCategory(string catgoty)
+        public string[] getAllSubCategory(string catgoty)
         {
             Entities DB = new Entities();
             Question question = new Question();
@@ -245,8 +244,8 @@ namespace Bot_Application1.Controllers
             }
             catch (Exception e)
             {
-           //     Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
-                throw new DBException(e.ToString());
+                Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
+                throw new DBException();
             }
 
             return catagory;
@@ -254,7 +253,7 @@ namespace Bot_Application1.Controllers
         }
 
 
-        public virtual string[] getMedia(string key, string type, string flags)
+        public string[] getMedia(string key, string type, string flags)
         {
             Entities DB = new Entities();
             media media = new media();
@@ -270,15 +269,15 @@ namespace Bot_Application1.Controllers
             }
             catch (Exception e)
             {
-           //     Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
-                throw new DBException(e.ToString());
+                Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
+                throw new DBException();
             }
 
             return urls;
 
         }
 
-        public virtual string[] getBotPhrase(Pkey pKey, string[] flags, string[] flagsNot)
+        public string[] getBotPhrase(Pkey pKey, string[] flags, string[] flagsNot)
         {
             Entities DB = new Entities();
             media media = new media();
@@ -302,8 +301,8 @@ namespace Bot_Application1.Controllers
             }
             catch (Exception e)
             {
-             //   Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
-                throw new DBException(e.ToString());
+                Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
+
             }
 
             return phrases;
