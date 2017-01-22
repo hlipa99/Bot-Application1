@@ -19,7 +19,12 @@ namespace Model.dataBase
             : base("name=mindcetEntities")
         {
         }
-    
+
+        public Entities(string conString)
+           : base("connectionString=" + conString)
+        {
+        }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();

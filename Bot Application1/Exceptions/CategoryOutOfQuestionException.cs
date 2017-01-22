@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace Bot_Application1.Exceptions
 {
     [Serializable]
-    internal class CategoryOutOfQuestionException : Exception
+    public class CategoryOutOfQuestionException : Exception
     {
         public CategoryOutOfQuestionException()
         {

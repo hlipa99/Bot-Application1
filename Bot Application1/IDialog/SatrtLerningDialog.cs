@@ -1,20 +1,12 @@
 ﻿using Microsoft.Bot.Builder.Dialogs;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Threading.Tasks;
-using Bot_Application1.Cardatt_achment;
 using Microsoft.Bot.Connector;
-using NLPtest;
-using NLPtest.WorldObj;
-using Bot_Application1.dataBase;
-using Catharsis.Commons;
 using NLPtest.Models;
 using Model.dataBase;
 using Bot_Application1.Controllers;
-using static Bot_Application1.Controllers.ConversationController.Pkey;
-using static Bot_Application1.Controllers.ConversationController;
+using Model;
 
 namespace Bot_Application1.IDialog
 {
@@ -98,8 +90,8 @@ namespace Bot_Application1.IDialog
             var question = edc().getQuestion(studySession.Category, studySession.SubCategory, studySession);
 
             await writeMessageToUser(context, new string[] { question.QuestionText });
-            studySession.currentQuestion = question;
-            studySession.QuestionAsked.Add(studySession.currentQuestion);
+            studySession.CurrentQuestion = question;
+            studySession.QuestionAsked.Add(studySession.CurrentQuestion);
             context.Wait(answerQuestion);
         }
 
@@ -116,15 +108,15 @@ namespace Bot_Application1.IDialog
                 context.Done("");
             }
 
-            var question = studySession.currentQuestion;
+            var question = studySession.CurrentQuestion;
 
             question = edc().checkAnswer(question, message.Text);
-            if(question.answerScore > 85)
+            if(question.AnswerScore > 85)
             {
                 await writeMessageToUser(context, conv().getPhrase(Pkey.goodAnswer));
 
             }
-            else if(question.answerScore > 30)
+            else if(question.AnswerScore > 30)
             {
                 await writeMessageToUser(context, conv().getPhrase(Pkey.partialAnswer));
             }
@@ -151,9 +143,9 @@ namespace Bot_Application1.IDialog
             if ((number = conv().getNum(message.Text)) >= 0)
             {
                 await writeMessageToUser(context, conv().getPhrase(Pkey.GeneralAck,textVar:(number +"")));
-                studySession.currentQuestion.answerScore = number;
+                studySession.CurrentQuestion.AnswerScore = number;
 
-                if (studySession.questionAsked.Count == studySession.sessionLength)
+                if (studySession.QuestionAsked.Count == studySession.SessionLength)
                 {
 
                     await writeMessageToUser(context, conv().endOfSession());

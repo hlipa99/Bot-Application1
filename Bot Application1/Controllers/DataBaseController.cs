@@ -302,7 +302,7 @@ namespace Bot_Application1.Controllers
             catch (Exception e)
             {
                 Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
-                throw new DBException();
+
             }
 
             return phrases;

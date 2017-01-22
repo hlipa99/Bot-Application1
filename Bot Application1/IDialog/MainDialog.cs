@@ -13,6 +13,7 @@ using NLPtest;
 using Model.dataBase;
 using Bot_Application1.log;
 using static Bot_Application1.Controllers.ConversationController;
+using Model;
 
 namespace Bot_Application1.IDialog
 {

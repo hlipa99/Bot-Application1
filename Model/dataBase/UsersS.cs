@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Model.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace Model.dataBase
 {
 
     [Serializable]
-    public partial class Users
+    public partial class Users : IUser
     {
 
         public bool Equals(Users other)

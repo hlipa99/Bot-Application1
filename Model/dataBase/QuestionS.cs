@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Model.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,9 +9,23 @@ namespace Model.dataBase
 {
 
     [Serializable]
-    public partial class Question
+    public partial class Question : IQuestion
     {
-        public int answerScore;
+        private int answerScore;
+
+        public int AnswerScore
+        {
+            get
+            {
+                return answerScore;
+            }
+
+            set
+            {
+                answerScore = value;
+            }
+        }
+
         public override bool Equals(object other)
         {
             if (other is Question)

@@ -55,12 +55,12 @@ namespace NLPtest
             input_TB.Text = String.Empty;
             text_TB.AppendText("Bot:" + Environment.NewLine);
     
-           // var botResualt = conv.testAnalizer(inputText);
+            var botResualt = NLPControler.getInstence().testAnalizer(inputText);
             //foreach (var line in new string[] { input.ToString() })
             //{
             //    text_TB.AppendText(line + Environment.NewLine);
             //}
-         //   drawTree(botResualt);
+            drawTree(botResualt);
             text_TB.AppendText("בוצע" + Environment.NewLine);
 
         }

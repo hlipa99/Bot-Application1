@@ -11,6 +11,7 @@ using Model.dataBase;
 using Model;
 using Bot_Application1.Controllers;
 using NLPtest;
+using Model.Models;
 
 namespace Bot_Application1.Controllers
 {
@@ -23,16 +24,32 @@ namespace Bot_Application1.Controllers
         MessageComposer composer;
         // Dictionary<string, string[]> PraseDictionary;
         DataBaseController db = new DataBaseController();
+
+
         private ContentTurn last;
         INLPControler nlpControler;
-        Users user;
-        StudySession studySession;
+        IUser user;
+        IStudySession studySession;
+  
 
         public static string BOT_NAME = "מיסטר אייצ" + "'";
 
         public static string BOT_SUBJECT = "היסטוריה";
 
-        public ConversationController(Users user, StudySession studySession)
+        public DataBaseController Db
+        {
+            get
+            {
+                return db;
+            }
+
+            set
+            {
+                db = value;
+            }
+        }
+
+        public ConversationController(IUser user, IStudySession studySession)
         {
             this.user = user;
             this.studySession = studySession;
@@ -42,20 +59,22 @@ namespace Bot_Application1.Controllers
         public  T FindMatchFromOptions<T>(string str, IEnumerable<T> options)
         {
             var res = "";
-           foreach(var o in options as IEnumerable<string>)
+            if (str != "")
             {
+                foreach (var o in options as IEnumerable<string>)
+                {
 
-                if (str.Contains(o)) res =  o;
-                if (o.Contains(str)) res =  o;
+                    if (str.Contains(o)) res = o;
+                    if (o.Contains(str)) res = o;
+                }
+
+
+                //bypass to keep the type T
+                foreach (var o in options)
+                {
+                    if (o.Equals(res)) return o;
+                }
             }
-
-
-           //bypass to keep the type T
-            foreach (var o in options)
-            {
-               if (o.Equals(res)) return o;
-            }
-
             return default(T);
         }
 
@@ -118,15 +137,15 @@ namespace Bot_Application1.Controllers
 
         public string[] endOfSession()
         {
-            if (studySession.questionAsked.Count <= 1)
+            if (studySession.QuestionAsked.Count <= 1)
             {
                 return getPhrase(Pkey.earlyDiparture);
              } else
             {
                 var average = 0;
-                foreach (var q in studySession.questionAsked)
+                foreach (var q in studySession.QuestionAsked)
                 {
-                    average += q.answerScore / studySession.questionAsked.Count;
+                    average += q.AnswerScore / studySession.QuestionAsked.Count;
                 }
 
                 if (average > 60)
@@ -148,7 +167,8 @@ namespace Bot_Application1.Controllers
             int res = -1;
             if(int.TryParse(conv, out res))
             {
-                if (res <= 10) return res * 10;
+                if (res < 0) return -1;
+                else if (res <= 10) return res * 10;
                 else if (res <= 100) return res;
                 else return -1;
             }
@@ -170,7 +190,12 @@ namespace Bot_Application1.Controllers
 
         public string getName(string text)
         {
-            return text;
+            if (text[0] >= '\u05D0' && text[0] <= '\u05EA')
+            {
+                if (text.Split(' ').Length == 1)
+                    return text;
+            }
+            return null;
           //  return nlpControler.getName(text);
         }
 
@@ -180,10 +205,12 @@ namespace Bot_Application1.Controllers
             {
                 return "masculine";
             }
-            else
+            else if(text == "בת")
             {
                 return "feminine";
             }
+
+            return null;
            // return nlpControler.GetGender(text);
         }
 
@@ -244,7 +271,9 @@ namespace Bot_Application1.Controllers
 
         public  string getClass(string text)
         {
-            return text;
+            if (text == "יב" || text == "יא" || text == "י")
+                return text;
+            else return null;
           //  return nlpControler.getClass(text);
         }
 
@@ -253,36 +282,6 @@ namespace Bot_Application1.Controllers
             return nlpControler.GetGeneralFeeling(text);
         }
 
-
-        internal ContentTurn testAnalizer(string inputText)
-        {
-
-            //    var a = MorfAnalizer.createSentence(inputText);
-            var context = new TextContext();
-            var sen = nlpControler.Analize(inputText);
-
-            ContentTurn input = new ContentTurn();
-            foreach (var s in sen)
-            {
-            //    input.Add(sa.tagWords2(s, ref context));
-         //       input = sa.findGufContext(input);
-            }
-
-
-          //  input = sa.findRelations(input);
-
-            if (last != null)
-            {
-       //         input = sa.findGufContext(last, input);
-            }
-
-
-
-
-            last = input;
-            return input;
-
-        }
 
 
 
@@ -301,7 +300,7 @@ namespace Bot_Application1.Controllers
                 if (flags == null) flags = new string[] { };
                 if (flagesNot == null) flagesNot = new string[] { };
 
-                var phrases = db.getBotPhrase(key, flags, flagesNot);
+                var phrases = Db.getBotPhrase(key, flags, flagesNot);
                 string phraseRes;
                 if (phrases.Length > 0)
                 {
@@ -328,8 +327,8 @@ namespace Bot_Application1.Controllers
             {
                 studySession = new StudySession();
                 studySession.Category = "";
-                studySession.sessionLength = 0;
-                studySession.questionAsked = new HashSet<Question>();
+                studySession.SessionLength = 0;
+                studySession.QuestionAsked = new HashSet<IQuestion>();
             }
 
             if (user == null)
@@ -344,8 +343,8 @@ namespace Bot_Application1.Controllers
             phraseRes = phraseRes.Replace("<genderPostfixT>", ifGufFemenin("ת"));
             phraseRes = phraseRes.Replace("<text>", textVar);
             phraseRes = phraseRes.Replace("<subject>", studySession.Category);
-            phraseRes = phraseRes.Replace("<numOfQuestions>", studySession.sessionLength + "");
-            phraseRes = phraseRes.Replace("<questionNum>", studySession.questionAsked.Count + "");
+            phraseRes = phraseRes.Replace("<numOfQuestions>", studySession.SessionLength + "");
+            phraseRes = phraseRes.Replace("<questionNum>", studySession.QuestionAsked.Count + "");
             phraseRes = phraseRes.Replace("<userName>", user.UserName);
             phraseRes = phraseRes.Replace("<botName>", BOT_NAME);
             phraseRes = phraseRes.Replace("<botSubject>", BOT_SUBJECT);
@@ -353,7 +352,7 @@ namespace Bot_Application1.Controllers
             phraseRes = phraseRes.Replace("<genderMany>", getGenderName("many"));
             phraseRes = phraseRes.Replace("<!genderMany>", getGenderOpositeName("many"));
             phraseRes = phraseRes.Replace("<timeOfday>", getTimeOfDay());
-            phraseRes = phraseRes.Replace("<questionsLeft>", getTimeOfDay());
+            phraseRes = phraseRes.Replace("<questionsLeft>", (studySession.SessionLength - studySession.QuestionAsked.Count).ToString());
 
 
             phraseRes = phraseRes.Replace("נ ", "ן ");
@@ -423,51 +422,7 @@ namespace Bot_Application1.Controllers
             return phraseRes;
         }
 
-        public enum Pkey
-        {
-            NotImplamented,
-            chooseStudyUnits,
-            areYouSure,
-            areUReaddyToLearn,
-            beforAskQuestion,
-            MissionDone,
-            stopLearningSession,
-            MyAnswerToQuestion,
-            wrongOption,
-            MainMenuText,
-            greetings,
-            moveToNextQuestion,
-            selfIntroduction,
-            SoSorry,
-            ok,
-            veryGood,
-            letsLearn,
-            howAreYou,
-            NewUserGreeting,
-            MissingUserInfo,
-            GenderAck,
-            notNumber,
-            goodAnswer,
-            partialAnswer,
-            notAnAnswer,
-            GeneralAck,
-            giveYourFeedback,
-            goodbye,
-            NewUserGetName,
-            NewUserGetClass,
-            LetsStart,
-            NewUserGetGender,
-            earlyDiparture,
-            goodSessionEnd,
-            badSessionEnd,
-            letsNotLearn,
-            MenuLearn,
-            MenuNotLearn,
-            firstQuestion,
-            endOfSession,
-            keepLearning,
-            NotAnOption
-        }
+        
 
     }
 

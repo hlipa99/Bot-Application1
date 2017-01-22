@@ -1,6 +1,7 @@
 ﻿using Bot_Application1.dataBase;
 using Bot_Application1.Exceptions;
 using Model.dataBase;
+using Model.Models;
 using NLPtest.Models;
 using System;
 using System.Collections.Generic;
@@ -9,33 +10,46 @@ namespace Bot_Application1.Controllers
 {
  
     [Serializable]
-    internal class EducationController
+    public class EducationController
     {
-         DataBaseController db = new DataBaseController();
-        private Users user;
-        private StudySession studySession;
+        DataBaseController db = new DataBaseController();
+        private IUser user;
+        private IStudySession studySession;
 
-        public EducationController(Users user, StudySession studySession)
+        public DataBaseController Db
+        {
+            get
+            {
+                return db;
+            }
+
+            set
+            {
+                db = value;
+            }
+        }
+
+        public EducationController(IUser user, IStudySession studySession)
         {
             this.user = user;
             this.studySession = studySession;
         }
 
-        internal string[] getStudyCategory()
+        public string[] getStudyCategory()
         {
-            var res = db.getAllCategory();
+            var res = Db.getAllCategory();
             return res;
         }
 
-        internal IEnumerable<string> getStudySubCategory(string category)
+        public IEnumerable<string> getStudySubCategory(string category)
         {
-            var res = db.getAllSubCategory(category);
+            var res = Db.getAllSubCategory(category);
             return res;
         }
 
         public string getRamdomImg(string mediaKey)
         {
-            var media = db.getMedia(mediaKey, "img", "");
+            var media = Db.getMedia(mediaKey, "img", "");
             var r = new Random();
 
             if(media.Length > 0)
@@ -48,18 +62,28 @@ namespace Bot_Application1.Controllers
             }
         }
 
-        internal Question getQuestion(string category, string subCategory, StudySession studySession)
+        public IQuestion getQuestion(string category, string subCategory, IStudySession studySession)
         {
-            List<Question> res = new List<Question>();
-            if(subCategory == null)
+            List<IQuestion> res = new List<IQuestion>();
+            IQuestion[] questions;
+            if (subCategory == null)
             {
-                res.AddRange(db.getQuestion(category));
+                questions = Db.getQuestion(category);
             }
             else
             {
-                res.AddRange(db.getQuestion(category, subCategory));
+                questions = Db.getQuestion(category, subCategory);
             }
-            res.RemoveAll(x => studySession.QuestionAsked.Contains(x));
+            if (questions.Length > 0)
+            {
+                res.AddRange(questions);
+            }
+            else
+            {
+                return null;
+            }
+
+                res.RemoveAll(x => studySession.QuestionAsked.Contains(x));
             var r = new Random();
             if (res.Count > 0)
             {
@@ -71,15 +95,19 @@ namespace Bot_Application1.Controllers
             }
         }
 
-        internal Question checkAnswer(Question question, string text)
+        public IQuestion checkAnswer(IQuestion question, string text)
         {
-            if(text.Split(' ').Length > 2 && !text.Contains("לא יודע"))
+            if(text.Split(' ').Length > 5 && !text.Contains("לא יודע"))
             {
-                question.answerScore = 100;
+                question.AnswerScore = 100;
+            }
+            else if (text.Split(' ').Length > 3 && !text.Contains("לא יודע"))
+            {
+                question.AnswerScore = 56;
             }
             else
             {
-                question.answerScore = 0;
+                question.AnswerScore = 0;
             }
             return question;
         }

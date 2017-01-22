@@ -11,7 +11,7 @@ namespace NLPtest
 
 
         private string text;
-        List<Word> words = new List<Word>();
+        List<WordObject> words = new List<WordObject>();
         SentenceType sType;
         internal WorldObject nose;
         internal QuestionObject question;
@@ -32,7 +32,7 @@ namespace NLPtest
             }
         }
 
-        internal List<Word> Words
+        internal List<WordObject> Words
         {
             get
             {
@@ -63,7 +63,7 @@ namespace NLPtest
            Text = inputText;
         }
 
-        internal void Add(Word word)
+        internal void Add(WordObject word)
         {
             Words.Add(word);
         }
@@ -72,7 +72,7 @@ namespace NLPtest
         public override string ToString()
         {
             var str = "";
-            foreach(Word w in Words)
+            foreach(WordObject w in Words)
             {
                 str += w + " ";
             }

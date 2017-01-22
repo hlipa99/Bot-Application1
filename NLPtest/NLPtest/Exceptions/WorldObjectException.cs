@@ -8,7 +8,7 @@ namespace NLPtest
     internal class WorldObjectException : Exception
     {
         private WorldObject key;
-        private Word word;
+        private WordObject word;
 
         public WorldObjectException()
         {
@@ -23,7 +23,7 @@ namespace NLPtest
         {
         }
 
-        public WorldObjectException(Word word)
+        public WorldObjectException(WordObject word)
         {
             this.word = word;
         }

@@ -13,6 +13,7 @@ using Bot_Application1.YAndex;
 using NLPtest.WorldObj;
 using Model.dataBase;
 using static Bot_Application1.Controllers.ConversationController;
+using Model;
 
 namespace Bot_Application1.IDialog
 {

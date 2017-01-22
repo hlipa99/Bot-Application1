@@ -5,12 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using NLPtest.WorldObj;
 
-using static NLPtest.Word.WordType;
+using static NLPtest.WordObject.WordType;
 namespace NLPtest
 {
      class HebDictionary
     {
-         Dictionary<string,Word> hebDic = new Dictionary<string, Word>();
+         Dictionary<string,WordObject> hebDic = new Dictionary<string, WordObject>();
         internal enum Guf { Rishon, Sheny, Shlishi };
         internal enum Kamot { Yahid, Rabim};
         internal enum Min { Zahar, Nekeva , Both, None };
@@ -141,7 +141,7 @@ namespace NLPtest
 
         private void addPrep(string v, RelationObject prepositionObject)
         {
-            hebDic.Add(v, new Word(v, prepWord, prepositionObject));
+            hebDic.Add(v, new WordObject(v, prepWord, prepositionObject));
         }
 
         //private  void addGuf(string v1, string v2, Guf rishon, Kamot yahid, Min both)
@@ -150,7 +150,7 @@ namespace NLPtest
         //}
 
         private  void addHello(string s,WorldObject obj) { 
-            hebDic.Add(s, new Word(s,helloWord,obj));
+            hebDic.Add(s, new WordObject(s,helloWord,obj));
         
         }
 
@@ -163,7 +163,7 @@ namespace NLPtest
 
         private  void addTime(string s)
         {
-            hebDic.Add(s, new Word(s,timeWord));
+            hebDic.Add(s, new WordObject(s,timeWord));
         }
 
 
@@ -175,7 +175,7 @@ namespace NLPtest
             return hebDic.ContainsKey(lemma);
         }
 
-        internal  Word get(string lemma)
+        internal  WordObject get(string lemma)
         {
             if (hebDic.ContainsKey(lemma))
             {

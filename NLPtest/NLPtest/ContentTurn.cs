@@ -19,6 +19,10 @@ namespace NLPtest
         {
             list.Add(obj);
         }
+        public void Add(List<WorldObject> obj)
+        {
+            list.AddRange(obj);
+        }
 
 
         public bool empty()
