@@ -25,8 +25,8 @@ public class NLPControler : INLPControler
                 return instance;
             }else
             {
-                   var nlp =  new NLPControler();
-               // var nlp = new NLPControlerTestStub();
+              //     var nlp =  new NLPControler();
+                var nlp = new NLPControlerTestStub();
                 nlp.Initialize();
                 return nlp;
             }

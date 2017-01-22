@@ -72,9 +72,10 @@ namespace Bot_Application1.IDialog
             var message = await result;
            if (edc().getStudyCategory().Contains(message.Text))
             {
+                studySession.Category = message.Text;
+
                 await writeMessageToUser(context, conv().getPhrase(Pkey.areUReaddyToLearn));
                 await writeMessageToUser(context, conv().getPhrase(Pkey.firstQuestion));
-                studySession.Category = message.Text;
                 await askQuestion(context);
             }else
             {

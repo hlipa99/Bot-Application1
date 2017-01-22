@@ -11,6 +11,8 @@ using System.Threading;
 using NLPtest;
 using Bot_Application1.Controllers;
 using NLPtest.Models;
+using Newtonsoft.Json.Linq;
+using Model;
 
 namespace Bot_Application1.IDialog
 {
@@ -60,6 +62,56 @@ namespace Bot_Application1.IDialog
 
             }
         }
+
+
+        public virtual async Task createMenuOptions(IDialogContext context, string title, string[] options, ResumeAfter<string> resume)
+        {
+            if(context.Activity.ChannelId == "facebook")
+            {
+                await createQuickReplay(context, title, options, resume);
+            }
+            else
+            {
+                await createRMenuOptions(context, title, options, resume);
+            }
+        }
+
+        public async virtual Task createQuickReplay(IDialogContext context,string title, string[] options, ResumeAfter<string> resume)
+        {
+
+            await writeMessageToUser(context, new string[] { title });
+
+            var reply = context.MakeMessage();
+            var channelData = new JObject();
+            var child = new JObject();
+            foreach (var s in options)
+            {
+                child.Add("content_type", "text");
+                child.Add("title", s);
+                child.Add("payload", s);
+                channelData.Add("quick_replies", new JArray(child));
+            }
+            reply.ChannelData = channelData;
+
+            await context.PostAsync(reply);
+
+            context.Wait(resume);
+
+        }
+
+        public async virtual Task createRMenuOptions(IDialogContext context,string title, string[] options,ResumeAfter<string> resume)
+        {
+            var menu = new PromptDialog.PromptChoice<string>(
+              options,
+             title,
+             conv().getPhrase(Pkey.wrongOption)[0],
+             3);
+
+            context.Call(menu, resume);
+
+        }
+
+
 
         private void typingTime(IDialogContext context)
         {

@@ -115,21 +115,25 @@ namespace Bot_Application1.IDialog
         {
             //user Name
             
-            context.UserData.TryGetValue<Users >("user", out user);
+           context.UserData.TryGetValue<Users >("user", out user);
             //user Gender
             if (user.UserGender == "" || user.UserGender == null)
             {
              
 
-                var menu = new PromptDialog.PromptChoice<string>(
-                 conv().getGenderOptions(),
-                conv().getPhrase(Pkey.NewUserGetGender)[0],
-                conv().getPhrase(Pkey.wrongOption)[0],
-                3);
+                //var menu = new PromptDialog.PromptChoice<string>(
+                // conv().getGenderOptions(),
+                //conv().getPhrase(Pkey.NewUserGetGender)[0],
+                //conv().getPhrase(Pkey.wrongOption)[0],
+                //3);
 
-                context.Call(menu, CheckGender);
+                //context.Call(menu, CheckGender);
 
-            }else
+                createMenuOptions(context,conv().getPhrase(Pkey.NewUserGetGender)[0], conv().getGenderOptions(), CheckGender);
+                
+
+            }
+            else
             {
                 await NewUserGetClass(context);
             }
@@ -153,7 +157,7 @@ namespace Bot_Application1.IDialog
             }
             else
             {
-                var newMessage = conv().getPhrase(Pkey.MissingUserInfo,textVar:"gender");
+                var newMessage = conv().getPhrase(Pkey.MissingUserInfo,textVar:"מין");
                 await writeMessageToUser(context, newMessage);
                 context.Wait(CheckGender);
             }
@@ -167,13 +171,7 @@ namespace Bot_Application1.IDialog
 
             if (user.UserClass == "" || user.UserClass == null)
             {
-                var menu = new PromptDialog.PromptChoice<string>(
-                 conv().getClassOptions(),
-                conv().getPhrase(Pkey.NewUserGetClass)[0],
-                conv().getPhrase(Pkey.wrongOption)[0],
-                3);
-
-                context.Call(menu, CheckClass);
+                await createMenuOptions(context, conv().getPhrase(Pkey.NewUserGetClass)[0], conv().getClassOptions(), CheckGender);
 
             }
             else
@@ -203,7 +201,7 @@ namespace Bot_Application1.IDialog
             else
             {
 
-                await writeMessageToUser(context, conv().getPhrase(Pkey.MissingUserInfo, textVar: "class"));
+                await writeMessageToUser(context, conv().getPhrase(Pkey.MissingUserInfo, textVar: "כיתה"));
                 context.Wait<string>(CheckClass);
             }
 

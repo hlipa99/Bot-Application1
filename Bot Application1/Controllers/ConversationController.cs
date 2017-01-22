@@ -325,10 +325,9 @@ namespace Bot_Application1.Controllers
         {
             if (studySession == null)
             {
-                studySession = new StudySession();
-                studySession.Category = "";
-                studySession.SessionLength = 0;
-                studySession.QuestionAsked = new HashSet<IQuestion>();
+                //studySession = new StudySession();
+
+            studySession = new StudySession();
             }
 
             if (user == null)

@@ -1,6 +1,8 @@
 ﻿
 using Bot_Application1.dataBase;
+using Bot_Application1.Exceptions;
 using Bot_Application1.log;
+using Model;
 using Model.dataBase;
 using System;
 using System.Collections.Generic;

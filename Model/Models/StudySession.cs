@@ -13,26 +13,23 @@ namespace NLPtest.Models
     public class StudySession : IStudySession
     {
 
-        private HashSet<IQuestion> questionAsked = new HashSet<IQuestion>();
-        private IQuestion currentQuestion = null;
+        private HashSet<IQuestion> questionAsked;
+        private IQuestion currentQuestion;
         private int sessionLength = 3;
 
         public string SubCategory { get; set; }
         public string Category { get; set; }
 
-        public HashSet<IQuestion> QuestionAsked
-        {
-            get
-            {
-                return QuestionAsked;
+        public StudySession(){
+                Category = "";
+                SessionLength = 0;
+                QuestionAsked = new HashSet<IQuestion>();
+                currentQuestion = null;
+                sessionLength = 3;
             }
 
-            set
-            {
-                QuestionAsked = value;
-            }
-        }
 
+       
       
 
         public IQuestion CurrentQuestion
@@ -58,6 +55,19 @@ namespace NLPtest.Models
             set
             {
                 sessionLength = value;
+            }
+        }
+
+        public HashSet<IQuestion> QuestionAsked
+        {
+            get
+            {
+                return questionAsked;
+            }
+
+            set
+            {
+                questionAsked = value;
             }
         }
     }
