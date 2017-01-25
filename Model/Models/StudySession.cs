@@ -16,6 +16,7 @@ namespace NLPtest.Models
         private HashSet<IQuestion> questionAsked;
         private IQuestion currentQuestion;
         private int sessionLength = 3;
+        private ISubQuestion currentSubQuestion;
 
         public string SubCategory { get; set; }
         public string Category { get; set; }
@@ -70,5 +71,19 @@ namespace NLPtest.Models
                 questionAsked = value;
             }
         }
+
+        public ISubQuestion CurrentSubQuestion
+        {
+            get
+           {
+                return currentSubQuestion;
+            }
+            set
+            {
+                currentSubQuestion = value;
+            }
+
+        }
+       
     }
 }

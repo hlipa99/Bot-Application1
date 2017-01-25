@@ -54,6 +54,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\ISubQuestion.cs" />
+    <Compile Include="dataBase\SubQuestion.cs">
+      <DependentUpon>BotData.tt</DependentUpon>
+    </Compile>
+    <Compile Include="dataBase\SubQuestionS.cs" />
+    <Compile Include="dataBase\User.cs">
+      <DependentUpon>BotData.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\IQuestion.cs" />
     <Compile Include="Models\IUser.cs" />
     <Compile Include="Models\IStudySession.cs" />
@@ -85,9 +93,6 @@
       <DependentUpon>BotData.tt</DependentUpon>
     </Compile>
     <Compile Include="dataBase\QuestionS.cs" />
-    <Compile Include="dataBase\Users.cs">
-      <DependentUpon>BotData.tt</DependentUpon>
-    </Compile>
     <Compile Include="dataBase\UsersS.cs" />
     <Compile Include="dataBase\Utility.cs" />
     <Compile Include="Emoji.cs" />

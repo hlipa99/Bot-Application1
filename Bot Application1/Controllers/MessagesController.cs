@@ -30,22 +30,23 @@ namespace Bot_Application1.Controllers
                 {
                     if (activity.Type == ActivityTypes.Message)
                     {
+                        try
+                        {
 
-                        //create typing replay
-                        var connector = new ConnectorClient(new Uri(activity.ServiceUrl));
-                        var typingReplay = activity.CreateReply();
-                        typingReplay.Type = ActivityTypes.Typing;
-                        await connector.Conversations.ReplyToActivityAsync(typingReplay);
+                            var dialog = new MainDialog();
+                            await Conversation.SendAsync(activity, () => new MainDialog());
 
-                        await Conversation.SendAsync(activity, () => new MainDialog());
-                        //ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
-                        //// calculate something for us to return
-                        //int length = (activity.Text ?? string.Empty).Length;
+                            
+                            //create typing replay
+                            //var connector = new ConnectorClient(new Uri(activity.ServiceUrl));
+                            //var typingReplay = activity.CreateReply();
+                            //typingReplay.Type = ActivityTypes.Typing;
+                            //await connector.Conversations.ReplyToActivityAsync(typingReplay);
 
+                        }catch (Exception ex)
+                        {
 
-                        //// return our reply to the user
-                        //Activity reply = activity.CreateReply($"You sent {activity.Text} which was {length} characters");
-                        //await connector.Conversations.ReplyToActivityAsync(reply);
+                        }
                         //
 
                     }

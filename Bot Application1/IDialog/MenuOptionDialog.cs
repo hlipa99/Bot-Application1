@@ -82,7 +82,7 @@ namespace Bot_Application1.IDialog
         {
 
             // context.UserData.TryGetValue<Users>("user", out user);
-            ConversationController conv = new ConversationController(new Model.dataBase.Users(),new StudySession());
+            ConversationController conv = new ConversationController(new Model.dataBase.User(),new StudySession());
            
             result = conv.FindMatchFromOptions<T>(message.Text, promptOptions.Options);
             return result != null;

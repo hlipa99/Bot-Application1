@@ -26,32 +26,60 @@
         </EntityType>
         <EntityType Name="Question">
           <Key>
-            <PropertyRef Name="ID" />
+            <PropertyRef Name="QuestionID" />
           </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QuestionID" Type="nchar" MaxLength="20" Nullable="false" />
           <Property Name="Category" Type="nvarchar" MaxLength="100" />
           <Property Name="SubCategory" Type="nvarchar" MaxLength="100" />
           <Property Name="QuestionText" Type="nvarchar(max)" />
-          <Property Name="AnswerText" Type="nvarchar(max)" />
+          <Property Name="Flags" Type="nvarchar(max)" />
         </EntityType>
-        <EntityType Name="Users">
+        <EntityType Name="SubQuestion">
           <Key>
-            <PropertyRef Name="Id" />
+            <PropertyRef Name="questionID" />
+            <PropertyRef Name="subQuestionID" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="UserID" Type="nvarchar" MaxLength="150" Nullable="false" />
-          <Property Name="UserName" Type="nvarchar" MaxLength="150" Nullable="false" />
-          <Property Name="Channel" Type="nvarchar" MaxLength="150" Nullable="false" />
-          <Property Name="created" Type="datetime" Nullable="false" />
-          <Property Name="Message" Type="nvarchar" MaxLength="500" />
-          <Property Name="UserGender" Type="nvarchar" MaxLength="50" />
-          <Property Name="UserClass" Type="nvarchar" MaxLength="150" />
+          <Property Name="questionID" Type="nchar" MaxLength="20" Nullable="false" />
+          <Property Name="subQuestionID" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="questionText" Type="nchar" MaxLength="1000" />
+          <Property Name="answerText" Type="nchar" MaxLength="1000" />
+          <Property Name="flags" Type="nchar" MaxLength="10" />
         </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="nchar" MaxLength="30" Nullable="false" />
+          <Property Name="UserName" Type="nchar" MaxLength="100" />
+          <Property Name="UserGender" Type="nchar" MaxLength="10" />
+          <Property Name="UserClass" Type="nchar" MaxLength="10" />
+          <Property Name="UserCreated" Type="datetime" />
+          <Property Name="UserLastSession" Type="datetime" />
+        </EntityType>
+        <Association Name="FK_SubQuestion_Question">
+          <End Role="Question" Type="Self.Question" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="SubQuestion" Type="Self.SubQuestion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Question">
+              <PropertyRef Name="QuestionID" />
+            </Principal>
+            <Dependent Role="SubQuestion">
+              <PropertyRef Name="questionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="mindcetModelStoreContainer">
           <EntitySet Name="botphrase" EntityType="Self.botphrase" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="media" EntityType="Self.media" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Question" EntityType="Self.Question" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SubQuestion" EntityType="Self.SubQuestion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_SubQuestion_Question" Association="Self.FK_SubQuestion_Question">
+            <End Role="Question" EntitySet="Question" />
+            <End Role="SubQuestion" EntitySet="SubQuestion" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -61,7 +89,12 @@
           <EntitySet Name="botphrase" EntityType="mindcetModel.botphrase" />
           <EntitySet Name="media" EntityType="mindcetModel.media" />
           <EntitySet Name="Question" EntityType="mindcetModel.Question" />
-          <EntitySet Name="Users" EntityType="mindcetModel.Users" />
+          <EntitySet Name="SubQuestion" EntityType="mindcetModel.SubQuestion" />
+          <AssociationSet Name="FK_SubQuestion_Question" Association="mindcetModel.FK_SubQuestion_Question">
+            <End Role="Question" EntitySet="Question" />
+            <End Role="SubQuestion" EntitySet="SubQuestion" />
+          </AssociationSet>
+          <EntitySet Name="User" EntityType="mindcetModel.User" />
         </EntityContainer>
         <EntityType Name="botphrase">
           <Key>
@@ -84,26 +117,51 @@
         </EntityType>
         <EntityType Name="Question">
           <Key>
-            <PropertyRef Name="ID" />
+            <PropertyRef Name="QuestionID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QuestionID" Type="String" Nullable="false" MaxLength="20" FixedLength="true" Unicode="true" />
           <Property Name="Category" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="SubCategory" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="QuestionText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="AnswerText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Flags" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="SubQuestion" Relationship="mindcetModel.FK_SubQuestion_Question" FromRole="Question" ToRole="SubQuestion" />
         </EntityType>
-        <EntityType Name="Users">
+        <EntityType Name="SubQuestion">
           <Key>
-            <PropertyRef Name="Id" />
+            <PropertyRef Name="questionID" />
+            <PropertyRef Name="subQuestionID" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserID" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="UserName" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="Channel" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="created" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Message" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="UserGender" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="UserClass" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="questionID" Type="String" Nullable="false" MaxLength="20" FixedLength="true" Unicode="true" />
+          <Property Name="subQuestionID" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="questionText" Type="String" MaxLength="1000" FixedLength="true" Unicode="true" />
+          <Property Name="answerText" Type="String" MaxLength="1000" FixedLength="true" Unicode="true" />
+          <Property Name="flags" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Question" Relationship="mindcetModel.FK_SubQuestion_Question" FromRole="SubQuestion" ToRole="Question" />
+        </EntityType>
+        <Association Name="FK_SubQuestion_Question">
+          <End Type="mindcetModel.Question" Role="Question" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="mindcetModel.SubQuestion" Role="SubQuestion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Question">
+              <PropertyRef Name="QuestionID" />
+            </Principal>
+            <Dependent Role="SubQuestion">
+              <PropertyRef Name="questionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="String" Nullable="false" MaxLength="30" FixedLength="true" Unicode="true" />
+          <Property Name="UserName" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
+          <Property Name="UserGender" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="UserClass" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="UserCreated" Type="DateTime" Precision="3" />
+          <Property Name="UserLastSession" Type="DateTime" Precision="3" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -135,29 +193,38 @@
           <EntitySetMapping Name="Question">
             <EntityTypeMapping TypeName="mindcetModel.Question">
               <MappingFragment StoreEntitySet="Question">
-                <ScalarProperty Name="AnswerText" ColumnName="AnswerText" />
+                <ScalarProperty Name="Flags" ColumnName="Flags" />
                 <ScalarProperty Name="QuestionText" ColumnName="QuestionText" />
                 <ScalarProperty Name="SubCategory" ColumnName="SubCategory" />
                 <ScalarProperty Name="Category" ColumnName="Category" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Users">
-            <EntityTypeMapping TypeName="mindcetModel.Users">
-              <MappingFragment StoreEntitySet="Users">
+          <EntitySetMapping Name="SubQuestion">
+            <EntityTypeMapping TypeName="mindcetModel.SubQuestion">
+              <MappingFragment StoreEntitySet="SubQuestion">
+                <ScalarProperty Name="flags" ColumnName="flags" />
+                <ScalarProperty Name="answerText" ColumnName="answerText" />
+                <ScalarProperty Name="questionText" ColumnName="questionText" />
+                <ScalarProperty Name="subQuestionID" ColumnName="subQuestionID" />
+                <ScalarProperty Name="questionID" ColumnName="questionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User">
+            <EntityTypeMapping TypeName="mindcetModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="UserLastSession" ColumnName="UserLastSession" />
+                <ScalarProperty Name="UserCreated" ColumnName="UserCreated" />
                 <ScalarProperty Name="UserClass" ColumnName="UserClass" />
                 <ScalarProperty Name="UserGender" ColumnName="UserGender" />
-                <ScalarProperty Name="Message" ColumnName="Message" />
-                <ScalarProperty Name="created" ColumnName="created" />
-                <ScalarProperty Name="Channel" ColumnName="Channel" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-        </EntityContainerMapping>
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>

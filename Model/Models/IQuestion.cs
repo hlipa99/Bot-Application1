@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+using Model.dataBase;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,12 +13,14 @@ namespace Model.Models
         bool Equals(object other);
         int GetHashCode();
 
-        int ID { get; set; }
+        string QuestionID { get; set; }
         string Category { get; set; }
         string SubCategory { get; set; }
         string QuestionText { get; set; }
-        string AnswerText { get; set; }
         int AnswerScore { get; set; }
+
+        ICollection<SubQuestion> SubQuestion { get; set; }
+        int Enumerator { get; set; }
     }
 
 

@@ -9,10 +9,9 @@ namespace Model.dataBase
 {
 
     [Serializable]
-    public partial class Question : IQuestion
+    public partial class SubQuestion : ISubQuestion
     {
         private int answerScore;
-        private int enumerator;
 
         public int AnswerScore
         {
@@ -27,25 +26,12 @@ namespace Model.dataBase
             }
         }
 
-        public int Enumerator
-        {
-            get
-            {
-                return enumerator;
-            }
-
-            set
-            {
-                enumerator = value;
-            }
-        }
-
         public override bool Equals(object other)
         {
-            if (other is Question)
+            if (other is SubQuestion)
             {
-                var q = other as Question;
-                return this.QuestionID == q.QuestionID;
+                var q = other as SubQuestion;
+                return this.questionID == q.questionID && this.subQuestionID == q.subQuestionID;
             }
             else
             {
@@ -55,7 +41,7 @@ namespace Model.dataBase
 
             public override int GetHashCode()
             {
-                   return this.QuestionID.GetHashCode();
+                   return this.questionID.GetHashCode() + this.subQuestionID.GetHashCode();
              }
         
     }

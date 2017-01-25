@@ -209,6 +209,8 @@
     <None Include="Properties\PublishProfiles\BotApplication120170104113209 - Web Deploy %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\BotApplication120170104113209 - Web Deploy %283%29.pubxml" />
     <None Include="Properties\PublishProfiles\BotApplication120170104113209 - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\BotApplication120170122015429 - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\hgfjh.pubxml" />
     <None Include="Properties\PublishProfiles\דד.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -250,7 +252,7 @@
     <Compile Include="IDialog\NewUserDialog.cs" />
     <Compile Include="IDialog\NotImplamentedDialog.cs" />
     <Compile Include="IDialog\QuestionDialog.cs" />
-    <Compile Include="IDialog\SatrtLerningDialog.cs" />
+    <Compile Include="IDialog\LerningDialog.cs" />
     <Compile Include="Json\Translate.cs" />
     <Compile Include="log\Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

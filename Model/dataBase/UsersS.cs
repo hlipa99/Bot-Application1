@@ -9,10 +9,10 @@ namespace Model.dataBase
 {
 
     [Serializable]
-    public partial class Users : IUser
+    public partial class User : IUser
     {
 
-        public bool Equals(Users other)
+        public bool Equals(User other)
         {
 
             return this.UserID == other.UserID;

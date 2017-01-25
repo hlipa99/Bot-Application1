@@ -12,15 +12,15 @@ namespace Model.dataBase
     using System;
     using System.Collections.Generic;
     
-    public partial class Users
+    public partial class User
     {
-        public int Id { get; set; }
         public string UserID { get; set; }
         public string UserName { get; set; }
-        public string Channel { get; set; }
-        public System.DateTime created { get; set; }
-        public string Message { get; set; }
         public string UserGender { get; set; }
         public string UserClass { get; set; }
+        public Nullable<System.DateTime> UserCreated { get; set; }
+        public Nullable<System.DateTime> UserLastSession { get; set; }
     }
 }
+  //this.Configuration.LazyLoadingEnabled = false;
+  //  this.Configuration.ProxyCreationEnabled = false;

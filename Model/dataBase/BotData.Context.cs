@@ -16,15 +16,12 @@ namespace Model.dataBase
     public partial class Entities : DbContext
     {
         public Entities()
-            : base("name=mindcetEntities")
+            : base("name=Entities")
         {
+         //   this.Configuration.LazyLoadingEnabled = false;
+          //  this.Configuration.ProxyCreationEnabled = false;
         }
-
-        public Entities(string conString)
-           : base("connectionString=" + conString)
-        {
-        }
-
+    
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();
@@ -33,6 +30,7 @@ namespace Model.dataBase
         public virtual DbSet<botphrase> botphrase { get; set; }
         public virtual DbSet<media> media { get; set; }
         public virtual DbSet<Question> Question { get; set; }
-        public virtual DbSet<Users> Users { get; set; }
+        public virtual DbSet<SubQuestion> SubQuestion { get; set; }
+        public virtual DbSet<User> User { get; set; }
     }
 }

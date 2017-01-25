@@ -13,6 +13,9 @@ using Bot_Application1.Controllers;
 using NLPtest.Models;
 using Newtonsoft.Json.Linq;
 using Model;
+using Model.Models;
+using Microsoft.Bot.Builder.ConnectorEx;
+using Microsoft.Bot.Builder.Dialogs.Internals;
 
 namespace Bot_Application1.IDialog
 {
@@ -20,42 +23,127 @@ namespace Bot_Application1.IDialog
     [Serializable]
     public abstract class AbsDialog : IDialog<object>
     {
-        public abstract Task StartAsync(IDialogContext context);
-        internal Users user;
-        internal StudySession studySession;
-        internal DateTime request = DateTime.Now;
+
+        private IUser user;
+        private StudySession studySession;
+        private DateTime request = DateTime.UtcNow;
+        //IDialogContext context;
+
+        internal void updateRequestTime()
+        {
+            request = DateTime.UtcNow;
+        }
+
+
+        public void getUser(IDialogContext context)
+            {
+                if (user == null) 
+                {
+                    User thisUser = User as User;
+                    context.UserData.TryGetValue<User>("user", out thisUser);
+                    user = thisUser;
+                }
+               
+            }
+
+        public void setUser(IDialogContext context)
+        {
+                User thisUser = user as User;
+                context.UserData.SetValue<User>("user",thisUser);
+            
+        }
+
+        public void getStudySession(IDialogContext context)
+        {
+            if (studySession == null)
+            {
+                context.UserData.TryGetValue<StudySession>("studySession", out studySession);
+            }
+        }
+
+        public void setStudySession(IDialogContext context)
+        {
+            context.UserData.SetValue<StudySession>("studySession", studySession);
+        }
+
+
+
+        internal DateTime Request
+        {
+            get
+            {
+                return request;
+            }
+        }
+
+        public IUser User
+        {
+            get
+            {
+                return user;
+            }
+
+            set
+            {
+                user = value;
+            }
+        }
+
+        public StudySession StudySession
+        {
+            get
+            {
+                return studySession;
+            }
+
+            set
+            {
+                studySession = value;
+            }
+        }
+
 
         internal async Task writeMessageToUser(IDialogContext context, string[] newMessage)
         {
+            var typingReplay = context.MakeMessage();
+            typingReplay.Type = ActivityTypes.Typing;
+
             foreach (var m in newMessage)
             {
                 if (m.Contains('|'))
                 {
-                     await writeMessageToUser(context,m.Split('|'));
+                    await context.PostAsync(typingReplay);
+                    //| is a sign for new line
+                    await writeMessageToUser(context,m.Split('|'));
                 }
                 else
                 {
                     if (m.Length > 220)
                     {
+                        await context.PostAsync(typingReplay);
+  
                         var idx = m.IndexOf(' ', 200);
                         if (idx > 0)
                         {
                             var str1 = m.Substring(0, idx);
                             var str2 = m.Substring(idx);
                             await writeMessageToUser(context, new string[] { str1, str2 });
-                        }else
+                        } else
                         {
 
                         }
-                    }else
+                    } else
                     {
                         //facebook cuts messages from 300 chars
                         if (newMessage.Count() > 1)
                         {
                             typingTime(context);
-                            Thread.Sleep(m.Length * 3);
+                            Thread.Sleep(m.Length * 4);
                         }
-                        await context.PostAsync(m);
+
+
+                        //send message
+                        if (m != null && m != "") await context.PostAsync(m);
                     }
                 }
          
@@ -65,34 +153,36 @@ namespace Bot_Application1.IDialog
         }
 
 
-        public virtual async Task createMenuOptions(IDialogContext context, string title, string[] options, ResumeAfter<string> resume)
+        public virtual async Task createMenuOptions(IDialogContext context, string title, string[] options, ResumeAfter<IMessageActivity> resume)
         {
-            if(context.Activity.ChannelId == "facebook")
+            if(context.Activity.ChannelId == "facebook" || true)
             {
                 await createQuickReplay(context, title, options, resume);
             }
             else
             {
-                await createRMenuOptions(context, title, options, resume);
+             //   await createRMenuOptions(context, title, options, resume);
             }
         }
 
-        public async virtual Task createQuickReplay(IDialogContext context,string title, string[] options, ResumeAfter<string> resume)
+        public async virtual Task createQuickReplay(IDialogContext context,string title, string[] options, ResumeAfter<IMessageActivity> resume)
         {
 
-            await writeMessageToUser(context, new string[] { title });
-
+            // await writeMessageToUser(context, new string[] { title });
+            
             var reply = context.MakeMessage();
             var channelData = new JObject();
-            var child = new JObject();
+            var quickReplies = new JArray();
+
+            
+            var qrList = new List<FacebookQuickReply>();
             foreach (var s in options)
             {
-                child.Add("content_type", "text");
-                child.Add("title", s);
-                child.Add("payload", s);
-                channelData.Add("quick_replies", new JArray(child));
+                var r = new FacebookQuickReply("text", s,s);
+                qrList.Add(r);
             }
-            reply.ChannelData = channelData;
+            var message = new FacebookMessage(title, qrList);
+            reply.ChannelData = message;
 
             await context.PostAsync(reply);
 
@@ -100,22 +190,25 @@ namespace Bot_Application1.IDialog
 
         }
 
-        public async virtual Task createRMenuOptions(IDialogContext context,string title, string[] options,ResumeAfter<string> resume)
-        {
-            var menu = new PromptDialog.PromptChoice<string>(
-              options,
-             title,
-             conv().getPhrase(Pkey.wrongOption)[0],
-             3);
+        //public async virtual Task createRMenuOptions(IDialogContext context,string title, string[] options,ResumeAfter<IMessageActivity> resume)
+        //{
+        //    ;
+        //    List<IMessageActivity> = new 
+        //    foreach (var s in options)
+        //    {
 
-            context.Call(menu, resume);
-        }
+        //    }
 
-        public void updateRequestTime()
-        {
-            request = DateTime.UtcNow;
-        }
-      
+
+        //    var menu = new PromptDialog.PromptChoice<IMessageActivity>(
+        //      options,
+        //     title,
+        //     conv().getPhrase(Pkey.wrongOption)[0],
+        //     3);
+
+        //    context.Call<IMessageActivity>(menu, resume);
+        //}
+
 
         private void typingTime(IDialogContext context)
         {
@@ -126,9 +219,13 @@ namespace Bot_Application1.IDialog
 
         public ConversationController conv()
         {
-            return new ConversationController(user,studySession);
+            return new ConversationController(User, StudySession);
         }
 
+        public virtual Task StartAsync(IDialogContext context)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 

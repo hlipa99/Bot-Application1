@@ -4,6 +4,7 @@ using Bot_Application1.Exceptions;
 using Bot_Application1.log;
 using Model;
 using Model.dataBase;
+using Model.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -26,7 +27,7 @@ namespace Bot_Application1.Controllers
             try
             {
 
-                exist = DB.Users.Any(x => x.UserID == userId);
+                exist = DB.User.Any(x => x.UserID == userId);
             }
             catch (Exception e)
             {
@@ -41,22 +42,18 @@ namespace Bot_Application1.Controllers
 
 
 
-        public void addNewUser(string channelId, string id, string name, string text)
+        public void addNewUser(string channelId, string id, string name)
         {
             Entities DB = new Entities();
             try
             {
 
-                var NewUsers = new Users();
+                var NewIUser = new User();
+                NewIUser.UserID = id;
+                NewIUser.UserName = name;
+                NewIUser.UserCreated = DateTime.UtcNow;
 
-
-                NewUsers.Channel = channelId;
-                NewUsers.UserID = id;
-                NewUsers.UserName = name;
-                NewUsers.created = DateTime.UtcNow;
-                NewUsers.Message = text.Truncate(500);
-
-                DB.Users.Add(NewUsers);
+                DB.User.Add(NewIUser);
                 DB.SaveChanges();
 
             }
@@ -71,14 +68,14 @@ namespace Bot_Application1.Controllers
         }
 
 
-        public void addNewUser(Users user)
+        public void addNewUser(IUser user)
         {
             Entities DB = new Entities();
             try
             {
 
 
-                DB.Users.Add(user);
+                DB.User.Add((User)user);
                 DB.SaveChanges();
 
             }
@@ -94,19 +91,19 @@ namespace Bot_Application1.Controllers
 
 
 
-        public Users getUser(string userId)
+        public IUser getUser(string userId)
         {
             Entities DB = new Entities();
-            Users NewUsers = new Users();
-            List<Users> visitors = new List<Users>();
+            IUser NewIUser = new User();
+            List<User> visitors = new List<User>();
 
             try
             {
 
-                NewUsers = new Users();
+                NewIUser = new User();
 
 
-                visitors = (from t in DB.Users
+                visitors = (from t in DB.User
                             where t.UserID == userId
                             select t).ToList();
             }
@@ -126,19 +123,19 @@ namespace Bot_Application1.Controllers
         public void deleteUser(string userId)
         {
             Entities DB = new Entities();
-            Users NewUsers = new Users();
-            List<Users> visitors = new List<Users>();
+            IUser NewIUser = new User();
+            List<IUser> visitors = new List<IUser>();
 
             try
             {
 
-                NewUsers = new Users();
+                NewIUser = new User();
 
-                var itemToRemove = DB.Users.SingleOrDefault(x => x.UserID == userId);
+                var itemToRemove = DB.User.SingleOrDefault(x => x.UserID == userId);
 
                 if (itemToRemove != null)
                 {
-                    DB.Users.Remove(itemToRemove);
+                    DB.User.Remove(itemToRemove);
                     DB.SaveChanges();
                 }
 

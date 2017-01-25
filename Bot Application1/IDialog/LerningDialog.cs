@@ -7,6 +7,7 @@ using NLPtest.Models;
 using Model.dataBase;
 using Bot_Application1.Controllers;
 using Model;
+using Model.Models;
 
 namespace Bot_Application1.IDialog
 {
@@ -18,21 +19,25 @@ namespace Bot_Application1.IDialog
 
         public override async Task StartAsync(IDialogContext context)
         {
-            context.UserData.TryGetValue<Users>("user", out user);
-            context.UserData.TryGetValue<StudySession>("studySession", out studySession);
+            User thisUser = User as User;
 
-            if (user == null)
+            context.UserData.TryGetValue<User>("user", out thisUser);
+            User = thisUser;
+            
+            
+
+            if (User == null)
             {
                 throw new unknownUserException();
             }
 
-            if(studySession == null)
+            if(StudySession == null)
             {
-                studySession = new StudySession();
+                StudySession = new StudySession();
             }
 
+            StudySession.CurrentQuestion = null;
 
-   
             await writeMessageToUser(context, conv().getPhrase(Pkey.letsLearn));
             await writeMessageToUser(context, conv().getPhrase(Pkey.chooseStudyUnits));
             var message = context.MakeMessage();
@@ -49,7 +54,7 @@ namespace Bot_Application1.IDialog
 
 
             context.UserData.RemoveValue("studySession");
-            studySession = new StudySession();
+            StudySession = new StudySession();
 
             await context.PostAsync(message);
             updateRequestTime();
@@ -65,7 +70,7 @@ namespace Bot_Application1.IDialog
 
         public async virtual Task StartLearning(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            if (context.Activity.Timestamp <= request)
+            if (context.Activity.Timestamp <= Request)
             {
                 context.Wait(StartLearning);
                 return;
@@ -74,11 +79,18 @@ namespace Bot_Application1.IDialog
             var message = await result;
            if (edc().getStudyCategory().Contains(message.Text))
             {
-                studySession.Category = message.Text;
+                StudySession.Category = message.Text;
+                edc().getNextQuestion();
+                var question = StudySession.CurrentQuestion;
+                if(question.QuestionText == null)
+                {
+                    await writeMessageToUser(context, conv().getPhrase(Pkey.SubjectNotAvialable));
+                    await StartAsync(context);
+                }
 
                 await writeMessageToUser(context, conv().getPhrase(Pkey.areUReaddyToLearn));
                 await writeMessageToUser(context, conv().getPhrase(Pkey.firstQuestion));
-                await askQuestion(context);
+                await intreduceQuestion(context);
             }else
             {
                 await writeMessageToUser(context, conv().getPhrase(Pkey.NotAnOption, textVar: message.Text));
@@ -86,24 +98,39 @@ namespace Bot_Application1.IDialog
             }
         }
 
+
+        public async Task intreduceQuestion(IDialogContext context)
+        {
+
+             edc().getNextQuestion();
+            var question = StudySession.CurrentQuestion;
+         
+            await writeMessageToUser(context, new string[] { '"'+question.QuestionText + '"' });
+
+            if (question.SubQuestion.Count > 1)
+            {
+                await writeMessageToUser(context, conv().getPhrase(Pkey.takeQuestionApart));
+            }
+            await askQuestion(context);
+        }
+
+
         public async Task askQuestion(IDialogContext context)
         {
 
 
-            var question = edc().getQuestion(studySession.Category, studySession.SubCategory, studySession);
-
-            await writeMessageToUser(context, new string[] { question.QuestionText });
-            studySession.CurrentQuestion = question;
-            studySession.QuestionAsked.Add(studySession.CurrentQuestion);
+            var question = StudySession.CurrentSubQuestion;
+            await writeMessageToUser(context, new string[] { question.questionText.Trim() });
 
             updateRequestTime();
             context.Wait(answerQuestion);
         }
 
 
+
         public async Task answerQuestion(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            if (context.Activity.Timestamp <= request)
+            if (context.Activity.Timestamp <= Request)
             {
                 context.Wait(StartLearning);
                 return;
@@ -117,7 +144,7 @@ namespace Bot_Application1.IDialog
                 context.Done("");
             }
 
-            var question = studySession.CurrentQuestion;
+            var question = StudySession.CurrentSubQuestion;
 
             question = edc().checkAnswer(question, message.Text);
             if(question.AnswerScore > 85)
@@ -136,18 +163,36 @@ namespace Bot_Application1.IDialog
             await writeMessageToUser(context, conv().getPhrase(Pkey.MyAnswerToQuestion));
 
          
-            await writeMessageToUser(context, new string[] { question.AnswerText });
-            await writeMessageToUser(context, conv().getPhrase(Pkey.giveYourFeedback));
+            await writeMessageToUser(context, new string[] { question.answerText.Trim()});
 
+
+            if(StudySession.CurrentQuestion.Enumerator == StudySession.CurrentQuestion.SubQuestion.Count)
+            {
+                await writeMessageToUser(context, conv().getPhrase(Pkey.giveYourFeedback));
+                updateRequestTime();
+                context.Wait(giveFeedback);
+            }
+            else
+            {
+                await writeMessageToUser(context, conv().getPhrase(Pkey.moveToNextSubQuestion));
+                edc().getNextQuestion();
+                await askQuestion(context);
+            }
+        }
+
+
+        public async Task questionEnd(IDialogContext context)
+        {
+            await writeMessageToUser(context, conv().getPhrase(Pkey.giveYourFeedback));
             updateRequestTime();
             context.Wait(giveFeedback);
-
         }
+
 
 
         public async Task giveFeedback(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            if (context.Activity.Timestamp <= request)
+            if (context.Activity.Timestamp <= Request)
             {
                 context.Wait(StartLearning);
                 return;
@@ -157,25 +202,23 @@ namespace Bot_Application1.IDialog
             int number;
             if ((number = conv().getNum(message.Text)) >= 0)
             {
-                await writeMessageToUser(context, conv().getPhrase(Pkey.GeneralAck,textVar:(number +"")));
-                studySession.CurrentQuestion.AnswerScore = number;
-
-                if (studySession.QuestionAsked.Count == studySession.SessionLength)
+               if(number < 45)
                 {
-
-                    await writeMessageToUser(context, conv().endOfSession());
-                    await writeMessageToUser(context, conv().getPhrase(Pkey.endOfSession));
-
-                    //TODO: save user sussion to DB
-                    updateRequestTime();
-                    context.Wait(EndOfLearningSession);
+                    await writeMessageToUser(context, conv().getPhrase(Pkey.neverMind));
+                }
+                else if(number < 75)
+                {
+                    await writeMessageToUser(context, conv().getPhrase(Pkey.GeneralAck, textVar: (number + "")));
                 }
                 else
                 {
-                    await writeMessageToUser(context, conv().getPhrase(Pkey.moveToNextQuestion));
-                    await writeMessageToUser(context, conv().getPhrase(Pkey.beforAskQuestion));
-                    await askQuestion(context);
+                    await writeMessageToUser(context, conv().getPhrase(Pkey.veryGood));
                 }
+              
+                StudySession.CurrentQuestion.AnswerScore = number;
+                setStudySession(context);
+
+                await questionSummery(context);
             }
             else
             {
@@ -186,9 +229,30 @@ namespace Bot_Application1.IDialog
         }
 
 
+        public async Task questionSummery(IDialogContext context)
+        {
+            if (StudySession.QuestionAsked.Count == StudySession.SessionLength)
+            {
+
+                await writeMessageToUser(context, conv().endOfSession());
+                await writeMessageToUser(context, conv().getPhrase(Pkey.endOfSession));
+
+                //TODO: save user sussion to DB
+                updateRequestTime();
+                context.Wait(EndOfLearningSession);
+            }
+            else
+            {
+                await writeMessageToUser(context, conv().getPhrase(Pkey.moveToNextQuestion));
+                await writeMessageToUser(context, conv().getPhrase(Pkey.beforAskQuestion));
+                await intreduceQuestion(context);
+            }
+        }
+
+
         public async Task EndOfLearningSession(IDialogContext context, IAwaitable<object> result)
         {
-            if (context.Activity.Timestamp <= request)
+            if (context.Activity.Timestamp <= Request)
             {
                 context.Wait(EndOfLearningSession);
                 return;
@@ -198,7 +262,7 @@ namespace Bot_Application1.IDialog
 
         private EducationController edc()
         {
-            return new EducationController(user,studySession);
+            return new EducationController(User,StudySession);
         }
 
     }

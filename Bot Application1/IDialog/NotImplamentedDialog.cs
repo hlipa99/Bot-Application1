@@ -13,6 +13,7 @@ using NLPtest;
 using NLPtest.WorldObj;
 using Model.dataBase;
 using Model;
+using Model.Models;
 
 namespace Bot_Application1.IDialog
 {
@@ -23,15 +24,13 @@ namespace Bot_Application1.IDialog
       
         public override async Task StartAsync(IDialogContext context)
         {
-            if(user == null)
+            if(User == null)
             {
-                user = new Users();
-                user.UserName = "";
-                user.UserGender = "masculine";
+                User = new User();
+                User.UserName = "";
+                User.UserGender = "masculine";
             }
-            
-            context.UserData.TryGetValue<Users>("user", out user);
-
+         
 
             await context.PostAsync(conv().getPhrase(Pkey.NotImplamented)[0]);
             context.Done("");

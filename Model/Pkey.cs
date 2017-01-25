@@ -49,6 +49,10 @@ namespace Model
         firstQuestion,
         endOfSession,
         keepLearning,
-        NotAnOption
+        NotAnOption,
+        takeQuestionApart,
+        SubjectNotAvialable,
+        moveToNextSubQuestion,
+        neverMind
     }
 }

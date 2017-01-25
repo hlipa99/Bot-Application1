@@ -14,6 +14,7 @@ using Model.dataBase;
 using Bot_Application1.log;
 using static Bot_Application1.Controllers.ConversationController;
 using Model;
+using Model.Models;
 
 namespace Bot_Application1.IDialog
 {
@@ -23,8 +24,8 @@ namespace Bot_Application1.IDialog
 
         public override async Task StartAsync(IDialogContext context)
         {
-            context.UserData.TryGetValue<Users>("user", out user);
-            if (user != null)
+            getUser(context);
+            if (User != null)
             {
                 await Greeting(context);
             }
@@ -38,7 +39,7 @@ namespace Bot_Application1.IDialog
 
         private async Task Greeting(IDialogContext context)
         {
-            context.UserData.TryGetValue<Users>("user", out user);
+        
 
             await writeMessageToUser(context, conv().getPhrase(Pkey.greetings));
             await writeMessageToUser(context, conv().getPhrase(Pkey.howAreYou));
@@ -49,7 +50,7 @@ namespace Bot_Application1.IDialog
 
         private async Task HowAreYouRes(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            context.UserData.TryGetValue<Users>("user", out user);
+    
 
             var text = await result;
          //   await writeMessageToUser(context, conv().getPhrase(Pkey.ok));
@@ -62,11 +63,8 @@ namespace Bot_Application1.IDialog
         {
             try
             {
-                context.UserData.TryGetValue<Users>("user", out user);
-
-                //  var message = await result;
-                context.UserData.TryGetValue<Users>("user", out user);
-                if (user != null)
+                getUser(context);
+                if (User != null)
                 {
                     var menu = new MenuOptionDialog<string>(
                         conv().MainMenuOptions(),
@@ -79,7 +77,7 @@ namespace Bot_Application1.IDialog
                        EndSession,EndSession,EndSession}
                          );
 
-                    context.Call(menu, EndSession);
+                    context.Call(menu, EndSession2);
 
                 }
                 else
@@ -112,6 +110,12 @@ namespace Bot_Application1.IDialog
         private async Task EndSession(IDialogContext context, IAwaitable<object> result)
         {
          //   context.Wait(MainMenu);
+            context.Call(new FarewellDialog(), MainMenu);
+        }
+
+        private async Task EndSession2(IDialogContext context, IAwaitable<object> result)
+        {
+            //   context.Wait(MainMenu);
             context.Call(new FarewellDialog(), MainMenu);
         }
 

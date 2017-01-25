@@ -333,7 +333,7 @@ namespace Bot_Application1.Controllers
 
             if (user == null)
             {
-                user = new Users();
+                user = new User();
                 user.UserName = "";
                 user.UserGender = "masculine";
             }

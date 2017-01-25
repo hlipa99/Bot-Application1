@@ -14,10 +14,19 @@ namespace Model.dataBase
     
     public partial class Question
     {
-        public int ID { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Question()
+        {
+            this.SubQuestion = new HashSet<SubQuestion>();
+        }
+    
+        public string QuestionID { get; set; }
         public string Category { get; set; }
         public string SubCategory { get; set; }
         public string QuestionText { get; set; }
-        public string AnswerText { get; set; }
+        public string Flags { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SubQuestion> SubQuestion { get; set; }
     }
 }

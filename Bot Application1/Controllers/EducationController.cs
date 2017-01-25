@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace Bot_Application1.Controllers
 {
- 
+
     [Serializable]
     public class EducationController
     {
@@ -52,27 +52,27 @@ namespace Bot_Application1.Controllers
             var media = Db.getMedia(mediaKey, "img", "");
             var r = new Random();
 
-            if(media.Length > 0)
+            if (media.Length > 0)
             {
                 return media[r.Next(media.Length - 1)];
 
-            }else
+            } else
             {
                 return "https://img.clipartfest.com/d82385630de0b6201f6a6bd5d2367726_clipart-question-mark-clip-art-clipart-question-mark-3d_494-743.jpeg";
             }
         }
 
-        public IQuestion getQuestion(string category, string subCategory, IStudySession studySession)
+        public IQuestion getQuestion()
         {
             List<IQuestion> res = new List<IQuestion>();
             IQuestion[] questions;
-            if (subCategory == null)
+            if (studySession.SubCategory == null)
             {
-                questions = Db.getQuestion(category);
+                questions = Db.getQuestion(studySession.Category);
             }
             else
             {
-                questions = Db.getQuestion(category, subCategory);
+                questions = Db.getQuestion(studySession.Category, studySession.SubCategory);
             }
             if (questions.Length > 0)
             {
@@ -83,7 +83,7 @@ namespace Bot_Application1.Controllers
                 return null;
             }
 
-                res.RemoveAll(x => studySession.QuestionAsked.Contains(x));
+            res.RemoveAll(x => studySession.QuestionAsked.Contains(x));
             var r = new Random();
             if (res.Count > 0)
             {
@@ -95,9 +95,9 @@ namespace Bot_Application1.Controllers
             }
         }
 
-        public IQuestion checkAnswer(IQuestion question, string text)
+        public ISubQuestion checkAnswer(ISubQuestion question, string text)
         {
-            if(text.Split(' ').Length > 5 && !text.Contains("לא יודע"))
+            if (text.Split(' ').Length > 5 && !text.Contains("לא יודע"))
             {
                 question.AnswerScore = 100;
             }
@@ -111,5 +111,38 @@ namespace Bot_Application1.Controllers
             }
             return question;
         }
+
+
+        internal void getNextQuestion()
+        {
+            if (studySession.CurrentQuestion == null)
+            {
+                studySession.CurrentQuestion = getQuestion();
+                studySession.CurrentQuestion.Enumerator = 0;
+            }
+
+
+            studySession.CurrentSubQuestion = getSubQuestion(studySession.CurrentQuestion.Enumerator);
+            studySession.CurrentQuestion.Enumerator++;
+            if (studySession.CurrentSubQuestion == null)
+            {
+                studySession.QuestionAsked.Add(studySession.CurrentQuestion);
+                studySession.CurrentQuestion = null;
+                getNextQuestion();
+            }
+
+
+        }
+    
+
+        private ISubQuestion getSubQuestion(int enumerator)
+        {
+           var qEnumerator =  studySession.CurrentQuestion.SubQuestion.GetEnumerator();
+           for(int i = 0; i <= enumerator; i++)
+            {
+                qEnumerator.MoveNext();
+            }
+            return qEnumerator.Current;
+        }
     }
-}
+ }

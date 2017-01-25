@@ -21,7 +21,7 @@ namespace Bot_Application1.Controllers
         }
 
 
-        public void addUser(Users user)
+        public void addUser(IUser user)
         {
             dc.addNewUser(user);
         }

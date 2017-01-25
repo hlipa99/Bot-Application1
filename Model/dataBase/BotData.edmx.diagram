@@ -8,7 +8,9 @@
         <EntityTypeShape EntityType="mindcetModel.botphrase" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="mindcetModel.media" Width="1.5" PointX="2.75" PointY="0.75" />
         <EntityTypeShape EntityType="mindcetModel.Question" Width="1.5" PointX="0.75" PointY="3.75" />
-        <EntityTypeShape EntityType="mindcetModel.Users" Width="1.5" PointX="2.75" PointY="3.75" />
+        <EntityTypeShape EntityType="mindcetModel.SubQuestion" Width="1.5" PointX="4.125" PointY="3.75" />
+        <AssociationConnector Association="mindcetModel.FK_SubQuestion_Question" />
+        <EntityTypeShape EntityType="mindcetModel.User" Width="1.5" PointX="5.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

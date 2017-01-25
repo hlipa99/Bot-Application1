@@ -10,7 +10,8 @@ namespace Bot_Application1.IDialog
     [Serializable]
     public class QuestionDialog : AbsDialog
     {
-        public override Task StartAsync(IDialogContext context)
+
+        public override async Task StartAsync(IDialogContext context)
         {
             throw new NotImplementedException();
         }
