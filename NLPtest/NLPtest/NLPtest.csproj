@@ -91,8 +91,8 @@
       <HintPath>..\..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Corba.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="IKVM.OpenJDK.Core, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Core.dll</HintPath>
+    <Reference Include="IKVM.OpenJDK.Core, Version=7.2.4630.5, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\IKVM.OpenJDK.Core.7.2.4630.5\lib\IKVM.OpenJDK.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="IKVM.OpenJDK.Jdbc, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
@@ -175,12 +175,16 @@
       <HintPath>..\..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.XPath.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="IKVM.Runtime, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\IKVM.8.1.5717.0\lib\IKVM.Runtime.dll</HintPath>
+    <Reference Include="IKVM.Runtime, Version=7.2.4630.5, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\IKVM.Runtime.7.2.4630.5\lib\IKVM.Runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="IKVM.Runtime.JNI, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
       <HintPath>..\..\packages\IKVM.8.1.5717.0\lib\IKVM.Runtime.JNI.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="nunit.core, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
@@ -220,13 +224,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Answer.cs" />
+    <Compile Include="Controllers\HttpController.cs" />
     <Compile Include="Controllers\TemplateController.cs" />
     <Compile Include="Exceptions\GufException.cs" />
     <Compile Include="Controllers\INLPController.cs" />
     <Compile Include="Controllers\NLPController.cs" />
     <Compile Include="Controllers\NLPControllerTestStub.cs" />
+    <Compile Include="HebWords\DictionaryException.cs" />
     <Compile Include="HebWords\HebTemplate.cs" />
     <Compile Include="Exceptions\TemplateException.cs" />
+    <Compile Include="MorfObjects\ExtTokenWithBuilder.cs" />
     <Compile Include="TemplateObject.cs" />
     <Compile Include="WorldObj\multyPersoneObject.cs" />
     <Compile Include="WorldObj\BotObject.cs" />
@@ -236,8 +243,6 @@
     <Compile Include="MorfObjects\MessageObject.cs" />
     <Compile Include="WorldObj\relations\VerbObjRelObject.cs" />
     <Compile Include="WorldObj\UserObject.cs" />
-    <Compile Include="WorldObj\ObjectsWrappers\NegationWrap.cs" />
-    <Compile Include="WorldObj\ObjectsWrappers\ObjectWrapper.cs" />
     <Compile Include="WorldObj\relations\ConjunctionObject.cs" />
     <Compile Include="WorldObj\gufObject.cs" />
     <Compile Include="Exceptions\EmptyWorldObjectException.cs" />
@@ -280,7 +285,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NLP\SemanticAnalizer.cs" />
-    <Compile Include="HebWords\Word.cs" />
+    <Compile Include="HebWords\WordObject.cs" />
+    <Compile Include="WorldObj\IWorldObject.cs" />
     <Compile Include="WorldObj\WorldObject.cs" />
     <Compile Include="WorldObj\PersonObject.cs" />
     <EmbeddedResource Include="view\Form1.resx">

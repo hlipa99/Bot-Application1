@@ -9,5 +9,15 @@ namespace NLPtest.view
         public BotObject(string word) : base(word)
         {
         }
+
+        public override IWorldObject Clone()
+        {
+            BotObject res = new BotObject(Word);
+            cloneBase(res);
+            return res;
+        }
+
+
+
     }
 }

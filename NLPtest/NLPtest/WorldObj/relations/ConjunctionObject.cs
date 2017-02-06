@@ -36,7 +36,12 @@ namespace NLPtest
         {
             return type.ToString();
         }
-
+        public override IWorldObject Clone()
+        {
+            ConjunctionRelObject res = new ConjunctionRelObject(Objective);
+            cloneBase(res);
+            return res;
+        }
         public enum ConjunctionType
         {
             andConjunction,

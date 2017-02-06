@@ -21,7 +21,7 @@ namespace NLPtest.HebWords
         string[] resultFlags;
         int priority;
         WorldObject resualtObject;
-        WorldObject[] objectTemplate;
+        ITemplate[] objectTemplate;
 
         // negateWord objectWord $ objectWord $ negate
         // adjactiveWord nounwords $ AjdectiveWord $ 
@@ -42,6 +42,7 @@ namespace NLPtest.HebWords
         {
             resualtObject = result;
             this.priority = priority;
+            this.objectTemplate = template;
 
         }
 
@@ -144,9 +145,11 @@ namespace NLPtest.HebWords
                     }
                 }
 
-               //recursive copy
-                resualtObject.CopyFromTemplate((WorldObject[])objects);
-                return resualtObject;
+
+                //recursive copy
+                var newObject = resualtObject.Clone();
+                newObject.CopyFromTemplate(objects);
+                return newObject;
             }
             return null;
         }

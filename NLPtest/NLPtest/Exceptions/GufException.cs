@@ -6,7 +6,7 @@ namespace NLPtest.view
  
     internal class GufException : Exception
     {
-        private gufObject gufObject;
+        private personObject gufObject;
 
         public GufException()
         {
@@ -16,7 +16,7 @@ namespace NLPtest.view
         {
         }
 
-        public GufException(gufObject gufObject)
+        public GufException(personObject gufObject)
         {
             this.gufObject = gufObject;
         }

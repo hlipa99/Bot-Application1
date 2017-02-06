@@ -58,6 +58,7 @@ namespace Bot_Application1.IDialog
 
         }
 
+        string[] options;
 
         private async Task MainMenu(IDialogContext context, IAwaitable<object> result)
         {
@@ -66,18 +67,21 @@ namespace Bot_Application1.IDialog
                 getUser(context);
                 if (User != null)
                 {
-                    var menu = new MenuOptionDialog<string>(
-                        conv().MainMenuOptions(),
-                        conv().getPhrase(Pkey.MainMenuText)[0],
-                        conv().getPhrase(Pkey.wrongOption)[0],
-                        3, new IDialog<object>[] {
-                    new StartLerningDialog(),
-                    new NotImplamentedDialog(),},
-                         new ResumeAfter<object>[] {
-                       EndSession,EndSession,EndSession}
-                         );
+                    options = conv().MainMenuOptions();
+                    await createMenuOptions(context, conv().getPhrase(Pkey.MainMenuText)[0], options, MainMenuResualt);
+                    
+                    //var menu = new MenuOptionDialog<string>(
+                  //      conv().MainMenuOptions(),
+                  //      conv().getPhrase(Pkey.MainMenuText)[0],
+                  //      conv().getPhrase(Pkey.wrongOption)[0],
+                  //      3, new IDialog<object>[] {
+                  //  new StartLerningDialog(),
+                  //  new NotImplamentedDialog(),},
+                  //       new ResumeAfter<object>[] {
+                  //     EndOfLearningSession,EndOfLearningSession}
+                  //       );
 
-                    context.Call(menu, EndSession2);
+                  //  context.Call(menu, UnknownException);
 
                 }
                 else
@@ -96,15 +100,65 @@ namespace Bot_Application1.IDialog
           //     Logger.log("MainDialog", "MainMenu", ex.ToString());
                await StartAsync(context);
             }
+        }
+
+        private async Task MainMenuResualt(IDialogContext context, IAwaitable<object> result)
+        {
+            var text = await result;
+            var option = "";
+
+            if (text is string)
+            {
+                option = (string)text;
+            }
+            else
+            {
+                option = ((IMessageActivity)text).Text;
+            }
 
 
 
+            if (options.Contains(option))
+            {
+                var optionIdx = options.ToList().IndexOf(option);
+                switch (optionIdx)
+                {
+                    case 0:  //start learning
+                        context.Call(new StartLerningDialog(),EndOfLearningSession);
+                        break;
+                    case 1:  //not implamented
+                        context.Call(new NotImplamentedDialog(), returnToMainMenu);
+                        break;
+                    default:
+                        break;
+                        await writeMessageToUser(context, conv().getPhrase(Pkey.NotAnOption));
+                        await MainMenu(context,result);
+                }
+            }else
+            {
+                await writeMessageToUser(context, conv().getPhrase(Pkey.NotAnOption));
+                await MainMenu(context, result);
+            }
 
         }
 
+        private async Task returnToMainMenu(IDialogContext context, IAwaitable<object> result)
+        {
+       //     await writeMessageToUser(context, conv().getPhrase(Pkey.returnToMainMenu));
+            await MainMenu(context, result);
+        }
+
+        private async Task UnknownException(IDialogContext context, IAwaitable<object> result)
+        {
+            await writeMessageToUser(context, new string[] { "אוקיי זה מביך " + "\U0001F633", "קרתה לי תקלה בשרת ואני לא יודע מה לעשות", "אני אתחיל עכשיו מהתחלה ונעמיד פנים שלא קרה כלום, " + "\U0001F648", "טוב" + "?" });
+            await StartAsync(context);
+        }
+
+
+
         private async Task EndOfLearningSession(IDialogContext context, IAwaitable<object> result)
         {
-            await StartAsync(context);
+            await EndSession(context,result);
         }
 
         private async Task EndSession(IDialogContext context, IAwaitable<object> result)
@@ -113,10 +167,10 @@ namespace Bot_Application1.IDialog
             context.Call(new FarewellDialog(), MainMenu);
         }
 
-        private async Task EndSession2(IDialogContext context, IAwaitable<object> result)
+        private async Task NotAvialable(IDialogContext context, IAwaitable<object> result)
         {
-            //   context.Wait(MainMenu);
-            context.Call(new FarewellDialog(), MainMenu);
+
+            context.Call(new NotImplamentedDialog(), EndOfLearningSession);
         }
 
 

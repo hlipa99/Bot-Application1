@@ -28,5 +28,12 @@ namespace NLPtest.WorldObj
         {
             return gender;
         }
+
+        public override IWorldObject Clone()
+        {
+            UserObject res = new UserObject(Word);
+            cloneBase(res);
+            return res;
+        }
     }
 }

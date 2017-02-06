@@ -10,5 +10,13 @@ namespace NLPtest
         {
         
         }
+        public override IWorldObject Clone()
+        {
+            OrginazationObject res = new OrginazationObject(Word);
+            cloneBase(res);
+            return res;
+        }
+
+
     }
 }

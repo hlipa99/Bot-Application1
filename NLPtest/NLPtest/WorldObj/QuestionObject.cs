@@ -19,9 +19,14 @@ namespace NLPtest.WorldObj
         }
 
 
-        
+        public override IWorldObject Clone()
+        {
+            QuestionObject res = new QuestionObject(Word);
+            cloneBase(res);
+            return res;
+        }
 
-      public enum QuestionType
+        public enum QuestionType
         { What, When, Why, Whom, Where, HowMatch, How, IsIt };
     }
 }

@@ -7,6 +7,7 @@ namespace NLPtest.WorldObj
     {
         WorldObject objective;
 
+
         public RelationObject(WorldObject objective)
         {
             this.Objective = objective;
@@ -44,16 +45,25 @@ namespace NLPtest.WorldObj
         }
 
 
-        internal new void CopyFromTemplate(WorldObject[] objects)
+        public override void CopyFromTemplate(ITemplate[] objects)
         {
-            var index = int.Parse(Word);
-            Copy(objects[index]);
+
             objective.CopyFromTemplate(objects);
             foreach (var r in Relations)
             {
                 r.CopyFromTemplate(objects);
             }
         }
+
+        public override IWorldObject Clone()
+        {
+            RelationObject res = new RelationObject(objective);
+            cloneBase(res);
+            return res;
+        }
+        
+
+
     }
 }
 

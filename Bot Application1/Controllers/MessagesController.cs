@@ -24,6 +24,7 @@ namespace Bot_Application1.Controllers
 
         public async Task<HttpResponseMessage> Post([FromBody]Activity activity)
         {
+   
             try
             {
                 if (activity.Conversation.IsGroup == null || !activity.Conversation.IsGroup.GetValueOrDefault())

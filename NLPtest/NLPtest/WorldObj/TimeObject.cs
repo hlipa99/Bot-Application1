@@ -15,5 +15,12 @@ namespace NLPtest.WorldObj
         {
           
         }
+
+        public override IWorldObject Clone()
+        {
+            TimeObject res = new TimeObject(Word);
+            cloneBase(res);
+            return res;
+        }
     }
 }

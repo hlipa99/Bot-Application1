@@ -2,13 +2,12 @@
 
 namespace NLPtest
 {
-    internal class gufObject :WorldObject
+    internal class personObject :WorldObject
     {
         private  amountType amount;
-        private  gufType guf;
+        private  personType person;
         private  timeType time;
         private genderType gender;
-        private string word;
 
         internal amountType Amount
         {
@@ -23,16 +22,16 @@ namespace NLPtest
             }
         }
 
-        internal gufType Guf
+        internal personType Guf
         {
             get
             {
-                return guf;
+                return person;
             }
 
             set
             {
-                guf = value;
+                person = value;
             }
         }
 
@@ -62,25 +61,13 @@ namespace NLPtest
             }
         }
 
-        public string Word
-        {
-            get
-            {
-                return word;
-            }
-
-            set
-            {
-                word = value;
-            }
-        }
-
-        public gufObject(string word)
+       
+        public personObject(string word)
         {
             this.Word = word;
         }
 
-        public gufObject(amountType amount, gufType guf, timeType time, genderType gender, string word)
+        public personObject(amountType amount, personType guf, timeType time, genderType gender, string word)
         {
             this.Amount = amount;
             this.Guf = guf;
@@ -98,12 +85,13 @@ namespace NLPtest
             unspecified
         }
 
-        public enum gufType
+        public enum personType
         {
             unspecified,
             First,
             Second,
-            Third
+            Third,
+            any
         }
 
         public enum genderType
@@ -120,6 +108,13 @@ namespace NLPtest
             future,
             none,
             unspecified
+        }
+
+        public override IWorldObject Clone()
+        {
+            personObject res = new personObject(amount,person,time,gender,Word);
+            cloneBase(res);
+            return res;
         }
 
     }

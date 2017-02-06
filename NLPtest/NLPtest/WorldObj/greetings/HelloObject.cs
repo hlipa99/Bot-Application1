@@ -35,5 +35,13 @@ namespace NLPtest.WorldObj
         {
             return type;
         }
+
+
+        public override IWorldObject Clone()
+        {
+            HelloObject res = new HelloObject(Word);
+            cloneBase(res);
+            return res;
+        }
     }
 }

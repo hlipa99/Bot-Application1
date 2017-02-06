@@ -53,6 +53,7 @@ namespace Model
         takeQuestionApart,
         SubjectNotAvialable,
         moveToNextSubQuestion,
-        neverMind
+        neverMind,
+        returnToMainMenu
     }
 }

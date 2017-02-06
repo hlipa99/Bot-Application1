@@ -1,7 +1,7 @@
 ﻿
 using Model.dataBase;
+using NLPtest.Controllers;
 using NLPtest.WorldObj;
-using NLPtest.WorldObj.ObjectsWrappers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -54,8 +54,10 @@ namespace NLPtest
             text_TB.AppendText(inputText + Environment.NewLine);
             input_TB.Text = String.Empty;
             text_TB.AppendText("Bot:" + Environment.NewLine);
-    
+
             var botResualt = NLPControler.getInstence().testAnalizer(inputText);
+            var httpCtrl = new HttpController();
+           
             //foreach (var line in new string[] { input.ToString() })
             //{
             //    text_TB.AppendText(line + Environment.NewLine);
@@ -90,12 +92,7 @@ namespace NLPtest
                     objectNode.Nodes.Add(rNode);
                 }
 
-                if (obj is ObjectWrapper)
-                {
-                    var o = obj as ObjectWrapper;
-                    var objec = drawObject(o.Objective);
-                    objectNode.Nodes.Add(objec);
-                }
+
 
             }else
             {

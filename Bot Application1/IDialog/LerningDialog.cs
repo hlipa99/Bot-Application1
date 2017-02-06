@@ -8,6 +8,7 @@ using Model.dataBase;
 using Bot_Application1.Controllers;
 using Model;
 using Model.Models;
+using Bot_Application1.Exceptions;
 
 namespace Bot_Application1.IDialog
 {
@@ -39,18 +40,31 @@ namespace Bot_Application1.IDialog
             StudySession.CurrentQuestion = null;
 
             await writeMessageToUser(context, conv().getPhrase(Pkey.letsLearn));
-            await writeMessageToUser(context, conv().getPhrase(Pkey.chooseStudyUnits));
-            var message = context.MakeMessage();
+          
 
-            foreach (var m in edc().getStudyCategory())
+
+
+            IMessageActivity message;
+            if (context.Activity.ChannelId != "telegram")
             {
-                var hc = new HeroCard(title: m, images: getImage(m), buttons:
-                    new CardAction[] { new CardAction(type: "imBack", value: m, title: m )});
-                message.Attachments.Add(hc.ToAttachment());
-                message.AttachmentLayout = "carousel";
+                await writeMessageToUser(context, conv().getPhrase(Pkey.chooseStudyUnits));
 
+                message = context.MakeMessage();
+
+                foreach (var m in edc().getStudyCategory())
+                {
+                    var action = new CardAction(type: "imBack", value: m, title: m);
+                    var hc = new HeroCard(title: m, images: getImage(m),tap: action, buttons:
+                        new CardAction[] { action });
+                    message.Attachments.Add(hc.ToAttachment());
+                    message.AttachmentLayout = "carousel";
+
+                }
+            }else
+            {
+                await createMenuOptions(context, conv().getPhrase(Pkey.chooseStudyUnits)[0], edc().getStudyCategory(), StartLearning);
+                return;
             }
-
 
 
             context.UserData.RemoveValue("studySession");
@@ -63,12 +77,15 @@ namespace Bot_Application1.IDialog
 
         private CardImage[] getImage(string m)
         {
-            var cardImg = new CardImage(url: edc().getRamdomImg(m));
+            MediaController mc = new MediaController();
+            var key = edc().getRamdomImg(m);
+            var urlAdd = mc.getFileUrl(key);
+            var cardImg = new CardImage(url: urlAdd);
             return new CardImage[] { cardImg };
         }
 
 
-        public async virtual Task StartLearning(IDialogContext context, IAwaitable<IMessageActivity> result)
+        public async virtual Task StartLearning(IDialogContext context, IAwaitable<object> result)
         {
             if (context.Activity.Timestamp <= Request)
             {
@@ -76,11 +93,37 @@ namespace Bot_Application1.IDialog
                 return;
             }
 
-            var message = await result;
-           if (edc().getStudyCategory().Contains(message.Text))
+            if(StudySession.Category != "")
             {
-                StudySession.Category = message.Text;
-                edc().getNextQuestion();
+                return;
+            }
+
+            string message = null;
+            var res = await result;
+            if (res is string)
+            {
+                message = res as string;
+            }
+            else
+            {
+                var r =  res as IMessageActivity;
+                message = r.Text;
+            }
+
+           
+           if (edc().getStudyCategory().Contains(message))
+            {
+                StudySession.Category = message;
+                try
+                {
+                    edc().getNextQuestion();
+                }catch(CategoryOutOfQuestionException ex)
+                {
+                    await writeMessageToUser(context, conv().getPhrase(Pkey.SubjectNotAvialable));
+                    await StartAsync(context);
+                    return;
+                }
+              
                 var question = StudySession.CurrentQuestion;
                 if(question.QuestionText == null)
                 {
@@ -93,7 +136,7 @@ namespace Bot_Application1.IDialog
                 await intreduceQuestion(context);
             }else
             {
-                await writeMessageToUser(context, conv().getPhrase(Pkey.NotAnOption, textVar: message.Text));
+                await writeMessageToUser(context, conv().getPhrase(Pkey.NotAnOption, textVar: message));
                 await StartAsync(context);
             }
         }
@@ -102,7 +145,7 @@ namespace Bot_Application1.IDialog
         public async Task intreduceQuestion(IDialogContext context)
         {
 
-             edc().getNextQuestion();
+
             var question = StudySession.CurrentQuestion;
          
             await writeMessageToUser(context, new string[] { '"'+question.QuestionText + '"' });
@@ -141,12 +184,14 @@ namespace Bot_Application1.IDialog
             if (conv().isStopSession(message.Text))
             {
                 await writeMessageToUser(context, conv().getPhrase(Pkey.stopLearningSession));
-                context.Done("");
+                await EndOfLearningSession(context,result);
             }
 
             var question = StudySession.CurrentSubQuestion;
 
             question = edc().checkAnswer(question, message.Text);
+
+            //check sub question
             if(question.AnswerScore > 85)
             {
                 await writeMessageToUser(context, conv().getPhrase(Pkey.goodAnswer));
@@ -160,6 +205,7 @@ namespace Bot_Application1.IDialog
             {
                 await writeMessageToUser(context, conv().getPhrase(Pkey.notAnAnswer));
             }
+
             await writeMessageToUser(context, conv().getPhrase(Pkey.MyAnswerToQuestion));
 
          
@@ -199,6 +245,14 @@ namespace Bot_Application1.IDialog
             }
 
             var message = await result;
+
+            if (conv().isStopSession(message.Text))
+            {
+                await writeMessageToUser(context, conv().getPhrase(Pkey.stopLearningSession));
+                await EndOfLearningSession(context, result);
+            }
+
+
             int number;
             if ((number = conv().getNum(message.Text)) >= 0)
             {
@@ -243,6 +297,7 @@ namespace Bot_Application1.IDialog
             }
             else
             {
+                edc().getNextQuestion();
                 await writeMessageToUser(context, conv().getPhrase(Pkey.moveToNextQuestion));
                 await writeMessageToUser(context, conv().getPhrase(Pkey.beforAskQuestion));
                 await intreduceQuestion(context);

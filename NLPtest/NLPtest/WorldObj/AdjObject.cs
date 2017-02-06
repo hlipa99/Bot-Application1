@@ -15,5 +15,13 @@ namespace NLPtest.WorldObj
         {
           
         }
+
+        public override IWorldObject Clone()
+        {
+            AdjObject res = new AdjObject(Word);
+            cloneBase(res);
+            return res;
+        }
+
     }
 }

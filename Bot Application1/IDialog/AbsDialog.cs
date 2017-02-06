@@ -114,7 +114,8 @@ namespace Bot_Application1.IDialog
                 {
                     await context.PostAsync(typingReplay);
                     //| is a sign for new line
-                    await writeMessageToUser(context,m.Split('|'));
+                  //  await writeMessageToUser(context,m.Split('|').Where(x=> x.Trim().Length > 0 ).Select(x=> "\U00002705" + x).ToArray());
+                    await writeMessageToUser(context, m.Split('|'));
                 }
                 else
                 {
@@ -135,12 +136,11 @@ namespace Bot_Application1.IDialog
                     } else
                     {
                         //facebook cuts messages from 300 chars
-                        if (newMessage.Count() > 1)
+                        if (newMessage.Length > 10)
                         {
                             typingTime(context);
-                            Thread.Sleep(m.Length * 4);
+                            Thread.Sleep(m.Length * 10);
                         }
-
 
                         //send message
                         if (m != null && m != "") await context.PostAsync(m);
@@ -153,23 +153,23 @@ namespace Bot_Application1.IDialog
         }
 
 
-        public virtual async Task createMenuOptions(IDialogContext context, string title, string[] options, ResumeAfter<IMessageActivity> resume)
+        public virtual async Task createMenuOptions(IDialogContext context, string title, string[] options, ResumeAfter<object> resume)
         {
-            if(context.Activity.ChannelId == "facebook" || true)
+            if(context.Activity.ChannelId == "facebook")
             {
                 await createQuickReplay(context, title, options, resume);
             }
             else
             {
-             //   await createRMenuOptions(context, title, options, resume);
+                await createRMenuOptions(context, title, options, resume);
             }
         }
 
         public async virtual Task createQuickReplay(IDialogContext context,string title, string[] options, ResumeAfter<IMessageActivity> resume)
         {
 
-            // await writeMessageToUser(context, new string[] { title });
-            
+        //     await writeMessageToUser(context, new string[] { title });
+
             var reply = context.MakeMessage();
             var channelData = new JObject();
             var quickReplies = new JArray();
@@ -178,42 +178,43 @@ namespace Bot_Application1.IDialog
             var qrList = new List<FacebookQuickReply>();
             foreach (var s in options)
             {
-                var r = new FacebookQuickReply("text", s,s);
+                var r = new FacebookQuickReply("text", s, s);
                 qrList.Add(r);
             }
+
             var message = new FacebookMessage(title, qrList);
             reply.ChannelData = message;
 
+
+            updateRequestTime();
             await context.PostAsync(reply);
 
             context.Wait(resume);
 
         }
 
-        //public async virtual Task createRMenuOptions(IDialogContext context,string title, string[] options,ResumeAfter<IMessageActivity> resume)
-        //{
-        //    ;
-        //    List<IMessageActivity> = new 
-        //    foreach (var s in options)
-        //    {
+        public async virtual Task createRMenuOptions(IDialogContext context, string title, string[] options, ResumeAfter<object> resume)
+        {
 
-        //    }
+        //    await writeMessageToUser(context, new string[] { title });
 
+         
 
-        //    var menu = new PromptDialog.PromptChoice<IMessageActivity>(
-        //      options,
-        //     title,
-        //     conv().getPhrase(Pkey.wrongOption)[0],
-        //     3);
+            var menu = new PromptDialog.PromptChoice<string>(
+              options,
+             title,
+             conv().getPhrase(Pkey.wrongOption)[0],
+             3);
 
-        //    context.Call<IMessageActivity>(menu, resume);
-        //}
+            context.Call(menu, resume);
 
+        }
 
         private void typingTime(IDialogContext context)
         {
             var message = context.MakeMessage();
             message.Type = ActivityTypes.Typing;
+            context.PostAsync(message);
         }
 
 

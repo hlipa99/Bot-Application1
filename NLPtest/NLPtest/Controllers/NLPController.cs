@@ -25,9 +25,9 @@ public class NLPControler : INLPControler
                 return instance;
             }else
             {
-              //     var nlp =  new NLPControler();
-                var nlp = new NLPControlerTestStub();
-                nlp.Initialize();
+                   var nlp =  new NLPControler();
+           //     var nlp = new NLPControlerTestStub();
+             //   nlp.Initialize();
                 return nlp;
             }
         }
@@ -41,13 +41,15 @@ public class NLPControler : INLPControler
         var context = new TextContext();
         var sen = ma.meniAnalize(inputText);
 
+      //  sa.findGufContext(sen);
+
+
         ContentTurn input = new ContentTurn();
         List<WorldObject> sentence = new List<WorldObject>();
         List<WorldObject> last = new List<WorldObject>();
         foreach (var s in sen)
         {
             sentence = sa.findTemplate(s.Words.ToArray());
-            sentence = sa.findGufContext(last, sentence);
             last = sentence;
             input.Add(sentence);
         }
@@ -55,9 +57,9 @@ public class NLPControler : INLPControler
 
     }
 
-    public void Initialize(){
-		ma = new MorfAnalizer();
-	}
+ //   public void Initialize(){
+	//	ma = new MorfAnalizer();
+	//}
 
     public List<Sentence> Analize(string text)
     {

@@ -12,5 +12,12 @@ namespace NLPtest.view
             this.persons = persons;
             number = persons.Length;
         }
+
+        public override IWorldObject Clone()
+        {
+            multyPersoneObject res = new multyPersoneObject(persons);
+            cloneBase(res);
+            return res;
+        }
     }
 }

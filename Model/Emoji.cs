@@ -65,6 +65,7 @@ namespace Model
             d.Add("baby", "\U0001F476");
             d.Add("fire", "\U0001F525");
             d.Add("oldMan", "\U0001F474\U0001F3FB");
+            d.Add("bulletBlue", "\U0001F539");
         }
 
 

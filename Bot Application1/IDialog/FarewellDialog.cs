@@ -32,7 +32,20 @@ namespace Bot_Application1.IDialog
         {
             
             await writeMessageToUser(context, conv().getPhrase(Pkey.goodbye));
+            context.Wait(waitForNextInteraction);
+        }
+
+        private async Task waitForNextInteraction(IDialogContext context, IAwaitable<object> result)
+        {
+            context.Wait(waitForNextInteraction2);
+        }
+
+        private async Task waitForNextInteraction2(IDialogContext context, IAwaitable<object> result)
+        {
             context.Done("");
         }
+
+
+
     }
 }

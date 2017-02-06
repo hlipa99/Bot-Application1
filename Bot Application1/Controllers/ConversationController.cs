@@ -94,7 +94,6 @@ namespace Bot_Application1.Controllers
             var stop =  new string[]
          {
                 "מספיק",
-                "די",
                 "נמאס",
                 "אין לי כח",
                 "לא בא לי",
@@ -344,7 +343,7 @@ namespace Bot_Application1.Controllers
             phraseRes = phraseRes.Replace("<text>", textVar);
             phraseRes = phraseRes.Replace("<subject>", studySession.Category);
             phraseRes = phraseRes.Replace("<numOfQuestions>", studySession.SessionLength + "");
-            phraseRes = phraseRes.Replace("<questionNum>", studySession.QuestionAsked.Count + "");
+            phraseRes = phraseRes.Replace("<questionNum>", (studySession.QuestionAsked.Count + 1) +"");
             phraseRes = phraseRes.Replace("<userName>", user.UserName);
             phraseRes = phraseRes.Replace("<botName>", BOT_NAME);
             phraseRes = phraseRes.Replace("<botSubject>", BOT_SUBJECT);

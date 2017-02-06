@@ -66,9 +66,11 @@ namespace Bot_Application1.Controllers
         {
             List<IQuestion> res = new List<IQuestion>();
             IQuestion[] questions;
+            studySession.SubCategory = "מאבק היישוב";
+            
             if (studySession.SubCategory == null)
             {
-                questions = Db.getQuestion(studySession.Category);
+                questions = Db.getQuestion(studySession.Category, studySession.SubCategory);
             }
             else
             {
@@ -115,34 +117,40 @@ namespace Bot_Application1.Controllers
 
         internal void getNextQuestion()
         {
-            if (studySession.CurrentQuestion == null)
-            {
-                studySession.CurrentQuestion = getQuestion();
-                studySession.CurrentQuestion.Enumerator = 0;
+
+                if (studySession.CurrentQuestion == null)
+                {
+                    studySession.CurrentQuestion = getQuestion();
+                    studySession.CurrentQuestion.Enumerator = 0;
+                }
+
+
+                studySession.CurrentQuestion.Enumerator++;
+                studySession.CurrentSubQuestion = getSubQuestion(studySession.CurrentQuestion.Enumerator);
+
+         
+                if (studySession.CurrentSubQuestion == null)
+                {
+                    studySession.QuestionAsked.Add(studySession.CurrentQuestion);
+                    studySession.CurrentQuestion = null;
+                    getNextQuestion();
+         
+                }
             }
+            
 
-
-            studySession.CurrentSubQuestion = getSubQuestion(studySession.CurrentQuestion.Enumerator);
-            studySession.CurrentQuestion.Enumerator++;
-            if (studySession.CurrentSubQuestion == null)
-            {
-                studySession.QuestionAsked.Add(studySession.CurrentQuestion);
-                studySession.CurrentQuestion = null;
-                getNextQuestion();
-            }
-
-
-        }
+        
     
 
         private ISubQuestion getSubQuestion(int enumerator)
         {
            var qEnumerator =  studySession.CurrentQuestion.SubQuestion.GetEnumerator();
-           for(int i = 0; i <= enumerator; i++)
+          foreach(var sq in studySession.CurrentQuestion.SubQuestion)
             {
-                qEnumerator.MoveNext();
+                if (int.Parse(sq.subQuestionID.Trim()) == enumerator) return sq;
             }
-            return qEnumerator.Current;
+
+            return null;
         }
     }
  }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public interface INLPControler
 {
-	void Initialize();
+//	void Initialize();
 	 List<Sentence> Analize(string text);
 	  string getClass(string text);
 

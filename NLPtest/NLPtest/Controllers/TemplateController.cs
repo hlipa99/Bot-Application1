@@ -30,18 +30,25 @@ namespace NLPtest.Controllers
     
                 
                 //one object template
-                new HebTemplate(new ITemplate[] { new WordObject("",nounWord) },new NounObject("1"),1),
-                new HebTemplate(new ITemplate[] { new WordObject("",verbWord) },new VerbObject("1"),1),
-                new HebTemplate(new ITemplate[] { new WordObject("",personWord) },new PersonObject("1"),2),
-                new HebTemplate(new ITemplate[] { new WordObject("",locationWord) },new LocationObject("1"),2),
+                new HebTemplate(new ITemplate[] { new WordObject("",nounWord) },new NounObject("0"),1),
+                new HebTemplate(new ITemplate[] { new WordObject("",verbWord) },new VerbObject("0"),1),
+                new HebTemplate(new ITemplate[] { new WordObject("",gufWord) },new personObject("0"),1),
+                new HebTemplate(new ITemplate[] { new WordObject("",personWord) },new PersonObject("0"),1),
+                 new HebTemplate(new ITemplate[] { new WordObject("",locationWord) },new LocationObject("0"),1),
+                new HebTemplate(new ITemplate[] { new WordObject("",adjectiveWord) },new AdjObject("0"),1),
+
 
 
                 //two object template
 
+                 new HebTemplate(new ITemplate[] { new AdjObject(""), new NounObject("") },
+                 relate(new NounObject("1"),new adjectiveRelObject(new AdjObject("0"))),2),
                  new HebTemplate(new ITemplate[] { new NounObject(""), new WordObject("", adjectiveWord) },
-                 relate(new NounObject("0"),new adjectiveRelObject(new AdjObject("1"))),-1),
+                 relate(new NounObject("0"),new adjectiveRelObject(new AdjObject("1"))),2),
                   new HebTemplate(new ITemplate[] {new WordObject("", negationWord) , new VerbObject("")},
-                 negate(new VerbObject("1")),-1),
+                 negate(new VerbObject("1")),2),
+                     new HebTemplate(new ITemplate[] {new WordObject("", negationWord) , new AdjObject("")},
+                 negate(new AdjObject("1")),2),
 
 
 
@@ -54,21 +61,11 @@ namespace NLPtest.Controllers
 
 
             };
-
-
-
-
-
-
-
-
-
-        
         }
 
 
 
-        private WorldObject negate(VerbObject verbObject)
+        private WorldObject negate(WorldObject verbObject)
         {
             verbObject.Negat = true;
             return verbObject;

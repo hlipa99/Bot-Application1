@@ -7,5 +7,15 @@ namespace NLPtest.view
         public expansionRelObject(WorldObject objective) : base( objective)
         {
         }
+        public override IWorldObject Clone()
+        {
+            expansionRelObject res = new expansionRelObject(Objective);
+            cloneBase(res);
+            return res;
+        }
+
     }
+
+
+    
 }

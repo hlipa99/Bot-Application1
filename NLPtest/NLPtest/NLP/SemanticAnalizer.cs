@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using vohmm.application;
-using NLPtest.WorldObj.ObjectsWrappers;
 using NLPtest.HebWords;
 using NLPtest.Controllers;
 
@@ -145,74 +144,80 @@ namespace NLPtest.view
 
 
         TemplateController tc = new TemplateController();
-        public List<WorldObject> findTemplate(ITemplate[] objects)
+        public List<WorldObject> findTemplate(ITemplate[] original)
         {
 
-            List<ITemplate> obj = objects.ToList();
+            List<ITemplate> resualtObjList = original.ToList();
+
             do {
-                objects = obj.ToArray();
+                original = resualtObjList.ToArray();
                 for (int i = 1; i <= 3; i++)
                 {
-                    for (int j = 0; j + i < objects.Length; j++)
+
+                    for (int j = 0; j + i < resualtObjList.Count; j++)
                     {
                         if (i == 1)
                         {
-                            objects = new ITemplate[] { objects[j] };
+                            var testPart = new ITemplate[] { resualtObjList[j] };
                             ITemplate o;
-                            if ((o = tc.checkObjects(objects)) != null) {
-                                objects[j] = o;
+                            if ((o = tc.checkObjects(testPart)) != null) {
+                                resualtObjList.RemoveAt(j);
+                                resualtObjList.Insert(j, o);
                             }
                         }
                         else if (i == 2)
                         {
-                            objects = new ITemplate[] { objects[j], objects[j + 1] };
+                            var testPart = new ITemplate[] { resualtObjList[j], resualtObjList[j + 1] };
                             ITemplate o;
-                            if ((o = tc.checkObjects(objects)) != null)
+                            if ((o = tc.checkObjects(testPart)) != null)
                             {
-                                objects[j] = o;
-                                objects[j + 1] = null;
+                                resualtObjList.RemoveAt(j);
+                                resualtObjList.RemoveAt(j);
+                                resualtObjList.Insert(j, o);
+                                j = j + 1;
                             }
                         }
 
                         else
                         {
-                            objects = new ITemplate[] { objects[j], objects[j + 1], objects[j + 2] };
+                            var testPart = new ITemplate[] { resualtObjList[j], resualtObjList[j + 1], resualtObjList[j + 2] };
                             ITemplate o;
-                            if ((o = tc.checkObjects(objects)) != null)
+                            if ((o = tc.checkObjects(testPart)) != null)
                             {
-                                objects[j] = o;
-                                objects[j + 1] = null;
-                                objects[j + 2] = null;
+                                resualtObjList.RemoveAt(j);
+                                resualtObjList.RemoveAt(j);
+                                resualtObjList.RemoveAt(j);
+                                resualtObjList.Insert(j, o);
+                                j = j + 2;
                             }
                         }
 
                     }
+                   
                 }
 
-                foreach (var o in objects)
-                {
-                    obj.Add(o);
-                }
-
-            } while (obj.Count != objects.Count());
+            } while (resualtObjList.Count < original.Count());
 
 
             List<WorldObject> res = new List<WorldObject>();
-            foreach(var o in obj)
+            foreach(var o in resualtObjList)
             {
-                res.Add(o as WorldObject);
+                if(o.ObjectType() == 0) //worldobject
+                {
+                    res.Add(o as WorldObject);
+                }
             }
 
             return res;
         }
-            
 
 
 
 
 
 
-            
+
+
 
 
 
@@ -241,36 +246,50 @@ namespace NLPtest.view
 
 
 
-        public List<WorldObject> findGufContext(List<WorldObject> last, List<WorldObject> current)
+        public List<ITemplate> findGufContext(List<Sentence> all)
         {
-            return findGufContextHlpr(last, current);
-        }
-
-        public List<WorldObject> findGufContext(List<WorldObject> objects)
-        {
-            return findGufContextHlpr(objects, objects);
-        }
-
-        private List<WorldObject> findGufContextHlpr(List<WorldObject> context, List<WorldObject> target)
-        {
-            foreach (var o in target)
+            List<ITemplate> res = new List<ITemplate>();
+            for (var s = 0; s < all.Count; s++)
             {
-                if(o is gufObject)
+                if(s > 0)
                 {
-                    var g = getGuf(o as gufObject, context);
-                    var i = target.IndexOf(o);
-                    target.RemoveAt(i);
-                    target.Insert(i, g);
+                    res.AddRange(findGufContextHlpr(all[s].Words, all[s - 1].Words));
+                }
+                else
+                {
+                    res.AddRange(findGufContextHlpr(all[s].Words, all[s].Words));
                 }
             }
-            return target;
+            return null;
         }
 
-        private WorldObject getGuf(gufObject gufObject, List<WorldObject> objects)
+        //public List<WorldObject> findGufContext(List<WordObject> objects)
+        //{
+        //    return findGufContextHlpr(objects, objects);
+        //}
+
+        private List<ITemplate> findGufContextHlpr(List<WordObject> context, List<WordObject> target)
         {
-            if(gufObject.Guf == gufObject.gufType.First)
+            List<ITemplate> res = new List<ITemplate>();
+            foreach (var o in target)
             {
-                if (gufObject.Amount == gufObject.amountType.singular)
+                if(o.isA(gufWord))
+                {
+                    var g = getGuf(o, context);
+                    res.Add(g);
+                }else
+                {
+                    res.Add(o);
+                }
+            }
+            return res;
+        }
+
+        private ITemplate getGuf(WordObject gufObject, List<WordObject> objects)
+        {
+            if(gufObject.Person == NLPtest.personObject.personType.First)
+            {
+                if (gufObject.Amount ==NLPtest.personObject.amountType.singular)
                 {
                     return new UserObject("");//TODO getUserObjectname
                 }else
@@ -278,28 +297,24 @@ namespace NLPtest.view
                     return new multyPersoneObject(new WorldObject[] { new UserObject(""), new BotObject("") }); //TODO det
                 }
               
-            }else if(gufObject.Guf == gufObject.gufType.First)
+            }else if(gufObject.Person == NLPtest.personObject.personType.Second)
             {
-                if (gufObject.Amount == gufObject.amountType.singular)
+                if (gufObject.Amount == NLPtest.personObject.amountType.singular)
                 {
                     return new BotObject("");//TODO getUserObjectname
                 }
                 else
                 {
-                    throw new GufException(gufObject);
+                    throw new GufException(gufObject.Text);
                 }
-            }else
+            }else //third person
             {
                 foreach (var o in objects)
                 {
-                    if(o is PersonObject)
+                    if(o.isA(personWord))
                     {
-                        var p = o as PersonObject;
-                        if(p.Gender == gufObject.Gender)
-                        {
-                            return p;
-                        }
-                    }else if(o is OrginazationObject && gufObject.Amount == gufObject.amountType.plural)
+                        return o;
+                    }else if(o.isA(orginazationWord) && gufObject.Amount == o.Amount)
                     {
                         return o;
                     }

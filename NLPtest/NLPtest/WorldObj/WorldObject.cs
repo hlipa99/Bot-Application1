@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,11 +11,11 @@ namespace NLPtest.WorldObj
 {
 
 
-    public class WorldObject : ITemplate
+    public class WorldObject : IWorldObject
     {
        
         List<RelationObject> relations = new List<RelationObject>();
-        string word;
+        private string word;
         private bool negat;
 
         public WorldObject(){}
@@ -73,26 +76,15 @@ namespace NLPtest.WorldObj
 
         public override string ToString()
         {
-            var n = negat ? "!" : "";
+            var n = negat ? "not" : "";
                 return Word + "(" + GetType() + ")" + n ;
         }
 
-        internal void Copy(WorldObject first)
+        internal void Copy(WorldObject obj)
         {
-            word = first.word;
-            negat = first.negat;
-            DefiniteArticle = first.DefiniteArticle;
-        }
-
-
-        internal void CopyFromTemplate(WorldObject[] objects)
-        {
-            var index = int.Parse(word);
-            Copy(objects[index]);
-            foreach (var r in relations)
-            {
-                r.CopyFromTemplate(objects);
-            }
+            word = obj.word;
+            negat = negat || obj.negat;
+            DefiniteArticle = DefiniteArticle || obj.DefiniteArticle;
         }
 
         public int ObjectType()
@@ -100,7 +92,45 @@ namespace NLPtest.WorldObj
             return 0;
         }
 
-   
+        public virtual IWorldObject Clone()
+        {
+            WorldObject res = new WorldObject(word);
+            cloneBase(res);
+            return res;
+        }
+
+        internal void cloneBase(WorldObject res)
+        {
+            foreach (var r in relations)
+            {
+                res.Relations.Add((RelationObject)r.Clone());
+            }
+            res.negat = negat;
+            res.DefiniteArticle = DefiniteArticle;
+        }
+
+         public virtual void CopyFromTemplate(ITemplate[] objects)
+        {
+            var index = int.Parse(Word);
+            var obj = objects[index];
+
+            if (obj is WorldObject)
+            {
+                Copy(obj as WorldObject);
+                foreach (var r in relations)
+                {
+                    r.CopyFromTemplate(objects);
+                }
+            }
+            else
+            {
+                var word = obj as WordObject;
+                this.word = word.Text;
+                this.DefiniteArticle = word.IsDefinite;
+            }
+
+
+        }
     }
 
 

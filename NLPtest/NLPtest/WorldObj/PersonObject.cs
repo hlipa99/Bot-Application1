@@ -10,6 +10,13 @@ namespace NLPtest.WorldObj
 
     public class PersonObject : NounObject
     {
+        public override IWorldObject Clone()
+        {
+            PersonObject res = new PersonObject(Word);
+            cloneBase(res);
+            return res;
+        }
+
 
         private string name;
 
@@ -18,7 +25,7 @@ namespace NLPtest.WorldObj
 
         }
 
-        internal gufObject.genderType Gender { get; set; }
+        internal personObject.genderType Gender { get; set; }
 
         public string Name
         {

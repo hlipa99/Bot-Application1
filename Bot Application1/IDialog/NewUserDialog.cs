@@ -141,7 +141,7 @@ namespace Bot_Application1.IDialog
             }
         }
 
-        public async virtual Task CheckGender(IDialogContext context, IAwaitable<IMessageActivity> result)
+        public async virtual Task CheckGender(IDialogContext context, IAwaitable<object> result)
         {
             if (context.Activity.Timestamp <= Request)
             {
@@ -150,14 +150,14 @@ namespace Bot_Application1.IDialog
             }
             string userText = null;
             var res = await result;
-            //if (res is string)
-            //{
-            //    userText = (string)res;
-            //}
-         //   else
-        //    {
+            if (res is string)
+            {
+                userText = (string)res;
+            }
+            else
+            {
                 userText = ((IMessageActivity)res).Text;
-        //    }
+            }
 
 
             if ((User.UserGender = conv().getGenderValue(userText)) != null)

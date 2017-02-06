@@ -9,5 +9,6 @@ namespace NLPtest
     public interface ITemplate
     {
         int ObjectType();
+     
     }
 }

@@ -5,8 +5,13 @@
         private PrepType type;
         private int v;
 
-      
 
+        public override IWorldObject Clone()
+        {
+            PrepRelObject res = new PrepRelObject(Objective);
+            cloneBase(res);
+            return res;
+        }
         public PrepRelObject( WorldObject objective, PrepType type) : base(objective)
         {
 
