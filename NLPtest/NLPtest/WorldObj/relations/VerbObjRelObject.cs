@@ -4,7 +4,7 @@
     {
         private int v;
 
-        public VerbObjRelObject(WorldObject objective) : base(objective)
+        public VerbObjRelObject(IWorldObject objective) : base(objective)
         {
    
          
@@ -14,7 +14,7 @@
         public override IWorldObject Clone()
         {
             VerbObjRelObject res = new VerbObjRelObject(Objective);
-            cloneBase(res);
+           res.cloneBase(this);
             return res;
         }
 

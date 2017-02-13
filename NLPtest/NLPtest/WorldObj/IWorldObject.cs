@@ -13,7 +13,9 @@ namespace NLPtest.WorldObj
 
     public interface IWorldObject : ITemplate
     {
+
         void CopyFromTemplate(ITemplate[] objects);
+        IWorldObject Clone();
     }
 
 

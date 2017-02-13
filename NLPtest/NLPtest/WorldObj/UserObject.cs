@@ -32,7 +32,7 @@ namespace NLPtest.WorldObj
         public override IWorldObject Clone()
         {
             UserObject res = new UserObject(Word);
-            cloneBase(res);
+           res.cloneBase(this);
             return res;
         }
     }

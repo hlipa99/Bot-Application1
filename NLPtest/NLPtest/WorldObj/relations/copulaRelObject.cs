@@ -4,17 +4,17 @@ namespace NLPtest.view
 {
     internal class copulaRelObject : RelationObject
     {
-        private personObject guf;
+    //    private personObject guf;
 
-        public copulaRelObject(WorldObject objective,personObject guf) : base( objective)
+        public copulaRelObject(WorldObject objective) : base( objective)
         {
-            this.guf = guf;
+        //    this.guf = guf;
         }
 
         public override IWorldObject Clone()
         {
             expansionRelObject res = new expansionRelObject(Objective);
-            cloneBase(res);
+           res.cloneBase(this);
             return res;
         }
     }

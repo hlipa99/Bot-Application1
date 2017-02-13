@@ -49,6 +49,11 @@ public class NLPControlerTestStub : INLPControler
     {
         return new ContentTurn();
     }
+
+    public ContentTurn testAnalizer(string inputText, out string log)
+    {
+        throw new NotImplementedException();
+    }
 }
         
 	

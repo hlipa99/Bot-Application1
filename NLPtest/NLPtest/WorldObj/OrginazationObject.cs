@@ -13,7 +13,7 @@ namespace NLPtest
         public override IWorldObject Clone()
         {
             OrginazationObject res = new OrginazationObject(Word);
-            cloneBase(res);
+           res.cloneBase(this);
             return res;
         }
 

@@ -6,7 +6,7 @@ namespace NLPtest
     {
         private ConjunctionType type;
 
-        public ConjunctionRelObject(WorldObject objective) : base(objective)
+        public ConjunctionRelObject(IWorldObject objective) : base(objective)
         {
             this.Type = ConjunctionType.unknownConjunction;
         }
@@ -38,8 +38,8 @@ namespace NLPtest
         }
         public override IWorldObject Clone()
         {
-            ConjunctionRelObject res = new ConjunctionRelObject(Objective);
-            cloneBase(res);
+            ConjunctionRelObject res = new ConjunctionRelObject(null);
+            res.Copy(this);
             return res;
         }
         public enum ConjunctionType

@@ -14,6 +14,6 @@ public interface INLPControler
       string GetGeneralFeeling(string text);
 
       ContentTurn checkContext(string text,ConversationContext context);
-    ContentTurn testAnalizer(string inputText);
+    ContentTurn testAnalizer(string inputText, out string log);
 
 }

@@ -2,23 +2,23 @@
 
 namespace NLPtest.WorldObj
 {
-    internal class AdjObject : WorldObject
+    internal class ParticipleObject : VerbObject
     {
 
 
-        public AdjObject()
+        public ParticipleObject()
         {
     
         }
 
-        public AdjObject(string word) : base(word)
+        public ParticipleObject(string word) : base(word)
         {
           
         }
 
         public override IWorldObject Clone()
         {
-            AdjObject res = new AdjObject(Word);
+            ParticipleObject res = new ParticipleObject(Word);
             res.cloneBase(this);
             return res;
         }

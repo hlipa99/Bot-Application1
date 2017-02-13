@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("root");
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("root");
             this.text_TB = new System.Windows.Forms.TextBox();
             this.input_TB = new System.Windows.Forms.TextBox();
             this.send_BTN = new System.Windows.Forms.Button();
@@ -58,7 +58,7 @@
             this.input_TB.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.input_TB.Size = new System.Drawing.Size(543, 26);
             this.input_TB.TabIndex = 1;
-            this.input_TB.Text = "לא רחוק מהיער התגורר גרגמל, המכשף הנורא. הוא היה רשע!";
+            this.input_TB.Text = "גרגמל המכשף התגורר ביער. הוא היה רשע!";
             this.input_TB.TextChanged += new System.EventHandler(this.input_TB_TextChanged);
             this.input_TB.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.input_TB_KeyPress);
             // 
@@ -79,10 +79,10 @@
             // 
             this.treeView.Location = new System.Drawing.Point(666, 12);
             this.treeView.Name = "treeView";
-            treeNode3.Name = "root";
-            treeNode3.Text = "root";
+            treeNode1.Name = "root";
+            treeNode1.Text = "root";
             this.treeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode3});
+            treeNode1});
             this.treeView.Size = new System.Drawing.Size(529, 378);
             this.treeView.TabIndex = 3;
             // 

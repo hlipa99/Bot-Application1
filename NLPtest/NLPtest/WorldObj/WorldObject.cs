@@ -85,51 +85,76 @@ namespace NLPtest.WorldObj
             word = obj.word;
             negat = negat || obj.negat;
             DefiniteArticle = DefiniteArticle || obj.DefiniteArticle;
+            foreach (var r in obj.Relations)
+            {
+                relations.Add((RelationObject)r.Clone());
+            }
         }
 
         public int ObjectType()
         {
-            return 0;
+            return 1;
         }
 
         public virtual IWorldObject Clone()
         {
             WorldObject res = new WorldObject(word);
-            cloneBase(res);
+            res.Copy(this);
             return res;
         }
 
-        internal void cloneBase(WorldObject res)
-        {
-            foreach (var r in relations)
-            {
-                res.Relations.Add((RelationObject)r.Clone());
-            }
-            res.negat = negat;
-            res.DefiniteArticle = DefiniteArticle;
-        }
+        //internal void cloneBase(WorldObject origin)
+        //{
+        //    foreach (var r in origin.Relations)
+        //    {
+        //        relations.Add((RelationObject)r.Clone());
+        //    }
+        //    negat = origin.negat;
+        //    DefiniteArticle = origin.DefiniteArticle;
+        //}
 
          public virtual void CopyFromTemplate(ITemplate[] objects)
         {
-            var index = int.Parse(Word);
-            var obj = objects[index];
-
-            if (obj is WorldObject)
+            try
             {
-                Copy(obj as WorldObject);
-                foreach (var r in relations)
+                var index = int.Parse(Word);
+                var obj = objects[index];
+
+                if (obj is WorldObject)
                 {
-                    r.CopyFromTemplate(objects);
+                    Copy(obj as WorldObject);
+                    foreach (var r in relations)
+                    {
+                        r.CopyFromTemplate(objects);
+                    }
                 }
-            }
-            else
+                else
+                {
+                    var word = obj as WordObject;
+                    this.word = word.Text;
+                    this.DefiniteArticle = word.IsDefinite;
+                }
+            }catch(Exception ex)
             {
-                var word = obj as WordObject;
-                this.word = word.Text;
-                this.DefiniteArticle = word.IsDefinite;
+
             }
 
+        }
 
+        public bool haveTypeOf(ITemplate template)
+        {
+            if (template.ObjectType() != ObjectType()) return false;
+            if (instanceOf(this.GetType(), template.GetType())) return true;
+            return false;
+        }
+
+
+        //recursivly search for type;
+        private bool instanceOf(Type type, Type templateType)
+        {
+            if (templateType == null) return false;
+            else if (type == templateType) return true;
+            else return instanceOf(type, templateType.BaseType);
         }
     }
 

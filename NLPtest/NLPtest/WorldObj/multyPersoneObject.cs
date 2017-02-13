@@ -16,7 +16,7 @@ namespace NLPtest.view
         public override IWorldObject Clone()
         {
             multyPersoneObject res = new multyPersoneObject(persons);
-            cloneBase(res);
+           res.cloneBase(this);
             return res;
         }
     }

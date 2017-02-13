@@ -5,15 +5,15 @@ namespace NLPtest.WorldObj
 {
     public class RelationObject : WorldObject
     {
-        WorldObject objective;
+        IWorldObject objective;
 
 
-        public RelationObject(WorldObject objective)
+        public RelationObject(IWorldObject objective)
         {
             this.Objective = objective;
         }
 
-        public WorldObject Objective
+        public IWorldObject Objective
         {
             get
             {
@@ -29,7 +29,7 @@ namespace NLPtest.WorldObj
       
         public override string ToString()
         {
-            return "rel->(" + GetType().ToString() + ")";
+            return "rel->(" + GetType().ToString() + ")[" + objective + "]";
         }
 
         internal void addObjective(WorldObject[] paramObjects)
@@ -41,7 +41,7 @@ namespace NLPtest.WorldObj
         internal void Copy(RelationObject first)
         {
             base.Copy(first);
-            objective = first.objective;
+            objective = first.objective.Clone();
         }
 
 
@@ -57,8 +57,8 @@ namespace NLPtest.WorldObj
 
         public override IWorldObject Clone()
         {
-            RelationObject res = new RelationObject(objective);
-            cloneBase(res);
+            RelationObject res = new RelationObject(null);
+            res.Copy(this);
             return res;
         }
         

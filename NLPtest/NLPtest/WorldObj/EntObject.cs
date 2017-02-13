@@ -8,7 +8,7 @@ namespace NLPtest.WorldObj
         public override IWorldObject Clone()
         {
             EntObject res = new EntObject();
-            cloneBase(res);
+           res.cloneBase(this);
             return res;
         }
 

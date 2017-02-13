@@ -34,11 +34,11 @@ public class NLPControler : INLPControler
      
     }
 
-    public ContentTurn testAnalizer(string inputText)
+    public ContentTurn testAnalizer(string inputText,out string log)
     {
         SemanticAnalizer sa = new SemanticAnalizer();
         //    var a = MorfAnalizer.createSentence(inputText);
-        var context = new TextContext();
+       // var context = new TextContext();
         var sen = ma.meniAnalize(inputText);
 
       //  sa.findGufContext(sen);
@@ -47,12 +47,19 @@ public class NLPControler : INLPControler
         ContentTurn input = new ContentTurn();
         List<WorldObject> sentence = new List<WorldObject>();
         List<WorldObject> last = new List<WorldObject>();
-        foreach (var s in sen)
+        string logTemp;
+        log = "";
+        List<ITemplate> context = new List<ITemplate>();
+        var sentences = sa.findGufContext(sen, context);
+
+        foreach (var s in sentences)
         {
-            sentence = sa.findTemplate(s.Words.ToArray());
+            sentence = sa.findTemplate(s.ToArray(),out logTemp);
+            log += logTemp;
             last = sentence;
             input.Add(sentence);
         }
+        
         return input;
 
     }

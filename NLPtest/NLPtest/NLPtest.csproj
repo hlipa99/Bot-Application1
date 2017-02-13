@@ -235,6 +235,8 @@
     <Compile Include="Exceptions\TemplateException.cs" />
     <Compile Include="MorfObjects\ExtTokenWithBuilder.cs" />
     <Compile Include="TemplateObject.cs" />
+    <Compile Include="WorldObj\ParticipleObject.cs" />
+    <Compile Include="WorldObj\InfinitiveObject.cs" />
     <Compile Include="WorldObj\multyPersoneObject.cs" />
     <Compile Include="WorldObj\BotObject.cs" />
     <Compile Include="Exceptions\CantResponeException.cs" />

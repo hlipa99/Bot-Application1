@@ -121,7 +121,7 @@ namespace NLPtest
             {
                 throw new DictionaryException(text);
             }
-            else if (Pos == "verb" || Pos == "participle")
+            else if (Pos == "verb")
             {
                 wordType = verbWord;
             }
@@ -143,7 +143,8 @@ namespace NLPtest
             }
             else if (Pos == "preposition")
             {
-                throw new DictionaryException(text);
+                //             throw new DictionaryException(text);
+                wordType = prepWord;
             }
             else if (Pos == "punctuation")
             {
@@ -177,6 +178,8 @@ namespace NLPtest
             {
                 wordType = adjectiveWord;
 
+            } else if (Pos == "participle"){
+                wordType = participleWord;
             }
             else if (Pos == "numeral")
             {
@@ -547,7 +550,7 @@ namespace NLPtest
         
         public override string ToString()
         {
-            return Text + "(" + WordT + ")";
+            return Text + "(" + Enum.GetName(typeof(WordType), WordT) + ")";
 
         }
         public bool isA(WordType t)
@@ -583,7 +586,8 @@ namespace NLPtest
             numeralWord = 2097152,
             properNameWord = 4194304,
             hyphenWord = 8388608,
-            negationWord = 16777216
+            negationWord = 16777216,
+            participleWord = 33554432
         }
 
         internal void setGender(string gen)
@@ -619,9 +623,15 @@ namespace NLPtest
 
         public new int ObjectType()
         {
-            return (int)WordT;
+            return 0;
         }
 
-       
+        public bool haveTypeOf(ITemplate template)
+        {
+            if (template.ObjectType() != ObjectType()) return false;
+            var w = template as WordObject;
+            if (WordT.HasFlag(w.WordT)) return true;
+            return false;
+        }
     }
 }

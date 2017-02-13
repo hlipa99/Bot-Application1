@@ -113,7 +113,7 @@ namespace NLPtest
         public override IWorldObject Clone()
         {
             personObject res = new personObject(amount,person,time,gender,Word);
-            cloneBase(res);
+           res.cloneBase(this);
             return res;
         }
 

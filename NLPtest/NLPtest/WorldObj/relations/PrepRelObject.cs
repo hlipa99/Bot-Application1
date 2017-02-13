@@ -9,17 +9,17 @@
         public override IWorldObject Clone()
         {
             PrepRelObject res = new PrepRelObject(Objective);
-            cloneBase(res);
+           res.cloneBase(this);
             return res;
         }
-        public PrepRelObject( WorldObject objective, PrepType type) : base(objective)
+        public PrepRelObject(IWorldObject objective, PrepType type) : base(objective)
         {
 
             this.Type = type;
             
         }
 
-        public PrepRelObject(WorldObject objective) : base(objective)
+        public PrepRelObject(IWorldObject objective) : base(objective)
         {
    
                 this.Type = PrepType.unknownPrep;

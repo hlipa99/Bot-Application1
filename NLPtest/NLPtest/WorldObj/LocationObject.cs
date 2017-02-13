@@ -14,7 +14,7 @@ namespace NLPtest.WorldObj
         public override IWorldObject Clone()
         {
             LocationObject res = new LocationObject(Word);
-            cloneBase(res);
+           res.cloneBase(this);
             return res;
         }
     }

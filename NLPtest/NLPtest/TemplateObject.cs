@@ -9,6 +9,6 @@ namespace NLPtest
     public interface ITemplate
     {
         int ObjectType();
-     
+        bool haveTypeOf(ITemplate template);
     }
 }

@@ -13,15 +13,36 @@ using NLPtest.view;
 namespace NLPtest.HebWords
 {
 
-    class HebTemplate
+     class HebTemplate
     {
         string templateText;
         string[] template;
         string result;
         string[] resultFlags;
-        int priority;
-        WorldObject resualtObject;
-        ITemplate[] objectTemplate;
+        readonly int priority;
+        readonly int count;
+        readonly WorldObject resualtObject;
+        readonly ITemplate[] objectTemplate;
+
+        public int Count
+        {
+            get
+            {
+                return count;
+            }
+
+
+        }
+
+        public int Priority
+        {
+            get
+            {
+                return priority;
+            }
+
+
+        }
 
         // negateWord objectWord $ objectWord $ negate
         // adjactiveWord nounwords $ AjdectiveWord $ 
@@ -41,9 +62,9 @@ namespace NLPtest.HebWords
          public HebTemplate(ITemplate[] template,WorldObject result,int priority)
         {
             resualtObject = result;
-            this.priority = priority;
             this.objectTemplate = template;
-
+            count = template.Count();
+            this.priority = priority;
         }
 
 
@@ -61,76 +82,76 @@ namespace NLPtest.HebWords
             return true;
         }
 
-        private WorldObject getResult(WordObject[] words)
-        {
-            List<WorldObject> objList = new List<WorldObject>();
-           foreach(var w in words)
-            {
-                objList.Add(w.WorldObject);
-            }
+        //private WorldObject getResult(WordObject[] words)
+        //{
+        //    List<WorldObject> objList = new List<WorldObject>();
+        //   foreach(var w in words)
+        //    {
+        //        objList.Add(w.WorldObject);
+        //    }
 
-            return getResult(objList.ToArray());
-        }
+        //    return getResult(objList.ToArray());
+        //}
 
        
 
-        private WorldObject getResult(WorldObject[] objects)
-        {
+        //private WorldObject getResult(WorldObject[] objects)
+        //{
 
-            var templateRes = result.Split('^');
-            WorldObject worldObject = null;
-            WorldObject objective = null;
-            RelationObject relation = null;
-
-
-            foreach (var t in templateRes)
-            {
-
-                if (t.Contains(":"))
-                {
-                    var r = t.Split(':');
-                    var idx = getIdx(r[0]);
+        //    var templateRes = result.Split('^');
+        //    WorldObject worldObject = null;
+        //    WorldObject objective = null;
+        //    RelationObject relation = null;
 
 
-                    var paramObjects = new List<WorldObject>();
-                    foreach (var param in r[1].Split(',')){
-                        var idx2 = getIdx(r[1]);
-                        if (idx2 >= 0)
-                        {
-                            paramObjects.Add(objects[idx2]);
-                        }
-                    }
+        //    foreach (var t in templateRes)
+        //    {
 
-                    if (idx >= 0)
-                    {
-                        relation = (RelationObject)objects[idx];
-                        relation.addObjective(paramObjects.ToArray());
-                    }
-                    else
-                    {
-                        Type rt = Type.GetType(r[0], true);
-                        relation = (RelationObject)(Activator.CreateInstance(rt, paramObjects));
-                        rt = Type.GetType(r[1], true);
-                    }
+        //        if (t.Contains(":"))
+        //        {
+        //            var r = t.Split(':');
+        //            var idx = getIdx(r[0]);
 
 
-                }
-                else
-                {
-                    var idx = getIdx(templateRes[0]);
-                    if (idx >= 0)
-                    {
-                        worldObject = objects[idx];
-                    }
-                }
+        //            var paramObjects = new List<WorldObject>();
+        //            foreach (var param in r[1].Split(',')){
+        //                var idx2 = getIdx(r[1]);
+        //                if (idx2 >= 0)
+        //                {
+        //                    paramObjects.Add(objects[idx2]);
+        //                }
+        //            }
 
-            }
+        //            if (idx >= 0)
+        //            {
+        //                relation = (RelationObject)objects[idx];
+        //                relation.addObjective(paramObjects.ToArray());
+        //            }
+        //            else
+        //            {
+        //                Type rt = Type.GetType(r[0], true);
+        //                relation = (RelationObject)(Activator.CreateInstance(rt, paramObjects));
+        //                rt = Type.GetType(r[1], true);
+        //            }
 
-            worldObject.addRelation(relation);
 
-            worldObject = addFlages(worldObject);
-            return worldObject;
-        }
+        //        }
+        //        else
+        //        {
+        //            var idx = getIdx(templateRes[0]);
+        //            if (idx >= 0)
+        //            {
+        //                worldObject = objects[idx];
+        //            }
+        //        }
+
+        //    }
+
+        //    worldObject.addRelation(relation);
+
+        //    worldObject = addFlages(worldObject);
+        //    return worldObject;
+        //}
 
         internal ITemplate tryMatch(ITemplate[] objects)
         {
@@ -138,7 +159,7 @@ namespace NLPtest.HebWords
             {
                for(int i = 0; i < objectTemplate.Count(); i++)
                 {
-                    if(objectTemplate[i].GetType() != objects[i].GetType() || objectTemplate[i].ObjectType() != objects[i].ObjectType())
+                    if(!objects[i].haveTypeOf(objectTemplate[i]))
                     {
                         //not match
                         return null;

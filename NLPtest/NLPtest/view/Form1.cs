@@ -54,8 +54,8 @@ namespace NLPtest
             text_TB.AppendText(inputText + Environment.NewLine);
             input_TB.Text = String.Empty;
             text_TB.AppendText("Bot:" + Environment.NewLine);
-
-            var botResualt = NLPControler.getInstence().testAnalizer(inputText);
+            string log = "";
+            var botResualt = NLPControler.getInstence().testAnalizer(inputText,out log);
             var httpCtrl = new HttpController();
            
             //foreach (var line in new string[] { input.ToString() })
@@ -63,7 +63,7 @@ namespace NLPtest
             //    text_TB.AppendText(line + Environment.NewLine);
             //}
             drawTree(botResualt);
-            text_TB.AppendText("בוצע" + Environment.NewLine);
+            text_TB.AppendText(log + Environment.NewLine);
 
         }
 
@@ -78,16 +78,16 @@ namespace NLPtest
             }
         }
 
-        private TreeNode drawObject(WorldObject obj)
+        private TreeNode drawObject(IWorldObject obj)
         {
             var objectNode = new TreeNode();
-            if (obj != null)
+            if (obj!= null)
             {
                 objectNode.Text = obj.ToString();
-                foreach (var r in obj.Relations)
+                foreach (var r in (obj as WorldObject).Relations)
                 {
-                    var rNode = drawObject(r);
-                    var objec = drawObject(r.Objective);
+                    var rNode = drawObject(r as RelationObject);
+                    var objec = drawObject(r.Objective as WorldObject);
                     rNode.Nodes.Add(objec);
                     objectNode.Nodes.Add(rNode);
                 }

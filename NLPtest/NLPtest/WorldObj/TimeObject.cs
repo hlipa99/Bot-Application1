@@ -19,7 +19,7 @@ namespace NLPtest.WorldObj
         public override IWorldObject Clone()
         {
             TimeObject res = new TimeObject(Word);
-            cloneBase(res);
+           res.cloneBase(this);
             return res;
         }
     }

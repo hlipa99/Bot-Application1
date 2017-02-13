@@ -2,23 +2,21 @@
 
 namespace NLPtest.WorldObj
 {
-    internal class AdjObject : WorldObject
+    internal class InfinitiveObject : WorldObject
     {
-
-
-        public AdjObject()
+        public InfinitiveObject()
         {
     
         }
 
-        public AdjObject(string word) : base(word)
+        public InfinitiveObject(string word) : base(word)
         {
           
         }
 
         public override IWorldObject Clone()
         {
-            AdjObject res = new AdjObject(Word);
+            InfinitiveObject res = new InfinitiveObject(Word);
             res.cloneBase(this);
             return res;
         }
