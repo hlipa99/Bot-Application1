@@ -50,7 +50,7 @@ namespace Bot_Application1.IDialog
           
             if (User.UserName == "" || User.UserName == null)
             {
-                if (context.Activity.ChannelId == "facebook" || context.Activity.ChannelId == "slack")
+                if (context.Activity.ChannelId == "facebook" &&  context.Activity.ChannelId == "slack")
                 {
                     var userFBname = context.Activity.From.Name;
                     var userTranslation = ControlerTranslate.Translate(userFBname);
@@ -66,7 +66,7 @@ namespace Bot_Application1.IDialog
                 else
                 {
                 await writeMessageToUser(context, conv().getPhrase(Pkey.NewUserGetName));
-                    updateRequestTime();
+                    updateRequestTime(context);
                     context.Wait(CheckName);
 
                 } 
@@ -107,7 +107,7 @@ namespace Bot_Application1.IDialog
             {
                 var newMessage = conv().getPhrase(Pkey.MissingUserInfo,textVar:"שם");
                 await writeMessageToUser(context, newMessage);
-                updateRequestTime();
+                updateRequestTime(context);
                 context.Wait(CheckName);
             }
         }
@@ -145,6 +145,7 @@ namespace Bot_Application1.IDialog
         {
             if (context.Activity.Timestamp <= Request)
             {
+                var userText2 = ((IMessageActivity)await result).Text;
                 context.Wait(CheckGender);
                 return;
             }
@@ -199,11 +200,13 @@ namespace Bot_Application1.IDialog
 
         public async virtual Task CheckClass(IDialogContext context, IAwaitable<object> result)
         {
-
+            
             if (context.Activity.Timestamp <= Request)
             {
                 context.Wait(CheckClass);
                 return;
+
+
             }
 
             //user class

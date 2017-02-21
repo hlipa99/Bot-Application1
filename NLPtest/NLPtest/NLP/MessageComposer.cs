@@ -29,7 +29,7 @@ namespace NLPtest
 
         }
 
-        public List<string> compose(ContentTurn content,UserObject user)
+        public List<string> compose(ContentList content,UserObject user)
         {
             List<string> res = new List<string>();
             while (!content.empty())

@@ -265,7 +265,10 @@ namespace NLPtest.view
             List<List<ITemplate>> res = new List<List<ITemplate>>();
             foreach (var s in all)
             {
-                var newS = findGufContextHlpr(s.Words,  context);
+                List<ITemplate> words = new List<ITemplate>();
+                words.AddRange(s.Words);
+                var newS = findGufContextHlpr(words, words);
+                newS = findGufContextHlpr(newS, context);
                 context = newS;
                 res.Add(newS);
             }
@@ -278,21 +281,34 @@ namespace NLPtest.view
         //    return findGufContextHlpr(objects, objects);
         //}
 
-        private List<ITemplate> findGufContextHlpr(List<WordObject> target, List<ITemplate> context)
+        private List<ITemplate> findGufContextHlpr(List<ITemplate> target, List<ITemplate> context)
         {
             List<ITemplate> res = new List<ITemplate>();
+
             foreach (var o in target)
             {
-                if(o.isA(gufWord))
+                if (o.ObjectType() == Word_Type)
                 {
-                    var g = getGuf(o, context);
-                    res.Add(g);
-                }else
-                {
-                    res.Add(o);
+                    var word = o as WordObject;
+                    if (word.isA(gufWord))
+                    {
+                        var g = getGuf(word, context);
+                        if(g != null)
+                        {
+                            res.Add(g);
+                        }else
+                        {
+                            res.Add(o);
+                        }
+                    }
+                    else
+                    {
+                        res.Add(o);
+                    }
                 }
             }
-            return res;
+                return res;
+            
         }
 
         private ITemplate getGuf(WordObject gufObject, List<ITemplate> context)
@@ -552,8 +568,40 @@ namespace NLPtest.view
             return sentence;
         }
 
+        OuterAPIController ac = new OuterAPIController();
+
+        public UserIntent getUserIntent(string input)  //tempfunction!! TODO
+        {
+            UserIntent intent;
+            try
+            {
+                var intentStr = ac.getIntentApiAi(input);
+                intent = (UserIntent) Enum.Parse(typeof(UserIntent), intentStr);
+            }catch(Exception ex)
+            {
+                return UserIntent.unknown;
+            }
+
+            return UserIntent.answer;
+
+        }
+
+    }
 
 
+
+
+
+    public enum UserIntent
+    {
+        dontKnow,
+        stopSession,
+        answer,
+        question,
+        introduction,
+        howAreYou,
+        unknown,
+        historyAnswer
     }
 }
 

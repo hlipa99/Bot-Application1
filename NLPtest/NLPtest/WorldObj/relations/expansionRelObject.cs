@@ -10,7 +10,7 @@ namespace NLPtest.view
         public override IWorldObject Clone()
         {
             expansionRelObject res = new expansionRelObject(Objective);
-           res.cloneBase(this);
+            res.Copy(this);
             return res;
         }
 

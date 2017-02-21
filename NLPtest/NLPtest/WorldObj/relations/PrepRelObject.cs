@@ -9,7 +9,7 @@
         public override IWorldObject Clone()
         {
             PrepRelObject res = new PrepRelObject(Objective);
-           res.cloneBase(this);
+            res.Copy(this);
             return res;
         }
         public PrepRelObject(IWorldObject objective, PrepType type) : base(objective)

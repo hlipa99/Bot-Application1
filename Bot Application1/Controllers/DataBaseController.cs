@@ -151,10 +151,10 @@ namespace Bot_Application1.Controllers
         }
 
 
-        internal Question[] getQuestion(string category)
+        public IQuestion[] getQuestion(string category)
         {
             Entities DB = new Entities();
-            Question question = new Question();
+            IQuestion question = new Question();
             Question[] questions = null;
 
             try

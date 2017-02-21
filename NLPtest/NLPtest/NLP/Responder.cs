@@ -11,10 +11,10 @@ namespace NLPtest
 
     public class Responder
     {
-        public ContentTurn respone(ContentTurn input,ConversationContext context)
+        public ContentList respone(ContentList input,ConversationContext context)
         {
 
-            ContentTurn res = new ContentTurn();
+            ContentList res = new ContentList();
             while (!input.empty())
             {
                 var o = input.pop();

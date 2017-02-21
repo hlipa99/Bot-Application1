@@ -1,6 +1,7 @@
 ﻿
 using Model.dataBase;
 using NLPtest.Controllers;
+using NLPtest.QnA;
 using NLPtest.WorldObj;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,9 @@ namespace NLPtest
     public partial class Form1 : Form
     {
         HebDictionary heb;
-     //   DataBaseControler
+        //   DataBaseControler
+        ContentList answer1 = new ContentList();
+        ContentList answer2 = new ContentList();
 
         public Form1()
         {
@@ -56,25 +59,26 @@ namespace NLPtest
             text_TB.AppendText("Bot:" + Environment.NewLine);
             string log = "";
             var botResualt = NLPControler.getInstence().testAnalizer(inputText,out log);
-            var httpCtrl = new HttpController();
-           
+            var httpCtrl = new OuterAPIController();
+
             //foreach (var line in new string[] { input.ToString() })
             //{
             //    text_TB.AppendText(line + Environment.NewLine);
             //}
-            drawTree(botResualt);
+            answer1 = botResualt;
+            drawTree(botResualt,treeView);
             text_TB.AppendText(log + Environment.NewLine);
 
         }
 
-        private void drawTree(ContentTurn content)
+        private void drawTree(ContentList content,TreeView tv)
         {
-            treeView.Nodes.Clear();
+            tv.Nodes.Clear();
             while (!content.empty())
             {
                 var c = content.pop();
                 var objectNode = drawObject(c);
-                treeView.Nodes.Add(objectNode);
+                tv.Nodes.Add(objectNode);
             }
         }
 
@@ -112,6 +116,40 @@ namespace NLPtest
         private void input_TB_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void send_BTN2_Click(object sender, EventArgs e)
+        {
+            var inputText = input_TB2.Text;
+            text_TB2.AppendText("User:" + Environment.NewLine);
+            text_TB2.AppendText(inputText + Environment.NewLine);
+            input_TB2.Text = String.Empty;
+            text_TB2.AppendText("Bot:" + Environment.NewLine);
+            string log = "";
+            var botResualt = NLPControler.getInstence().testAnalizer(inputText, out log);
+            var httpCtrl = new OuterAPIController();
+
+            //foreach (var line in new string[] { input.ToString() })
+            //{
+            //    text_TB.AppendText(line + Environment.NewLine);
+            //}
+            answer2 = botResualt;
+            drawTree(botResualt,treeView2);
+            text_TB2.AppendText(log + Environment.NewLine);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            QAEngin qna = new QAEngin();
+            string str;
+            var match = qna.matchAnswers(NLPControler.getInstence().testAnalizer(input_TB.Text,out str).List,
+                NLPControler.getInstence().testAnalizer(input_TB2.Text, out str).List);
+            var answerText = "Score:" + match.score + Environment.NewLine;
+            foreach (var ent in match.missingEntitis)
+            {
+                answerText += "Missing Entity:" + ent + Environment.NewLine;
+            }
+            text_TB3.Text = answerText;
         }
     }
 }

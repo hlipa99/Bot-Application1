@@ -135,9 +135,9 @@
       <Project>{77834157-486A-4ECD-98F6-0D8F9783077A}</Project>
       <Name>Models</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NLPtest\NLPtest\NLPtest.csproj">
+    <ProjectReference Include="..\NLPtest\NLPtest\NLP.csproj">
       <Project>{f1b355e1-3b6e-423d-8225-dc400cff395d}</Project>
-      <Name>NLPtest</Name>
+      <Name>NLP</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

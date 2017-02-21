@@ -19,7 +19,7 @@ namespace NLPtest.WorldObj
         public override IWorldObject Clone()
         {
             ParticipleObject res = new ParticipleObject(Word);
-            res.cloneBase(this);
+            res.Copy(this);
             return res;
         }
 

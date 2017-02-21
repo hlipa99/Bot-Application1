@@ -22,7 +22,7 @@ namespace NLPtest.WorldObj
         public override IWorldObject Clone()
         {
             QuestionObject res = new QuestionObject(Word);
-           res.cloneBase(this);
+            res.Copy(this);
             return res;
         }
 

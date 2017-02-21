@@ -40,7 +40,7 @@ namespace NLPtest.WorldObj
         public override IWorldObject Clone()
         {
             HelloObject res = new HelloObject(Word);
-           res.cloneBase(this);
+            res.Copy(this);
             return res;
         }
     }

@@ -13,7 +13,7 @@ using Bot_Application1.Exceptions;
 namespace Bot_Application1.IDialog
 {
     [Serializable]
-    public class StartLerningDialog : AbsDialog
+    public class LerningDialog : AbsDialog
     {
 
 
@@ -21,7 +21,7 @@ namespace Bot_Application1.IDialog
         public override async Task StartAsync(IDialogContext context)
         {
             User thisUser = User as User;
-
+            UserContext = new UserContext("LerningDialog");
             context.UserData.TryGetValue<User>("user", out thisUser);
             User = thisUser;
             
@@ -71,7 +71,7 @@ namespace Bot_Application1.IDialog
             StudySession = new StudySession();
 
             await context.PostAsync(message);
-            updateRequestTime();
+            updateRequestTime(context);
             context.Wait(StartLearning);
         }
 
@@ -165,7 +165,7 @@ namespace Bot_Application1.IDialog
             var question = StudySession.CurrentSubQuestion;
             await writeMessageToUser(context, new string[] { question.questionText.Trim() });
 
-            updateRequestTime();
+            updateRequestTime(context);
             context.Wait(answerQuestion);
         }
 
@@ -189,22 +189,13 @@ namespace Bot_Application1.IDialog
 
             var question = StudySession.CurrentSubQuestion;
 
-            question = edc().checkAnswer(question, message.Text);
 
-            //check sub question
-            if(question.AnswerScore > 85)
-            {
-                await writeMessageToUser(context, conv().getPhrase(Pkey.goodAnswer));
+            var feedback = conv().createReplayToUser(message.Text, UserContext);
 
-            }
-            else if(question.AnswerScore > 30)
-            {
-                await writeMessageToUser(context, conv().getPhrase(Pkey.partialAnswer));
-            }
-            else
-            {
-                await writeMessageToUser(context, conv().getPhrase(Pkey.notAnAnswer));
-            }
+            //    edc().checkAnswer(message.Text);
+
+            await writeMessageToUser(context, feedback);
+
 
             await writeMessageToUser(context, conv().getPhrase(Pkey.MyAnswerToQuestion));
 
@@ -215,7 +206,7 @@ namespace Bot_Application1.IDialog
             if(StudySession.CurrentQuestion.Enumerator == StudySession.CurrentQuestion.SubQuestion.Count)
             {
                 await writeMessageToUser(context, conv().getPhrase(Pkey.giveYourFeedback));
-                updateRequestTime();
+                updateRequestTime(context);
                 context.Wait(giveFeedback);
             }
             else
@@ -230,7 +221,7 @@ namespace Bot_Application1.IDialog
         public async Task questionEnd(IDialogContext context)
         {
             await writeMessageToUser(context, conv().getPhrase(Pkey.giveYourFeedback));
-            updateRequestTime();
+            updateRequestTime(context);
             context.Wait(giveFeedback);
         }
 
@@ -277,7 +268,7 @@ namespace Bot_Application1.IDialog
             else
             {
                 await writeMessageToUser(context, conv().getPhrase(Pkey.notNumber));
-                updateRequestTime();
+                updateRequestTime(context);
                 context.Wait(giveFeedback);
             }
         }
@@ -292,7 +283,7 @@ namespace Bot_Application1.IDialog
                 await writeMessageToUser(context, conv().getPhrase(Pkey.endOfSession));
 
                 //TODO: save user sussion to DB
-                updateRequestTime();
+                updateRequestTime(context);
                 context.Wait(EndOfLearningSession);
             }
             else
@@ -317,7 +308,7 @@ namespace Bot_Application1.IDialog
 
         private EducationController edc()
         {
-            return new EducationController(User,StudySession);
+            return new EducationController(User,StudySession,null);
         }
 
     }

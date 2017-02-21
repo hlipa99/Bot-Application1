@@ -16,7 +16,6 @@ namespace NLPtest
         WordType wordType = unknownWord;
         private string lemma;
         string text;
-        public string root;
         private personType person = personType.unspecified;
         private timeType time = timeType.unspecified;
         private amountType amount = amountType.unspecified;
@@ -36,26 +35,33 @@ namespace NLPtest
         [JsonConstructor]
         public WordObject(string ner, string text, string gender, string number, string person, string polarity, string pos, string posType, string[] prefixes, string tense, string suffixFunction, string suffixGender, string suffixNumber, string suffixPerson, bool isDefinite,String lemma)
         {
-            this.Ner = ner;
-            this.text = text;
-            this.Gender = (genderType) Enum.Parse(typeof(genderType),gender);
-            this.Amount = (amountType)Enum.Parse(typeof(amountType), number);
-            this.Person = (personType)Enum.Parse(typeof(personType), person);
-            this.polarity = polarity;
-            this.Pos = pos;
-            this.posType = posType;
-            this.Prefixes = prefixes;
-            this.tense = tense;
-            this.suffixFunction = suffixFunction;
-            this.Lemma = lemma;
-            this.Gender = this.Gender == genderType.unspecified & suffixGender != null ? (genderType)Enum.Parse(typeof(genderType), suffixGender) : this.Gender;
-            this.Amount = this.Amount == amountType.unspecified & suffixNumber != null ? (amountType)Enum.Parse(typeof(amountType), suffixNumber) : this.Amount;
-            this.Person = this.Person == personType.unspecified & suffixPerson != null ? (personType)Enum.Parse(typeof(personType), suffixPerson) : this.Person;
-            this.Amount = (amountType)Enum.Parse(typeof(amountType), number);
-            this.Person = (personType)Enum.Parse(typeof(personType), person);
+            try
+            {
+                this.Ner = ner;
+                this.text = text;
+                this.polarity = polarity;
+                this.Pos = pos;
+                this.posType = posType;
+                this.Prefixes = prefixes;
+                this.tense = tense;
+                this.suffixFunction = suffixFunction;
+                this.Lemma = lemma;
 
-            this.IsDefinite = isDefinite;
-            findObjectType();
+                this.Gender = (genderType)Enum.Parse(typeof(genderType), gender);
+                this.Amount = (amountType)Enum.Parse(typeof(amountType), number);
+                this.Person = (personType)Enum.Parse(typeof(personType), person);
+                this.Gender = this.Gender == genderType.unspecified & suffixGender != null ? (genderType)Enum.Parse(typeof(genderType), suffixGender) : this.Gender;
+                this.Amount = this.Amount == amountType.unspecified & suffixNumber != null ? (amountType)Enum.Parse(typeof(amountType), suffixNumber) : this.Amount;
+                this.Person = this.Person == personType.unspecified & suffixPerson != null ? (personType)Enum.Parse(typeof(personType), suffixPerson) : this.Person;
+                this.Amount = (amountType)Enum.Parse(typeof(amountType), number);
+                this.Person = (personType)Enum.Parse(typeof(personType), person);
+
+                this.IsDefinite = isDefinite;
+                findObjectType();
+            }catch(Exception ex)
+            {
+
+            }
         }
 
         private void findObjectType()

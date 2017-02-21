@@ -13,7 +13,7 @@ namespace NLPtest.view
         public override IWorldObject Clone()
         {
             BotObject res = new BotObject(Word);
-           res.cloneBase(this);
+            res.Copy(this);
             return res;
         }
 

@@ -4,19 +4,20 @@ using System;
 using NLPtest.view;
 using NLPtest.WorldObj;
 
-public class NLPControler : INLPControler
+public class NLPControler // : INLPControler
 {
 	
-	static INLPControler instance;
+	static NLPControler instance;
     static object syncLock = new object();
     MorfAnalizer ma = null;
+    SemanticAnalizer sa = new SemanticAnalizer();
 
     private NLPControler()
     {
         this.ma = new MorfAnalizer();
     }
 
-    public static INLPControler getInstence()
+    public static NLPControler getInstence()
     {
         lock (syncLock)
         {
@@ -34,21 +35,21 @@ public class NLPControler : INLPControler
      
     }
 
-    public ContentTurn testAnalizer(string inputText,out string log)
+    public ContentList testAnalizer(string inputText,out string log)
     {
-        SemanticAnalizer sa = new SemanticAnalizer();
+        log = "";
         //    var a = MorfAnalizer.createSentence(inputText);
-       // var context = new TextContext();
+        // var context = new TextContext();
         var sen = ma.meniAnalize(inputText);
 
-      //  sa.findGufContext(sen);
+        //  sa.findGufContext(sen);
+        log += "intent:" + getUserIntent(inputText) + Environment.NewLine;
 
-
-        ContentTurn input = new ContentTurn();
+          ContentList input = new ContentList();
         List<WorldObject> sentence = new List<WorldObject>();
         List<WorldObject> last = new List<WorldObject>();
         string logTemp;
-        log = "";
+
         List<ITemplate> context = new List<ITemplate>();
         var sentences = sa.findGufContext(sen, context);
 
@@ -64,14 +65,11 @@ public class NLPControler : INLPControler
 
     }
 
- //   public void Initialize(){
-	//	ma = new MorfAnalizer();
-	//}
-
-    public List<Sentence> Analize(string text)
+    public UserIntent getUserIntent(string str)
     {
-        return ma.meniAnalize(text);
+        return sa.getUserIntent(str);
     }
+
 
     public  string getClass(string text){
 		return ma.getClass(text);
@@ -92,9 +90,45 @@ public class NLPControler : INLPControler
 		return ma.GetGeneralFeeling(text);
 	}
 
-    public ContentTurn checkContext(string text, ConversationContext context)
+
+    public List<WorldObject> Analize(string text)
     {
-        throw new NotImplementedException();
+        return Analize(text, null);
+    }
+
+    public List<WorldObject> Analize(string text, string systemAnswerText)
+    {
+        // var context = new TextContext();
+        var textAnlz = ma.meniAnalize(text);
+        List<WorldObject> input = new List<WorldObject>();
+        List<WorldObject> sentence = new List<WorldObject>();
+        List<WorldObject> last = new List<WorldObject>();
+        List < List < ITemplate >> sentences;
+        List<ITemplate> context = new List<ITemplate>();
+
+
+        if (systemAnswerText != null)
+        {
+            var contextAnlz = ma.meniAnalize(systemAnswerText);
+            //create context 
+            var contextSentences = sa.findGufContext(contextAnlz, context);
+            contextSentences.ForEach(x => context.AddRange(x));
+             sentences = sa.findGufContext(textAnlz, context);
+        }else
+        {
+             sentences = sa.findGufContext(textAnlz, context);
+        }
+       
+        string logTemp;
+
+        foreach (var s in sentences)
+        {
+            sentence = sa.findTemplate(s.ToArray(), out logTemp);
+            last = sentence;
+            input.AddRange(sentence);
+        }
+
+        return input;
     }
 }
         

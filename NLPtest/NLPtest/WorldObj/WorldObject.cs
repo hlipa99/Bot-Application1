@@ -131,7 +131,7 @@ namespace NLPtest.WorldObj
                 else
                 {
                     var word = obj as WordObject;
-                    this.word = word.Text;
+                    this.word = word.Lemma;
                     this.DefiniteArticle = word.IsDefinite;
                 }
             }catch(Exception ex)

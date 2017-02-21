@@ -2,13 +2,13 @@
 
 namespace NLPtest
 {
-    internal class EventObject : WorldObject
+    internal class EventObject : EntityObject
     {
 
         public override IWorldObject Clone()
         {
             EventObject res = new EventObject( Word);
-           res.cloneBase(this);
+            res.Copy(this);
             return res;
         }
         public EventObject(string word) : base(word)

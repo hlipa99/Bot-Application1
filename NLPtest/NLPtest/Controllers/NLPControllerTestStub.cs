@@ -40,17 +40,17 @@ public class NLPControlerTestStub : INLPControler
         return true;
     }
 
-    ContentTurn INLPControler.checkContext(string text, ConversationContext context)
+    ContentList INLPControler.checkContext(string text, ConversationContext context)
     {
-        return new ContentTurn();
+        return new ContentList();
     }
 
-    public ContentTurn testAnalizer(string text)
+    public ContentList testAnalizer(string text)
     {
-        return new ContentTurn();
+        return new ContentList();
     }
 
-    public ContentTurn testAnalizer(string inputText, out string log)
+    public ContentList testAnalizer(string inputText, out string log)
     {
         throw new NotImplementedException();
     }

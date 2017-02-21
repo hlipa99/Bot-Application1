@@ -1,8 +1,11 @@
 ﻿using Bot_Application1.dataBase;
 using Bot_Application1.Exceptions;
+using Model;
 using Model.dataBase;
 using Model.Models;
+using NLPtest.Controllers;
 using NLPtest.Models;
+using NLPtest.view;
 using System;
 using System.Collections.Generic;
 
@@ -15,7 +18,7 @@ namespace Bot_Application1.Controllers
         DataBaseController db = new DataBaseController();
         private IUser user;
         private IStudySession studySession;
-
+        ConversationController conversationController;
         public DataBaseController Db
         {
             get
@@ -29,10 +32,11 @@ namespace Bot_Application1.Controllers
             }
         }
 
-        public EducationController(IUser user, IStudySession studySession)
+        public EducationController(IUser user, IStudySession studySession, ConversationController cc)
         {
             this.user = user;
             this.studySession = studySession;
+            this.conversationController = cc;
         }
 
         public string[] getStudyCategory()
@@ -66,11 +70,11 @@ namespace Bot_Application1.Controllers
         {
             List<IQuestion> res = new List<IQuestion>();
             IQuestion[] questions;
-            studySession.SubCategory = "מאבק היישוב";
-            
+
+
             if (studySession.SubCategory == null)
             {
-                questions = Db.getQuestion(studySession.Category, studySession.SubCategory);
+                questions = Db.getQuestion(studySession.Category);
             }
             else
             {
@@ -97,60 +101,117 @@ namespace Bot_Application1.Controllers
             }
         }
 
-        public ISubQuestion checkAnswer(ISubQuestion question, string text)
+        public AnswerFeedback checkAnswer(string text)
         {
-            if (text.Split(' ').Length > 5 && !text.Contains("לא יודע"))
-            {
-                question.AnswerScore = 100;
-            }
-            else if (text.Split(' ').Length > 3 && !text.Contains("לא יודע"))
-            {
-                question.AnswerScore = 56;
-            }
-            else
-            {
-                question.AnswerScore = 0;
-            }
-            return question;
-        }
+            //QuestionsAnswersControllers qac = new QuestionsAnswersControllers();
+            //ISubQuestion question = studySession.CurrentSubQuestion;
+            //var nlp = NLPControler.getInstence();
+            //var systemAnswerText = studySession.CurrentSubQuestion.answerText;
+            //var systemAnswer = nlp.Analize(text, systemAnswerText);
+            //var answerFeedback = qac.matchAnswers(question, text);
 
+
+            var answerFeedback = new AnswerFeedback();
+            var anslength = text.Split(' ').Length;
+                if (anslength > 7)
+                {
+                answerFeedback.score =  100;
+                }else if(anslength > 4)
+                {
+                answerFeedback.score = 60;
+            }else if (anslength >= 2)
+            {
+                answerFeedback.score = 30;
+            }else
+            {
+                answerFeedback.score = 0;
+            }
+            
+         
+            return answerFeedback;
+        }
 
         internal void getNextQuestion()
         {
 
-                if (studySession.CurrentQuestion == null)
-                {
-                    studySession.CurrentQuestion = getQuestion();
-                    studySession.CurrentQuestion.Enumerator = 0;
-                }
-
-
-                studySession.CurrentQuestion.Enumerator++;
-                studySession.CurrentSubQuestion = getSubQuestion(studySession.CurrentQuestion.Enumerator);
-
-         
-                if (studySession.CurrentSubQuestion == null)
-                {
-                    studySession.QuestionAsked.Add(studySession.CurrentQuestion);
-                    studySession.CurrentQuestion = null;
-                    getNextQuestion();
-         
-                }
+            if (studySession.CurrentQuestion == null)
+            {
+                studySession.CurrentQuestion = getQuestion();
+                studySession.CurrentQuestion.Enumerator = 0;
             }
-            
 
-        
-    
+
+            studySession.CurrentQuestion.Enumerator++;
+            studySession.CurrentSubQuestion = getSubQuestion(studySession.CurrentQuestion.Enumerator);
+
+
+            if (studySession.CurrentSubQuestion == null)
+            {
+                studySession.QuestionAsked.Add(studySession.CurrentQuestion);
+                studySession.CurrentQuestion = null;
+                getNextQuestion();
+
+            }
+        }
+
+
+
+
 
         private ISubQuestion getSubQuestion(int enumerator)
         {
-           var qEnumerator =  studySession.CurrentQuestion.SubQuestion.GetEnumerator();
-          foreach(var sq in studySession.CurrentQuestion.SubQuestion)
+            var qEnumerator = studySession.CurrentQuestion.SubQuestion.GetEnumerator();
+            foreach (var sq in studySession.CurrentQuestion.SubQuestion)
             {
                 if (int.Parse(sq.subQuestionID.Trim()) == enumerator) return sq;
             }
 
             return null;
         }
+
+        internal string[] createReplayToUser(string text, UserIntent answerIntent)
+        {
+            switch (answerIntent)
+            {
+                case UserIntent.unknown:
+                case UserIntent.answer:
+                    return createFeedBack(checkAnswer(text));
+
+                case UserIntent.dontKnow:
+                    return conversationController.getPhrase(Pkey.neverMind);
+
+                case UserIntent.question:
+                    return conversationController.getPhrase(Pkey.unknownQuestion);
+
+                case UserIntent.stopSession:
+                    throw new StopSessionException();
+
+                default:
+                    return createFeedBack(checkAnswer(text));
+
+            }
+           return null;
+        }
+
+        private string[] createFeedBack(AnswerFeedback answerFeedback)
+        {
+            //check sub question
+            if (answerFeedback.score >= 85)
+            {
+                return  conversationController.getPhrase(Pkey.goodAnswer);
+            }
+            else if (answerFeedback.score >= 30)
+            {
+                return conversationController.getPhrase(Pkey.partialAnswer);
+            }
+            else
+            {
+                return conversationController.getPhrase(Pkey.notAnAnswer);
+            }
+        }
     }
- }
+
+
+
+
+}

@@ -17,7 +17,7 @@ namespace NLPtest.WorldObj
         public override IWorldObject Clone()
         {
             InfinitiveObject res = new InfinitiveObject(Word);
-            res.cloneBase(this);
+            res.Copy(this);
             return res;
         }
 

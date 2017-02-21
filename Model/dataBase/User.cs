@@ -22,5 +22,3 @@ namespace Model.dataBase
         public Nullable<System.DateTime> UserLastSession { get; set; }
     }
 }
-  //this.Configuration.LazyLoadingEnabled = false;
-  //  this.Configuration.ProxyCreationEnabled = false;

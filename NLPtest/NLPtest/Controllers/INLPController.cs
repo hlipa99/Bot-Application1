@@ -13,7 +13,7 @@ public interface INLPControler
 	
       string GetGeneralFeeling(string text);
 
-      ContentTurn checkContext(string text,ConversationContext context);
-    ContentTurn testAnalizer(string inputText, out string log);
-
+      ContentList checkContext(string text,ConversationContext context);
+    ContentList testAnalizer(string inputText, out string log);
+    
 }

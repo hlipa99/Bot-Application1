@@ -124,7 +124,7 @@ namespace Bot_Application1.IDialog
                 switch (optionIdx)
                 {
                     case 0:  //start learning
-                        context.Call(new StartLerningDialog(),EndOfLearningSession);
+                        context.Call(new LerningDialog(),EndOfLearningSession);
                         break;
                     case 1:  //not implamented
                         context.Call(new NotImplamentedDialog(), returnToMainMenu);

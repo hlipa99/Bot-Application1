@@ -18,10 +18,10 @@ using System.Text.RegularExpressions;
 using NLPtest.view;
 using NLPtest.Controllers;
 using java.awt;
-using Newtonsoft.Json;
 using System.Xml.Serialization;
 using NLPtest.MorfObjects;
 using static NLPtest.WordObject;
+using Newtonsoft.Json;
 
 namespace NLPtest
 {
@@ -33,7 +33,7 @@ namespace NLPtest
       //  MeniTaggeedSentenceFactory sentenceFactory;
       //  TaggerBasedHebrewChunker chunker;
         private   HebDictionary hebDictionary;
-        HttpController httpCtrl = new HttpController();
+        OuterAPIController httpCtrl = new OuterAPIController();
         private IEnumerable<Word> wordList;
 
         public MorfAnalizer()
@@ -48,6 +48,36 @@ namespace NLPtest
             hebDictionary = new HebDictionary();
         }
 
+
+        public List<WordObject> getWordsObjectFromParserServer(String str,bool isSpellCorrected)
+        {
+            string JsonRes = httpCtrl.sendToHebrewMorphAnalizer(str);
+
+            var sentenceFromServer = new List<WordObject>();
+            if (JsonRes != null)
+            {
+                try
+                {
+                
+                    sentenceFromServer = JsonConvert.DeserializeObject<List<WordObject>>(JsonRes);
+                }
+                catch (Exception ex)
+                {
+                    return null;
+                }
+            }
+
+            //may be mispelling for the first time
+            if(!isSpellCorrected && sentenceFromServer.Count(x=> x.isA(WordType.unknownWord)) > 0){
+                var correctSpelling = httpCtrl.correctSpelling(str);
+                if (correctSpelling != null)
+                {
+                    return getWordsObjectFromParserServer(correctSpelling, true);
+                }
+            }
+
+            return sentenceFromServer;
+        }
         
         public   List<Sentence> meniAnalize(String str)
         {
@@ -71,24 +101,8 @@ namespace NLPtest
                 {
                     //   var taggedSentences = tagger.getTaggedSentences(strRes);
 
-                    var JsonRes = httpCtrl.sendToHebrewMorphAnalizer(strRes);
-                    var sentenceFromServer = new List<WordObject>();
-                    if (JsonRes != null)
-                    {
-                        try
-                        {
-                            sentenceFromServer = JsonConvert.DeserializeObject<List<WordObject>>(JsonRes); 
-                        }
-                        catch (Exception ex)
-                        {
-                            return new List<Sentence>();
-                        }
-                    }
-                    else
-                    {
-                        return new List<Sentence>();  //TODO Exception
-                    }
 
+                    var sentenceFromServer = getWordsObjectFromParserServer(strRes, false);
                     //remove nikod etc.
                     sentenceFromServer.RemoveAll(x => (x.Text.Length <= 1) && (x.Pos == "punctuation"));
 
@@ -151,7 +165,7 @@ namespace NLPtest
             var context = new TextContext();
             var sen = meniAnalize(text);
             string res = null;
-            ContentTurn input = new ContentTurn();
+            ContentList input = new ContentList();
             foreach (var s in sen)
             {
                 foreach (var w in s.Words)
@@ -497,7 +511,7 @@ namespace NLPtest
                 return sen[0].Words[0].Text;
             }
 
-            ContentTurn input = new ContentTurn();
+            ContentList input = new ContentList();
             foreach (var s in sen)
             {
                 foreach (var w in s.Words)
@@ -519,7 +533,7 @@ namespace NLPtest
             var context = new TextContext();
             var sen = meniAnalize(text);
 
-            ContentTurn input = new ContentTurn();
+            ContentList input = new ContentList();
             foreach (var s in sen)
             {
                 foreach (var w in s.Words)

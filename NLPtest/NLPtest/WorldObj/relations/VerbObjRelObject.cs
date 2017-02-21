@@ -14,7 +14,7 @@
         public override IWorldObject Clone()
         {
             VerbObjRelObject res = new VerbObjRelObject(Objective);
-           res.cloneBase(this);
+            res.Copy(this);
             return res;
         }
 

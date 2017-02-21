@@ -18,9 +18,9 @@ namespace NLPtest.WorldObj.ConversationFlow
         }
 
 
-        public override ContentTurn getResponse()
+        public override ContentList getResponse()
         {
-            ContentTurn res = new ContentTurn();
+            ContentList res = new ContentList();
 
           
             if (introjection != null)

@@ -54,6 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\AnswerFeedback.cs" />
     <Compile Include="Models\ISubQuestion.cs" />
     <Compile Include="dataBase\SubQuestion.cs">
       <DependentUpon>BotData.tt</DependentUpon>
@@ -111,6 +112,7 @@
       <DependentUpon>BotData.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
+    <Content Include="dataBase\BotData.edmx.sql" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

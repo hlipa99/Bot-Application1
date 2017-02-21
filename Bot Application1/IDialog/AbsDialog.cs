@@ -27,11 +27,17 @@ namespace Bot_Application1.IDialog
         private IUser user;
         private StudySession studySession;
         private DateTime request = DateTime.UtcNow;
+        private UserContext userContext;
         //IDialogContext context;
 
-        internal void updateRequestTime()
+        internal void updateRequestTime2()
         {
             request = DateTime.UtcNow;
+        }
+
+        internal void updateRequestTime(IDialogContext context)
+        {
+            request = context.Activity.Timestamp.Value;
         }
 
 
@@ -102,6 +108,18 @@ namespace Bot_Application1.IDialog
             }
         }
 
+        public UserContext UserContext
+        {
+            get
+            {
+                return userContext;
+            }
+
+            set
+            {
+                userContext = value;
+            }
+        }
 
         internal async Task writeMessageToUser(IDialogContext context, string[] newMessage)
         {
@@ -168,8 +186,8 @@ namespace Bot_Application1.IDialog
         public async virtual Task createQuickReplay(IDialogContext context,string title, string[] options, ResumeAfter<IMessageActivity> resume)
         {
 
-        //     await writeMessageToUser(context, new string[] { title });
-
+            //     await writeMessageToUser(context, new string[] { title });
+           
             var reply = context.MakeMessage();
             var channelData = new JObject();
             var quickReplies = new JArray();
@@ -182,17 +200,20 @@ namespace Bot_Application1.IDialog
                 qrList.Add(r);
             }
 
+          
             var message = new FacebookMessage(title, qrList);
             reply.ChannelData = message;
 
 
-            updateRequestTime();
+
             await context.PostAsync(reply);
 
+            updateRequestTime(context);
             context.Wait(resume);
 
         }
 
+   
         public async virtual Task createRMenuOptions(IDialogContext context, string title, string[] options, ResumeAfter<object> resume)
         {
 

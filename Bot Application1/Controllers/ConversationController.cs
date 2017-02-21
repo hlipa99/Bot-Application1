@@ -24,9 +24,9 @@ namespace Bot_Application1.Controllers
         MessageComposer composer;
         // Dictionary<string, string[]> PraseDictionary;
         DataBaseController db = new DataBaseController();
+        EducationController ec;
 
-
-        private ContentTurn last;
+        private ContentList last;
         INLPControler nlpControler;
         IUser user;
         IStudySession studySession;
@@ -53,6 +53,7 @@ namespace Bot_Application1.Controllers
         {
             this.user = user;
             this.studySession = studySession;
+             ec = new EducationController(user, studySession,this);
         }
 
 
@@ -292,8 +293,55 @@ namespace Bot_Application1.Controllers
 
         //    return d;
         //}
+        public string[] createReplayToUser(string text, UserContext context)
+        {
+            NLPControler nlp = NLPControler.getInstence();
+          //  var answer = nlp.Analize(text);
+            var answerIntent = nlp.getUserIntent(text);
+            if(context.dialog == "LerningDialog")
+            {
+                return ec.createReplayToUser(text, answerIntent);
+            }else if (context.dialog == "lerningSession")
+            {
 
- 
+                switch (answerIntent)
+                {
+                    case UserIntent.answer:
+                        if (context.dialog == "lerningSession")
+                        {
+                            throw new StopSessionException();
+                        }
+                        break;
+
+                    case UserIntent.dontKnow:
+
+                        break;
+
+                    case UserIntent.question:
+
+                        break;
+
+                    case UserIntent.unknown:
+
+                        break;
+
+                    case UserIntent.stopSession:
+
+                        throw new StopSessionException();
+
+                     default:
+
+                        break;
+                }
+            }else
+            {
+                throw new ContextException();
+            }
+            return null;
+        }
+
+
+
         public string[] getPhrase(Pkey key,string[] flags = null, string[] flagesNot = null, string textVar = null)
         {
           
@@ -365,9 +413,23 @@ namespace Bot_Application1.Controllers
                 phraseRes = formatEmuji(phraseRes);
             }
 
-            if (phraseRes.Contains("<") || phraseRes.Contains(">"))
+
+            //example <יודע#יודעת>
+            while (phraseRes.Contains("<") && phraseRes.Contains(">"))
             {
-                throw new PhraseFormatException();
+
+                if (phraseRes.Contains("#"))
+                {
+                    var start = phraseRes.IndexOf("<");
+                    var end = phraseRes.IndexOf(">");
+                    var replace = phraseRes.Substring(start + 1, end - start -1).Split('#');
+                    var gender = user.UserGender == "feminine" ? replace[1] : replace[0];
+                    phraseRes = phraseRes.Remove(start, end - start + 1);
+                    phraseRes = phraseRes.Insert(start, gender);
+                }
+
+
+            //    throw new PhraseFormatException();
             }
 
             return phraseRes;
@@ -426,6 +488,5 @@ namespace Bot_Application1.Controllers
     }
 
 
-   
 
 }

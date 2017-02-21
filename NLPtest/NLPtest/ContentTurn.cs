@@ -9,33 +9,46 @@ using System.Threading.Tasks;
 namespace NLPtest
 {
     //fifo stack
-    public class ContentTurn
+    public class ContentList
     {
         List<WorldObject> list = new List<WorldObject>();
+
         ConversationContext conversationContext;
 
+        public List<WorldObject> List
+        {
+            get
+            {
+                return list;
+            }
+
+            set
+            {
+                list = value;
+            }
+        }
 
         public void Add(WorldObject obj)
         {
-            list.Add(obj);
+            List.Add(obj);
         }
         public void Add(List<WorldObject> obj)
         {
-            list.AddRange(obj);
+            List.AddRange(obj);
         }
 
 
         public bool empty()
         {
-            return list.Count <= 0;
+            return List.Count <= 0;
         }
 
 
         public WorldObject pop()
         {
-            var next = list.FirstOrDefault();
+            var next = List.FirstOrDefault();
             if (!empty()) {
-                list.RemoveAt(0);
+                List.RemoveAt(0);
             }
             return next;
         }
@@ -43,21 +56,21 @@ namespace NLPtest
         public IEnumerator<WorldObject> GetEnumerator()
         {
             //return copy allow change as enumarating 
-            return list.ToList<WorldObject>().GetEnumerator();
+            return List.ToList<WorldObject>().GetEnumerator();
         }
 
 
 
-        internal void Add(ContentTurn contentTurn)
+        internal void Add(ContentList contentTurn)
         {
-            list.AddRange(contentTurn.getList());
+            List.AddRange(contentTurn.getList());
         }
 
         internal WorldObject Get(int idx)
         {
             try
             {
-                return list.ElementAt(idx);
+                return List.ElementAt(idx);
             }catch(Exception ex)
             {
                 return null;
@@ -67,14 +80,14 @@ namespace NLPtest
 
         private IEnumerable<WorldObject> getList()
         {
-            return list;
+            return List;
         }
 
 
         public override string ToString()
         {
             var res = "";
-            foreach(var o in list)
+            foreach(var o in List)
             {
                     res += o + " | ";
             }
@@ -83,14 +96,14 @@ namespace NLPtest
 
         internal void replace(WorldObject o, WorldObject g)
         {
-            var i = list.IndexOf(o);
-            list.RemoveAt(i);
-            list.Insert(i,g);
+            var i = List.IndexOf(o);
+            List.RemoveAt(i);
+            List.Insert(i,g);
         }
 
         internal int Count()
         {
-            return list.Count;
+            return List.Count;
         }
     }
 }

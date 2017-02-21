@@ -16,12 +16,10 @@ namespace Model.dataBase
     public partial class Entities : DbContext
     {
         public Entities()
-            : base("name=Entities")
-        {
-         //   this.Configuration.LazyLoadingEnabled = false;
-          //  this.Configuration.ProxyCreationEnabled = false;
+            : base("name=mindcetEntities")
+        { 
         }
-    
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();

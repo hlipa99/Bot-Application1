@@ -119,8 +119,8 @@
       <HintPath>..\packages\WindowsAzure.Storage.8.0.1\lib\net45\Microsoft.WindowsAzure.Storage.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="nunit.framework, Version=3.5.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
@@ -245,6 +245,9 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="verifyxspell.htm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -255,8 +258,11 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Carda_factory\ManagerCard.cs" />
+    <Compile Include="Controllers\ContextException.cs" />
     <Compile Include="Controllers\DataBaseController.cs" />
     <Compile Include="Controllers\MediaController.cs" />
+    <Compile Include="Controllers\StopSessionException.cs" />
+    <Compile Include="Controllers\UserContext.cs" />
     <Compile Include="Exceptions\DBException.cs" />
     <Compile Include="Exceptions\PhraseFormatException.cs" />
     <Compile Include="Exceptions\botphraseException.cs" />
@@ -270,7 +276,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="IDialog\AbsDialog.cs" />
-    <Compile Include="IDialog\EndOfLearningSessionException.cs" />
+    <Compile Include="Exceptions\EndOfLearningSessionException.cs" />
     <Compile Include="IDialog\FarewellDialog.cs" />
     <Compile Include="IDialog\MainDialog.cs" />
     <Compile Include="IDialog\MenuOptionDialog.cs" />
@@ -321,9 +327,9 @@
       <Project>{77834157-486A-4ECD-98F6-0D8F9783077A}</Project>
       <Name>Models</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NLPtest\NLPtest\NLPtest.csproj">
+    <ProjectReference Include="..\NLPtest\NLPtest\NLP.csproj">
       <Project>{F1B355E1-3B6E-423D-8225-DC400CFF395D}</Project>
-      <Name>NLPtest</Name>
+      <Name>NLP</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

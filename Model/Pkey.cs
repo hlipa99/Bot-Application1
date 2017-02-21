@@ -54,6 +54,7 @@ namespace Model
         SubjectNotAvialable,
         moveToNextSubQuestion,
         neverMind,
-        returnToMainMenu
+        returnToMainMenu,
+        unknownQuestion
     }
 }

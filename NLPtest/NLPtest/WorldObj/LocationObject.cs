@@ -2,7 +2,7 @@
 
 namespace NLPtest.WorldObj
 {
-    internal class LocationObject : NounObject
+    internal class LocationObject : EntityObject
     {
    
 
@@ -14,7 +14,7 @@ namespace NLPtest.WorldObj
         public override IWorldObject Clone()
         {
             LocationObject res = new LocationObject(Word);
-           res.cloneBase(this);
+            res.Copy(this);
             return res;
         }
     }

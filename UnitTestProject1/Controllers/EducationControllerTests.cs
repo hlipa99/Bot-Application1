@@ -16,6 +16,7 @@ namespace Bot_Application1.Controllers.Tests
     public class EducationControllerTests
     {
         EducationController ec;
+        ConversationController cc;
         Mock<IUser> mockUser = new Mock<IUser>();
         Mock<IStudySession> mockStudySession = new Mock<IStudySession>();
         Mock<IQuestion> mockQuestion1 = new Mock<IQuestion>();
@@ -36,8 +37,8 @@ namespace Bot_Application1.Controllers.Tests
             mockStudySession.Setup(x => x.Category).Returns("לאומיות");
             mockStudySession.Setup(x => x.SessionLength).Returns(3);
             mockStudySession.Setup(x => x.QuestionAsked).Returns(new HashSet<IQuestion>());
-            ec = new EducationController(mockUser.Object, mockStudySession.Object);
-
+            cc = new ConversationController(mockUser.Object, mockStudySession.Object);
+            ec = new EducationController(mockUser.Object, mockStudySession.Object,cc);
             mockDB.Setup(x => x.getAllCategory()).Returns(new string[] { "לאומיות" });
             mockDB.Setup(x => x.getQuestion("לאומיות")).Returns(new IQuestion[] { mockQuestion1.Object });
             mockDB.Setup(x => x.getBotPhrase(It.IsAny<Pkey>(), new string[] { }, new string[] { })).Returns((Pkey key, string[] a, string[] b) => new string[] { Enum.GetName(typeof(Pkey), key) });
@@ -51,18 +52,24 @@ namespace Bot_Application1.Controllers.Tests
         public void getQuestionTest()
         {
             //good
-            Assert.AreEqual(ec.getQuestion("לאומיות", null, mockStudySession.Object), mockQuestion1.Object);
+            mockStudySession.Object.Category = "לאומיות";
+            ec = new EducationController(mockUser.Object, mockStudySession.Object,cc);
+            Assert.AreEqual(ec.getQuestion(), mockQuestion1.Object);
 
             //bad
-            Assert.AreEqual(ec.getQuestion("dsdsds", null, mockStudySession.Object), null);
+            mockStudySession.Object.Category = "dsdsds";
+            ec = new EducationController(mockUser.Object, mockStudySession.Object,cc);
+            Assert.AreEqual(ec.getQuestion(), null);
           
             //ugly
             try
             {
+                mockStudySession.Object.Category = "לאומיות";
+                ec = new EducationController(mockUser.Object, mockStudySession.Object,cc);
                 var qs = new HashSet<IQuestion>();
                 qs.Add(mockQuestion1.Object);
                 mockStudySession.Setup(x => x.QuestionAsked).Returns(qs);
-                ec.getQuestion("לאומיות", null, mockStudySession.Object);
+                ec.getQuestion();
                 Assert.Fail();
             }
             catch(Exception ex)
@@ -75,16 +82,16 @@ namespace Bot_Application1.Controllers.Tests
         [TestMethod()]
         public void checkAnswerTest()
         {
-            Mock<IQuestion> mockQuestion4 = new Mock<IQuestion>();
+            Mock<ISubQuestion> mockQuestion4 = new Mock<ISubQuestion>();
             mockQuestion4.SetupProperty(x => x.AnswerScore);
             //good
-            Assert.AreEqual(ec.checkAnswer(mockQuestion4.Object, "תשובה טובה מאד מאד, אפילו מצויינת").AnswerScore, 100);
+            Assert.AreEqual(ec.checkAnswer( "תשובה טובה מאד מאד, אפילו מצויינת").score, 100);
 
             //bad
-            Assert.AreEqual(ec.checkAnswer(mockQuestion4.Object, "תשובה חלקית אבל בסדר").AnswerScore, 56);
+            Assert.AreEqual(ec.checkAnswer("תשובה חלקית אבל בסדר").score, 56);
 
             //ugly
-            Assert.AreEqual(ec.checkAnswer(mockQuestion4.Object, "sdsdfsdfs").AnswerScore, 0);
+            Assert.AreEqual(ec.checkAnswer("sdsdfsdfs").score, 0);
 
         }
 

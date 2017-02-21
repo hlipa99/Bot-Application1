@@ -98,7 +98,8 @@ namespace NLPtest
         {
             masculine,
             feminine,
-            unspecified
+            masculineandfeminine,
+            unspecified,
         }
 
         public enum timeType
@@ -113,7 +114,7 @@ namespace NLPtest
         public override IWorldObject Clone()
         {
             personObject res = new personObject(amount,person,time,gender,Word);
-           res.cloneBase(this);
+            res.Copy(this);
             return res;
         }
 

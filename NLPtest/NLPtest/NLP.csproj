@@ -71,6 +71,11 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ApiAiSDK, Version=1.6.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\ApiAiSDK.1.6.5\lib\net35\ApiAiSDK.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
     <Reference Include="IKVM.AWT.WinForms, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
       <HintPath>..\..\packages\IKVM.8.1.5717.0\lib\IKVM.AWT.WinForms.dll</HintPath>
       <Private>True</Private>
@@ -184,7 +189,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\packages\Newtonsoft.Json.9.0.2-beta2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="nunit.core, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
@@ -224,7 +229,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Answer.cs" />
-    <Compile Include="Controllers\HttpController.cs" />
+    <Compile Include="Controllers\OuterAPIController.cs" />
+    <Compile Include="Controllers\QuestionsAnswersControllers.cs" />
     <Compile Include="Controllers\TemplateController.cs" />
     <Compile Include="Exceptions\GufException.cs" />
     <Compile Include="Controllers\INLPController.cs" />
@@ -234,7 +240,9 @@
     <Compile Include="HebWords\HebTemplate.cs" />
     <Compile Include="Exceptions\TemplateException.cs" />
     <Compile Include="MorfObjects\ExtTokenWithBuilder.cs" />
+    <Compile Include="QnA\QAEngin.cs" />
     <Compile Include="TemplateObject.cs" />
+    <Compile Include="WorldObj\EntityObject.cs" />
     <Compile Include="WorldObj\ParticipleObject.cs" />
     <Compile Include="WorldObj\InfinitiveObject.cs" />
     <Compile Include="WorldObj\multyPersoneObject.cs" />
@@ -335,6 +343,7 @@
       <Name>Models</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

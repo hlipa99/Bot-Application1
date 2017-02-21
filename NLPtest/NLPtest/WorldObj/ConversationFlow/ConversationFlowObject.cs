@@ -9,7 +9,7 @@ namespace NLPtest.WorldObj
     abstract class ConversationFlowObject : WorldObject
     {
 
-        public abstract ContentTurn getResponse();
+        public abstract ContentList getResponse();
     }
 
 

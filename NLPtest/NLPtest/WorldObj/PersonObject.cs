@@ -8,12 +8,12 @@ namespace NLPtest.WorldObj
 {
 
 
-    public class PersonObject : NounObject
+    public class PersonObject : EntityObject
     {
         public override IWorldObject Clone()
         {
             PersonObject res = new PersonObject(Word);
-           res.cloneBase(this);
+            res.Copy(this);
             return res;
         }
 

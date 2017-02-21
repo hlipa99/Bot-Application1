@@ -18,7 +18,7 @@ namespace NLPtest.WorldObj
         public override IWorldObject Clone()
         {
             VerbObject res = new VerbObject(Word);
-           res.cloneBase(this);
+            res.Copy(this);
             return res;
         }
     }
