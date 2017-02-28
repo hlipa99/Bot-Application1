@@ -230,6 +230,7 @@
     <Content Include="images\MainBot.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="ClassDiagram1.cd" />
     <None Include="Properties\PublishProfiles\BotApplication120170104113209 - Web Deploy %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\BotApplication120170104113209 - Web Deploy %283%29.pubxml" />
     <None Include="Properties\PublishProfiles\BotApplication120170104113209 - Web Deploy.pubxml" />
@@ -277,7 +278,10 @@
     </Compile>
     <Compile Include="IDialog\AbsDialog.cs" />
     <Compile Include="Exceptions\EndOfLearningSessionException.cs" />
+    <Compile Include="IDialog\SideDialog.cs" />
+    <Compile Include="IDialog\YesNoQuestionDialog.cs" />
     <Compile Include="IDialog\FarewellDialog.cs" />
+    <Compile Include="IDialog\GreetingDialog.cs" />
     <Compile Include="IDialog\MainDialog.cs" />
     <Compile Include="IDialog\MenuOptionDialog.cs" />
     <Compile Include="IDialog\NewUserDialog.cs" />

@@ -21,7 +21,11 @@ namespace Bot_Application1.IDialog
     [Serializable]
     public class NewUserDialog : AbsDialog
     {
-     
+        public override string getDialogContext()
+        {
+            return "NewUserDialog";
+        }
+
         public override async Task StartAsync(IDialogContext context)
         {
 
@@ -81,37 +85,38 @@ namespace Bot_Application1.IDialog
 
         public async virtual Task CheckName(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            if(context.Activity.Timestamp <= Request)
-            {
-                context.Wait(CheckName);
-                return;
-            }
+            if(await outDatedMessage(context,CheckName,result)) return;
+
+
 
 
             var message = await result;
             var userText = await result;
 
-        
+
             if ((User.UserName = conv().getName(userText.Text)) != null)
             {
                 setUser(context);
                 var newMessage = conv().getPhrase(Pkey.NewUserGreeting);
 
-          
 
-                 await writeMessageToUser(context, newMessage);
-                 await NewUserGetGender(context);
-  
+
+                await writeMessageToUser(context, newMessage);
+                await NewUserGetGender(context);
+
             }
             else
             {
-                var newMessage = conv().getPhrase(Pkey.MissingUserInfo,textVar:"שם");
+                var newMessage = conv().getPhrase(Pkey.MissingUserInfo, textVar: "שם");
                 await writeMessageToUser(context, newMessage);
                 updateRequestTime(context);
                 context.Wait(CheckName);
             }
         }
 
+       
+
+     
 
         public async virtual Task NewUserGetGender(IDialogContext context)
         {

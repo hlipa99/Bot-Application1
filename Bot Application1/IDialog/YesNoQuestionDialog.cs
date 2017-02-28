@@ -18,11 +18,11 @@ using Model;
 namespace Bot_Application1.IDialog
 {
     [Serializable]
-    public class FarewellDialog : AbsDialog
+    public class YesNoQuestionDialog : AbsDialog
     {
         public override string getDialogContext()
         {
-            return "FarewellDialog";
+            return "YesNoQuestionDialog";
         }
 
         public override async Task StartAsync(IDialogContext context)

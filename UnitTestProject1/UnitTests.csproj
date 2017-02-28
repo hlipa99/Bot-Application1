@@ -125,6 +125,7 @@
     <Compile Include="Controllers\EducationControllerTests.cs" />
     <Compile Include="NLP\NLPTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QnA\QAEnginTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bot Application1\Bot Application1.csproj">
