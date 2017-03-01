@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace NLPtest.QnA
 {
-    class QAEngin
+    public class QAEngin
     {
         NLPControler nlp = NLPControler.getInstence();
 

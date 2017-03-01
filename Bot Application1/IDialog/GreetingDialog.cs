@@ -15,17 +15,17 @@ using Bot_Application1.log;
 using static Bot_Application1.Controllers.ConversationController;
 using Model;
 using Model.Models;
-using Bot_Application1.Exceptions;
 
 namespace Bot_Application1.IDialog
 {
     [Serializable]
-    public class MainDialog : AbsDialog
+    public class GreetingDialog : AbsDialog
     {
+
 
         public override string getDialogContext()
         {
-            return "MainDialog";
+            return "GreetingDialog";
         }
 
         public override async Task StartAsync(IDialogContext context)

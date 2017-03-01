@@ -16,7 +16,10 @@ namespace Bot_Application1.IDialog
     [Serializable]
     public class LerningDialog : AbsDialog
     {
-
+        public override string getDialogContext()
+        {
+            return "LerningDialog";
+        }
 
 
         public override async Task StartAsync(IDialogContext context)

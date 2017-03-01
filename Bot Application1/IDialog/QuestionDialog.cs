@@ -11,6 +11,12 @@ namespace Bot_Application1.IDialog
     public class QuestionDialog : AbsDialog
     {
 
+
+        public override string getDialogContext()
+        {
+            return "NotImplamentedDialog";
+        }
+
         public override async Task StartAsync(IDialogContext context)
         {
             throw new NotImplementedException();

@@ -16,13 +16,13 @@ using Model;
 using Model.Models;
 using Microsoft.Bot.Builder.ConnectorEx;
 using Microsoft.Bot.Builder.Dialogs.Internals;
-using Bot_Application1.Models;
+using Bot_Application1.IDialog;
 
 namespace Bot_Application1.IDialog
 {
 
     [Serializable]
-    public abstract class AbsDialog : IDialog<object>
+    public abstract class AbsDialog : IDialog<IMessageActivity>
     {
 
         private IUser user;
@@ -244,6 +244,21 @@ namespace Bot_Application1.IDialog
         {
             return new ConversationController(User, StudySession);
         }
+
+
+        public async Task<bool> outDatedMessage(IDialogContext context,ResumeAfter<IMessageActivity> resume, IAwaitable<IMessageActivity> message)
+        {
+            var mes = await message;
+            if (mes.Timestamp <= Request)
+            {
+                mes.Summary = getDialogContext();
+                await context.Forward<IMessageActivity, IMessageActivity>(new SideDialog(), resume, mes, CancellationToken.None);
+                return true;
+            }
+            return false;
+        }
+
+        public abstract string getDialogContext();
 
         public virtual Task StartAsync(IDialogContext context)
         {

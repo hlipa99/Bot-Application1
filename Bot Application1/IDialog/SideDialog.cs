@@ -18,35 +18,17 @@ using Model;
 namespace Bot_Application1.IDialog
 {
     [Serializable]
-    public class FarewellDialog : AbsDialog
+    public class SideDialog : AbsDialog
     {
         public override string getDialogContext()
         {
-            return "FarewellDialog";
+            return "SideDialog";
         }
 
         public override async Task StartAsync(IDialogContext context)
         {
-            context.Wait(userGoodbye);
-        }
-
-        private async Task userGoodbye(IDialogContext context, IAwaitable<object> result)
-        {
-            
-            await writeMessageToUser(context, conv().getPhrase(Pkey.goodbye));
-            context.Wait(waitForNextInteraction);
-        }
-
-        private async Task waitForNextInteraction(IDialogContext context, IAwaitable<object> result)
-        {
-            context.Wait(waitForNextInteraction2);
-        }
-
-        private async Task waitForNextInteraction2(IDialogContext context, IAwaitable<object> result)
-        {
             context.Done("");
         }
-
 
 
     }

@@ -37,7 +37,12 @@ namespace Bot_Application1.IDialog
 
         }
 
-     
+        public override string getDialogContext()
+        {
+            return "NotImplamentedDialog";
+        }
+
+
 
     }
 }
