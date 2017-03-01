@@ -1,0 +1,217 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="NLPtest.MorfObjects.Sentence" Collapsed="true">
+    <Position X="34.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQIBAAAAAAAAAEAEAABAAAAAAAQAAAQIACAACAEgAAA=</HashCode>
+      <FileName>MorfObjects\Sentence.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NLPtest.NLP.MorfAnalizer">
+    <Position X="35" Y="7.25" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>BiAACCQAAAAAAAAgAAIIAACAIgAAAAAAAAAEAAAAAAA=</HashCode>
+      <FileName>NLP\MorfAnalizer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NLPtest.NLP.Responder">
+    <Position X="36" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAA=</HashCode>
+      <FileName>NLP\Responder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NLPtest.EntityObject" Collapsed="true">
+    <Position X="31.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>WorldObj\entities\EntityObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NLPtest.EventObject" Collapsed="true">
+    <Position X="34" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>WorldObj\entities\EventObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NLPtest.OrginazationObject" Collapsed="true">
+    <Position X="30.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>WorldObj\entities\OrginazationObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NLPtest.Controllers.OuterAPIController">
+    <Position X="27.75" Y="7.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAEAAAAAAAAEAAAAAAAAAAAAAAAgAAAAAAAA=</HashCode>
+      <FileName>Controllers\OuterAPIController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NLPtest.Controllers.QuestionsAnswersControllers">
+    <Position X="33.5" Y="1.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\QuestionsAnswersControllers.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NLPtest.NLP.SemanticAnalizer">
+    <Position X="30" Y="7.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AQACQAAAAAAAAAAAAAAAAAAAAAQBYAAAAAAAgAABgAA=</HashCode>
+      <FileName>NLP\SemanticAnalizer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NLPtest.view.BotObject" Collapsed="true">
+    <Position X="32.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>WorldObj\BotObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NLPtest.view.multyPersoneObject" Collapsed="true">
+    <Position X="34" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAQAAAAAAABA=</HashCode>
+      <FileName>WorldObj\entities\multyPersoneObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NLPtest.view.adjectiveRelObject" Collapsed="true">
+    <Position X="27.75" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>WorldObj\relations\adjectiveRelObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NLPtest.view.copulaRelObject" Collapsed="true">
+    <Position X="29.5" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>WorldObj\relations\copulaRelObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NLPtest.WorldObj.AdjObject" Collapsed="true">
+    <Position X="29.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>WorldObj\AdjObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NLPtest.WorldObj.LocationObject" Collapsed="true">
+    <Position X="28.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>WorldObj\entities\LocationObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NLPtest.WorldObj.NounObject" Collapsed="true">
+    <Position X="31.5" Y="1.5" Width="1.5" />
+    <InheritanceLine Type="NLPtest.WorldObj.WorldObject" ManuallyRouted="true" FixedFromPoint="true">
+      <Path>
+        <Point X="27.75" Y="2.562" />
+        <Point X="31.26" Y="2.562" />
+        <Point X="31.26" Y="1.846" />
+        <Point X="31.5" Y="1.846" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>WorldObj\NounObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NLPtest.WorldObj.PersonObject" Collapsed="true">
+    <Position X="32.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAACAAAAAAAQAAAAEAAAAAAAAAAAAABA=</HashCode>
+      <FileName>WorldObj\entities\PersonObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NLPtest.WorldObj.PrepRelObject" Collapsed="true">
+    <Position X="35.25" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAABAAAAARAAAAAAABA=</HashCode>
+      <FileName>WorldObj\relations\PrepRelObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NLPtest.WorldObj.RelationObject" Collapsed="true">
+    <Position X="28" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAEAAAAACAAECAAAAAAAAgAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>WorldObj\relations\RelationObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NLPtest.WorldObj.VerbObjRelObject" Collapsed="true">
+    <Position X="31.25" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAABA=</HashCode>
+      <FileName>WorldObj\relations\VerbObjRelObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NLPtest.WorldObj.VerbRelObject" Collapsed="true">
+    <Position X="33.25" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAABA=</HashCode>
+      <FileName>WorldObj\relations\VerbRelObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NLPtest.WorldObj.UserObject" Collapsed="true">
+    <Position X="30.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAACAAAAAAAAAgAEAAAAAAAAAAAAAAAIAABA=</HashCode>
+      <FileName>WorldObj\entities\UserObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NLPtest.WorldObj.VerbObject" Collapsed="true">
+    <Position X="28" Y="2.75" Width="1.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAABA=</HashCode>
+      <FileName>WorldObj\VerbObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NLPtest.WorldObj.WorldObject">
+    <Position X="26.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAABBAAAAAAECAAACAAAAggAAAQCAJAEAQAAABA=</HashCode>
+      <FileName>WorldObj\WorldObject.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="NLPtest.QnA.QAEngin">
+    <Position X="38.5" Y="7.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAABAAA=</HashCode>
+      <FileName>QnA\QAEngin.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NLPtest.HebWords.HebTemplate" Collapsed="true">
+    <Position X="36.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAQAAABEhggIAAQAAAIAAAAAJAAAAAAAAAA=</HashCode>
+      <FileName>HebWords\HebTemplate.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NLPtest.HebWords.WordObject" Collapsed="true">
+    <Position X="32.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AICBAgERIQSAAiCGAJIo4ICABIiggASqQOACCACQkxA=</HashCode>
+      <FileName>HebWords\WordObject.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="NLPtest.ITemplate" Collapsed="true">
+    <Position X="30.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAIAAAAAAAAA=</HashCode>
+      <FileName>TemplateObject.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="NLPtest.WorldObj.IWorldObject" Collapsed="true">
+    <Position X="28.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>WorldObj\IWorldObject.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

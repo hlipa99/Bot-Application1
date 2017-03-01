@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace NLPtest.view
+namespace NLPtest.Exceptions
 {
     [Serializable]
     internal class SemanticException : Exception

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Bot_Application1.Controllers
+namespace Bot_Application1.Exceptions
 {
     [Serializable]
     internal class PhraseFormatException : Exception

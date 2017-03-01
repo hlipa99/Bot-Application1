@@ -1,6 +1,7 @@
 ﻿
 using Model.dataBase;
 using NLPtest.Controllers;
+using NLPtest.HebWords;
 using NLPtest.QnA;
 using NLPtest.WorldObj;
 using System;
@@ -150,6 +151,11 @@ namespace NLPtest
                 answerText += "Missing Entity:" + ent + Environment.NewLine;
             }
             text_TB3.Text = answerText;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            NLPControler.getInstence().updateEntityTable();
         }
     }
 }

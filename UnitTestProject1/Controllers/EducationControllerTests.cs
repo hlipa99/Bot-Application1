@@ -9,6 +9,7 @@ using Moq;
 using Model.Models;
 using NLPtest.Models;
 using Model;
+using Model.dataBase;
 
 namespace Bot_Application1.Controllers.Tests
 {

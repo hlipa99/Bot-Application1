@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Bot_Application1.Controllers.ConversationController">
+    <Position X="1.5" Y="1.5" Width="2" />
+    <Members>
+      <Field Name="composer" Hidden="true" />
+      <Field Name="db" Hidden="true" />
+      <Property Name="Db" Hidden="true" />
+      <Field Name="ec" Hidden="true" />
+      <Method Name="getClass" Hidden="true" />
+      <Method Name="getClassOptions" Hidden="true" />
+      <Method Name="getGenderName" Hidden="true" />
+      <Method Name="getGenderOpositeName" Hidden="true" />
+      <Method Name="getGenderOptions" Hidden="true" />
+      <Method Name="getGenderValue" Hidden="true" />
+      <Method Name="getGufSecond" Hidden="true" />
+      <Method Name="getName" Hidden="true" />
+      <Method Name="getNum" Hidden="true" />
+      <Method Name="getPhrase" Hidden="true" />
+      <Method Name="getTimeOfDay" Hidden="true" />
+      <Method Name="getYesNoOptions" Hidden="true" />
+      <Method Name="ifGufFemenin" Hidden="true" />
+      <Method Name="isStopSession" Hidden="true" />
+      <Field Name="last" Hidden="true" />
+      <Field Name="nlpControler" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>UIAAAAQAAAAQgCAAEAIIACIBAIhAkCAAQAQGAAYAAwA=</HashCode>
+      <FileName>Controllers\ConversationController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.Controllers.EducationController">
+    <Position X="5.75" Y="4.75" Width="2" />
+    <Members>
+      <Method Name="getQuestion" Hidden="true" />
+      <Method Name="getRamdomImg" Hidden="true" />
+      <Method Name="getStudyCategory" Hidden="true" />
+      <Method Name="getStudySubCategory" Hidden="true" />
+      <Method Name="getSubQuestion" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>CAAAAAAAAAAQAAAAECAAAAAAAgAQAQAARAAQAAaAAQA=</HashCode>
+      <FileName>Controllers\EducationController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.Controllers.MessagesController">
+    <Position X="3.5" Y="5.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAACAACAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\MessagesController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.IDialog.AbsDialog">
+    <Position X="8" Y="5" Width="1.75" />
+    <Members>
+      <Method Name="getStudySession" Hidden="true" />
+      <Method Name="getUser" Hidden="true" />
+      <Method Name="setStudySession" Hidden="true" />
+      <Method Name="setUser" Hidden="true" />
+      <Method Name="StartAsync" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAACAAAAAEACAoIAEgAAABQABIBQABWA=</HashCode>
+      <FileName>IDialog\AbsDialog.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Bot_Application1.IDialog.FarewellDialog">
+    <Position X="5.75" Y="1.5" Width="2.25" />
+    <Members>
+      <Method Name="StartAsync" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAQBAAAAAAAAAAAAAAAAAAAAAAAAAQAAABAAAAA=</HashCode>
+      <FileName>IDialog\FarewellDialog.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.IDialog.LerningDialog">
+    <Position X="9.75" Y="1.25" Width="2" />
+    <Members>
+      <Method Name="edc" Hidden="true" />
+      <Method Name="StartAsync" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAACACAMAQABAAAAAAAABAAAAAAQAAACAAAQA=</HashCode>
+      <FileName>IDialog\LerningDialog.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.IDialog.MainDialog">
+    <Position X="10" Y="5" Width="2" />
+    <Members>
+      <Method Name="StartAsync" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>EEAAKAAAAAAAgEAAAAAAAAIUAAAACAAAAQAAAAAAAAA=</HashCode>
+      <FileName>IDialog\MainDialog.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.IDialog.NewUserDialog">
+    <Position X="3.75" Y="1.5" Width="1.75" />
+    <Members>
+      <Method Name="StartAsync" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAABCAAAAAAAACAAAQIAAAAACSAAAAAAAAA=</HashCode>
+      <FileName>IDialog\NewUserDialog.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

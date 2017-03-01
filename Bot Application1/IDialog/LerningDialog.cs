@@ -9,6 +9,7 @@ using Bot_Application1.Controllers;
 using Model;
 using Model.Models;
 using Bot_Application1.Exceptions;
+using Bot_Application1.Models;
 
 namespace Bot_Application1.IDialog
 {

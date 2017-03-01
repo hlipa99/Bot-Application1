@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<modelStoreModel xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm4="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/LogicalClassDesigner"
+  dslVersion="1.0.0.0"
+  Id="3fc3b01c-f2d9-4c4d-8479-8fe31329d82e"
+  name="umls" xmlns="http://schemas.microsoft.com/dsltools/ModelStore">
+  <appliedStereotypesInternal>
+    <stereotypeInstance
+      Id="9541c35a-da14-43a2-969d-46d9411e1cd8"
+      name="framework"
+      profile="StandardProfileL2" />
+    <stereotypeInstance
+      Id="8c942d77-a8cb-4c06-81b5-19730d558a08"
+      name="modelLibrary"
+      profile="StandardProfileL2" />
+    <stereotypeInstance
+      Id="4fe341e1-50a4-422e-98bb-c964e2c27183"
+      name="metamodel"
+      profile="StandardProfileL3" />
+    <stereotypeInstance
+      Id="db8ed906-9e04-4c10-9296-c62ba216f3ea"
+      name="systemModel"
+      profile="StandardProfileL3" />
+    <stereotypeInstance
+      Id="84fcf675-d757-43fa-b029-0df1cbca90b1"
+      name="namespace"
+      profile="CSharpProfile">
+      <propertyInstances>
+        <stereotypeInstanceHasPropertyInstances
+          Id="478e0ef1-0728-4f62-868a-e8e42729555d">
+          <propertyInstance
+            Id="51394748-7c7c-4102-8798-2ad8ddac7aad"
+            name="BaseName" />
+        </stereotypeInstanceHasPropertyInstances>
+        <stereotypeInstanceHasPropertyInstances
+          Id="7b176a7e-72c5-40d8-a109-d9f9bb37c359">
+          <propertyInstance
+            Id="f09ecdbf-6674-4944-95b6-d3ee13fb7072"
+            name="ClrAttributes" />
+        </stereotypeInstanceHasPropertyInstances>
+        <stereotypeInstanceHasPropertyInstances
+          Id="7f97961d-bb77-4653-a371-16ac9b44ea90">
+          <propertyInstance
+            Id="26b4b79b-376c-4101-8a7f-b4f6735b444c"
+            name="Usings" />
+        </stereotypeInstanceHasPropertyInstances>
+      </propertyInstances>
+    </stereotypeInstance>
+  </appliedStereotypesInternal>
+  <profileInstances>
+    <packageHasProfileInstances
+      Id="0caec977-1f8c-4ba3-a7db-8cc9ad9cc73b">
+      <profileInstance
+        Id="e34d544e-0fea-4ed6-ac5e-1b74119ac791"
+        name="StandardProfileL2" />
+    </packageHasProfileInstances>
+    <packageHasProfileInstances
+      Id="29349502-908c-4fda-9054-c48619c59ed0">
+      <profileInstance
+        Id="532ea607-fb19-44b8-8502-3351b05452be"
+        name="StandardProfileL3" />
+    </packageHasProfileInstances>
+    <packageHasProfileInstances
+      Id="35454811-1613-418e-8b15-da9e46f7a471">
+      <profileInstance
+        Id="bac658b1-68c4-4ed5-8f6c-a14cf0fdc760"
+        name="CSharpProfile" />
+    </packageHasProfileInstances>
+  </profileInstances>
+  <primitiveType
+    Id="220a3521-e091-4221-bae9-3ef9018e845c"
+    name="Integer"
+    isAbstract="false"
+    isLeaf="false" />
+  <primitiveType
+    Id="8943dc84-709e-4f62-b15a-a3273aa6f165"
+    name="Boolean"
+    isAbstract="false"
+    isLeaf="false" />
+  <primitiveType
+    Id="59259974-6d55-42c6-b7bd-763d77ac8ef9"
+    name="String"
+    isAbstract="false"
+    isLeaf="false" />
+  <primitiveType
+    Id="3ab42e7d-4969-445a-b209-471f5cb8209c"
+    name="UnlimitedNatural"
+    isAbstract="false"
+    isLeaf="false" />
+</modelStoreModel>

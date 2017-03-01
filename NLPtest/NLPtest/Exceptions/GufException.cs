@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace NLPtest.view
+namespace NLPtest.Exceptions
 {
  
     internal class GufException : Exception

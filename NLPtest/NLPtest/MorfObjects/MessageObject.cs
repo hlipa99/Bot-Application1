@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NLPtest
+namespace NLPtest.MorfObjects
 {
     internal class MessageObject
     {

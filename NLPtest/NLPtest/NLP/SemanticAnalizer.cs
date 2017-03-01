@@ -1,6 +1,6 @@
-﻿using static NLPtest.WordObject.WordType;
+﻿
 using NLPtest.WorldObj;
-using NLPtest.WorldObj.ConversationFlow;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +9,12 @@ using System.Threading.Tasks;
 using vohmm.application;
 using NLPtest.HebWords;
 using NLPtest.Controllers;
+using NLPtest.MorfObjects;
+using NLPtest.view;
+using NLPtest.Exceptions;
+using static NLPtest.HebWords.WordObject.WordType;
 
-namespace NLPtest.view
+namespace NLPtest.NLP
 {
 
    
@@ -217,8 +221,8 @@ namespace NLPtest.view
                 {
                     res.Add(o as WorldObject);
                 }else
-                {
-                    res.Add(new WorldObject(o.ToString()));
+                { //TODO take care of unknown objects
+                 //   res.Add(new WorldObject(o.ToString()));
                 }
             }
             log = tc.log;
@@ -260,13 +264,13 @@ namespace NLPtest.view
 
 
 
-        public List<List<ITemplate>> findGufContext(List<Sentence> all, List<ITemplate> context)
+        public List<List<ITemplate>> findGufContext(List<List<WordObject>> all, List<ITemplate> context)
         {
             List<List<ITemplate>> res = new List<List<ITemplate>>();
             foreach (var s in all)
             {
                 List<ITemplate> words = new List<ITemplate>();
-                words.AddRange(s.Words);
+                words.AddRange(s);
                 var newS = findGufContextHlpr(words, words);
                 newS = findGufContextHlpr(newS, context);
                 context = newS;
@@ -344,7 +348,7 @@ namespace NLPtest.view
                         {
                             return o;
                         }
-                        else if (w.isA(orginazationWord) && gufObject.Amount == w.Amount)
+                        else if (w.isA(orginazationWord) && gufObject.Amount == personObject.amountType.plural)
                         {
                             return o;
                         }
@@ -570,12 +574,12 @@ namespace NLPtest.view
 
         OuterAPIController ac = new OuterAPIController();
 
-        public UserIntent getUserIntent(string input)  //tempfunction!! TODO
+        public UserIntent getUserIntent(string input,string context)  //tempfunction!! TODO
         {
             UserIntent intent;
             try
             {
-                var intentStr = ac.getIntentApiAi(input);
+                var intentStr = ac.getIntentApiAi(input, context);
                 intent = (UserIntent) Enum.Parse(typeof(UserIntent), intentStr);
             }catch(Exception ex)
             {

@@ -1,8 +1,9 @@
-﻿using NLPtest.WorldObj;
+﻿using NLPtest.MorfObjects;
+using NLPtest.WorldObj;
 using System;
 using System.Collections.Generic;
 
-namespace NLPtest
+namespace NLPtest.NLP
 {
 
     public class MessageComposer

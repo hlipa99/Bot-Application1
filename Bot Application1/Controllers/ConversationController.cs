@@ -12,6 +12,10 @@ using Model;
 using Bot_Application1.Controllers;
 using NLPtest;
 using Model.Models;
+using Bot_Application1.Exceptions;
+using Bot_Application1.Models;
+using NLPtest.NLP;
+using NLPtest.Controllers;
 
 namespace Bot_Application1.Controllers
 {
@@ -27,7 +31,7 @@ namespace Bot_Application1.Controllers
         EducationController ec;
 
         private ContentList last;
-        INLPControler nlpControler;
+        NLPControler nlpControler;
         IUser user;
         IStudySession studySession;
   
@@ -278,10 +282,10 @@ namespace Bot_Application1.Controllers
           //  return nlpControler.getClass(text);
         }
 
-        public string getGeneralFeeling(string text)   //TODO: real feeling
-        {
-            return nlpControler.GetGeneralFeeling(text);
-        }
+        //public string getGeneralFeeling(string text)   //TODO: real feeling
+        //{
+        // //   return nlpControler.GetGeneralFeeling(text);
+        //}
 
 
 
@@ -297,11 +301,12 @@ namespace Bot_Application1.Controllers
         {
             NLPControler nlp = NLPControler.getInstence();
           //  var answer = nlp.Analize(text);
-            var answerIntent = nlp.getUserIntent(text);
-            if(context.dialog == "LerningDialog")
+            var answerIntent = nlp.getUserIntent(text, context.dialog);
+            if (context.dialog == "LerningDialog")
             {
                 return ec.createReplayToUser(text, answerIntent);
-            }else if (context.dialog == "lerningSession")
+            }
+            else if (context.dialog == "startConv")
             {
 
                 switch (answerIntent)
@@ -312,6 +317,10 @@ namespace Bot_Application1.Controllers
                             throw new StopSessionException();
                         }
                         break;
+                        if (context.dialog == "farewell")
+                        {
+                            throw new StopSessionException();
+                        }
 
                     case UserIntent.dontKnow:
 
@@ -329,11 +338,49 @@ namespace Bot_Application1.Controllers
 
                         throw new StopSessionException();
 
-                     default:
+                    default:
 
                         break;
                 }
-            }else
+            }
+            else if (context.dialog == "farewell")
+            {
+
+                switch (answerIntent)
+                {
+                    case UserIntent.answer:
+                        if (context.dialog == "lerningSession")
+                        {
+                            throw new StopSessionException();
+                        }
+                        break;
+                        if (context.dialog == "farewell")
+                        {
+                            throw new StopSessionException();
+                        }
+
+                    case UserIntent.dontKnow:
+
+                        break;
+
+                    case UserIntent.question:
+
+                        break;
+
+                    case UserIntent.unknown:
+
+                        break;
+
+                    case UserIntent.stopSession:
+
+                        throw new StopSessionException();
+
+                    default:
+
+                        break;
+                }
+            }
+            else
             {
                 throw new ContextException();
             }
@@ -349,7 +396,7 @@ namespace Bot_Application1.Controllers
                 if (flagesNot == null) flagesNot = new string[] { };
 
                 var phrases = Db.getBotPhrase(key, flags, flagesNot);
-                string phraseRes;
+                string phraseRes = null;
                 if (phrases.Length > 0)
                 {
 
@@ -359,7 +406,7 @@ namespace Bot_Application1.Controllers
                 }
                 else
                 {
-                    throw new botphraseException();
+                 //   throw new botphraseException();
                 }
 
 

@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using NLPtest.WorldObj;
 
-using static NLPtest.WordObject.WordType;
-namespace NLPtest
+using static NLPtest.HebWords.WordObject.WordType;
+namespace NLPtest.HebWords
 {
      class HebDictionary
     {

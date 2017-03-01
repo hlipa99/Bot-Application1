@@ -13,12 +13,6 @@ namespace Bot_Application1.Controllers
     {
 
         DataBaseController dc = new DataBaseController();
-        
-        public IUser getUser(string id)
-        {
-            var user = dc.getUser(id);
-            return user;
-        }
 
 
         public void addUser(IUser user)

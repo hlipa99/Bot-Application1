@@ -1,4 +1,5 @@
-﻿using NLPtest.view;
+﻿using NLPtest.Exceptions;
+using NLPtest.view;
 using NLPtest.WorldObj;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NLPtest
+namespace NLPtest.NLP
 {
 
     public class Responder

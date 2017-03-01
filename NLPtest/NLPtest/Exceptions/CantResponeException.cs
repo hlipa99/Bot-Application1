@@ -2,7 +2,7 @@
 using System.Runtime.Serialization;
 using NLPtest.WorldObj;
 
-namespace NLPtest
+namespace NLPtest.Exceptions
 {
     [Serializable]
     internal class CantResponeException : Exception

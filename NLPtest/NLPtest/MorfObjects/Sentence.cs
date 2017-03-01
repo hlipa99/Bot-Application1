@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using NLPtest.WorldObj;
+using NLPtest.HebWords;
 
-namespace NLPtest
+namespace NLPtest.MorfObjects
 {
     public class Sentence
     {

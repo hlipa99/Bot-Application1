@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NLPtest.WorldObj;
-using static NLPtest.WordObject.WordType;
+using static NLPtest.HebWords.WordObject.WordType;
 using NLPtest.view;
 
 namespace NLPtest.Controllers
@@ -33,61 +33,63 @@ namespace NLPtest.Controllers
     
                 
                 //one object template
-                new HebTemplate(new ITemplate[] { new WordObject("",nounWord) },new NounObject("0"),1),
-                new HebTemplate(new ITemplate[] { new WordObject("",verbWord) },new VerbObject("0"),1),
-                new HebTemplate(new ITemplate[] { new WordObject("",gufWord) },new personObject("0"),1),
+                //new HebTemplate(new ITemplate[] { new WordObject("",nounWord) },new NounObject("0"),1),
+                //new HebTemplate(new ITemplate[] { new WordObject("",verbWord) },new VerbObject("0"),1),
+             //   new HebTemplate(new ITemplate[] { new WordObject("",gufWord) },new personObject("0"),1),
+                new HebTemplate(new ITemplate[] { new WordObject("",locationWord) },new LocationObject("0"),1),
                 new HebTemplate(new ITemplate[] { new WordObject("",personWord) },new PersonObject("0"),1),
-                 new HebTemplate(new ITemplate[] { new WordObject("",locationWord) },new LocationObject("0"),1),
-                new HebTemplate(new ITemplate[] { new WordObject("",adjectiveWord) },new AdjObject("0"),1),
-                   new HebTemplate(new ITemplate[] { new WordObject("",participleWord) },new ParticipleObject("0"),1),
-
+               // new HebTemplate(new ITemplate[] { new WordObject("",adjectiveWord) },new AdjObject("0"),1),
+               // new HebTemplate(new ITemplate[] { new WordObject("",participleWord) },new ParticipleObject("0"),1),
+                new HebTemplate(new ITemplate[] { new WordObject("",conceptWord) },new ConceptObject("0"),1),
+                new HebTemplate(new ITemplate[] { new WordObject("",orginazationWord) },new OrginazationObject("0"),1),
+                new HebTemplate(new ITemplate[] { new WordObject("",eventWord) },new EventObject("0"),1),
 
 
                 
                 //two object template
 
-                 new HebTemplate(new ITemplate[] { new AdjObject(""), new NounObject("") },
-                 relate(new WorldObject("1"),new adjectiveRelObject(new AdjObject("0"))),0),
+                 //new HebTemplate(new ITemplate[] { new AdjObject(""), new NounObject("") },
+                 //relate(new WorldObject("1"),new adjectiveRelObject(new AdjObject("0"))),0),
 
-                 new HebTemplate(new ITemplate[] { new NounObject(""),new AdjObject(""),  },
-                 relate(new WorldObject("0"),new adjectiveRelObject(new AdjObject("1"))),0),
+                 //new HebTemplate(new ITemplate[] { new NounObject(""),new AdjObject(""),  },
+                 //relate(new WorldObject("0"),new adjectiveRelObject(new AdjObject("1"))),0),
 
-                 //אהב לאכול
-                 new HebTemplate(new ITemplate[] { new VerbObject(""),new VerbObject("")},
-                 relate(new VerbObject("0"),new VerbRelObject(new AdjObject("1"))),10),
+                 ////אהב לאכול
+                 //new HebTemplate(new ITemplate[] { new VerbObject(""),new VerbObject("")},
+                 //relate(new VerbObject("0"),new VerbRelObject(new AdjObject("1"))),10),
 
-                 //לאכול חצילים
-                     new HebTemplate(new ITemplate[] { new VerbObject(""),new WorldObject("")},
-                 relate(new VerbObject("1"),new VerbRelObject(new WorldObject("0"))),10),
+                 ////לאכול חצילים
+                 //    new HebTemplate(new ITemplate[] { new VerbObject(""),new WorldObject("")},
+                 //relate(new VerbObject("1"),new VerbRelObject(new WorldObject("0"))),10),
 
-                 new HebTemplate(new ITemplate[] { new WorldObject(""),new VerbObject("")},
-                 relate(new WorldObject("0"),new VerbRelObject(new VerbObject("1"))),10),
+                 //new HebTemplate(new ITemplate[] { new WorldObject(""),new VerbObject("")},
+                 //relate(new WorldObject("0"),new VerbRelObject(new VerbObject("1"))),10),
 
-                 new HebTemplate(new ITemplate[] { new WorldObject(""), new WordObject("", adjectiveWord) },
-                 relate(new WorldObject("0"),new adjectiveRelObject(new AdjObject("1"))),2),
+                 //new HebTemplate(new ITemplate[] { new WorldObject(""), new WordObject("", adjectiveWord) },
+                 //relate(new WorldObject("0"),new adjectiveRelObject(new AdjObject("1"))),2),
 
                  //לא עושה
-                new HebTemplate(new ITemplate[] {new WordObject("", negationWord) , new VerbObject("")},
+                new HebTemplate(new ITemplate[] {new WordObject("", negationWord) , new WorldObject("")},
                  negate(new VerbObject("1")),2),
 
-               //לא רחוק
-                     new HebTemplate(new ITemplate[] {new WordObject("", negationWord) , new AdjObject("")},
-                 negate(new AdjObject("1")),2),
+               ////לא רחוק
+               //      new HebTemplate(new ITemplate[] {new WordObject("", negationWord) , new AdjObject("")},
+               //  negate(new AdjObject("1")),2),
                   
 
-                 //אוהב לאכול
-                 new HebTemplate(new ITemplate[] { new ParticipleObject(""),new VerbObject("") },
-                 relate(new VerbObject("0"),new VerbRelObject(new VerbObject("1"))),4),
+               //  //אוהב לאכול
+               //  new HebTemplate(new ITemplate[] { new ParticipleObject(""),new VerbObject("") },
+               //  relate(new VerbObject("0"),new VerbRelObject(new VerbObject("1"))),4),
 
 
-                //three object template
+               // //three object template
 
-                //גרגמל גר ביער
-                new HebTemplate(new ITemplate[] { new NounObject(""), new VerbObject(""),new NounObject("") },
-                 relate(new NounObject("0"),new VerbRelObject(relate(new VerbObject("1"), new VerbObjRelObject(new NounObject("2"))))),8),
+               // //גרגמל גר ביער
+               // new HebTemplate(new ITemplate[] { new NounObject(""), new VerbObject(""),new NounObject("") },
+               //  relate(new NounObject("0"),new VerbRelObject(relate(new VerbObject("1"), new VerbObjRelObject(new NounObject("2"))))),8),
 
-                    new HebTemplate(new ITemplate[] { new NounObject(""), new WordObject("",copulaWord),new AdjObject("") },
-                 relate(new NounObject("0"),new copulaRelObject(new AdjObject("2"))),2),
+               //     new HebTemplate(new ITemplate[] { new NounObject(""), new WordObject("",copulaWord),new AdjObject("") },
+               //  relate(new NounObject("0"),new copulaRelObject(new AdjObject("2"))),2),
 
               
 

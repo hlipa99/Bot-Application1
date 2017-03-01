@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="Model.Emoji">
+    <Position X="4.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAEAAAAAAAAAAA=</HashCode>
+      <FileName>Emoji.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Model.dataBase.Question" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="1.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BQAABAEAAAAAAAAEgAAAAAAACAAAAIwEAAQAAAAACAA=</HashCode>
+      <FileName>dataBase\QuestionS.cs</FileName>
+      <NewMemberFileName>dataBase\Question.cs</NewMemberFileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Model.dataBase.SubQuestion" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="3" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAEgAAAAIAAAAAEAIAEAAAAAAAAAAQ=</HashCode>
+      <FileName>dataBase\SubQuestionS.cs</FileName>
+      <NewMemberFileName>dataBase\SubQuestion.cs</NewMemberFileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Model.dataBase.User" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="6.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgIAAIAAAAAAAAAAgAAAAAgABAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>dataBase\UsersS.cs</FileName>
+      <NewMemberFileName>dataBase\User.cs</NewMemberFileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Model.dataBase.DataBaseController">
+    <Position X="8.5" Y="4" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAIAACAAAAAAAAAFEIAAAAAABAQBAAABAAQAQ=</HashCode>
+      <FileName>dataBase\DataBaseController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Model.Models.AnswerFeedback">
+    <Position X="1.25" Y="2" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>Models\AnswerFeedback.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NLPtest.Models.StudySession" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAEBAAAAAAAAAAAAAACAAACAgAAIAAAACAAAAACBA=</HashCode>
+      <FileName>Models\StudySession.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Model.dataBase.entity">
+    <Position X="8.25" Y="1.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAAAAAAAAAAAAAAAAgAAAgAAAAAAAAAAQAA=</HashCode>
+      <FileName>dataBase\entity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Model.dataBase.botphrase">
+    <Position X="6.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACBAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAACAAAAAA=</HashCode>
+      <FileName>dataBase\botphrase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="Model.Models.IQuestion">
+    <Position X="1.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAEAAAAAAAAEgAAAAAAACAAAAIAAAAQAAAAACAA=</HashCode>
+      <FileName>Models\IQuestion.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Model.Models.ISubQuestion">
+    <Position X="3" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAEAAAAAIAAAAAEAAAEAAAAAAAAAAQ=</HashCode>
+      <FileName>Models\ISubQuestion.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Model.Models.IUser">
+    <Position X="6.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgIAAIAAAAAAAAAAAAAAAAgABAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Models\IUser.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="NLPtest.Models.IStudySession">
+    <Position X="4.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAAAAAAAAAAAAAAACAgAAAAAAACAAAAACBA=</HashCode>
+      <FileName>Models\IStudySession.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

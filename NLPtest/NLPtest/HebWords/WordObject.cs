@@ -2,11 +2,12 @@
 using static NLPtest.WorldObj.PrepRelObject;
 using NLPtest.WorldObj;
 using vohmm.corpus;
-using static NLPtest.WordObject.WordType;
+using static NLPtest.HebWords.WordObject.WordType;
 using static NLPtest.personObject;
 using Newtonsoft.Json;
+using NLPtest.Exceptions;
 
-namespace NLPtest
+namespace NLPtest.HebWords
 {
     public class WordObject : ITemplate
     {
@@ -33,7 +34,7 @@ namespace NLPtest
         private bool isDefinite;
 
         [JsonConstructor]
-        public WordObject(string ner, string text, string gender, string number, string person, string polarity, string pos, string posType, string[] prefixes, string tense, string suffixFunction, string suffixGender, string suffixNumber, string suffixPerson, bool isDefinite,String lemma)
+        public WordObject(string ner, string text, string gender, string number, string person, string polarity, string pos, string posType, string[] prefixes, string tense, string suffixFunction, string suffixGender, string suffixNumber, string suffixPerson, bool isDefinite, String lemma)
         {
             try
             {
@@ -47,7 +48,7 @@ namespace NLPtest
                 this.suffixFunction = suffixFunction;
                 this.Lemma = lemma;
 
-                this.Gender = (genderType)Enum.Parse(typeof(genderType), gender);
+                this.Gender = (genderType)Enum.Parse(typeof(genderType), gender.Replace(" ", ""));
                 this.Amount = (amountType)Enum.Parse(typeof(amountType), number);
                 this.Person = (personType)Enum.Parse(typeof(personType), person);
                 this.Gender = this.Gender == genderType.unspecified & suffixGender != null ? (genderType)Enum.Parse(typeof(genderType), suffixGender) : this.Gender;
@@ -58,10 +59,23 @@ namespace NLPtest
 
                 this.IsDefinite = isDefinite;
                 findObjectType();
-            }catch(Exception ex)
+            } catch (Exception ex)
             {
 
             }
+        }
+
+
+        public WordObject(string word, WordType t)
+        {
+            this.Text = word;
+            this.WordT = t;
+
+        }
+
+        public WordObject(string word, WordType t, WorldObject worldObject) : this(word, t)
+        {
+            this.WorldObject = worldObject;
         }
 
         private void findObjectType()
@@ -70,15 +84,15 @@ namespace NLPtest
             {
                 if (Ner.Contains("ORG"))
                 {
-                    wordType = orginazationWord | nounWord;
+                    wordType = orginazationWord;
                 }
                 else if (Ner.Contains("MISC__AFF"))
                 {
-                    wordType = identityWord | nounWord;
+                    wordType = identityWord;
                 }
                 else if (Ner.Contains("PERS"))
                 {
-                    wordType = personWord | nounWord;
+                    wordType = personWord;
 
                 }
                 else if (Ner.Contains("MISC_EVENT"))
@@ -88,7 +102,7 @@ namespace NLPtest
                 }
                 else if (Ner.Contains("LOC"))
                 {
-                    wordType = locationWord | nounWord;
+                    wordType = locationWord;
                 }
                 else if (Ner.Contains("DATE"))
                 {
@@ -163,7 +177,7 @@ namespace NLPtest
                 {
                     wordType = markWord;
                 }
-                else if (Text == "-" || Text == "–")
+                else if (Text == "-" || Text == "–" || Text == ":")
                 {
                     wordType = hyphenWord;
                 }
@@ -184,7 +198,7 @@ namespace NLPtest
             {
                 wordType = adjectiveWord;
 
-            } else if (Pos == "participle"){
+            } else if (Pos == "participle") {
                 wordType = participleWord;
             }
             else if (Pos == "numeral")
@@ -196,7 +210,19 @@ namespace NLPtest
             {
                 wordType = properNameWord;
             }
-            else 
+            else if (Pos == "wPrefix")
+            {
+                wordType = wPrefixWord;
+            }
+            else if (Pos == "pronoun")
+            {
+                wordType = wPrefixWord;
+            }
+            else if (Pos == "modal")
+            {
+                wordType = modal;
+            }
+            else
             {
                 wordType = unknownWord;
             }
@@ -234,13 +260,13 @@ namespace NLPtest
             get
             {
                 WorldObject res = null;
-           
+
                 if (worldObject == null)
                 {
 
-                        if (isA(dateWord)) {
+                    if (isA(dateWord)) {
                         worldObject = getDateFromWord();
-               }else if (isA(copulaWord) || isA(gufWord))
+                    } else if (isA(copulaWord) || isA(gufWord))
                     {
                         worldObject = getGufFromWord();
                     }
@@ -248,7 +274,7 @@ namespace NLPtest
                     {
                         worldObject = getEventFromWord();
                     }
-                   
+
                     else if (isA(adverbWord))
                     {
                         worldObject = getadverbFromWord();
@@ -263,7 +289,7 @@ namespace NLPtest
                     }
                     else if (isA(markWord))
                     {
-                        worldObject = new toneObject("mark");
+                        worldObject = new WorldObject("mark");
                     }
                     else if (isA(adjectiveWord))
                     {
@@ -273,7 +299,11 @@ namespace NLPtest
                     {
                         worldObject = new ConjunctionRelObject(null);
                     }
-                  
+
+                    else if (isA(conceptWord))
+                    {
+                        worldObject = new ConceptObject(text);
+                    }
                     else if (isA(orginazationWord))
                     {
                         worldObject = getOrginazationFromWord();
@@ -305,7 +335,7 @@ namespace NLPtest
                     else if (isA(nounWord))
                     {
                         worldObject = getNounFromWord();
-                    }else
+                    } else
                     {
                         worldObject = new WorldObject(Text);
                     }
@@ -325,6 +355,13 @@ namespace NLPtest
             {
                 worldObject = value;
             }
+        }
+
+        internal bool isEntity()
+        {
+            return WordT == orginazationWord || WordT == conceptWord ||
+                 WordT == eventWord || WordT == personWord ||
+                  WordT == timeWord || WordT == numeralWord || WordT == nounWord; 
         }
 
         public string Text
@@ -541,17 +578,6 @@ namespace NLPtest
 
 
 
-        public WordObject(string word, WordType t)
-        {
-            this.Text = word;
-            this.WordT = t;
-
-        }
-
-        public WordObject(string word, WordType t, WorldObject worldObject) : this(word, t)
-        {
-            this.WorldObject = worldObject;
-        }
 
         
         public override string ToString()
@@ -561,39 +587,42 @@ namespace NLPtest
         }
         public bool isA(WordType t)
         {
-            return (WordT & t) > 0;
+            return WordT == t;
         }
 
 
         public enum WordType
         {
-            everyword = int.MaxValue,
-            dateWord = 1,
-            eventWord = 2,
-            gufWord = 4,
-            adverbWord = 8,
-            helloWord = 16,
-            identityWord = 32,
-            locationWord = 64,
-            markWord = 128,
-            adjectiveWord = 256,
-            moneyWord = 512,
-            nounWord = 1024,
-            orginazationWord = 2048,
-            personWord = 4096,
-            precentWord = 8192,
-            prepWord = 16384,
-            questionWord = 32768,
-            timeWord = 65536,
-            unknownWord = 131072,
-            verbWord = 262144,
-            copulaWord = 524288,
-            conjunctionWord = 1048576,
-            numeralWord = 2097152,
-            properNameWord = 4194304,
-            hyphenWord = 8388608,
-            negationWord = 16777216,
-            participleWord = 33554432
+            dateWord,
+            eventWord,
+            gufWord,
+            adverbWord,
+            helloWord ,
+            identityWord ,
+            locationWord ,
+            markWord ,
+            adjectiveWord ,
+            moneyWord ,
+            nounWord ,
+            orginazationWord,
+            personWord,
+            precentWord ,
+            prepWord ,
+            questionWord,
+            timeWord ,
+            unknownWord ,
+            verbWord,
+            copulaWord ,
+            conjunctionWord ,
+            numeralWord,
+            properNameWord ,
+            hyphenWord ,
+            negationWord ,
+            participleWord ,
+            wPrefixWord ,
+            pronoun,
+            modal,
+            conceptWord,
         }
 
         internal void setGender(string gen)
@@ -627,7 +656,7 @@ namespace NLPtest
         }
 
 
-        public new int ObjectType()
+        public int ObjectType()
         {
             return 0;
         }
@@ -636,7 +665,7 @@ namespace NLPtest
         {
             if (template.ObjectType() != ObjectType()) return false;
             var w = template as WordObject;
-            if (WordT.HasFlag(w.WordT)) return true;
+            if (w.isA(WordT)) return true;
             return false;
         }
     }

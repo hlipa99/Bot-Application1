@@ -1,0 +1,287 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="mindcetModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="botphrase">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Pkey" Type="nvarchar" MaxLength="200" />
+          <Property Name="Text" Type="nvarchar(max)" />
+          <Property Name="Flags" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="entity">
+          <Key>
+            <PropertyRef Name="entityID" />
+          </Key>
+          <Property Name="entityID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="entityValue" Type="nvarchar" MaxLength="50" />
+          <Property Name="entityType" Type="nvarchar" MaxLength="50" />
+          <Property Name="entitySynonimus" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="media">
+          <Key>
+            <PropertyRef Name="mediaKey" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="type" Type="nvarchar" MaxLength="50" />
+          <Property Name="mediaKey" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="value" Type="nvarchar" MaxLength="200" />
+          <Property Name="flags" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="Question">
+          <Key>
+            <PropertyRef Name="QuestionID" />
+          </Key>
+          <Property Name="QuestionID" Type="nchar" MaxLength="20" Nullable="false" />
+          <Property Name="Category" Type="nvarchar" MaxLength="100" />
+          <Property Name="SubCategory" Type="nvarchar" MaxLength="100" />
+          <Property Name="QuestionText" Type="nvarchar(max)" />
+          <Property Name="Flags" Type="nvarchar(max)" />
+          <Property Name="questionType" Type="nvarchar" MaxLength="100" />
+          <Property Name="questionMedia" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="SubQuestion">
+          <Key>
+            <PropertyRef Name="questionID" />
+            <PropertyRef Name="subQuestionID" />
+          </Key>
+          <Property Name="questionID" Type="nchar" MaxLength="20" Nullable="false" />
+          <Property Name="subQuestionID" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="questionText" Type="nchar" MaxLength="1000" />
+          <Property Name="answerText" Type="nchar" MaxLength="1000" />
+          <Property Name="flags" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="nchar" MaxLength="30" Nullable="false" />
+          <Property Name="UserName" Type="nchar" MaxLength="100" />
+          <Property Name="UserGender" Type="nchar" MaxLength="10" />
+          <Property Name="UserClass" Type="nchar" MaxLength="10" />
+          <Property Name="UserCreated" Type="datetime" />
+          <Property Name="UserLastSession" Type="datetime" />
+        </EntityType>
+        <Association Name="FK_SubQuestion_Question">
+          <End Role="Question" Type="Self.Question" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="SubQuestion" Type="Self.SubQuestion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Question">
+              <PropertyRef Name="QuestionID" />
+            </Principal>
+            <Dependent Role="SubQuestion">
+              <PropertyRef Name="questionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="mindcetModelStoreContainer">
+          <EntitySet Name="botphrase" EntityType="Self.botphrase" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="entity" EntityType="Self.entity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="media" EntityType="Self.media" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Question" EntityType="Self.Question" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SubQuestion" EntityType="Self.SubQuestion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_SubQuestion_Question" Association="Self.FK_SubQuestion_Question">
+            <End Role="Question" EntitySet="Question" />
+            <End Role="SubQuestion" EntitySet="SubQuestion" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="mindcetModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="botphrase">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Pkey" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Text" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Flags" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="entity">
+          <Key>
+            <PropertyRef Name="entityID" />
+          </Key>
+          <Property Name="entityID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="entityValue" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="entityType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="entitySynonimus" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="media">
+          <Key>
+            <PropertyRef Name="mediaKey" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="mediaKey" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="value" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="flags" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Question">
+          <Key>
+            <PropertyRef Name="QuestionID" />
+          </Key>
+          <Property Name="QuestionID" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Category" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="SubCategory" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="QuestionText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Flags" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="questionType" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="questionMedia" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="SubQuestion" Relationship="Self.FK_SubQuestion_Question" FromRole="Question" ToRole="SubQuestion" />
+        </EntityType>
+        <EntityType Name="SubQuestion">
+          <Key>
+            <PropertyRef Name="questionID" />
+            <PropertyRef Name="subQuestionID" />
+          </Key>
+          <Property Name="questionID" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="subQuestionID" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="questionText" Type="String" MaxLength="1000" FixedLength="true" Unicode="true" />
+          <Property Name="answerText" Type="String" MaxLength="1000" FixedLength="true" Unicode="true" />
+          <Property Name="flags" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Question" Relationship="Self.FK_SubQuestion_Question" FromRole="SubQuestion" ToRole="Question" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="String" MaxLength="30" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="UserName" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
+          <Property Name="UserGender" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="UserClass" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="UserCreated" Type="DateTime" Precision="3" />
+          <Property Name="UserLastSession" Type="DateTime" Precision="3" />
+        </EntityType>
+        <Association Name="FK_SubQuestion_Question">
+          <End Role="Question" Type="Self.Question" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="SubQuestion" Type="Self.SubQuestion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Question">
+              <PropertyRef Name="QuestionID" />
+            </Principal>
+            <Dependent Role="SubQuestion">
+              <PropertyRef Name="questionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Entities2" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="botphrase" EntityType="Self.botphrase" />
+          <EntitySet Name="entity" EntityType="Self.entity" />
+          <EntitySet Name="media" EntityType="Self.media" />
+          <EntitySet Name="Question" EntityType="Self.Question" />
+          <EntitySet Name="SubQuestion" EntityType="Self.SubQuestion" />
+          <EntitySet Name="User" EntityType="Self.User" />
+          <AssociationSet Name="FK_SubQuestion_Question" Association="Self.FK_SubQuestion_Question">
+            <End Role="Question" EntitySet="Question" />
+            <End Role="SubQuestion" EntitySet="SubQuestion" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="mindcetModelStoreContainer" CdmEntityContainer="Entities2">
+          <EntitySetMapping Name="botphrase">
+            <EntityTypeMapping TypeName="mindcetModel.botphrase">
+              <MappingFragment StoreEntitySet="botphrase">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Pkey" ColumnName="Pkey" />
+                <ScalarProperty Name="Text" ColumnName="Text" />
+                <ScalarProperty Name="Flags" ColumnName="Flags" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="entity">
+            <EntityTypeMapping TypeName="mindcetModel.entity">
+              <MappingFragment StoreEntitySet="entity">
+                <ScalarProperty Name="entityID" ColumnName="entityID" />
+                <ScalarProperty Name="entityValue" ColumnName="entityValue" />
+                <ScalarProperty Name="entityType" ColumnName="entityType" />
+                <ScalarProperty Name="entitySynonimus" ColumnName="entitySynonimus" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="media">
+            <EntityTypeMapping TypeName="mindcetModel.media">
+              <MappingFragment StoreEntitySet="media">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="mediaKey" ColumnName="mediaKey" />
+                <ScalarProperty Name="value" ColumnName="value" />
+                <ScalarProperty Name="flags" ColumnName="flags" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Question">
+            <EntityTypeMapping TypeName="mindcetModel.Question">
+              <MappingFragment StoreEntitySet="Question">
+                <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="SubCategory" ColumnName="SubCategory" />
+                <ScalarProperty Name="QuestionText" ColumnName="QuestionText" />
+                <ScalarProperty Name="Flags" ColumnName="Flags" />
+                <ScalarProperty Name="questionType" ColumnName="questionType" />
+                <ScalarProperty Name="questionMedia" ColumnName="questionMedia" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SubQuestion">
+            <EntityTypeMapping TypeName="mindcetModel.SubQuestion">
+              <MappingFragment StoreEntitySet="SubQuestion">
+                <ScalarProperty Name="questionID" ColumnName="questionID" />
+                <ScalarProperty Name="subQuestionID" ColumnName="subQuestionID" />
+                <ScalarProperty Name="questionText" ColumnName="questionText" />
+                <ScalarProperty Name="answerText" ColumnName="answerText" />
+                <ScalarProperty Name="flags" ColumnName="flags" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User">
+            <EntityTypeMapping TypeName="mindcetModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="UserGender" ColumnName="UserGender" />
+                <ScalarProperty Name="UserClass" ColumnName="UserClass" />
+                <ScalarProperty Name="UserCreated" ColumnName="UserCreated" />
+                <ScalarProperty Name="UserLastSession" ColumnName="UserLastSession" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

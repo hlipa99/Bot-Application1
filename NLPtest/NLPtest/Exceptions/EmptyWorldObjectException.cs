@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace NLPtest.WorldObj.ConversationFlow
+namespace NLPtest.Exceptions
 {
     [Serializable]
     internal class EmptyWorldObjectException : Exception

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Bot_Application1.IDialog
+namespace Bot_Application1.Exceptions
 {
     [Serializable]
     public class unknownUserException : Exception

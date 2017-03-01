@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace NLPtest.HebWords
+namespace NLPtest.Exceptions
 {
 
     internal class TemplateException : Exception

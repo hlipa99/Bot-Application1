@@ -5,6 +5,7 @@ using Model.dataBase;
 using Model.Models;
 using NLPtest.Controllers;
 using NLPtest.Models;
+using NLPtest.NLP;
 using NLPtest.view;
 using System;
 using System.Collections.Generic;
@@ -103,29 +104,29 @@ namespace Bot_Application1.Controllers
 
         public AnswerFeedback checkAnswer(string text)
         {
-            //QuestionsAnswersControllers qac = new QuestionsAnswersControllers();
-            //ISubQuestion question = studySession.CurrentSubQuestion;
-            //var nlp = NLPControler.getInstence();
+            QuestionsAnswersControllers qac = new QuestionsAnswersControllers();
+            ISubQuestion question = studySession.CurrentSubQuestion;
+            var nlp = NLPControler.getInstence();
             //var systemAnswerText = studySession.CurrentSubQuestion.answerText;
-            //var systemAnswer = nlp.Analize(text, systemAnswerText);
-            //var answerFeedback = qac.matchAnswers(question, text);
+            //var systemAnswer = nlp.Analize(text, question.questionText);
+            var answerFeedback = qac.matchAnswers(question, text);
 
 
-            var answerFeedback = new AnswerFeedback();
-            var anslength = text.Split(' ').Length;
-                if (anslength > 7)
-                {
-                answerFeedback.score =  100;
-                }else if(anslength > 4)
-                {
-                answerFeedback.score = 60;
-            }else if (anslength >= 2)
-            {
-                answerFeedback.score = 30;
-            }else
-            {
-                answerFeedback.score = 0;
-            }
+            //var answerFeedback = new AnswerFeedback();
+            //var anslength = text.Split(' ').Length;
+            //    if (anslength > 7)
+            //    {
+            //    answerFeedback.score =  100;
+            //    }else if(anslength > 4)
+            //    {
+            //    answerFeedback.score = 60;
+            //}else if (anslength >= 2)
+            //{
+            //    answerFeedback.score = 30;
+            //}else
+            //{
+            //    answerFeedback.score = 0;
+            //}
             
          
             return answerFeedback;

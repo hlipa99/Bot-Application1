@@ -25,6 +25,8 @@ namespace Model.dataBase
         public string SubCategory { get; set; }
         public string QuestionText { get; set; }
         public string Flags { get; set; }
+        public string questionType { get; set; }
+        public string questionMedia { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SubQuestion> SubQuestion { get; set; }

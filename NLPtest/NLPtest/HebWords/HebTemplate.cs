@@ -1,12 +1,11 @@
 ﻿using NLPtest;
 using NLPtest.WorldObj;
-using static NLPtest.WordObject.WordType;
+using static NLPtest.HebWords.WordObject.WordType;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static NLPtest.WordObject;
 using NLPtest.view;
 
 

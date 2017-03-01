@@ -1,5 +1,5 @@
 ﻿
-using static NLPtest.WordObject.WordType;
+using static NLPtest.HebWords.WordObject.WordType;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,35 +7,33 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NLPtest.WorldObj;
-using vohmm.application;
 using hebrewNER;
-using yg.sentence;
-using yg.chunker;
-using java.io;
-using static vohmm.corpus.Sentence;
-using vohmm.corpus;
+//using java.io;
+//using static vohmm.corpus.Sentence;
 using System.Text.RegularExpressions;
 using NLPtest.view;
 using NLPtest.Controllers;
-using java.awt;
+//using java.awt;
 using System.Xml.Serialization;
 using NLPtest.MorfObjects;
-using static NLPtest.WordObject;
 using Newtonsoft.Json;
+using Model.dataBase;
+using static NLPtest.HebWords.WordObject;
+using NLPtest.HebWords;
 
-namespace NLPtest
+
+namespace NLPtest.NLP
 {
       public class MorfAnalizer
     {
-
      //   SimpleTagger3 tagger;
       //  NERTagger nerTagger;
       //  MeniTaggeedSentenceFactory sentenceFactory;
       //  TaggerBasedHebrewChunker chunker;
         private   HebDictionary hebDictionary;
         OuterAPIController httpCtrl = new OuterAPIController();
-        private IEnumerable<Word> wordList;
-
+       // private IEnumerable<Word> wordList;
+        DataBaseController DBctrl = new DataBaseController();
         public MorfAnalizer()
         {
          //   var path = "C:/Program Files (x86)/IIS Express/botServer/hebdata/";
@@ -51,49 +49,57 @@ namespace NLPtest
 
         public List<WordObject> getWordsObjectFromParserServer(String str,bool isSpellCorrected)
         {
-            string JsonRes = httpCtrl.sendToHebrewMorphAnalizer(str);
-
-            var sentenceFromServer = new List<WordObject>();
-            if (JsonRes != null)
+            List<WordObject> sentenceFromServer = null;
+            try
             {
-                try
+                string JsonRes = httpCtrl.sendToHebrewMorphAnalizer(str);
+
+                sentenceFromServer = new List<WordObject>();
+                if (JsonRes != null)
                 {
-                
                     sentenceFromServer = JsonConvert.DeserializeObject<List<WordObject>>(JsonRes);
                 }
-                catch (Exception ex)
+
+                //may be mispelling for the first time
+                if (!isSpellCorrected && sentenceFromServer.Count(x => x.isA(WordType.unknownWord) && x.Text.Length > 1) > 0)
                 {
-                    return null;
+                    var correctSpelling = httpCtrl.correctSpelling(str);
+                    if (correctSpelling != null)
+                    {
+                        return getWordsObjectFromParserServer(correctSpelling, true);
+                    }
                 }
             }
-
-            //may be mispelling for the first time
-            if(!isSpellCorrected && sentenceFromServer.Count(x=> x.isA(WordType.unknownWord)) > 0){
-                var correctSpelling = httpCtrl.correctSpelling(str);
-                if (correctSpelling != null)
+            catch (Exception ex) //if parser server is down
+            {
+                var words = str.Split(' '); 
+                foreach(var w in words)
                 {
-                    return getWordsObjectFromParserServer(correctSpelling, true);
+                    var word = new WordObject(w, nounWord); 
                 }
             }
-
             return sentenceFromServer;
         }
         
-        public   List<Sentence> meniAnalize(String str)
+
+
+
+
+        public List<List<WordObject>> meniAnalize(String str)
         {
 
             // The follwoing object constructions are heavy - SHOULD BE APPLIED ONLY ONCE!
             // create the morphological analyzer and disambiguator 
 
-            var sentenses = str.Split('.');
-            List<Sentence> allRes = new List<Sentence>();
+            var sentenses = str.Split('.',',');
+            List<List<WordObject>> allRes = new List<List<WordObject>>();
 
             foreach (var s in sentenses)
             {
 
                 var strRes = s;
 
-                Sentence res = new Sentence(s);
+                List<WordObject> res = new List<WordObject>();
                 strRes = removeParentheses(strRes, '(', ')');
                 strRes = removeParentheses(strRes, '[', ']');
 
@@ -108,22 +114,23 @@ namespace NLPtest
 
                     if (sentenceFromServer.Count >= 0)
                     {
-                        //Noun-phrase chunking for the given tagged sentence (will be available soon in Java)
-                        //      chunker.addBIOLabels(sentence);
-
+                       
                         // print tagged sentence by using AnalysisInterface, as follows:
                         foreach (WordObject w in sentenceFromServer)
                         {
                             WordObject word = w;
 
+
+
+                           
                             //two NRI in a row
                             //join word if ist part of a name
 
-                            if (res.Words.Count > 0)
+                            if (res.Count > 0)
                             {
-                                if (res.Words.LastOrDefault().Ner == w.Ner && res.Words.LastOrDefault().Ner != "O")
+                                if (res.LastOrDefault().Ner == w.Ner && res.LastOrDefault().Ner != "O")
                                 {
-                                    res.Words.LastOrDefault().Text += " " + word.Text;
+                                    res.LastOrDefault().Text += " " + word.Text;
                                     continue;
                                 }
                             }
@@ -131,13 +138,12 @@ namespace NLPtest
                             if (hebDictionary.contains(word.Text))
                             {
                                 word = hebDictionary.get(word.Text);
-
                             }
                             //joinwords
-                            if (res.Words.LastOrDefault() != null && word.isA(nounWord) && res.Words.LastOrDefault().isA(nounWord))
+                            if (res.LastOrDefault() != null && word.isA(nounWord) && res.LastOrDefault().isA(nounWord))
                             {
-                                var last = res.Words.LastOrDefault();
-                                res.Words.RemoveAt(res.Words.Count - 1);
+                                var last = res.LastOrDefault();
+                                res.RemoveAt(res.Count - 1);
                                 last.Text = last.Text + " " + word.Text;
                                 last.WordT = last.WordT | word.WordT; //combin flages
                                 word = last;
@@ -150,7 +156,7 @@ namespace NLPtest
                           
                         }
                         
-                        res = checkPhrases(res);
+                       // res = checkPhrases(res);
                         allRes.Add(res);
                     }
                 }
@@ -158,117 +164,199 @@ namespace NLPtest
             return allRes;
         }
 
-
-        public    string getClass(string text)
+        public List<WordObject> tryMatchEntities(List<WordObject> sentence)
         {
-            //    var a = ma.createSentence(inputText);
-            var context = new TextContext();
-            var sen = meniAnalize(text);
-            string res = null;
-            ContentList input = new ContentList();
-            foreach (var s in sen)
+            //increase the match found to implement maximal munch
+            for(int i = 0; i < sentence.Count; i++)
             {
-                foreach (var w in s.Words)
+                WordObject word = sentence[i];
+                if(!word.isEntity())
                 {
-                    
-                    switch (w.Text)
+                    continue;
+                }
+
+                var entities = DBctrl.getEntitys();
+                var searchText = "";
+                IQueryable<entity> match = null;
+                int j = i;
+                for (; j < sentence.Count; j++)
+                {
+                    searchText += sentence[i].Text;
+                    var tryMatch = findMatch(entities, searchText);
+                    if(tryMatch.Count() != 0)
                     {
-                        case "א":
-                        case "'א":
-                        case "אלף":
+                        match = tryMatch;
+                    }else
+                    {
+                        break;
+                    }
+                    
+                }
 
-                            res = "א";
-                            break;
-                        case "ב":
-                        case "'ב":
-                        case "בית":
+                if (match != null && match.Count() != 0)
+                {
+                         //TODO implament selector or create multiple answer
+                        var entity = match.FirstOrDefault();
+                        for(int k = i; k < j; k++)
+                        {
+                            sentence.RemoveAt(i);
+                        }
+                        foreach(var w in match)
+                          {
+                                sentence.Insert(i, new WordObject(entity.entityValue, (WordType)Enum.Parse(typeof(WordType), entity.entityType)));
+                          }
+                }
+ 
+            }
+            return sentence;
+        }
 
-                            res = "ב";
-                            break;
-                        case "ג":
-                        case "'ג":
-                        case "גימל":
-                            res = "ג";
-
-                            break;
-                        case "ד":
-                        case "'ד":
-                        case "דלת":
-                            res = "ד";
-
-                            break;
-                        case "ה":
-                        case "'ה":
-                        case "הי":
-                            res = "ה";
-
-                            break;
-                        case "ו":
-                        case "'ו":
-                        case "וו":
-
-                            res = "ו";
-                            break;
-
-                        case "ז":
-                        case "'ז":
-                        case "זוד":
-                        case "שזשזת":
-                            res = "ז";
-                            break;
-
-                        case "ח":
-                        case "'ח":
-                        case "חית":
-                            res = "ח";
-                            break;
-
-                        case "ט":
-                        case "'ט":
-                        case "טוד":
-                        case "חמישית":
-                        case "חמשוש":
-                        case "חמשושית":
-                            res = "ט";
-                            break;
+        public IQueryable<entity> findMatch(IQueryable<entity> quarible, string text)
+        {
+            quarible = quarible.Where(x => x.entitySynonimus.Contains(";" +text + ";") || x.entitySynonimus.StartsWith(text + ";") || x.entitySynonimus.EndsWith(";"+text));
+            return quarible;
+        }
 
 
+        public void searchAllAnswerForentities()
+        {
+            List<entity> entList = new List<entity>(); 
+            foreach (var s in DBctrl.getAllSubQuestions())
+            {
+                var sentenses = meniAnalize(s.answerText);
+                foreach(var sen in sentenses)
+                {
+                    var relevant = sen.Where(x => x.isEntity());
+                    foreach(var w in relevant)
+                    {
+                      
+                        var wText = w.Lemma == null || w.Lemma.Length == 1 ? w.Text : w.Lemma;
+                        if (wText == null)
+                        {
 
+                        }
 
-                        case "י":
-                        case "'י":
-                        case "יוד":
-                        case "שישית":
-                        case "שישיסט":
-                        case "שישיסטית":
-                            res = "י";
-                            break;
-
-                        case "יא":
-                        case "י\"א":
-                        case "יא'":
-                        case "'יא":
-                        case "שביעית":
-                        case "שביעיסט":
-                        case "שביעיסטית":
-                            res = "יא";
-                            break;
-
-                        case "יב":
-                        case "י\"ב":
-                        case "יב'":
-                        case "'יב":
-                        case "שמינית":
-                            res = "יב";
-                            break;
-
-
+                        var ent = new entity();
+                        ent.entitySynonimus = ";" + wText + ";";
+                        entList.Add(ent);
                     }
                 }
             }
-
-            return res;
+            DBctrl.saveEntitiesFromQuestions(entList);
         }
+
+
+
+        //public    string getClass(string text)
+        //{
+        //    //    var a = ma.createSentence(inputText);
+        //    var context = new TextContext();
+        //    var sen = meniAnalize(text);
+        //    string res = null;
+        //    ContentList input = new ContentList();
+        //    foreach (var s in sen)
+        //    {
+        //        foreach (var w in s.Words)
+        //        {
+                    
+        //            switch (w.Text)
+        //            {
+        //                case "א":
+        //                case "'א":
+        //                case "אלף":
+
+        //                    res = "א";
+        //                    break;
+        //                case "ב":
+        //                case "'ב":
+        //                case "בית":
+
+        //                    res = "ב";
+        //                    break;
+        //                case "ג":
+        //                case "'ג":
+        //                case "גימל":
+        //                    res = "ג";
+
+        //                    break;
+        //                case "ד":
+        //                case "'ד":
+        //                case "דלת":
+        //                    res = "ד";
+
+        //                    break;
+        //                case "ה":
+        //                case "'ה":
+        //                case "הי":
+        //                    res = "ה";
+
+        //                    break;
+        //                case "ו":
+        //                case "'ו":
+        //                case "וו":
+
+        //                    res = "ו";
+        //                    break;
+
+        //                case "ז":
+        //                case "'ז":
+        //                case "זוד":
+        //                case "שזשזת":
+        //                    res = "ז";
+        //                    break;
+
+        //                case "ח":
+        //                case "'ח":
+        //                case "חית":
+        //                    res = "ח";
+        //                    break;
+
+        //                case "ט":
+        //                case "'ט":
+        //                case "טוד":
+        //                case "חמישית":
+        //                case "חמשוש":
+        //                case "חמשושית":
+        //                    res = "ט";
+        //                    break;
+
+
+
+
+        //                case "י":
+        //                case "'י":
+        //                case "יוד":
+        //                case "שישית":
+        //                case "שישיסט":
+        //                case "שישיסטית":
+        //                    res = "י";
+        //                    break;
+
+        //                case "יא":
+        //                case "י\"א":
+        //                case "יא'":
+        //                case "'יא":
+        //                case "שביעית":
+        //                case "שביעיסט":
+        //                case "שביעיסטית":
+        //                    res = "יא";
+        //                    break;
+
+        //                case "יב":
+        //                case "י\"ב":
+        //                case "יב'":
+        //                case "'יב":
+        //                case "שמינית":
+        //                    res = "יב";
+        //                    break;
+
+
+        //            }
+        //        }
+        //    }
+
+        //    return res;
+        //}
 
 
 
@@ -460,114 +548,114 @@ namespace NLPtest
 
 
         //ceack if part of the sentence is a prase
-        private   Sentence checkPhrases(Sentence sentence)
-        {
+        //private List<WordObject> checkPhrases(List<WordObject> sentence)
+        //{
 
-            var words = sentence.Words;
-
-
-            //length
-            for (int i = words.Count; i > 1; i--)
-            {
-
-                //start
-                for (int k = 0; k + i <= words.Count; k++)
-                {
-                    var str = "";
-                    //accemulate
-                    for (int j = 0; j < i && k + j < words.Count; j++)
-                    {
-                        str += words[k + j].Text + " ";
-                    }
+        //    var words = sentence;
 
 
-                    if (hebDictionary.contains(str.Trim()))
-                    {
-                        sentence.Words.RemoveRange(k, i);
-                        sentence.Words.Insert(k, hebDictionary.get(str.Trim()));
-                    }
+        //    //length
+        //    for (int i = words.Count; i > 1; i--)
+        //    {
+
+        //        //start
+        //        for (int k = 0; k + i <= words.Count; k++)
+        //        {
+        //            var str = "";
+        //            //accemulate
+        //            for (int j = 0; j < i && k + j < words.Count; j++)
+        //            {
+        //                str += words[k + j].Text + " ";
+        //            }
 
 
-                }
-
-            }
-
-
-            return sentence;
-        }
+        //            if (hebDictionary.contains(str.Trim()))
+        //            {
+        //                sentence.RemoveRange(k, i);
+        //                sentence.Insert(k, hebDictionary.get(str.Trim()));
+        //            }
 
 
+        //        }
 
-        public   String getName(string inputText)
-        {
+        //    }
 
-            //    var a = MorfAnalizer.createSentence(inputText);
-            var context = new TextContext();
-            var sen = meniAnalize(inputText);
-            var sa = new SemanticAnalizer();
 
-            if (sen.Count == 1 && sen[0].Words.Count == 1 && sen[0].Words[0].isA(nounWord))
-            {
-                return sen[0].Words[0].Text;
-            }
+        //    return sentence;
+        //}
 
-            ContentList input = new ContentList();
-            foreach (var s in sen)
-            {
-                foreach (var w in s.Words)
-                {
-                    if (sa.isAName(w))
-                    {
-                        return w.Text;
-                    }
-                }
-            }
 
-            return null;
 
-        }
+        //public   String getName(string inputText)
+        //{
 
-        public   string GetGender(string text)
-        {
-            //    var a = MorfAnalizer.createSentence(inputText);
-            var context = new TextContext();
-            var sen = meniAnalize(text);
+        //    //    var a = MorfAnalizer.createSentence(inputText);
+        //    var context = new TextContext();
+        //    var sen = meniAnalize(inputText);
+        //    var sa = new SemanticAnalizer();
 
-            ContentList input = new ContentList();
-            foreach (var s in sen)
-            {
-                foreach (var w in s.Words)
-                {
-                    if (w.Text == "בן")
-                    {
-                        return "masculine";
-                    }
-                    if (w.Gender != personObject.genderType.unspecified)
-                    {
-                        return w.Gender.ToString();
-                    }
-                }
-            }
+        //    if (sen.Count == 1 && sen[0].Count == 1 && sen[0][0].isA(nounWord))
+        //    {
+        //        return sen[0][0].Text;
+        //    }
 
-            return null;
-        }
+        //    ContentList input = new ContentList();
+        //    foreach (var s in sen)
+        //    {
+        //        foreach (var w in s)
+        //        {
+        //            if (sa.isAName(w))
+        //            {
+        //                return w.Text;
+        //            }
+        //        }
+        //    }
 
-        public   string GetGeneralFeeling(string text)
-        {
-            //    var a = MorfAnalizer.createSentence(inputText);
-            if (text.Contains("לא טוב") || text.Contains("רע") || text.Contains("גרוע") || text.Contains("על הפנים"))
-            {
-                return "good";
-            }
-            else if (text.Contains("טוב") || text.Contains("סבבה") || text.Contains("מצויין") || text.Contains("אחלה"))
-            {
-                return "bad";
-            }
-            else
-            {
-                return "netural";
-            }
-        }
+        //    return null;
+
+        //}
+
+        //public   string GetGender(string text)
+        //{
+        //    //    var a = MorfAnalizer.createSentence(inputText);
+        //    var context = new TextContext();
+        //    var sen = meniAnalize(text);
+
+        //    ContentList input = new ContentList();
+        //    foreach (var s in sen)
+        //    {
+        //        foreach (var w in s)
+        //        {
+        //            if (w.Text == "בן")
+        //            {
+        //                return "masculine";
+        //            }
+        //            if (w.Gender != personObject.genderType.unspecified)
+        //            {
+        //                return w.Gender.ToString();
+        //            }
+        //        }
+        //    }
+
+        //    return null;
+        //}
+
+        //public   string GetGeneralFeeling(string text)
+        //{
+        //    //    var a = MorfAnalizer.createSentence(inputText);
+        //    if (text.Contains("לא טוב") || text.Contains("רע") || text.Contains("גרוע") || text.Contains("על הפנים"))
+        //    {
+        //        return "good";
+        //    }
+        //    else if (text.Contains("טוב") || text.Contains("סבבה") || text.Contains("מצויין") || text.Contains("אחלה"))
+        //    {
+        //        return "bad";
+        //    }
+        //    else
+        //    {
+        //        return "netural";
+        //    }
+        //}
 
     }
     }

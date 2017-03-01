@@ -217,6 +217,10 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebApi.Client.5.2.2\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -226,6 +230,10 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="Yuml.Net, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Yuml.Net.1.3.0\lib\net45\Yuml.Net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Answer.cs" />
@@ -233,53 +241,48 @@
     <Compile Include="Controllers\QuestionsAnswersControllers.cs" />
     <Compile Include="Controllers\TemplateController.cs" />
     <Compile Include="Exceptions\GufException.cs" />
-    <Compile Include="Controllers\INLPController.cs" />
     <Compile Include="Controllers\NLPController.cs" />
-    <Compile Include="Controllers\NLPControllerTestStub.cs" />
-    <Compile Include="HebWords\DictionaryException.cs" />
+    <Compile Include="Exceptions\DictionaryException.cs" />
     <Compile Include="HebWords\HebTemplate.cs" />
     <Compile Include="Exceptions\TemplateException.cs" />
     <Compile Include="MorfObjects\ExtTokenWithBuilder.cs" />
     <Compile Include="QnA\QAEngin.cs" />
     <Compile Include="TemplateObject.cs" />
-    <Compile Include="WorldObj\EntityObject.cs" />
+    <Compile Include="WorldObj\entities\EntityObject.cs" />
     <Compile Include="WorldObj\ParticipleObject.cs" />
     <Compile Include="WorldObj\InfinitiveObject.cs" />
-    <Compile Include="WorldObj\multyPersoneObject.cs" />
+    <Compile Include="WorldObj\entities\multyPersoneObject.cs" />
     <Compile Include="WorldObj\BotObject.cs" />
     <Compile Include="Exceptions\CantResponeException.cs" />
     <Compile Include="Exceptions\unknownUserException.cs" />
     <Compile Include="NLP\MessageComposer.cs" />
     <Compile Include="MorfObjects\MessageObject.cs" />
+    <Compile Include="WorldObj\entities\PersonObject.cs" />
     <Compile Include="WorldObj\relations\VerbObjRelObject.cs" />
-    <Compile Include="WorldObj\UserObject.cs" />
+    <Compile Include="WorldObj\entities\UserObject.cs" />
     <Compile Include="WorldObj\relations\ConjunctionObject.cs" />
-    <Compile Include="WorldObj\gufObject.cs" />
+    <Compile Include="WorldObj\entities\gufObject.cs" />
     <Compile Include="Exceptions\EmptyWorldObjectException.cs" />
     <Compile Include="WorldObj\greetings\HisStatusObject.cs" />
     <Compile Include="WorldObj\greetings\MyStatusObject.cs" />
     <Compile Include="WorldObj\MessageDictionary.cs" />
-    <Compile Include="WorldObj\OrginazationObject.cs" />
-    <Compile Include="WorldObj\EventObject.cs" />
+    <Compile Include="WorldObj\entities\OrginazationObject.cs" />
+    <Compile Include="WorldObj\entities\EventObject.cs" />
     <Compile Include="WorldObj\relations\copulaRelObject.cs" />
     <Compile Include="WorldObj\relations\expansionRelObject.cs" />
     <Compile Include="WorldObj\relations\adjectiveRelObject.cs" />
     <Compile Include="ContentTurn.cs" />
     <Compile Include="TextContext.cs" />
     <Compile Include="Exceptions\WorldObjectException.cs" />
-    <Compile Include="HebWords\toneObject.cs" />
     <Compile Include="NLP\MorfAnalizer.cs" />
     <Compile Include="WorldObj\NounObject.cs" />
     <Compile Include="NLP\Responder.cs" />
     <Compile Include="Exceptions\SemanticException.cs" />
-    <Compile Include="WorldObj\ConversationFlow\ConversationFlowObject.cs" />
-    <Compile Include="WorldObj\ConversationFlow\HelloConFlowObject.cs" />
     <Compile Include="WorldObj\relations\VerbRelObject.cs" />
     <Compile Include="WorldObj\relations\PrepRelObject.cs" />
     <Compile Include="WorldObj\relations\RelationObject.cs" />
     <Compile Include="WorldObj\TimeObject.cs" />
-    <Compile Include="WorldObj\LocationObject.cs" />
-    <Compile Include="WorldObj\EntObject.cs" />
+    <Compile Include="WorldObj\entities\LocationObject.cs" />
     <Compile Include="WorldObj\AdjObject.cs" />
     <Compile Include="WorldObj\VerbObject.cs" />
     <Compile Include="WorldObj\greetings\HelloObject.cs" />
@@ -298,7 +301,10 @@
     <Compile Include="HebWords\WordObject.cs" />
     <Compile Include="WorldObj\IWorldObject.cs" />
     <Compile Include="WorldObj\WorldObject.cs" />
-    <Compile Include="WorldObj\PersonObject.cs" />
+    <Compile Include="WorldObj\entities\ConceptObject.cs" />
+    <Compile Include="YAndex\ControlerGrammar.cs" />
+    <Compile Include="YAndex\ControlerTranslate.cs" />
+    <Compile Include="Exceptions\UnknownEncodingException.cs" />
     <EmbeddedResource Include="view\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -311,6 +317,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

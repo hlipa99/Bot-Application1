@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NLPtest.HebWords;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -131,7 +132,7 @@ namespace NLPtest.WorldObj
                 else
                 {
                     var word = obj as WordObject;
-                    this.word = word.Lemma;
+                    this.word = word.Lemma == null || word.Lemma.Length < 2 ? word.Text : word.Lemma ;
                     this.DefiniteArticle = word.IsDefinite;
                 }
             }catch(Exception ex)

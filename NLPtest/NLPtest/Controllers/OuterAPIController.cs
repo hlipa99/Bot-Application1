@@ -23,7 +23,7 @@ namespace NLPtest.Controllers
         }
 
 
-        public string getIntentApiAi(string str)
+        public string getIntentApiAi(string str,string context)
         {
           
             try
@@ -45,7 +45,7 @@ namespace NLPtest.Controllers
         {
             try
             {
-                WebRequest request = WebRequest.Create("http://localhost:4567/parse");
+                WebRequest request = WebRequest.Create("http://6a554add.ngrok.io/parse");
                 string responseFromServer = "";
                 request.Method = "POST";
                 byte[] byteArray = Encoding.UTF8.GetBytes(text);
@@ -80,11 +80,11 @@ namespace NLPtest.Controllers
     {
         try
         {
-            WebRequest request = WebRequest.Create("http://xspell.ga/?token=57d1b5fd8f45189c136d0b99c628d4e1&check=\"" + text + "\"");
+            WebRequest request = WebRequest.Create("http://xspell.ga/?token=57d1b5fd8f45189c136d0b99c628d4e1&check=" + text);
    //             WebRequest request = WebRequest.Create("http://xspell.ga/?token=c9acedeff1e873a46bef7a6c38e5d82d&check=\"" + text + "\"");
 
                 string responseFromServer = "";
-            request.Method = "POST";
+            request.Method = "GET";
             request.ContentType = "application/x-www-form-urlencoded";
             using (WebResponse response = request.GetResponse())
             {
