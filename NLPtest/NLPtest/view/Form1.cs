@@ -20,8 +20,8 @@ namespace NLPtest
     {
         HebDictionary heb;
         //   DataBaseControler
-        ContentList answer1 = new ContentList();
-        ContentList answer2 = new ContentList();
+        List<WorldObject> answer1 = new List<WorldObject>();
+        List<WorldObject> answer2 = new List<WorldObject>();
 
         public Form1()
         {
@@ -72,12 +72,13 @@ namespace NLPtest
 
         }
 
-        private void drawTree(ContentList content,TreeView tv)
+        private void drawTree(List<WorldObject> content,TreeView tv)
         {
             tv.Nodes.Clear();
-            while (!content.empty())
+            while (content.Count > 0)
             {
-                var c = content.pop();
+                var c = content.FirstOrDefault();
+                content.Remove(c);
                 var objectNode = drawObject(c);
                 tv.Nodes.Add(objectNode);
             }
@@ -143,12 +144,22 @@ namespace NLPtest
         {
             QAEngin qna = new QAEngin();
             string str;
-            var match = qna.matchAnswers(NLPControler.getInstence().testAnalizer(input_TB.Text,out str).List,
-                NLPControler.getInstence().testAnalizer(input_TB2.Text, out str).List);
+            var subQuestion = new SubQuestion();
+            subQuestion.answerText = input_TB.Text;
+            subQuestion.flags = "needAll";
+            var match = qna.matchAnswers(subQuestion,
+                input_TB2.Text);
             var answerText = "Score:" + match.score + Environment.NewLine;
             foreach (var ent in match.missingEntitis)
             {
-                answerText += "Missing Entity:" + ent + Environment.NewLine;
+                answerText += "Missing Entity:" + ent.entityValue + Environment.NewLine;
+              
+            }
+
+            foreach (var ans in match.missingAnswers)
+            {
+                answerText += "Missing Answer:" + ans + Environment.NewLine;
+
             }
             text_TB3.Text = answerText;
         }

@@ -1,10 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using Model.dataBase;
+using System;
+using System.Collections.Generic;
 
 namespace Model.Models
 {
     public class AnswerFeedback
     {
-        public List<string> missingEntitis = new List<string>();
+        public List<entity> missingEntitis = new List<entity>();
+        public List<string> missingAnswers = new List<string>();
+
         public int score;
+
+        public void merge(AnswerFeedback f)
+        {
+            score = (score + f.score) / 2;
+            missingEntitis.AddRange(f.missingEntitis);
+            missingAnswers.AddRange(f.missingAnswers);
+        }
     }
 }

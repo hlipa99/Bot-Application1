@@ -19,7 +19,7 @@ namespace Bot_Application1.Controllers
         DataBaseController db = new DataBaseController();
         private IUser user;
         private IStudySession studySession;
-        ConversationController conversationController;
+        ConversationController convCtrl;
         public DataBaseController Db
         {
             get
@@ -37,7 +37,7 @@ namespace Bot_Application1.Controllers
         {
             this.user = user;
             this.studySession = studySession;
-            this.conversationController = cc;
+            this.convCtrl = cc;
         }
 
         public string[] getStudyCategory()
@@ -90,7 +90,7 @@ namespace Bot_Application1.Controllers
                 return null;
             }
 
-            res.RemoveAll(x => studySession.QuestionAsked.Contains(x));
+            res.RemoveAll(x => studySession.IQuestionAsked.Contains(x));
             var r = new Random();
             if (res.Count > 0)
             {
@@ -105,7 +105,7 @@ namespace Bot_Application1.Controllers
         public AnswerFeedback checkAnswer(string text)
         {
             QuestionsAnswersControllers qac = new QuestionsAnswersControllers();
-            ISubQuestion question = studySession.CurrentSubQuestion;
+            ISubQuestion question = studySession.ICurrentSubQuestion;
             var nlp = NLPControler.getInstence();
             //var systemAnswerText = studySession.CurrentSubQuestion.answerText;
             //var systemAnswer = nlp.Analize(text, question.questionText);
@@ -135,21 +135,21 @@ namespace Bot_Application1.Controllers
         internal void getNextQuestion()
         {
 
-            if (studySession.CurrentQuestion == null)
+            if (studySession.ICurrentQuestion == null)
             {
-                studySession.CurrentQuestion = getQuestion();
-                studySession.CurrentQuestion.Enumerator = 0;
+                studySession.ICurrentQuestion = getQuestion();
+                studySession.ICurrentQuestion.Enumerator = 0;
             }
 
 
-            studySession.CurrentQuestion.Enumerator++;
-            studySession.CurrentSubQuestion = getSubQuestion(studySession.CurrentQuestion.Enumerator);
+            studySession.ICurrentQuestion.Enumerator++;
+            studySession.ICurrentSubQuestion = getSubQuestion(studySession.ICurrentQuestion.Enumerator);
 
 
-            if (studySession.CurrentSubQuestion == null)
+            if (studySession.ICurrentSubQuestion == null)
             {
-                studySession.QuestionAsked.Add(studySession.CurrentQuestion);
-                studySession.CurrentQuestion = null;
+                studySession.IQuestionAsked.Add(studySession.ICurrentQuestion);
+                studySession.ICurrentQuestion = null;
                 getNextQuestion();
 
             }
@@ -161,8 +161,8 @@ namespace Bot_Application1.Controllers
 
         private ISubQuestion getSubQuestion(int enumerator)
         {
-            var qEnumerator = studySession.CurrentQuestion.SubQuestion.GetEnumerator();
-            foreach (var sq in studySession.CurrentQuestion.SubQuestion)
+            var qEnumerator = studySession.ICurrentQuestion.SubQuestion.GetEnumerator();
+            foreach (var sq in studySession.ICurrentQuestion.SubQuestion)
             {
                 if (int.Parse(sq.subQuestionID.Trim()) == enumerator) return sq;
             }
@@ -174,41 +174,58 @@ namespace Bot_Application1.Controllers
         {
             switch (answerIntent)
             {
-                case UserIntent.unknown:
-                case UserIntent.answer:
-                    return createFeedBack(checkAnswer(text));
 
                 case UserIntent.dontKnow:
-                    return conversationController.getPhrase(Pkey.neverMind);
-
+                    var message = convCtrl.merge(convCtrl.getPhrase(Pkey.neverMind),convCtrl.getPhrase(Pkey.MyAnswerToQuestion));
+                    message = convCtrl.merge(message, studySession.ICurrentSubQuestion.answerText);
+                    return message;
                 case UserIntent.question:
-                    return conversationController.getPhrase(Pkey.unknownQuestion);
+                    throw new UnrelatedSubjectException();
 
                 case UserIntent.stopSession:
                     throw new StopSessionException();
-
+                case UserIntent.unknown:
+                case UserIntent.answer:
                 default:
-                    return createFeedBack(checkAnswer(text));
+                    var feedback = checkAnswer(text);
+                    studySession.ICurrentQuestion.AnswerScore = feedback.score;
+                    return createVerbalFeedBack(feedback);
 
             }
-           return null;
+            return null;
         }
 
-        private string[] createFeedBack(AnswerFeedback answerFeedback)
+        private string[] createVerbalFeedBack(AnswerFeedback answerFeedback)
         {
+            List<string> verbalAssasment = new List<string>();
             //check sub question
             if (answerFeedback.score >= 85)
             {
-                return  conversationController.getPhrase(Pkey.goodAnswer);
+                verbalAssasment.AddRange(convCtrl.getPhrase(Pkey.goodAnswer));
             }
             else if (answerFeedback.score >= 30)
             {
-                return conversationController.getPhrase(Pkey.partialAnswer);
+                verbalAssasment.AddRange(convCtrl.getPhrase(Pkey.partialAnswer));
             }
             else
             {
-                return conversationController.getPhrase(Pkey.notAnAnswer);
+                verbalAssasment.AddRange(convCtrl.getPhrase(Pkey.notAnAnswer));
             }
+
+            if(answerFeedback.missingAnswers.Count > 0)
+            {
+                verbalAssasment.AddRange(convCtrl.getPhrase(Pkey.missingAnswrPart));
+                verbalAssasment.Add('"' + answerFeedback.missingAnswers[0] + '"');
+                answerFeedback.missingAnswers.RemoveAt(0);
+                foreach (var a in answerFeedback.missingAnswers)
+                { 
+                
+                    verbalAssasment.Add(convCtrl.getPhrase(Pkey.and)[0] + " \"" + a + "\"");
+                }
+            }
+
+            return verbalAssasment.ToArray();
+
         }
     }
 

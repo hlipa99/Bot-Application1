@@ -15,15 +15,17 @@ using Model.dataBase;
 using static Bot_Application1.Controllers.ConversationController;
 using Model;
 using Model.Models;
+using Bot_Application1.Models;
 
 namespace Bot_Application1.IDialog
 {
     [Serializable]
-    public class NewUserDialog : AbsDialog
+    public class NewUserDialog : AbsDialog<IMessageActivity>
     {
-        public override string getDialogContext()
+        public override UserContext getDialogContext()
         {
-            return "NewUserDialog";
+            UserContext.dialog = "NewUserDialog";
+            return UserContext;
         }
 
         public override async Task StartAsync(IDialogContext context)

@@ -17,10 +17,78 @@ namespace NLPtest.QnA
         public AnswerFeedback matchAnswers(ISubQuestion subquestion, string answer)
         {
             var userAnswer = nlp.Analize(answer, subquestion.questionText);
-            var systemAnswer = nlp.Analize(subquestion.answerText);
-            return matchAnswers(userAnswer, systemAnswer);
+            AnswerFeedback feedback = new AnswerFeedback();
+
+            if (subquestion.answerText.Contains("|")){
+
+                AnswerFeedback f = null; //helpers
+                AnswerFeedback f1 = null;
+                AnswerFeedback f2 = null;
+
+                foreach (var ans in subquestion.answerText.Split('|'))
+                {
+                    var systemAnswerWords = nlp.Analize(ans);
+                    if (ans.Trim() != "")
+                    {
+                        switch (subquestion.flags.Trim())
+                        {
+                            case ("needAll"):
+
+                                f = matchAnswers(userAnswer, systemAnswerWords, ans);
+                                feedback.merge(f);
+                                break;
+
+                            case ("need1"):
+                                f = matchAnswers(userAnswer, systemAnswerWords, ans);
+                                if (f.score > feedback.score)
+                                {
+                                    feedback = f;
+                                }
+
+                                break;
+                            case ("need2"):
+                                f = matchAnswers(userAnswer, systemAnswerWords, ans);
+                                if (f.score > f1.score || f.score > f2.score)
+                                {
+                                    if (f1.score > f2.score)
+                                    {
+                                        f2 = f;
+                                    }
+                                    else
+                                    {
+                                        f1 = f;
+                                    }
+                                }
+
+                                f1.merge(f2);
+                                feedback = f1;
+                                break;
+                            default:
+                                throw new DBDataException();
+                                break;
+                        }
+
+                    }
+                }
+
+            }else
+            {
+                var systemAnswer = nlp.Analize(subquestion.answerText);
+                feedback = matchAnswers(userAnswer, systemAnswer);
+            }
+            return feedback;
         }
 
+
+        private AnswerFeedback matchAnswers(List<WorldObject> userAnswer, List<WorldObject> systemAnswerWords, string ans)
+        {
+            AnswerFeedback f = matchAnswers(userAnswer, systemAnswerWords);
+            if (f.missingEntitis.Where(x => x.entityType != "locationWord").Count() > 0)
+            {
+                f.missingAnswers.Add(ans);
+            }
+            return f;
+        }
 
         public AnswerFeedback matchAnswers(List<WorldObject> userAnswer, List<WorldObject> systemAnswer)
         {
@@ -35,7 +103,6 @@ namespace NLPtest.QnA
                     var found = false;
                     foreach (var ue in userEntitis)
                     {
-
                         if (se.GetType() == ue.GetType())
                         {
                             if (se.Word == ue.Word && se.Negat == ue.Negat)
@@ -49,10 +116,12 @@ namespace NLPtest.QnA
 
                     if (!found)
                     {
-                        feedback.missingEntitis.Add(se.Word);
+                        feedback.missingEntitis.Add(se.Entity);
                     }
 
                 }
+
+
             }
             else
             {

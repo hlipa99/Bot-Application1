@@ -14,11 +14,12 @@ using NLPtest.WorldObj;
 using Model.dataBase;
 using Model;
 using Model.Models;
+using Bot_Application1.Models;
 
 namespace Bot_Application1.IDialog
 {
     [Serializable]
-    public class NotImplamentedDialog : AbsDialog
+    public class NotImplamentedDialog : AbsDialog<IMessageActivity>
     {
 
       
@@ -37,9 +38,10 @@ namespace Bot_Application1.IDialog
 
         }
 
-        public override string getDialogContext()
+        public override UserContext getDialogContext()
         {
-            return "NotImplamentedDialog";
+            UserContext.dialog = "NotImplamentedDialog";
+            return UserContext;
         }
 
 

@@ -37,7 +37,7 @@ namespace Bot_Application1.Controllers.Tests
             mockQuestion3.Setup(x => x.AnswerScore).Returns(100);
             mockStudySession.Setup(x => x.Category).Returns("לאומיות");
             mockStudySession.Setup(x => x.SessionLength).Returns(3);
-            mockStudySession.Setup(x => x.QuestionAsked).Returns(new HashSet<IQuestion>());
+            mockStudySession.Setup(x => x.IQuestionAsked).Returns(new HashSet<IQuestion>());
             cc = new ConversationController(mockUser.Object, mockStudySession.Object);
             ec = new EducationController(mockUser.Object, mockStudySession.Object,cc);
             mockDB.Setup(x => x.getAllCategory()).Returns(new string[] { "לאומיות" });
@@ -69,7 +69,7 @@ namespace Bot_Application1.Controllers.Tests
                 ec = new EducationController(mockUser.Object, mockStudySession.Object,cc);
                 var qs = new HashSet<IQuestion>();
                 qs.Add(mockQuestion1.Object);
-                mockStudySession.Setup(x => x.QuestionAsked).Returns(qs);
+                mockStudySession.Setup(x => x.IQuestionAsked).Returns(qs);
                 ec.getQuestion();
                 Assert.Fail();
             }

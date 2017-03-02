@@ -13,10 +13,10 @@ namespace NLPtest.Models
     public interface IStudySession
     {
 
-      HashSet<IQuestion> QuestionAsked { get; set; }
-      IQuestion CurrentQuestion { get; set; }
-        ISubQuestion CurrentSubQuestion { get; set; }
-        int SessionLength { get; set;}
+      HashSet<IQuestion> IQuestionAsked { get; set; }
+      IQuestion ICurrentQuestion { get; set; }
+      ISubQuestion ICurrentSubQuestion { get; set; }
+      int SessionLength { get; set;}
 
       string SubCategory { get; set;}
       string Category { get; set;}

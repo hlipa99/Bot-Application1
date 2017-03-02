@@ -141,15 +141,15 @@ namespace Bot_Application1.Controllers
 
         public string[] endOfSession()
         {
-            if (studySession.QuestionAsked.Count <= 1)
+            if (studySession.IQuestionAsked.Count <= 1)
             {
                 return getPhrase(Pkey.earlyDiparture);
              } else
             {
                 var average = 0;
-                foreach (var q in studySession.QuestionAsked)
+                foreach (var q in studySession.IQuestionAsked)
                 {
-                    average += q.AnswerScore / studySession.QuestionAsked.Count;
+                    average += q.AnswerScore / studySession.IQuestionAsked.Count;
                 }
 
                 if (average > 60)
@@ -245,6 +245,27 @@ namespace Bot_Application1.Controllers
             // return nlpControler.GetGender(text);
         }
 
+        internal string[] merge(string[] m1, string[] m2)
+        {
+            var res = new List<string>(m1);
+            res.AddRange(m2);
+            return res.ToArray();
+        }
+
+        internal string[] merge(string[] m1, string m2)
+        {
+            var res = new List<string>(m1);
+            res.Add(m2);
+            return res.ToArray();
+        }
+
+        internal string[] merge(string m1, string[] m2)
+        {
+            var res = new List<string>(m2);
+            res.Insert(0,m1);
+            return res.ToArray();
+        }
+
         public string getGenderOpositeName(string text)
         {
             if (text == "many")
@@ -299,10 +320,11 @@ namespace Bot_Application1.Controllers
         //}
         public string[] createReplayToUser(string text, UserContext context)
         {
+
             NLPControler nlp = NLPControler.getInstence();
           //  var answer = nlp.Analize(text);
             var answerIntent = nlp.getUserIntent(text, context.dialog);
-            if (context.dialog == "LerningDialog")
+            if (context.dialog == "LerningDialog" || context.dialog == "QuestionDialog")
             {
                 return ec.createReplayToUser(text, answerIntent);
             }
@@ -438,7 +460,7 @@ namespace Bot_Application1.Controllers
             phraseRes = phraseRes.Replace("<text>", textVar);
             phraseRes = phraseRes.Replace("<subject>", studySession.Category);
             phraseRes = phraseRes.Replace("<numOfQuestions>", studySession.SessionLength + "");
-            phraseRes = phraseRes.Replace("<questionNum>", (studySession.QuestionAsked.Count + 1) +"");
+            phraseRes = phraseRes.Replace("<questionNum>", (studySession.IQuestionAsked.Count + 1) +"");
             phraseRes = phraseRes.Replace("<userName>", user.UserName);
             phraseRes = phraseRes.Replace("<botName>", BOT_NAME);
             phraseRes = phraseRes.Replace("<botSubject>", BOT_SUBJECT);
@@ -446,7 +468,7 @@ namespace Bot_Application1.Controllers
             phraseRes = phraseRes.Replace("<genderMany>", getGenderName("many"));
             phraseRes = phraseRes.Replace("<!genderMany>", getGenderOpositeName("many"));
             phraseRes = phraseRes.Replace("<timeOfday>", getTimeOfDay());
-            phraseRes = phraseRes.Replace("<questionsLeft>", (studySession.SessionLength - studySession.QuestionAsked.Count).ToString());
+            phraseRes = phraseRes.Replace("<questionsLeft>", (studySession.SessionLength - studySession.IQuestionAsked.Count).ToString());
 
 
             phraseRes = phraseRes.Replace("נ ", "ן ");

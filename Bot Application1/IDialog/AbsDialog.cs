@@ -17,21 +17,22 @@ using Model.Models;
 using Microsoft.Bot.Builder.ConnectorEx;
 using Microsoft.Bot.Builder.Dialogs.Internals;
 using Bot_Application1.IDialog;
+using Bot_Application1.Models;
 
 namespace Bot_Application1.IDialog
 {
 
     [Serializable]
-    public abstract class AbsDialog : IDialog<IMessageActivity>
+    public abstract class AbsDialog<T> : IDialog<T>
     {
 
         private IUser user;
         private StudySession studySession;
         private DateTime request = DateTime.UtcNow;
-        private UserContext userContext;
+        private UserContext userContext = new UserContext("abs");
         //IDialogContext context;
 
-        internal void updateRequestTime2()
+        internal void updateRequestTime()
         {
             request = DateTime.UtcNow;
         }
@@ -67,6 +68,12 @@ namespace Bot_Application1.IDialog
                 context.UserData.TryGetValue<StudySession>("studySession", out studySession);
             }
         }
+
+        public EducationController edc()
+        {
+            return new EducationController(User, StudySession, null);
+        }
+
 
         public void setStudySession(IDialogContext context)
         {
@@ -251,14 +258,15 @@ namespace Bot_Application1.IDialog
             var mes = await message;
             if (mes.Timestamp <= Request)
             {
-                mes.Summary = getDialogContext();
-                await context.Forward<IMessageActivity, IMessageActivity>(new SideDialog(), resume, mes, CancellationToken.None);
+             //   mes.Summary = getDialogContext();
+                context.Wait(resume);
+                //await context.Forward<IMessageActivity, IMessageActivity>(new SideDialog(), resume, mes, CancellationToken.None);
                 return true;
             }
             return false;
         }
 
-        public abstract string getDialogContext();
+        public abstract UserContext getDialogContext();
 
         public virtual Task StartAsync(IDialogContext context)
         {

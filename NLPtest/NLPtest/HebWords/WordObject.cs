@@ -6,6 +6,7 @@ using static NLPtest.HebWords.WordObject.WordType;
 using static NLPtest.personObject;
 using Newtonsoft.Json;
 using NLPtest.Exceptions;
+using System.Collections.Generic;
 
 namespace NLPtest.HebWords
 {
@@ -21,6 +22,17 @@ namespace NLPtest.HebWords
         private timeType time = timeType.unspecified;
         private amountType amount = amountType.unspecified;
         private genderType gender = genderType.unspecified;
+
+        internal string TypefromEnum(WordType wordT) {
+            string ret = "";
+            try { 
+            ret = Enum.GetName(typeof(WordType), wordT);
+            }catch(Exception ex)
+            {
+                ret = "unknownWord";
+            }
+            return ret;
+        }
 
         private String ner;
 
@@ -41,17 +53,17 @@ namespace NLPtest.HebWords
                 this.Ner = ner;
                 this.text = text;
                 this.polarity = polarity;
-                this.Pos = pos;
+                this.Pos = pos.ToLower();
                 this.posType = posType;
                 this.Prefixes = prefixes;
                 this.tense = tense;
                 this.suffixFunction = suffixFunction;
-                this.Lemma = lemma;
+                this.Lemma = getLemma(lemma,text);
 
                 this.Gender = (genderType)Enum.Parse(typeof(genderType), gender.Replace(" ", ""));
                 this.Amount = (amountType)Enum.Parse(typeof(amountType), number);
                 this.Person = (personType)Enum.Parse(typeof(personType), person);
-                this.Gender = this.Gender == genderType.unspecified & suffixGender != null ? (genderType)Enum.Parse(typeof(genderType), suffixGender) : this.Gender;
+                this.Gender = this.Gender == genderType.unspecified & suffixGender != null ? (genderType)Enum.Parse(typeof(genderType), suffixGender.Replace(" ", "")) : this.Gender;
                 this.Amount = this.Amount == amountType.unspecified & suffixNumber != null ? (amountType)Enum.Parse(typeof(amountType), suffixNumber) : this.Amount;
                 this.Person = this.Person == personType.unspecified & suffixPerson != null ? (personType)Enum.Parse(typeof(personType), suffixPerson) : this.Person;
                 this.Amount = (amountType)Enum.Parse(typeof(amountType), number);
@@ -65,11 +77,40 @@ namespace NLPtest.HebWords
             }
         }
 
+        private string getLemma(string lemma,string text)
+        {
+            if (lemma == null || lemma == "###NUMBER###" || lemma.Length <= 1) return text;
+
+            if(Ner != "O")
+            {
+                var chars = new List<char>();
+                foreach(var c in Prefixes)
+                {
+                    chars.Add(c[0]);
+                }
+
+                text = text.TrimStart(chars.ToArray());
+            }
+
+
+
+            if (lemma.StartsWith("CARD")) return lemma.Remove(0, 4);
+            if (lemma.StartsWith("ORD")) return lemma.Remove(0, 3);
+            
+            return lemma;
+        }
 
         public WordObject(string word, WordType t)
         {
             this.Text = word;
             this.WordT = t;
+            Ner = "O";
+            this.Pos = Enum.GetName(typeof(WordType), t);
+            this.posType = "";
+            this.Prefixes = new string[0]; ;
+            this.tense = "";
+            this.suffixFunction = "";
+            this.Lemma = getLemma(lemma, text);
 
         }
 
@@ -153,7 +194,7 @@ namespace NLPtest.HebWords
             {
                 wordType = nounWord;
             }
-            else if (Pos == "negation")
+            else if (Pos == "negation" || Pos == "negative")
             {
                 wordType = negationWord;
             }
@@ -210,7 +251,7 @@ namespace NLPtest.HebWords
             {
                 wordType = properNameWord;
             }
-            else if (Pos == "wPrefix")
+            else if (Pos == "wprefix")
             {
                 wordType = wPrefixWord;
             }
@@ -220,7 +261,15 @@ namespace NLPtest.HebWords
             }
             else if (Pos == "modal")
             {
-                wordType = modal;
+                wordType = modalWord;
+            }
+            else if (Pos == "existential")
+            {
+                wordType = existentialWord;
+            }
+            else if (text.Length == 1)
+            {
+                wordType = prefixWord;
             }
             else
             {
@@ -289,7 +338,7 @@ namespace NLPtest.HebWords
                     }
                     else if (isA(markWord))
                     {
-                        worldObject = new WorldObject("mark");
+                        worldObject = new WorldObject(this);
                     }
                     else if (isA(adjectiveWord))
                     {
@@ -337,7 +386,7 @@ namespace NLPtest.HebWords
                         worldObject = getNounFromWord();
                     } else
                     {
-                        worldObject = new WorldObject(Text);
+                        worldObject = new WorldObject(this);
                     }
 
                 }
@@ -593,6 +642,7 @@ namespace NLPtest.HebWords
 
         public enum WordType
         {
+            unknownWord,
             dateWord,
             eventWord,
             gufWord,
@@ -610,7 +660,7 @@ namespace NLPtest.HebWords
             prepWord ,
             questionWord,
             timeWord ,
-            unknownWord ,
+           
             verbWord,
             copulaWord ,
             conjunctionWord ,
@@ -621,8 +671,11 @@ namespace NLPtest.HebWords
             participleWord ,
             wPrefixWord ,
             pronoun,
-            modal,
+            modalWord,
             conceptWord,
+            existentialWord,
+            prefixWord
+     
         }
 
         internal void setGender(string gen)

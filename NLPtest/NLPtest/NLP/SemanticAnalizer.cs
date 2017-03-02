@@ -580,24 +580,21 @@ namespace NLPtest.NLP
             try
             {
                 var intentStr = ac.getIntentApiAi(input, context);
-                intent = (UserIntent) Enum.Parse(typeof(UserIntent), intentStr);
+                intent = (UserIntent) Enum.Parse(typeof(UserIntent), intentStr.Replace(" ",""));
             }catch(Exception ex)
             {
                 return UserIntent.unknown;
             }
 
-            return UserIntent.answer;
+            return intent;
 
         }
 
     }
 
-
-
-
-
     public enum UserIntent
     {
+        DefaultFallbackIntent,
         dontKnow,
         stopSession,
         answer,
@@ -605,7 +602,9 @@ namespace NLPtest.NLP
         introduction,
         howAreYou,
         unknown,
-        historyAnswer
+        historyAnswer,
+        yes,
+        no,
     }
 }
 

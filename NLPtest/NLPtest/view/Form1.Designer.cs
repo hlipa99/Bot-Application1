@@ -66,7 +66,8 @@
             this.input_TB.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.input_TB.Size = new System.Drawing.Size(543, 26);
             this.input_TB.TabIndex = 1;
-            this.input_TB.Text = "הערבים יצאו במתקפות כלפי היהודים ואינם היו מרוצים מתכנית החלוקה";
+            this.input_TB.Text = "לנצל את ההזדמנות | פגיעה במורל אם לא יכריזו | לאפשר חוק גיוס חובה ולחזק את הצבא |" +
+    " הפסקת אש תחזק את מדינות ערב | תואמת את החלטת האו\"ם |";
             this.input_TB.TextChanged += new System.EventHandler(this.input_TB_TextChanged);
             this.input_TB.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.input_TB_KeyPress);
             // 
@@ -127,7 +128,7 @@
             this.input_TB2.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.input_TB2.Size = new System.Drawing.Size(543, 26);
             this.input_TB2.TabIndex = 5;
-            this.input_TB2.Text = "הערבים דחו את ההחלטה והתחילו בהתקפות על יהודים בכל הארץ";
+            this.input_TB2.Text = "מתאים להחלתה של האום ומאפשר חוק גוס חובה לצהל";
             // 
             // text_TB2
             // 

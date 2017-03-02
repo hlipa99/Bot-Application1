@@ -16,60 +16,57 @@ using static Bot_Application1.Controllers.ConversationController;
 using Model;
 using Model.Models;
 using Bot_Application1.Exceptions;
+using Bot_Application1.Models;
 
 namespace Bot_Application1.IDialog
 {
     [Serializable]
-    public class MainDialog : AbsDialog
+    public class MainDialog : AbsDialog<IMessageActivity>
     {
 
-        public override string getDialogContext()
+        public override UserContext getDialogContext()
         {
-            return "MainDialog";
+            UserContext.dialog = "SideDialog";
+            return UserContext;
         }
 
         public override async Task StartAsync(IDialogContext context)
         {
-            getUser(context);
-            if (User != null)
+            try
             {
-                await Greeting(context);
+                getUser(context);
+                if (User != null)
+                {
+                    if (User.UserLastSession == null || User.UserLastSession.Value.AddHours(1) > context.Activity.Timestamp)
+                    {
+                        User.UserLastSession = context.Activity.Timestamp;
+                        context.UserData.SetValue("user", User);
+                        context.Wait(MainMenu);
+                    }
+                    else
+                    {
+                        context.Call(new GreetingDialog(), MainMenu);
+                    }
+                }
+                else
+                {
+                    context.Call(new NewUserDialog(), MainMenu);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                context.Call(new NewUserDialog(), MainMenu);
+                await writeMessageToUser(context, new string[] { "אוקיי זה מביך " + "\U0001F633", "קרתה לי תקלה בשרת ואני לא יודע מה לעשות", "אני אתחיל עכשיו מהתחלה ונעמיד פנים שלא קרה כלום, " + "\U0001F648", "טוב" + "?" });
+            //    await writeMessageToUser(context, new string[] { ex.Data.ToString(), ex.InnerException.ToString(), ex.StackTrace.ToString(), ex.TargetSite.ToString(), ex.ToString() });
+                //     Logger.log("MainDialog", "MainMenu", ex.ToString());
+                await StartAsync(context);
             }
         }
 
-   
-
-        private async Task Greeting(IDialogContext context)
-        {
-        
-
-            await writeMessageToUser(context, conv().getPhrase(Pkey.greetings));
-            await writeMessageToUser(context, conv().getPhrase(Pkey.howAreYou));
-            context.Wait(HowAreYouRes);
-
-        }
-
-
-        private async Task HowAreYouRes(IDialogContext context, IAwaitable<IMessageActivity> result)
-        {
-    
-
-            var text = await result;
-         //   await writeMessageToUser(context, conv().getPhrase(Pkey.ok));
-            await MainMenu(context, result);
-
-        }
-
-        string[] options;
+            string[] options;
 
         private async Task MainMenu(IDialogContext context, IAwaitable<object> result)
         {
-            try
-            {
+           
                 getUser(context);
                 if (User != null)
                 {
@@ -94,18 +91,9 @@ namespace Bot_Application1.IDialog
                 {
                     context.Call(new NewUserDialog(), MainMenu);
                 }
-            }
-            catch (EndOfLearningSessionException ex)
-            {
-                context.Wait(EndOfLearningSession);
-            }
-            catch (Exception ex)
-            {
-                await writeMessageToUser(context, new string[] { "אוקיי זה מביך " + "\U0001F633", "קרתה לי תקלה בשרת ואני לא יודע מה לעשות", "אני אתחיל עכשיו מהתחלה ונעמיד פנים שלא קרה כלום, " + "\U0001F648", "טוב" + "?" });
-                await writeMessageToUser(context,  new string[] { ex.Data.ToString(), ex.InnerException.ToString(), ex.StackTrace.ToString(), ex.TargetSite.ToString(), ex.ToString() });
-          //     Logger.log("MainDialog", "MainMenu", ex.ToString());
-               await StartAsync(context);
-            }
+            
+     
+     
         }
 
         private async Task MainMenuResualt(IDialogContext context, IAwaitable<object> result)

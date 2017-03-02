@@ -13,77 +13,88 @@ namespace NLPtest.Models
     public class StudySession : IStudySession
     {
 
-        private HashSet<IQuestion> questionAsked;
-        private IQuestion currentQuestion;
+        private HashSet<Question> questionAsked = new HashSet<Question>();
+        private Question currentQuestion;
         private int sessionLength = 3;
-        private ISubQuestion currentSubQuestion;
+        private SubQuestion currentSubQuestion;
 
         public string SubCategory { get; set; }
-        public string Category { get; set; }
+        public string Category { get; set;}
 
         public StudySession(){
                 Category = "";
                 SessionLength = 0;
-                QuestionAsked = new HashSet<IQuestion>();
+                QuestionAsked = new HashSet<Question>();
                 currentQuestion = null;
                 sessionLength = 3;
             }
 
 
-       
-      
+        public int SessionLength{get;set;}
 
-        public IQuestion CurrentQuestion
+        public HashSet<IQuestion> IQuestionAsked
         {
             get
             {
-                return currentQuestion;
+                HashSet<IQuestion> ret = new HashSet<IQuestion>();
+                foreach (var q in questionAsked)
+                {
+                    ret.Add(q);
+                }
+                return ret;
             }
 
             set
             {
-                currentQuestion = value;
+
+                questionAsked = new HashSet<Question>();
+                foreach (var q in value)
+                {
+                    questionAsked.Add((Question)q);
+                }
             }
         }
 
-        public int SessionLength
+        public HashSet<Question> QuestionAsked{ get;set;}
+        public Question CurrentQuestion { get; set; }
+
+        public IQuestion ICurrentQuestion
         {
             get
             {
-                return sessionLength;
+                return CurrentQuestion;
             }
 
             set
             {
-                sessionLength = value;
+                CurrentQuestion = (Question) value;
             }
         }
 
-        public HashSet<IQuestion> QuestionAsked
+        public ISubQuestion ICurrentSubQuestion
         {
             get
             {
-                return questionAsked;
+                return CurrentSubQuestion;
             }
 
             set
             {
-                questionAsked = value;
+                CurrentSubQuestion = (SubQuestion) value;
             }
         }
 
-        public ISubQuestion CurrentSubQuestion
+        public SubQuestion CurrentSubQuestion
         {
             get
-           {
+            {
                 return currentSubQuestion;
             }
+
             set
             {
                 currentSubQuestion = value;
             }
-
         }
-       
     }
 }

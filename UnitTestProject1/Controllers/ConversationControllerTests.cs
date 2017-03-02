@@ -77,7 +77,7 @@ namespace Bot_Application1.Controllers.Tests
             hs.Add(mockQuestion2.Object);
             hs.Add(mockQuestion3.Object);
 
-            mockStudySession.Setup(x => x.QuestionAsked).Returns(hs);
+            mockStudySession.Setup(x => x.IQuestionAsked).Returns(hs);
             //good
             Assert.AreEqual(cv.endOfSession()[0], EnumVal(Pkey.goodSessionEnd));
 
@@ -90,12 +90,12 @@ namespace Bot_Application1.Controllers.Tests
             hs.Add(mockQuestion1.Object);
             hs.Add(mockQuestion2.Object);
             hs.Add(mockQuestion3.Object);
-            mockStudySession.Setup(x => x.QuestionAsked).Returns(hs);
+            mockStudySession.Setup(x => x.IQuestionAsked).Returns(hs);
 
             Assert.AreEqual(cv.endOfSession()[0], EnumVal(Pkey.badSessionEnd));
 
             //bad
-            mockStudySession.Setup(x => x.QuestionAsked).Returns(new HashSet<IQuestion>());
+            mockStudySession.Setup(x => x.IQuestionAsked).Returns(new HashSet<IQuestion>());
             Assert.AreEqual(cv.endOfSession()[0], EnumVal(Pkey.earlyDiparture));
 
 
@@ -107,7 +107,7 @@ namespace Bot_Application1.Controllers.Tests
             hs.Add(mockQuestion1.Object);
             hs.Add(mockQuestion2.Object);
             hs.Add(mockQuestion3.Object);
-            mockStudySession.Setup(x => x.QuestionAsked).Returns(hs);
+            mockStudySession.Setup(x => x.IQuestionAsked).Returns(hs);
 
             Assert.AreEqual(cv.endOfSession()[0], EnumVal(Pkey.badSessionEnd));
         }
