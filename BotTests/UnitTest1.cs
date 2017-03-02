@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using Model;
 using Bot_Application1.Controllers;
+using Model.dataBase;
 
 namespace UnitTestProject1
 {

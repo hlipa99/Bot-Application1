@@ -18,7 +18,7 @@ namespace NLPtest.NLP
 {
 
    
-    class SemanticAnalizer
+    public class SemanticAnalizer
     {
 
         //public ContentTurn tagWords2(Sentence sentence, ref TextContext context)

@@ -123,9 +123,16 @@
   <ItemGroup>
     <Compile Include="Controllers\ConversationControllerTests.cs" />
     <Compile Include="Controllers\EducationControllerTests.cs" />
+    <Compile Include="Controllers\NLPControlerTests.cs" />
+    <Compile Include="Controllers\OuterAPIControllerTests.cs" />
+    <Compile Include="Controllers\QuestionsAnswersControllersTests.cs" />
+    <Compile Include="HebWords\HebTemplateTests.cs" />
+    <Compile Include="HebWords\WordObjectTests.cs" />
     <Compile Include="NLP\NLPTest.cs" />
+    <Compile Include="NLP\SemanticAnalizerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QnA\QAEnginTests.cs" />
+    <Compile Include="YAndex\ControlerTranslateTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bot Application1\Bot Application1.csproj">
