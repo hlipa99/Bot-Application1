@@ -12,7 +12,7 @@ using NLPtest.view;
 namespace NLPtest.HebWords
 {
 
-     class HebTemplate
+     public class HebTemplate
     {
         string templateText;
         string[] template;

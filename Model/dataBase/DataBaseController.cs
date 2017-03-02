@@ -22,7 +22,7 @@ namespace Model.dataBase
     public class DataBaseController
     {
 
-        public bool isUserExist(string userId)
+        public virtual bool isUserExist(string userId)
         {
            Entities2 DB = new Entities2();
             bool exist = false;
@@ -42,7 +42,7 @@ namespace Model.dataBase
 
         }
 
-        public void saveEntitiesFromQuestions(List<entity> Entities2)
+        public virtual void saveEntitiesFromQuestions(List<entity> Entities2)
         {
             Entities2 DB = new Entities2();
             var questions = DB.SubQuestion;
@@ -55,7 +55,7 @@ namespace Model.dataBase
          
 
 
-        public void addNewUser(string channelId, string id, string name)
+        public virtual void addNewUser(string channelId, string id, string name)
         {
            Entities2 DB = new Entities2();
             try
@@ -81,7 +81,7 @@ namespace Model.dataBase
         }
 
 
-        public void addNewEntity(string value, string type)
+        public virtual void addNewEntity(string value, string type)
         {
            Entities2 DB = new Entities2();
             try
@@ -113,7 +113,7 @@ namespace Model.dataBase
 
 
 
-        public void addNewUser(IUser user)
+        public virtual void addNewUser(IUser user)
         {
            Entities2 DB = new Entities2();
             try
@@ -136,7 +136,7 @@ namespace Model.dataBase
 
 
 
-        public IUser getUser(string userId)
+        public virtual IUser getUser(string userId)
         {
            Entities2 DB = new Entities2();
             IUser NewIUser = new User();
@@ -165,7 +165,7 @@ namespace Model.dataBase
 
 
 
-        public void deleteUser(string userId)
+        public virtual void deleteUser(string userId)
         {
            Entities2 DB = new Entities2();
             IUser NewIUser = new User();
@@ -196,7 +196,7 @@ namespace Model.dataBase
         }
 
 
-        public IQuestion[] getQuestion(string category)
+        public virtual IQuestion[] getQuestion(string category)
         {
            Entities2 DB = new Entities2();
             IQuestion question = new Question();
@@ -221,7 +221,7 @@ namespace Model.dataBase
             return questions;
         }
 
-        public Question[] getQuestion(string catgoty, string subCategory)
+        public virtual Question[] getQuestion(string catgoty, string subCategory)
         {
            Entities2 DB = new Entities2();
             Question question = new Question();
@@ -248,7 +248,7 @@ namespace Model.dataBase
         }
 
 
-        public string[] getAllCategory()
+        public virtual string[] getAllCategory()
         {
            Entities2 DB = new Entities2();
             Question question = new Question();
@@ -271,13 +271,13 @@ namespace Model.dataBase
 
         }
 
-        public DbSet<entity> getEntitys()
+        public virtual DbSet<entity> getEntitys()
         {
             Entities2 DB = new Entities2();
             return DB.entity;
         }
 
-        public string[] getAllSubCategory(string catgoty)
+        public virtual string[] getAllSubCategory(string catgoty)
         {
            Entities2 DB = new Entities2();
             Question question = new Question();
@@ -302,7 +302,7 @@ namespace Model.dataBase
         }
 
 
-        public string[] getMedia(string key, string type, string flags)
+        public virtual string[] getMedia(string key, string type, string flags)
         {
            Entities2 DB = new Entities2();
             media media = new media();
@@ -326,14 +326,14 @@ namespace Model.dataBase
 
         }
 
-        public SubQuestion[] getAllSubQuestions()
+        public virtual SubQuestion[] getAllSubQuestions()
         {
             var x = System.Configuration.ConfigurationManager.ConnectionStrings;
             Entities2 DB = new Entities2();
             return DB.SubQuestion.ToArray();
         }
 
-        public string[] getBotPhrase(Pkey pKey, string[] flags, string[] flagsNot)
+        public virtual string[] getBotPhrase(Pkey pKey, string[] flags, string[] flagsNot)
         {
            Entities2 DB = new Entities2();
             media media = new media();

@@ -262,6 +262,10 @@
     <Compile Include="Exceptions\ContextException.cs" />
     <Compile Include="Controllers\MediaController.cs" />
     <Compile Include="Exceptions\StopSessionException.cs" />
+    <Compile Include="IDialog\GreetingDialog.cs" />
+    <Compile Include="IDialog\MenuObject.cs" />
+    <Compile Include="IDialog\SideDialog.cs" />
+    <Compile Include="IDialog\YesNoQuestionDialog.cs" />
     <Compile Include="Models\UserContext.cs" />
     <Compile Include="Exceptions\DBException.cs" />
     <Compile Include="Exceptions\PhraseFormatException.cs" />

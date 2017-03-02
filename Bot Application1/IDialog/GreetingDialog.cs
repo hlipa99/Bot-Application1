@@ -15,6 +15,7 @@ using Bot_Application1.log;
 using static Bot_Application1.Controllers.ConversationController;
 using Model;
 using Model.Models;
+using Bot_Application1.Exceptions;
 
 namespace Bot_Application1.IDialog
 {

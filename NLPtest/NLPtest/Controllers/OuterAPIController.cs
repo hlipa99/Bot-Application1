@@ -11,7 +11,7 @@ using ApiAiSDK.Model;
 
 namespace NLPtest.Controllers
 {
-    class OuterAPIController
+    public class OuterAPIController
     {
         private ApiAi apiAi;
 

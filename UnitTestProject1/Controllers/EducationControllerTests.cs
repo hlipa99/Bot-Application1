@@ -23,6 +23,7 @@ namespace Bot_Application1.Controllers.Tests
         Mock<IQuestion> mockQuestion1 = new Mock<IQuestion>();
         Mock<IQuestion> mockQuestion2 = new Mock<IQuestion>();
         Mock<IQuestion> mockQuestion3 = new Mock<IQuestion>();
+        Mock<ISubQuestion> mockSubQuestion = new Mock<ISubQuestion>();
         Mock<DataBaseController> mockDB = new Mock<DataBaseController>();
 
         [TestInitialize()]
@@ -38,6 +39,7 @@ namespace Bot_Application1.Controllers.Tests
             mockStudySession.Setup(x => x.Category).Returns("לאומיות");
             mockStudySession.Setup(x => x.SessionLength).Returns(3);
             mockStudySession.Setup(x => x.QuestionAsked).Returns(new HashSet<IQuestion>());
+            mockStudySession.Setup(x => x.CurrentSubQuestion).Returns(mockSubQuestion.Object);
             cc = new ConversationController(mockUser.Object, mockStudySession.Object);
             ec = new EducationController(mockUser.Object, mockStudySession.Object,cc);
             mockDB.Setup(x => x.getAllCategory()).Returns(new string[] { "לאומיות" });
@@ -85,14 +87,16 @@ namespace Bot_Application1.Controllers.Tests
         {
             Mock<ISubQuestion> mockQuestion4 = new Mock<ISubQuestion>();
             mockQuestion4.SetupProperty(x => x.AnswerScore);
+            mockSubQuestion.Setup(x => x.answerText).Returns("הגנה אצל יהודים ערבים");
+
             //good
-            Assert.AreEqual(ec.checkAnswer( "תשובה טובה מאד מאד, אפילו מצויינת").score, 100);
+            Assert.AreEqual(ec.checkAnswer( "הגנה אצל יהודים ערבים").score, 100);
 
             //bad
-            Assert.AreEqual(ec.checkAnswer("תשובה חלקית אבל בסדר").score, 56);
+            Assert.AreEqual(ec.checkAnswer("הגנה יהודים ").score, 50);
 
             //ugly
-            Assert.AreEqual(ec.checkAnswer("sdsdfsdfs").score, 0);
+            Assert.AreEqual(ec.checkAnswer("למה התרנגול חצה את הכביש?").score, 0);
 
         }
 

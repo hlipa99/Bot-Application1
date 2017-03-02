@@ -17,6 +17,7 @@ using Model.Models;
 using Microsoft.Bot.Builder.ConnectorEx;
 using Microsoft.Bot.Builder.Dialogs.Internals;
 using Bot_Application1.IDialog;
+using Bot_Application1.Models;
 
 namespace Bot_Application1.IDialog
 {
