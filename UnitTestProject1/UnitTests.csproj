@@ -126,8 +126,8 @@
     <Compile Include="Controllers\NLPControlerTests.cs" />
     <Compile Include="Controllers\OuterAPIControllerTests.cs" />
     <Compile Include="Controllers\QuestionsAnswersControllersTests.cs" />
-    <Compile Include="HebWords\HebTemplateTests.cs" />
     <Compile Include="HebWords\WordObjectTests.cs" />
+    <Compile Include="MockObjectTestBase.cs" />
     <Compile Include="NLP\NLPTest.cs" />
     <Compile Include="NLP\SemanticAnalizerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

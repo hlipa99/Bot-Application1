@@ -27,7 +27,7 @@ namespace Bot_Application1.Controllers
 
         MessageComposer composer;
         // Dictionary<string, string[]> PraseDictionary;
-        DataBaseController db = new DataBaseController();
+        DataBaseController db;
         EducationController ec;
 
         private ContentList last;
@@ -40,24 +40,48 @@ namespace Bot_Application1.Controllers
 
         public static string BOT_SUBJECT = "היסטוריה";
 
-        public DataBaseController Db
+        public virtual DataBaseController Db
         {
             get
             {
-                return db;
+                return DataBaseController.getInstance();
+            }
+        }
+
+        public virtual IUser User
+        {
+            get
+            {
+                return user;
             }
 
             set
             {
-                db = value;
+                user = value;
             }
         }
 
+        public virtual IStudySession StudySession
+        {
+            get
+            {
+                return studySession;
+            }
+
+            set
+            {
+                studySession = value;
+            }
+        }
+
+        public ConversationController(){}
+
         public ConversationController(IUser user, IStudySession studySession)
         {
-            this.user = user;
-            this.studySession = studySession;
-             ec = new EducationController(user, studySession,this);
+            this.User = user;
+            this.StudySession = studySession;
+            this.db = db;
+            ec = new EducationController(user, studySession, this);
         }
 
 
@@ -141,15 +165,15 @@ namespace Bot_Application1.Controllers
 
         public string[] endOfSession()
         {
-            if (studySession.QuestionAsked.Count <= 1)
+            if (StudySession.QuestionAsked.Count <= 1)
             {
                 return getPhrase(Pkey.earlyDiparture);
              } else
             {
                 var average = 0;
-                foreach (var q in studySession.QuestionAsked)
+                foreach (var q in StudySession.QuestionAsked)
                 {
-                    average += q.AnswerScore / studySession.QuestionAsked.Count;
+                    average += q.AnswerScore / StudySession.QuestionAsked.Count;
                 }
 
                 if (average > 60)
@@ -182,7 +206,7 @@ namespace Bot_Application1.Controllers
 
         private  string getGufSecond()
         {
-            if(user.UserGender == "feminine")
+            if(User.UserGender == "feminine")
             {
                 return "את";
             }else
@@ -222,7 +246,7 @@ namespace Bot_Application1.Controllers
         {
             if (text == "many")
             {
-                if(user.UserGender == "masculine")
+                if(User.UserGender == "masculine")
                 {
                     return "בנים";
                 }
@@ -233,7 +257,7 @@ namespace Bot_Application1.Controllers
             }
             else
             {
-                if (user.UserGender == "masculine")
+                if (User.UserGender == "masculine")
                 {
                     return "בן";
                 }
@@ -249,7 +273,7 @@ namespace Bot_Application1.Controllers
         {
             if (text == "many")
             {
-                if (user.UserGender == "masculine")
+                if (User.UserGender == "masculine")
                 {
                     return "בנות";
                   
@@ -261,7 +285,7 @@ namespace Bot_Application1.Controllers
             }
             else
             {
-                if (user.UserGender == "masculine")
+                if (User.UserGender == "masculine")
                 {
                     return "בת";
                 }
@@ -299,8 +323,8 @@ namespace Bot_Application1.Controllers
         //}
         public string[] createReplayToUser(string text, UserContext context)
         {
-            NLPControler nlp = NLPControler.getInstence();
-          //  var answer = nlp.Analize(text);
+            NLPControler nlp = new NLPControler();
+            //  var answer = nlp.Analize(text);
             var answerIntent = nlp.getUserIntent(text, context.dialog);
             if (context.dialog == "LerningDialog")
             {
@@ -389,7 +413,7 @@ namespace Bot_Application1.Controllers
 
 
 
-        public string[] getPhrase(Pkey key,string[] flags = null, string[] flagesNot = null, string textVar = null)
+        public virtual string[] getPhrase(Pkey key,string[] flags = null, string[] flagesNot = null, string textVar = null)
         {
           
                 if (flags == null) flags = new string[] { };
@@ -418,35 +442,35 @@ namespace Bot_Application1.Controllers
 
         private string formateVars(string phraseRes,string textVar)
         {
-            if (studySession == null)
+            if (StudySession == null)
             {
                 //studySession = new StudySession();
 
-            studySession = new StudySession();
+            StudySession = new StudySession();
             }
 
-            if (user == null)
+            if (User == null)
             {
-                user = new User();
-                user.UserName = "";
-                user.UserGender = "masculine";
+                User = new User();
+                User.UserName = "";
+                User.UserGender = "masculine";
             }
 
             phraseRes = phraseRes.Replace("<genderGuf>", getGufSecond());
             phraseRes = phraseRes.Replace("<genderPostfixH>",ifGufFemenin("ה"));
             phraseRes = phraseRes.Replace("<genderPostfixT>", ifGufFemenin("ת"));
             phraseRes = phraseRes.Replace("<text>", textVar);
-            phraseRes = phraseRes.Replace("<subject>", studySession.Category);
-            phraseRes = phraseRes.Replace("<numOfQuestions>", studySession.SessionLength + "");
-            phraseRes = phraseRes.Replace("<questionNum>", (studySession.QuestionAsked.Count + 1) +"");
-            phraseRes = phraseRes.Replace("<userName>", user.UserName);
+            phraseRes = phraseRes.Replace("<subject>", StudySession.Category);
+            phraseRes = phraseRes.Replace("<numOfQuestions>", StudySession.SessionLength + "");
+            phraseRes = phraseRes.Replace("<questionNum>", (StudySession.QuestionAsked.Count + 1) +"");
+            phraseRes = phraseRes.Replace("<userName>", User.UserName);
             phraseRes = phraseRes.Replace("<botName>", BOT_NAME);
             phraseRes = phraseRes.Replace("<botSubject>", BOT_SUBJECT);
             phraseRes = phraseRes.Replace("<genderPostfixY>", ifGufFemenin("י"));
             phraseRes = phraseRes.Replace("<genderMany>", getGenderName("many"));
             phraseRes = phraseRes.Replace("<!genderMany>", getGenderOpositeName("many"));
             phraseRes = phraseRes.Replace("<timeOfday>", getTimeOfDay());
-            phraseRes = phraseRes.Replace("<questionsLeft>", (studySession.SessionLength - studySession.QuestionAsked.Count).ToString());
+            phraseRes = phraseRes.Replace("<questionsLeft>", (StudySession.SessionLength - StudySession.QuestionAsked.Count).ToString());
 
 
             phraseRes = phraseRes.Replace("נ ", "ן ");
@@ -470,7 +494,7 @@ namespace Bot_Application1.Controllers
                     var start = phraseRes.IndexOf("<");
                     var end = phraseRes.IndexOf(">");
                     var replace = phraseRes.Substring(start + 1, end - start -1).Split('#');
-                    var gender = user.UserGender == "feminine" ? replace[1] : replace[0];
+                    var gender = User.UserGender == "feminine" ? replace[1] : replace[0];
                     phraseRes = phraseRes.Remove(start, end - start + 1);
                     phraseRes = phraseRes.Insert(start, gender);
                 }
@@ -513,7 +537,7 @@ namespace Bot_Application1.Controllers
 
         private string ifGufFemenin(string v)
         {
-            if (user.UserGender == "feminine") return v;
+            if (User.UserGender == "feminine") return v;
             else return "";
         }
 

@@ -21,10 +21,40 @@ namespace Model.dataBase
     [Serializable]
     public class DataBaseController
     {
+        static object syncLock = new object();
+        static Entities2 DB;
+        static DataBaseController controller;
+
+        public static void setStubInstance(DataBaseController ctrl)
+        {
+            controller = ctrl;
+        }
+
+        public static DataBaseController getInstance()
+        {
+
+            lock (syncLock)
+            {
+                if (controller == null)
+                {
+                   
+                    controller = new DataBaseController();
+                    DB = new Entities2();
+                    return controller;
+                }
+                else
+                {
+                    return controller;
+                }
+            }
+             
+        }
+
+
 
         public virtual bool isUserExist(string userId)
         {
-           Entities2 DB = new Entities2();
+           
             bool exist = false;
             try
             {
@@ -221,7 +251,7 @@ namespace Model.dataBase
             return questions;
         }
 
-        public virtual Question[] getQuestion(string catgoty, string subCategory)
+        public virtual IQuestion[] getQuestion(string catgoty, string subCategory)
         {
            Entities2 DB = new Entities2();
             Question question = new Question();
@@ -271,10 +301,9 @@ namespace Model.dataBase
 
         }
 
-        public virtual DbSet<entity> getEntitys()
+        public virtual IEnumerable<Ientity> getEntitys()
         {
-            Entities2 DB = new Entities2();
-            return DB.entity;
+            return DB.entity.Cast<Ientity>().ToArray();
         }
 
         public virtual string[] getAllSubCategory(string catgoty)
@@ -326,7 +355,7 @@ namespace Model.dataBase
 
         }
 
-        public virtual SubQuestion[] getAllSubQuestions()
+        public virtual ISubQuestion[] getAllSubQuestions()
         {
             var x = System.Configuration.ConfigurationManager.ConnectionStrings;
             Entities2 DB = new Entities2();

@@ -16,21 +16,16 @@ namespace Bot_Application1.Controllers
     [Serializable]
     public class EducationController
     {
-        DataBaseController db = new DataBaseController();
         private IUser user;
         private IStudySession studySession;
         ConversationController conversationController;
-        public DataBaseController Db
+        public virtual DataBaseController Db
         {
             get
             {
-                return db;
+                return DataBaseController.getInstance();
             }
 
-            set
-            {
-                db = value;
-            }
         }
 
         public EducationController(IUser user, IStudySession studySession, ConversationController cc)
@@ -106,7 +101,7 @@ namespace Bot_Application1.Controllers
         {
             QuestionsAnswersControllers qac = new QuestionsAnswersControllers();
             ISubQuestion question = studySession.CurrentSubQuestion;
-            var nlp = NLPControler.getInstence();
+            var nlp = new NLPControler();
             //var systemAnswerText = studySession.CurrentSubQuestion.answerText;
             //var systemAnswer = nlp.Analize(text, question.questionText);
             var answerFeedback = qac.matchAnswers(question, text);

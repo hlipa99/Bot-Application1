@@ -13,7 +13,7 @@ namespace NLPtest.Models
     public class StudySession : IStudySession
     {
 
-        private HashSet<IQuestion> questionAsked;
+        private ICollection<IQuestion> questionAsked;
         private IQuestion currentQuestion;
         private int sessionLength = 3;
         private ISubQuestion currentSubQuestion;
@@ -59,7 +59,7 @@ namespace NLPtest.Models
             }
         }
 
-        public HashSet<IQuestion> QuestionAsked
+        public ICollection<IQuestion> QuestionAsked
         {
             get
             {

@@ -52,7 +52,7 @@ namespace NLPtest.WorldObj
             }
         }
 
-        public bool DefiniteArticle { get; internal set; }
+        public bool DefiniteArticle { get;  set; }
 
         public string Word
         {
@@ -156,6 +156,27 @@ namespace NLPtest.WorldObj
             if (templateType == null) return false;
             else if (type == templateType) return true;
             else return instanceOf(type, templateType.BaseType);
+        }
+
+
+        public override bool Equals(object obj)
+        {
+
+            if (this.GetType() != obj.GetType()) return false;
+
+            var objres = obj as WorldObject;
+
+            if (!(this.Word == objres.Word &&
+            this.Negat == objres.Negat &&
+            this.DefiniteArticle == objres.DefiniteArticle)) return false;
+
+            foreach(var r in Relations)
+            {
+                if (!objres.Relations.Contains(r)) return false;
+            }
+          
+
+            return true;
         }
     }
 

@@ -59,7 +59,7 @@ namespace NLPtest
             input_TB.Text = String.Empty;
             text_TB.AppendText("Bot:" + Environment.NewLine);
             string log = "";
-            var botResualt = NLPControler.getInstence().testAnalizer(inputText,out log);
+            var botResualt = new NLPControler().testAnalizer(inputText,out log);
             var httpCtrl = new OuterAPIController();
 
             //foreach (var line in new string[] { input.ToString() })
@@ -127,7 +127,7 @@ namespace NLPtest
             input_TB2.Text = String.Empty;
             text_TB2.AppendText("Bot:" + Environment.NewLine);
             string log = "";
-            var botResualt = NLPControler.getInstence().testAnalizer(inputText, out log);
+            var botResualt = new NLPControler().testAnalizer(inputText, out log);
             var httpCtrl = new OuterAPIController();
 
             //foreach (var line in new string[] { input.ToString() })
@@ -143,8 +143,9 @@ namespace NLPtest
         {
             QAEngin qna = new QAEngin();
             string str;
-            var match = qna.matchAnswers(NLPControler.getInstence().testAnalizer(input_TB.Text,out str).List,
-                NLPControler.getInstence().testAnalizer(input_TB2.Text, out str).List);
+            var nlp = new NLPControler();
+            var match = qna.matchAnswers(nlp.testAnalizer(input_TB.Text,out str).List,
+                nlp.testAnalizer(input_TB2.Text, out str).List);
             var answerText = "Score:" + match.score + Environment.NewLine;
             foreach (var ent in match.missingEntitis)
             {
@@ -155,7 +156,7 @@ namespace NLPtest
 
         private void button2_Click(object sender, EventArgs e)
         {
-            NLPControler.getInstence().updateEntityTable();
+            new NLPControler().updateEntityTable();
         }
     }
 }

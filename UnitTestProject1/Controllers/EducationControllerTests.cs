@@ -10,43 +10,20 @@ using Model.Models;
 using NLPtest.Models;
 using Model;
 using Model.dataBase;
+using UnitTestProject1;
 
 namespace Bot_Application1.Controllers.Tests
 {
     [TestClass()]
-    public class EducationControllerTests
+    public class EducationControllerTests : MockObjectTestBase
     {
-        EducationController ec;
-        ConversationController cc;
-        Mock<IUser> mockUser = new Mock<IUser>();
-        Mock<IStudySession> mockStudySession = new Mock<IStudySession>();
-        Mock<IQuestion> mockQuestion1 = new Mock<IQuestion>();
-        Mock<IQuestion> mockQuestion2 = new Mock<IQuestion>();
-        Mock<IQuestion> mockQuestion3 = new Mock<IQuestion>();
-        Mock<ISubQuestion> mockSubQuestion = new Mock<ISubQuestion>();
-        Mock<DataBaseController> mockDB = new Mock<DataBaseController>();
 
+        EducationController eduCtrl;
         [TestInitialize()]
         public void EducationControllerTest()
         {
-            mockUser.Setup(x => x.UserName).Returns("יוחאי");
-            mockUser.Setup(x => x.UserClass).Returns("יא");
-            mockUser.Setup(x => x.UserGender).Returns("musculine");
-            mockQuestion1.Setup(x => x.AnswerScore).Returns(100);
-            mockQuestion1.Setup(x => x.Category).Returns("לאומיות");
-            mockQuestion2.Setup(x => x.AnswerScore).Returns(100);
-            mockQuestion3.Setup(x => x.AnswerScore).Returns(100);
-            mockStudySession.Setup(x => x.Category).Returns("לאומיות");
-            mockStudySession.Setup(x => x.SessionLength).Returns(3);
-            mockStudySession.Setup(x => x.QuestionAsked).Returns(new HashSet<IQuestion>());
-            mockStudySession.Setup(x => x.CurrentSubQuestion).Returns(mockSubQuestion.Object);
-            cc = new ConversationController(mockUser.Object, mockStudySession.Object);
-            ec = new EducationController(mockUser.Object, mockStudySession.Object,cc);
-            mockDB.Setup(x => x.getAllCategory()).Returns(new string[] { "לאומיות" });
-            mockDB.Setup(x => x.getQuestion("לאומיות")).Returns(new IQuestion[] { mockQuestion1.Object });
-            mockDB.Setup(x => x.getBotPhrase(It.IsAny<Pkey>(), new string[] { }, new string[] { })).Returns((Pkey key, string[] a, string[] b) => new string[] { Enum.GetName(typeof(Pkey), key) });
-
-            ec.Db = mockDB.Object;
+            initializeMocksObject();
+            eduCtrl = new EducationController(mockUserMus.Object, mockStudySession.Object, mockConvCtrl.Object);
         }
 
        
@@ -56,23 +33,18 @@ namespace Bot_Application1.Controllers.Tests
         {
             //good
             mockStudySession.Object.Category = "לאומיות";
-            ec = new EducationController(mockUser.Object, mockStudySession.Object,cc);
-            Assert.AreEqual(ec.getQuestion(), mockQuestion1.Object);
+            Assert.AreEqual(eduCtrl.getQuestion(), mockQuestion1.Object);
 
             //bad
-            mockStudySession.Object.Category = "dsdsds";
-            ec = new EducationController(mockUser.Object, mockStudySession.Object,cc);
-            Assert.AreEqual(ec.getQuestion(), null);
+            mockStudySession.Setup(x => x.Category).Returns("נושא שלא קיים");
+            Assert.AreEqual(eduCtrl.getQuestion(), null);
           
             //ugly
             try
             {
-                mockStudySession.Object.Category = "לאומיות";
-                ec = new EducationController(mockUser.Object, mockStudySession.Object,cc);
-                var qs = new HashSet<IQuestion>();
-                qs.Add(mockQuestion1.Object);
-                mockStudySession.Setup(x => x.QuestionAsked).Returns(qs);
-                ec.getQuestion();
+                mockStudySession.Setup(x => x.Category).Returns("לאומיות");
+                mockStudySession.Setup(x => x.QuestionAsked).Returns(mockDB.Object.getQuestion("לאומיות"));
+                eduCtrl.getQuestion();
                 Assert.Fail();
             }
             catch(Exception ex)
@@ -87,16 +59,19 @@ namespace Bot_Application1.Controllers.Tests
         {
             Mock<ISubQuestion> mockQuestion4 = new Mock<ISubQuestion>();
             mockQuestion4.SetupProperty(x => x.AnswerScore);
-            mockSubQuestion.Setup(x => x.answerText).Returns("הגנה אצל יהודים ערבים");
+            mockSubQqestion1.Setup(x => x.answerText).Returns("תשובה טובה כוללת את כל הדברים");
 
             //good
-            Assert.AreEqual(ec.checkAnswer( "הגנה אצל יהודים ערבים").score, 100);
+            Assert.AreEqual(eduCtrl.checkAnswer( "תשובה טובה כוללת את כל הדברים").score, 100);
+
+            //doog
+            Assert.AreEqual(eduCtrl.checkAnswer("תשובה טובה אבל לא מושלמת ").score, 50);
 
             //bad
-            Assert.AreEqual(ec.checkAnswer("הגנה יהודים ").score, 50);
+            Assert.AreEqual(eduCtrl.checkAnswer("תשובה לא נכונה ולא קשורה בשיט ").score, 0);
 
             //ugly
-            Assert.AreEqual(ec.checkAnswer("למה התרנגול חצה את הכביש?").score, 0);
+            Assert.AreEqual(eduCtrl.checkAnswer("").score, 0);
 
         }
 

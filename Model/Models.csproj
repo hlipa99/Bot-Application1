@@ -101,8 +101,10 @@
     <Compile Include="dataBase\User.cs">
       <DependentUpon>botDataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="dataBase\entityS.cs" />
     <Compile Include="DBException.cs" />
     <Compile Include="Logger.cs" />
+    <Compile Include="Models\Ientity.cs" />
     <Compile Include="Models\AnswerFeedback.cs" />
     <Compile Include="Models\ISubQuestion.cs" />
     <Compile Include="dataBase\SubQuestionS.cs" />

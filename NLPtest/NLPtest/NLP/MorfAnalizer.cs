@@ -20,7 +20,7 @@ using Newtonsoft.Json;
 using Model.dataBase;
 using static NLPtest.HebWords.WordObject;
 using NLPtest.HebWords;
-
+using Model.Models;
 
 namespace NLPtest.NLP
 {
@@ -33,7 +33,7 @@ namespace NLPtest.NLP
         private   HebDictionary hebDictionary;
         OuterAPIController httpCtrl = new OuterAPIController();
        // private IEnumerable<Word> wordList;
-        DataBaseController DBctrl = new DataBaseController();
+        DataBaseController DBctrl = DataBaseController.getInstance();
         public MorfAnalizer()
         {
          //   var path = "C:/Program Files (x86)/IIS Express/botServer/hebdata/";
@@ -157,7 +157,7 @@ namespace NLPtest.NLP
                         }
                         
                        // res = checkPhrases(res);
-                        allRes.Add(res);
+                        allRes.Add(tryMatchEntities(res));
                     }
                 }
             
@@ -170,19 +170,15 @@ namespace NLPtest.NLP
             for(int i = 0; i < sentence.Count; i++)
             {
                 WordObject word = sentence[i];
-                if(!word.isEntity())
-                {
-                    continue;
-                }
 
                 var entities = DBctrl.getEntitys();
                 var searchText = "";
-                IQueryable<entity> match = null;
+                IQueryable<Ientity> match = null;
                 int j = i;
                 for (; j < sentence.Count; j++)
                 {
                     searchText += sentence[i].Text;
-                    var tryMatch = findMatch(entities, searchText);
+                    var tryMatch = findMatch(entities.AsQueryable(), searchText);
                     if(tryMatch.Count() != 0)
                     {
                         match = tryMatch;
@@ -197,13 +193,17 @@ namespace NLPtest.NLP
                 {
                          //TODO implament selector or create multiple answer
                         var entity = match.FirstOrDefault();
-                        for(int k = i; k < j; k++)
+                    var newWord = sentence[i];
+                     for (int k = i ; k < j; k++)
                         {
                             sentence.RemoveAt(i);
                         }
                         foreach(var w in match)
                           {
-                                sentence.Insert(i, new WordObject(entity.entityValue, (WordType)Enum.Parse(typeof(WordType), entity.entityType)));
+                              
+                                newWord.Text = entity.EntityValue;
+                                 newWord.WordT = (WordType)Enum.Parse(typeof(WordType), entity.EntityType);
+                                sentence.Insert(i, newWord);
                           }
                 }
  
@@ -211,9 +211,9 @@ namespace NLPtest.NLP
             return sentence;
         }
 
-        public IQueryable<entity> findMatch(IQueryable<entity> quarible, string text)
+        public IQueryable<Ientity> findMatch(IQueryable<Ientity> quarible, string text)
         {
-            quarible = quarible.Where(x => x.entitySynonimus.Contains(";" +text + ";") || x.entitySynonimus.StartsWith(text + ";") || x.entitySynonimus.EndsWith(";"+text));
+            quarible = quarible.Where(x => x.EntitySynonimus.Contains(";" +text + ";") || x.EntitySynonimus.StartsWith(text + ";") || x.EntitySynonimus.EndsWith(";"+text));
             return quarible;
         }
 

@@ -36,7 +36,7 @@ namespace UnitTestProject1
         [TestInitialize]
         public void TestInitializeAttribute()
         {
-            db = new DataBaseController();
+            db = DataBaseController.getInstance();
             createNewClientConversation(out convID);
             Client = createNewClientConversation(out convID);
             var task = sendMessage("/deleteprofile");

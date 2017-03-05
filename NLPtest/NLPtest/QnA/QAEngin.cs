@@ -12,7 +12,7 @@ namespace NLPtest.QnA
 {
     public class QAEngin
     {
-        NLPControler nlp = NLPControler.getInstence();
+        NLPControler nlp = new NLPControler();
 
         public AnswerFeedback matchAnswers(ISubQuestion subquestion, string answer)
         {

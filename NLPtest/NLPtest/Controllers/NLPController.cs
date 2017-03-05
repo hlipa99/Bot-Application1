@@ -13,34 +13,34 @@ namespace NLPtest.Controllers
     public class NLPControler
     {
 
-        static NLPControler instance;
-        static object syncLock = new object();
+      //  static NLPControler instance;
+       // static object syncLock = new object();
         MorfAnalizer ma = null;
         SemanticAnalizer sa = new SemanticAnalizer();
 
-        private NLPControler()
+        public NLPControler()
         {
             this.ma = new MorfAnalizer();
         }
 
-        public static NLPControler getInstence()
-        {
-            lock (syncLock)
-            {
-                if (instance != null)
-                {
-                    return instance;
-                }
-                else
-                {
-                    var nlp = new NLPControler();
-                    //     var nlp = new NLPControlerTestStub();
-                    //   nlp.Initialize();
-                    return nlp;
-                }
-            }
+        //public static NLPControler getInstence()
+        //{
+        //    lock (syncLock)
+        //    {
+        //        if (instance != null)
+        //        {
+        //            return instance;
+        //        }
+        //        else
+        //        {
+        //            var nlp = new NLPControler();
+        //            //     var nlp = new NLPControlerTestStub();
+        //            //   nlp.Initialize();
+        //            return nlp;
+        //        }
+        //    }
 
-        }
+        //}
 
         public ContentList testAnalizer(string inputText, out string log)
         {
@@ -117,13 +117,6 @@ namespace NLPtest.Controllers
             List<List<ITemplate>> sentences;
             List<ITemplate> context = new List<ITemplate>();
 
-            List<List<WordObject>> textAnlzReplace = new List<List<WordObject>>();
-
-            foreach (var s in textAnlz)
-            {
-                textAnlzReplace.Add(ma.tryMatchEntities(s));
-            }
-
 
             if (systemAnswerText != null)
             {
@@ -134,11 +127,11 @@ namespace NLPtest.Controllers
                 //create context 
                 var contextSentences = sa.findGufContext(contextAnlz, context);
                 contextSentences.ForEach(x => context.AddRange(x));
-                sentences = sa.findGufContext(textAnlzReplace, context);
+                sentences = sa.findGufContext(textAnlz, context);
             }
             else
             {
-                sentences = sa.findGufContext(textAnlzReplace, context);
+                sentences = sa.findGufContext(textAnlz, context);
             }
 
             string logTemp;

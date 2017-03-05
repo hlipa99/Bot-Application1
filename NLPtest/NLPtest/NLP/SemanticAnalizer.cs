@@ -352,6 +352,10 @@ namespace NLPtest.NLP
                         {
                             return o;
                         }
+                        else if (w.isA(conceptWord) && gufObject.Gender == w.Gender && gufObject.Amount == w.Amount)
+                        {
+                            return o;
+                        }
                         else if (w.isA(nounWord) && gufObject.Gender == w.Gender)
                         {
                             return o;
