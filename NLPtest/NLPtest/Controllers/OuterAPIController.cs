@@ -28,7 +28,13 @@ namespace NLPtest.Controllers
           
             try
             {
-                var response = apiAi.TextRequest(str);
+                RequestExtras exstra = new RequestExtras();
+                var contextAI = new AIContext();
+                contextAI.Name =context;
+                contextAI.Lifespan = 5;
+                exstra.Contexts = new List<AIContext>();
+                exstra.Contexts.Add(contextAI);
+                var response = apiAi.TextRequest(str,exstra);
                 var intent = response.Result.Metadata.IntentName;
                 return intent;
             }

@@ -78,9 +78,16 @@ namespace Model.dataBase
             var questions = DB.SubQuestion;
             foreach(var e in Entities2)
             {
+                if(e.entityValue.Length < 50)
                 DB.entity.Add(e);
             }
-            DB.SaveChangesAsync();
+            try
+            {
+                DB.SaveChangesAsync();
+            }catch(Exception ex)
+            {
+
+            }
         }
          
 
@@ -357,7 +364,7 @@ namespace Model.dataBase
 
         public virtual ISubQuestion[] getAllSubQuestions()
         {
-            var x = System.Configuration.ConfigurationManager.ConnectionStrings;
+     //       var x = System.Configuration.ConfigurationManager.ConnectionStrings;
             Entities2 DB = new Entities2();
             return DB.SubQuestion.ToArray();
         }

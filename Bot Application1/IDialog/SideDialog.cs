@@ -14,16 +14,20 @@ using Model.dataBase;
 using Bot_Application1.log;
 using static Bot_Application1.Controllers.ConversationController;
 using Model;
+using Bot_Application1.Models;
 
 namespace Bot_Application1.IDialog
 {
     [Serializable]
-    public class SideDialog : AbsDialog
+    public class SideDialog : AbsDialog<IMessageActivity>
     {
-        public override string getDialogContext()
+        public override UserContext getDialogContext()
         {
-            return "SideDialog";
+            UserContext.dialog = "SideDialog";
+            return UserContext;
         }
+    
+
 
         public override async Task StartAsync(IDialogContext context)
         {

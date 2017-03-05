@@ -10,7 +10,7 @@
   <Class Name="NLPtest.NLP.MorfAnalizer">
     <Position X="35" Y="7.25" Width="3.25" />
     <TypeIdentifier>
-      <HashCode>BiAACCQAAAAAAAAgAAIIAACAIgAAAAAAAAAEAAAAAAA=</HashCode>
+      <HashCode>BAAACCQAAAQAAAAgAAAAAACAIgAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>NLP\MorfAnalizer.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -109,8 +109,8 @@
     <Position X="31.5" Y="1.5" Width="1.5" />
     <InheritanceLine Type="NLPtest.WorldObj.WorldObject" ManuallyRouted="true" FixedFromPoint="true">
       <Path>
-        <Point X="27.75" Y="2.562" />
-        <Point X="31.26" Y="2.562" />
+        <Point X="27.75" Y="2.65" />
+        <Point X="31.26" Y="2.65" />
         <Point X="31.26" Y="1.846" />
         <Point X="31.5" Y="1.846" />
       </Path>
@@ -172,7 +172,7 @@
   <Class Name="NLPtest.WorldObj.WorldObject">
     <Position X="26.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAEAAAABBAAAAAAECAAACAAAAggAAAQCAJAEAQAAABA=</HashCode>
+      <HashCode>EAEAAAABBAAAAAAECAAACAAAAggAAAQCAJAEAQAAABA=</HashCode>
       <FileName>WorldObj\WorldObject.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -194,7 +194,7 @@
   <Class Name="NLPtest.HebWords.WordObject" Collapsed="true">
     <Position X="32.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AICBAgERIQSAAiCGAJIo4ICABIiggASqQOACCACQkxA=</HashCode>
+      <HashCode>CICBAgERIQSAAiCGAJIo4ICABIiggASqQOACCACQkxA=</HashCode>
       <FileName>HebWords\WordObject.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />

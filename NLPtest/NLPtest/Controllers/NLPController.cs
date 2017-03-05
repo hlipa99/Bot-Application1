@@ -42,34 +42,15 @@ namespace NLPtest.Controllers
 
         //}
 
-        public ContentList testAnalizer(string inputText, out string log)
+        public List<WorldObject> testAnalizer(string inputText, out string log)
         {
             log = "";
             //    var a = MorfAnalizer.createSentence(inputText);
             // var context = new TextContext();
-            var sen = ma.meniAnalize(inputText);
 
             //  sa.findGufContext(sen);
-            log += "intent:" + getUserIntent(inputText,"QnA") + Environment.NewLine;
-
-            ContentList input = new ContentList();
-            List<WorldObject> sentence = new List<WorldObject>();
-            List<WorldObject> last = new List<WorldObject>();
-            string logTemp;
-
-            List<ITemplate> context = new List<ITemplate>();
-            var sentences = sa.findGufContext(sen, context);
-
-            foreach (var s in sentences)
-            {
-                sentence = sa.findTemplate(s.ToArray(), out logTemp);
-                log += logTemp;
-                last = sentence;
-                input.Add(sentence);
-            }
-
-            return input;
-
+            log += "intent:" + getUserIntent(inputText, "QuestionDialog") + Environment.NewLine;
+            return Analize(inputText);
         }
 
         public UserIntent getUserIntent(string str,string context)
@@ -110,7 +91,7 @@ namespace NLPtest.Controllers
         public List<WorldObject> Analize(string text, string systemAnswerText)
         {
             // var context = new TextContext();
-            var textAnlz = ma.meniAnalize(text);
+            var textAnlz = ma.meniAnalize(text,true);
             List<WorldObject> input = new List<WorldObject>();
             List<WorldObject> sentence = new List<WorldObject>();
             List<WorldObject> last = new List<WorldObject>();
@@ -121,7 +102,7 @@ namespace NLPtest.Controllers
             if (systemAnswerText != null)
             {
                 //add mising data to entity DB
-                var contextAnlz = ma.meniAnalize(systemAnswerText);
+                var contextAnlz = ma.meniAnalize(systemAnswerText,false);
 
 
                 //create context 

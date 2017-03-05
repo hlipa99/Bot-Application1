@@ -7,6 +7,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
+using Model.dataBase;
 
 namespace NLPtest.WorldObj
 {
@@ -21,9 +22,22 @@ namespace NLPtest.WorldObj
 
         public WorldObject(){}
 
-        public WorldObject(string word) 
+        public WorldObject(string word)
         {
             this.Word = word;
+            this.Entity = new entity();
+            Entity.entityValue = word;
+            Entity.entityType = "unknownWord";
+        }
+
+
+
+        public WorldObject(WordObject word) 
+        {
+            this.Word = word.Text;
+            this.Entity = new entity();
+            Entity.entityValue = word.Text;
+            Entity.entityType = word.TypefromEnum(word.WordT);
         }
 
         public List<RelationObject> Relations
@@ -66,6 +80,8 @@ namespace NLPtest.WorldObj
                 word = value;
             }
         }
+
+        public entity Entity { get; internal set; }
 
         public void addRelation(RelationObject relation)
         {if (relation != null)

@@ -50,7 +50,7 @@
       <FileName>Controllers\MessagesController.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Bot_Application1.IDialog.AbsDialog">
+  <Class Name="Bot_Application1.IDialog.AbsDialog&lt;T&gt;">
     <Position X="8" Y="5" Width="1.75" />
     <Members>
       <Method Name="getStudySession" Hidden="true" />
@@ -63,7 +63,7 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>AAABAAAAAAAAAACAAAAAEACAoIAEgAAABQABIBQABWA=</HashCode>
+      <HashCode>ABABAAAAAAAAAACAAAAAEACAoIgEgAAABQABIDQABWA=</HashCode>
       <FileName>IDialog\AbsDialog.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -74,18 +74,17 @@
       <Method Name="StartAsync" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>AAAAAAQBAAAAAAAAAAAAAAAAAAAAAAAAAQAAABAAAAA=</HashCode>
+      <HashCode>AAAAAAQBAAAAAAAAAAAAAAAAAAgAAAAAAQAAABAAAAA=</HashCode>
       <FileName>IDialog\FarewellDialog.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Bot_Application1.IDialog.LerningDialog">
     <Position X="9.75" Y="1.25" Width="2" />
     <Members>
-      <Method Name="edc" Hidden="true" />
       <Method Name="StartAsync" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>AAAQAAAAACACAMAQABAAAAAAAABAAAAAAQAAACAAAQA=</HashCode>
+      <HashCode>AAAAAAAAAAACAMAAABAAAAAAAAgAAAAAAQAgAAAAAQA=</HashCode>
       <FileName>IDialog\LerningDialog.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -95,7 +94,7 @@
       <Method Name="StartAsync" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>EEAAKAAAAAAAgEAAAAAAAAIUAAAACAAAAQAAAAAAAAA=</HashCode>
+      <HashCode>EEAACAAAAAAAgEAAAAAAAAAUAAgACAAAAQAAAAAAAAA=</HashCode>
       <FileName>IDialog\MainDialog.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -105,7 +104,7 @@
       <Method Name="StartAsync" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>AACAAAAAAAABCAAAAAAAACAAAQIAAAAACSAAAAAAAAA=</HashCode>
+      <HashCode>AACAAAAAAAABCAAAAAAAACAAAQoAAAAACSAAAAAAAAA=</HashCode>
       <FileName>IDialog\NewUserDialog.cs</FileName>
     </TypeIdentifier>
   </Class>

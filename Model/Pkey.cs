@@ -55,6 +55,9 @@ namespace Model
         moveToNextSubQuestion,
         neverMind,
         returnToMainMenu,
-        unknownQuestion
+        unknownQuestion,
+        shouldWeContinue,
+        missingAnswrPart,
+        and
     }
 }

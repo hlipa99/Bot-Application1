@@ -14,40 +14,45 @@ using Model.dataBase;
 using Bot_Application1.log;
 using static Bot_Application1.Controllers.ConversationController;
 using Model;
+using Bot_Application1.Models;
 
 namespace Bot_Application1.IDialog
 {
     [Serializable]
-    public class YesNoQuestionDialog : AbsDialog
+    public class YesNoQuestionDialog : AbsDialog<Boolean>
     {
-        public override string getDialogContext()
+        public override UserContext getDialogContext()
         {
-            return "YesNoQuestionDialog";
+            UserContext.dialog = "YesNoQuestionDialog";
+            return UserContext;
         }
 
         public override async Task StartAsync(IDialogContext context)
         {
-            context.Wait(userGoodbye);
+            await userYesNo(context,null);
         }
 
-        private async Task userGoodbye(IDialogContext context, IAwaitable<object> result)
+        private async Task userYesNo(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            
-            await writeMessageToUser(context, conv().getPhrase(Pkey.goodbye));
-            context.Wait(waitForNextInteraction);
+            context.Wait(userYesNoRes);
         }
 
-        private async Task waitForNextInteraction(IDialogContext context, IAwaitable<object> result)
+        private async Task userYesNoRes(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            context.Wait(waitForNextInteraction2);
+            if (await outDatedMessage(context, userYesNo, result)) return;
+
+
+            var res = await result;
+            if (res.Text == "כן")
+            {
+                context.Done(true);
+            }else
+            {
+                context.Done(false);
+            }
+  
         }
 
-        private async Task waitForNextInteraction2(IDialogContext context, IAwaitable<object> result)
-        {
-            context.Done("");
-        }
-
-
-
+       
     }
 }
