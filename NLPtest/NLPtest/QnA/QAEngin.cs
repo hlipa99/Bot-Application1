@@ -14,9 +14,22 @@ namespace NLPtest.QnA
     {
         NLPControler nlp = new NLPControler();
 
+        public NLPControler Nlp
+        {
+            get
+            {
+                return nlp;
+            }
+
+            set
+            {
+                nlp = value;
+            }
+        }
+
         public AnswerFeedback matchAnswers(ISubQuestion subquestion, string answer)
         {
-            var userAnswer = nlp.Analize(answer, subquestion.questionText);
+            var userAnswer = Nlp.Analize(answer, subquestion.questionText);
             AnswerFeedback feedback = new AnswerFeedback();
 
             if (subquestion.answerText.Contains("|")){
@@ -27,7 +40,7 @@ namespace NLPtest.QnA
 
                 foreach (var ans in subquestion.answerText.Split('|'))
                 {
-                    var systemAnswerWords = nlp.Analize(ans);
+                    var systemAnswerWords = Nlp.Analize(ans);
                     if (ans.Trim() != "")
                     {
                         switch (subquestion.flags.Trim())
@@ -73,7 +86,7 @@ namespace NLPtest.QnA
 
             }else
             {
-                var systemAnswer = nlp.Analize(subquestion.answerText);
+                var systemAnswer = Nlp.Analize(subquestion.answerText);
                 feedback = matchAnswers(userAnswer, systemAnswer);
             }
             return feedback;
@@ -82,53 +95,69 @@ namespace NLPtest.QnA
 
         private AnswerFeedback matchAnswers(List<WorldObject> userAnswer, List<WorldObject> systemAnswerWords, string ans)
         {
-            AnswerFeedback f = matchAnswers(userAnswer, systemAnswerWords);
-            if (f.missingEntitis.Where(x => x.entityType != "locationWord").Count() > 0)
-            {
-                f.missingAnswers.Add(ans);
-            }
-            return f;
+           
+                AnswerFeedback f = matchAnswers(userAnswer, systemAnswerWords);
+                if (f.missingEntitis.Where(x => x.EntityType != "locationWord").Count() > 0)
+                {
+                    f.missingAnswers.Add(ans);
+                }
+                return f;
+            
         }
 
         public AnswerFeedback matchAnswers(List<WorldObject> userAnswer, List<WorldObject> systemAnswer)
         {
-            var feedback = new AnswerFeedback();
-            var systemEntitis = systemAnswer.Where(x => x is NounObject);
-            var userEntitis = userAnswer.Where(x => x is NounObject);
-
-            if (systemEntitis.Count() != 0)
+            if (userAnswer != null && systemAnswer != null)
             {
-                foreach (var se in systemEntitis)
+                var feedback = new AnswerFeedback();
+                var systemEntitis = systemAnswer.Where(x => x is NounObject);
+                var userEntitis = userAnswer.Where(x => x is NounObject);
+
+                if (systemEntitis.Count() != 0)
                 {
-                    var found = false;
-                    foreach (var ue in userEntitis)
+                    foreach (var se in systemEntitis)
                     {
-                        if (se.GetType() == ue.GetType())
+                        var found = false;
+                        foreach (var ue in userEntitis)
                         {
-                            if (se.Word == ue.Word && se.Negat == ue.Negat)
+                            if (se.GetType() == ue.GetType())
                             {
-                                feedback.score += 100 / systemEntitis.Count();
-                                found = true;
-                                break;
+                                if (se.Word == ue.Word && se.Negat == ue.Negat)
+                                {
+                                    feedback.score += 100 / systemEntitis.Count();
+                                    found = true;
+                                    break;
+                                }
                             }
                         }
+
+                        if (!found)
+                        {
+                            feedback.missingEntitis.Add(se.Entity);
+                        }
+
                     }
 
-                    if (!found)
-                    {
-                        feedback.missingEntitis.Add(se.Entity);
-                    }
+
+                }
+                else
+                {
 
                 }
 
-
+                return feedback;
             }
-            else
+            else if (userAnswer == null && systemAnswer != null)
             {
-
+                var fe = new AnswerFeedback();
+                fe.score = 0;
+                return fe;
+            }else
+            {
+                var fe = new AnswerFeedback();
+                fe.score = 100;
+                return fe;
             }
-
-            return feedback;
         }
     }
 }

@@ -18,9 +18,22 @@ namespace NLPtest.Controllers
         MorfAnalizer ma = null;
         SemanticAnalizer sa = new SemanticAnalizer();
 
+        public MorfAnalizer Ma
+        {
+            get
+            {
+                return ma;
+            }
+
+            set
+            {
+                ma = value;
+            }
+        }
+
         public NLPControler()
         {
-            this.ma = new MorfAnalizer();
+            this.Ma = new MorfAnalizer();
         }
 
         //public static NLPControler getInstence()
@@ -83,15 +96,15 @@ namespace NLPtest.Controllers
         //}
 
 
-        public List<WorldObject> Analize(string text)
+        public virtual List<WorldObject> Analize(string text)
         {
             return Analize(text, null);
         }
 
-        public List<WorldObject> Analize(string text, string systemAnswerText)
+        public virtual List<WorldObject> Analize(string text, string systemAnswerText)
         {
             // var context = new TextContext();
-            var textAnlz = ma.meniAnalize(text,true);
+            var textAnlz = Ma.meniAnalize(text,true);
             List<WorldObject> input = new List<WorldObject>();
             List<WorldObject> sentence = new List<WorldObject>();
             List<WorldObject> last = new List<WorldObject>();
@@ -102,7 +115,7 @@ namespace NLPtest.Controllers
             if (systemAnswerText != null)
             {
                 //add mising data to entity DB
-                var contextAnlz = ma.meniAnalize(systemAnswerText,false);
+                var contextAnlz = Ma.meniAnalize(systemAnswerText,false);
 
 
                 //create context 
@@ -129,7 +142,7 @@ namespace NLPtest.Controllers
 
         internal void updateEntityTable()
         {
-            ma.searchAllAnswerForentities();
+            Ma.searchAllAnswerForentities();
         }
     }
 }

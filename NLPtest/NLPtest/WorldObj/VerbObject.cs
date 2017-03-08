@@ -2,7 +2,7 @@
 
 namespace NLPtest.WorldObj
 {
-    internal class VerbObject : WorldObject
+    public class VerbObject : WorldObject
     {
         private string type;
         public VerbObject()

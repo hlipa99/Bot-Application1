@@ -2,17 +2,17 @@
 
 namespace NLPtest
 {
-    internal class OrginazationObject : EntityObject
+    public class OrganizationObject : EntityObject
     {
        
 
-        public OrginazationObject(string word) : base(word)
+        public OrganizationObject(string word) : base(word)
         {
         
         }
         public override IWorldObject Clone()
         {
-            OrginazationObject res = new OrginazationObject(Word);
+            OrganizationObject res = new OrganizationObject(Word);
             res.Copy(this);
             return res;
         }

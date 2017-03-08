@@ -1,4 +1,6 @@
-﻿using NLPtest.HebWords;
+﻿using Bot_Application1.dataBase;
+using Model.Models;
+using NLPtest.HebWords;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,7 +9,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
-using Model.dataBase;
+
 
 namespace NLPtest.WorldObj
 {
@@ -24,10 +26,10 @@ namespace NLPtest.WorldObj
 
         public WorldObject(string word)
         {
-            this.Word = word;
-            this.Entity = new entity();
-            Entity.entityValue = word;
-            Entity.entityType = "unknownWord";
+            this.Word = word; 
+            this.Entity =  new entity();
+            Entity.EntityValue = word;
+            Entity.EntityType = "unknownWord";
         }
 
 
@@ -36,8 +38,8 @@ namespace NLPtest.WorldObj
         {
             this.Word = word.Text;
             this.Entity = new entity();
-            Entity.entityValue = word.Text;
-            Entity.entityType = word.TypefromEnum(word.WordT);
+            Entity.EntityValue = word.Text;
+            Entity.EntityType = word.TypefromEnum(word.WordT);
         }
 
         public List<RelationObject> Relations
@@ -81,7 +83,7 @@ namespace NLPtest.WorldObj
             }
         }
 
-        public entity Entity { get; internal set; }
+        public Ientity Entity { get;  set; }
 
         public void addRelation(RelationObject relation)
         {if (relation != null)
@@ -175,7 +177,7 @@ namespace NLPtest.WorldObj
         }
 
 
-        public override bool Equals(object obj)
+        public override bool Equals(Object obj)
         {
 
             if (this.GetType() != obj.GetType()) return false;

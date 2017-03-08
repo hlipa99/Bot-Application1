@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Bot_Application1.dataBase;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using NLPtest;
 using NLPtest.NLP;
 using System;
@@ -6,11 +8,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnitTestProject1;
 
 namespace NLPtest.Tests
 {
     [TestClass()]
-    public class UnitTest1
+    public class MorfAnalizerTest : MockObjectTestBase
     {
 
         MorfAnalizer ma = new MorfAnalizer();
@@ -19,16 +22,12 @@ namespace NLPtest.Tests
         public void Init()
         {
             ma = new MorfAnalizer();
+            initializeMocksObject();
         }
 
-        [TestCleanup]
-        public void cleanUp()
-        {
-            ma = null;
-        }
 
         [TestMethod()]
-        public void MorfAnalizerTest()
+        public void MorfAnalizerTest1()
         {
             Assert.IsNotNull(ma);
         }
@@ -37,8 +36,31 @@ namespace NLPtest.Tests
         [TestMethod()]
         public void meniAnalizeTest()
         {
-           var res = ma.meniAnalize("אחת שתיים שלוש");
-            Assert.IsTrue(res.Count == 3);
+            ma.HttpCtrl = mockOuterAPICtrl.Object;
+            ma.DBctrl1 = mockDB.Object;
+           var res = ma.meniAnalize("בן גוריון והנהגת ארגון ההגנה היו אחראים במידה רבה להכרזת המדינה ולניסוח מגילת העצמאות",false);
+
+            //good
+            Assert.IsTrue(res.FirstOrDefault().Contains(moqWordObject1.Object));
+            Assert.IsTrue(res.FirstOrDefault().Contains(moqWordObject2.Object));
+            Assert.IsTrue(res.FirstOrDefault().Contains(moqWordObject3.Object));
+            Assert.IsTrue(res.FirstOrDefault().Contains(moqWordObject4.Object));
+            Assert.IsTrue(res.FirstOrDefault().Count() == 4);
+
+            mockDB.Setup(x => x.getEntitys()).Returns(()=>new entity[] { });
+            mockOuterAPICtrl.Setup(x => x.sendToHebrewMorphAnalizer(It.IsAny<string>())).Returns("");
+            //bad
+            res = ma.meniAnalize("בלה בלה בלה אין תוכן", false);
+            Assert.AreEqual(res.FirstOrDefault().Count,0);
+
+
+            //ugly
+            res = ma.meniAnalize("", false);
+            Assert.AreEqual(res.Count, 0);
+
+            res = ma.meniAnalize(null, false);
+            Assert.AreEqual(res.Count, 0);
+
         }
 
         //[TestMethod()]

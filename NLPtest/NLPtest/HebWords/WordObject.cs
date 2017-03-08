@@ -45,7 +45,13 @@ namespace NLPtest.HebWords
 
         private bool isDefinite;
 
-        [JsonConstructor]
+        public WordObject() {
+            this.Amount =amountType.unspecified;
+            this.Person = personType.unspecified;
+            this.Gender = genderType.unspecified;
+                }
+                               
+        [JsonConstructor]      
         public WordObject(string ner, string text, string gender, string number, string person, string polarity, string pos, string posType, string[] prefixes, string tense, string suffixFunction, string suffixGender, string suffixNumber, string suffixPerson, bool isDefinite, String lemma)
         {
             try
@@ -60,17 +66,21 @@ namespace NLPtest.HebWords
                 this.suffixFunction = suffixFunction;
                 this.Lemma = getLemma(lemma,text);
 
+                this.IsDefinite = isDefinite;
+                findObjectType();
+
+
                 this.Gender = (genderType)Enum.Parse(typeof(genderType), gender.Replace(" ", ""));
                 this.Amount = (amountType)Enum.Parse(typeof(amountType), number);
                 this.Person = (personType)Enum.Parse(typeof(personType), person);
+                this.Amount = (amountType)Enum.Parse(typeof(amountType), number);
+                this.Person = (personType)Enum.Parse(typeof(personType), person);
+                this.Time = (timeType)Enum.Parse(typeof(timeType), tense);
                 this.Gender = this.Gender == genderType.unspecified & suffixGender != null ? (genderType)Enum.Parse(typeof(genderType), suffixGender.Replace(" ", "")) : this.Gender;
                 this.Amount = this.Amount == amountType.unspecified & suffixNumber != null ? (amountType)Enum.Parse(typeof(amountType), suffixNumber) : this.Amount;
                 this.Person = this.Person == personType.unspecified & suffixPerson != null ? (personType)Enum.Parse(typeof(personType), suffixPerson) : this.Person;
-                this.Amount = (amountType)Enum.Parse(typeof(amountType), number);
-                this.Person = (personType)Enum.Parse(typeof(personType), person);
 
-                this.IsDefinite = isDefinite;
-                findObjectType();
+
             } catch (Exception ex)
             {
 
@@ -125,7 +135,7 @@ namespace NLPtest.HebWords
             {
                 if (Ner.Contains("ORG"))
                 {
-                    wordType = orginazationWord;
+                    wordType = organizationWord;
                 }
                 else if (Ner.Contains("MISC__AFF"))
                 {
@@ -291,7 +301,7 @@ namespace NLPtest.HebWords
             }
         }
 
-        public WordType WordT
+        public virtual WordType WordT
         {
             get
             {
@@ -353,7 +363,7 @@ namespace NLPtest.HebWords
                     {
                         worldObject = new ConceptObject(text);
                     }
-                    else if (isA(orginazationWord))
+                    else if (isA(organizationWord))
                     {
                         worldObject = getOrginazationFromWord();
                     }
@@ -406,14 +416,14 @@ namespace NLPtest.HebWords
             }
         }
 
-        internal bool isEntity()
+        public bool isEntity()
         {
-            return WordT == orginazationWord || WordT == conceptWord ||
+            return WordT == organizationWord || WordT == conceptWord ||
                  WordT == eventWord || WordT == personWord ||
                   WordT == timeWord || WordT == numeralWord || WordT == nounWord; 
         }
 
-        public string Text
+        public virtual string Text
         {
             get
             {
@@ -478,7 +488,7 @@ namespace NLPtest.HebWords
             }
         }
 
-        internal personType Person
+        public personType Person
         {
             get
             {
@@ -491,7 +501,7 @@ namespace NLPtest.HebWords
             }
         }
 
-        internal timeType Time
+        public timeType Time
         {
             get
             {
@@ -504,7 +514,7 @@ namespace NLPtest.HebWords
             }
         }
 
-        internal amountType Amount
+        public virtual amountType Amount
         {
             get
             {
@@ -517,7 +527,7 @@ namespace NLPtest.HebWords
             }
         }
 
-        internal genderType Gender
+        public virtual genderType Gender
         {
             get
             {
@@ -561,11 +571,6 @@ namespace NLPtest.HebWords
             return res;
         }
 
-        private WorldObject getPrecentageFromWord( )
-        {
-            throw new NotImplementedException();
-        }
-
         private WorldObject getPersonFromWord( )
         {
             var res = new PersonObject(Text);
@@ -574,7 +579,7 @@ namespace NLPtest.HebWords
 
         private WorldObject getOrginazationFromWord( )
         {
-            var res = new OrginazationObject(Text);
+            var res = new OrganizationObject(Text);
             return res;
         }
 
@@ -654,7 +659,7 @@ namespace NLPtest.HebWords
             adjectiveWord ,
             moneyWord ,
             nounWord ,
-            orginazationWord,
+            organizationWord,
             personWord,
             precentWord ,
             prepWord ,
@@ -714,12 +719,29 @@ namespace NLPtest.HebWords
             return 0;
         }
 
-        public bool haveTypeOf(ITemplate template)
+        public virtual bool haveTypeOf(ITemplate template)
         {
             if (template.ObjectType() != ObjectType()) return false;
             var w = template as WordObject;
             if (w.isA(WordT)) return true;
             return false;
+        }
+
+        public override bool Equals(Object obj)
+        {
+
+
+            var objres = obj as WordObject;
+            if (objres == null) return false;
+            if (!(this.Text == objres.Text &&
+            this.WordT == objres.WordT &&
+             this.gender == objres.gender &&
+              this.amount == objres.amount &&
+                this.person == objres.person &&
+                       this.Time == objres.Time )) return false;
+
+
+            return true;
         }
     }
 }

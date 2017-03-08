@@ -34,6 +34,33 @@ namespace NLPtest.NLP
         OuterAPIController httpCtrl = new OuterAPIController();
        // private IEnumerable<Word> wordList;
         DataBaseController DBctrl = DataBaseController.getInstance();
+
+        public OuterAPIController HttpCtrl
+        {
+            get
+            {
+                return httpCtrl;
+            }
+
+            set
+            {
+                httpCtrl = value;
+            }
+        }
+
+        public DataBaseController DBctrl1
+        {
+            get
+            {
+                return DBctrl;
+            }
+
+            set
+            {
+                DBctrl = value;
+            }
+        }
+
         public MorfAnalizer()
         {
          //   var path = "C:/Program Files (x86)/IIS Express/botServer/hebdata/";
@@ -52,7 +79,17 @@ namespace NLPtest.NLP
             List<WordObject> sentenceFromServer = null;
             try
             {
-                string JsonRes = httpCtrl.sendToHebrewMorphAnalizer(str);
+
+                if (!isSpellCorrected)
+                {
+                    var correctSpelling = HttpCtrl.correctSpelling(str);
+                    if (correctSpelling != null)
+                    {
+                        return getWordsObjectFromParserServer(correctSpelling, true);
+                    }
+                }
+
+                string JsonRes = HttpCtrl.sendToHebrewMorphAnalizer(str);
 
                 sentenceFromServer = new List<WordObject>();
                 if (JsonRes != null)
@@ -61,21 +98,15 @@ namespace NLPtest.NLP
                 }
 
                 //may be mispelling for the first time
-                if (!isSpellCorrected && sentenceFromServer.Count(x => x.isA(WordType.unknownWord) && x.Text.Length > 1) > 0)
-                {
-                    var correctSpelling = httpCtrl.correctSpelling(str);
-                    if (correctSpelling != null)
-                    {
-                        return getWordsObjectFromParserServer(correctSpelling, true);
-                    }
-                }
+           
             }
             catch (Exception ex) //if parser server is down
             {
                 var words = str.Split(' '); 
                 foreach(var w in words)
                 {
-                    var word = new WordObject(w, nounWord); 
+                    var word = new WordObject(w, nounWord);
+                    sentenceFromServer.Add(word);
                 }
             }
             return sentenceFromServer;
@@ -85,82 +116,84 @@ namespace NLPtest.NLP
 
 
 
-        public List<List<WordObject>> meniAnalize(String str)
+        public virtual List<List<WordObject>> meniAnalize(String str,bool isUserInput)
         {
-
-            // The follwoing object constructions are heavy - SHOULD BE APPLIED ONLY ONCE!
-            // create the morphological analyzer and disambiguator 
-
-            var sentenses = str.Split('.',',');
             List<List<WordObject>> allRes = new List<List<WordObject>>();
 
-            foreach (var s in sentenses)
+            if (str != null && str.Length > 0)
             {
+                var sentenses = str.Split('.', ',');
+     
 
-                var strRes = s;
-
-                List<WordObject> res = new List<WordObject>();
-                strRes = removeParentheses(strRes, '(', ')');
-                strRes = removeParentheses(strRes, '[', ']');
-
-                if (strRes.Length > 0)
+                foreach (var s in sentenses)
                 {
-                    //   var taggedSentences = tagger.getTaggedSentences(strRes);
 
+                    var strRes = s;
 
-                    var sentenceFromServer = getWordsObjectFromParserServer(strRes, false);
-                    //remove nikod etc.
-                    sentenceFromServer.RemoveAll(x => (x.Text.Length <= 1) && (x.Pos == "punctuation"));
+                    List<WordObject> res = new List<WordObject>();
+                    strRes = removeParentheses(strRes, '(', ')');
+                    strRes = removeParentheses(strRes, '[', ']');
 
-                    if (sentenceFromServer.Count >= 0)
+                    if (strRes.Length > 0)
                     {
-                       
-                        // print tagged sentence by using AnalysisInterface, as follows:
-                        foreach (WordObject w in sentenceFromServer)
+                        //   var taggedSentences = tagger.getTaggedSentences(strRes);
+
+
+                        var sentenceFromServer = getWordsObjectFromParserServer(strRes, !isUserInput);
+
+
+
+                        if (sentenceFromServer != null && sentenceFromServer.Count >= 0)
                         {
-                            WordObject word = w;
+                            //remove nikod etc.s
+                            sentenceFromServer.RemoveAll(x => (x.Text.Length <= 1) && (x.Pos == "punctuation"));
 
-
-
-                           
-                            //two NRI in a row
-                            //join word if ist part of a name
-
-                            if (res.Count > 0)
+                            // print tagged sentence by using AnalysisInterface, as follows:
+                            foreach (WordObject w in sentenceFromServer)
                             {
-                                if (res.LastOrDefault().Ner == w.Ner && res.LastOrDefault().Ner != "O")
+                                WordObject word = w;
+
+
+
+
+                                //two NRI in a row
+                                //join word if ist part of a name
+
+                                if (res.Count > 0)
                                 {
-                                    res.LastOrDefault().Text += " " + word.Text;
-                                    continue;
+                                    if (res.LastOrDefault().Ner == w.Ner && res.LastOrDefault().Ner != "O")
+                                    {
+                                        res.LastOrDefault().Text += " " + word.Text;
+                                        continue;
+                                    }
                                 }
-                            }
 
-                            if (hebDictionary.contains(word.Text))
-                            {
-                                word = hebDictionary.get(word.Text);
-                            }
-                            //joinwords
-                            if (res.LastOrDefault() != null && word.isA(nounWord) && res.LastOrDefault().isA(nounWord))
-                            {
-                                var last = res.LastOrDefault();
-                                res.RemoveAt(res.Count - 1);
-                                last.Text = last.Text + " " + word.Text;
-                                last.WordT = last.WordT | word.WordT; //combin flages
-                                word = last;
-                            }
+                                if (hebDictionary.contains(word.Text))
+                                {
+                                    word = hebDictionary.get(word.Text);
+                                }
+                                //joinwords
+                                if (res.LastOrDefault() != null && word.isA(nounWord) && res.LastOrDefault().isA(nounWord))
+                                {
+                                    var last = res.LastOrDefault();
+                                    res.RemoveAt(res.Count - 1);
+                                    last.Text = last.Text + " " + word.Text;
+                                    last.WordT = last.WordT | word.WordT; //combin flages
+                                    word = last;
+                                }
 
                                 res.Add(word);
 
 
                             }
-                          
+
                         }
-                        
-                       // res = checkPhrases(res);
+
+                        // res = checkPhrases(res);
                         allRes.Add(tryMatchEntities(res));
                     }
                 }
-            
+            }
             return allRes;
         }
 
@@ -171,7 +204,7 @@ namespace NLPtest.NLP
             {
                 WordObject word = sentence[i];
 
-                var entities = DBctrl.getEntitys();
+                var entities = DBctrl1.getEntitys();
                 var searchText = "";
                 IQueryable<Ientity> match = null;
                 int j = i;
@@ -221,9 +254,9 @@ namespace NLPtest.NLP
         public void searchAllAnswerForentities()
         {
             List<entity> entList = new List<entity>(); 
-            foreach (var s in DBctrl.getAllSubQuestions())
+            foreach (var s in DBctrl1.getAllSubQuestions())
             {
-                var sentenses = meniAnalize(s.answerText);
+                var sentenses = meniAnalize(s.answerText,false);
                 foreach(var sen in sentenses)
                 {
                     var relevant = sen.Where(x => x.isEntity());
@@ -242,7 +275,7 @@ namespace NLPtest.NLP
                     }
                 }
             }
-            DBctrl.saveEntitiesFromQuestions(entList);
+            DBctrl1.saveEntitiesFromQuestions(entList);
         }
 
 

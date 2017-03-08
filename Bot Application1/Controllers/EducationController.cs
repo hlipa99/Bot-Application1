@@ -19,6 +19,9 @@ namespace Bot_Application1.Controllers
         private IUser user;
         private IStudySession studySession;
         ConversationController conversationController;
+        QuestionsAnswersControllers qac = new QuestionsAnswersControllers();
+        NLPControler nlp = new NLPControler();
+
         public virtual DataBaseController Db
         {
             get
@@ -28,11 +31,50 @@ namespace Bot_Application1.Controllers
 
         }
 
+        public ConversationController ConversationController
+        {
+            get
+            {
+                return conversationController;
+            }
+
+            set
+            {
+                conversationController = value;
+            }
+        }
+
+        public QuestionsAnswersControllers Qac
+        {
+            get
+            {
+                return qac;
+            }
+
+            set
+            {
+                qac = value;
+            }
+        }
+
+        public NLPControler Nlp
+        {
+            get
+            {
+                return nlp;
+            }
+
+            set
+            {
+                nlp = value;
+            }
+        }
+
         public EducationController(IUser user, IStudySession studySession, ConversationController cc)
         {
             this.user = user;
             this.studySession = studySession;
-            this.conversationController = cc;
+            this.ConversationController = cc;
         }
 
         public string[] getStudyCategory()
@@ -99,12 +141,12 @@ namespace Bot_Application1.Controllers
 
         public AnswerFeedback checkAnswer(string text)
         {
-            QuestionsAnswersControllers qac = new QuestionsAnswersControllers();
+
             ISubQuestion question = studySession.CurrentSubQuestion;
-            var nlp = new NLPControler();
+
             //var systemAnswerText = studySession.CurrentSubQuestion.answerText;
             //var systemAnswer = nlp.Analize(text, question.questionText);
-            var answerFeedback = qac.matchAnswers(question, text);
+            var answerFeedback = Qac.matchAnswers(question, text);
 
 
             //var answerFeedback = new AnswerFeedback();
@@ -174,10 +216,10 @@ namespace Bot_Application1.Controllers
                     return createFeedBack(checkAnswer(text));
 
                 case UserIntent.dontKnow:
-                    return conversationController.getPhrase(Pkey.neverMind);
+                    return ConversationController.getPhrase(Pkey.neverMind);
 
                 case UserIntent.question:
-                    return conversationController.getPhrase(Pkey.unknownQuestion);
+                    return ConversationController.getPhrase(Pkey.unknownQuestion);
 
                 case UserIntent.stopSession:
                     throw new StopSessionException();
@@ -194,15 +236,15 @@ namespace Bot_Application1.Controllers
             //check sub question
             if (answerFeedback.score >= 85)
             {
-                return  conversationController.getPhrase(Pkey.goodAnswer);
+                return  ConversationController.getPhrase(Pkey.goodAnswer);
             }
             else if (answerFeedback.score >= 30)
             {
-                return conversationController.getPhrase(Pkey.partialAnswer);
+                return ConversationController.getPhrase(Pkey.partialAnswer);
             }
             else
             {
-                return conversationController.getPhrase(Pkey.notAnAnswer);
+                return ConversationController.getPhrase(Pkey.notAnAnswer);
             }
         }
     }

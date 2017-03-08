@@ -10,5 +10,7 @@ namespace NLPtest
     {
         int ObjectType();
         bool haveTypeOf(ITemplate template);
+
+        bool Equals(object obj);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace NLPtest
 {
-    internal class EventObject : EntityObject
+    public class EventObject : EntityObject
     {
 
         public override IWorldObject Clone()

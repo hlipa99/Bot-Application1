@@ -58,6 +58,7 @@ namespace Bot_Application1.Controllers.Tests
         public void checkAnswerTest()
         {
             Mock<ISubQuestion> mockQuestion4 = new Mock<ISubQuestion>();
+            eduCtrl.Nlp = mockNLPCtrl.Object;
             mockQuestion4.SetupProperty(x => x.AnswerScore);
             mockSubQqestion1.Setup(x => x.answerText).Returns("תשובה טובה כוללת את כל הדברים");
 

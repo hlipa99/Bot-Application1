@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ApiAiSDK;
 using ApiAiSDK.Model;
-
+using System.Web;
 
 namespace NLPtest.Controllers
 {
@@ -23,7 +23,7 @@ namespace NLPtest.Controllers
         }
 
 
-        public string getIntentApiAi(string str,string context)
+        public virtual string getIntentApiAi(string str,string context)
         {
           
             try
@@ -31,7 +31,7 @@ namespace NLPtest.Controllers
                 RequestExtras exstra = new RequestExtras();
                 var contextAI = new AIContext();
                 contextAI.Name =context;
-                contextAI.Lifespan = 5;
+                contextAI.Lifespan = 10;
                 exstra.Contexts = new List<AIContext>();
                 exstra.Contexts.Add(contextAI);
                 var response = apiAi.TextRequest(str,exstra);
@@ -47,7 +47,7 @@ namespace NLPtest.Controllers
 
 
 
-        public string sendToHebrewMorphAnalizer(string text)
+        public virtual string sendToHebrewMorphAnalizer(string text)
         {
             try
             {
@@ -81,33 +81,40 @@ namespace NLPtest.Controllers
                 return null;
             }
         }
-    
-    public string correctSpelling(string text)
+
+        public virtual string correctSpelling(string text)
     {
         try
         {
-            WebRequest request = WebRequest.Create("http://xspell.ga/?token=57d1b5fd8f45189c136d0b99c628d4e1&check=" + text);
-   //             WebRequest request = WebRequest.Create("http://xspell.ga/?token=c9acedeff1e873a46bef7a6c38e5d82d&check=\"" + text + "\"");
-
-                string responseFromServer = "";
-            request.Method = "GET";
-            request.ContentType = "application/x-www-form-urlencoded";
-            using (WebResponse response = request.GetResponse())
-            {
-
-                using (Stream dataStream = response.GetResponseStream())
+                if (text.Trim() != "" && text != null)
                 {
-                    using (StreamReader reader = new StreamReader(dataStream))
+                    WebRequest request = WebRequest.Create("http://xspell.ga/?token=57d1b5fd8f45189c136d0b99c628d4e1&check=" + text);
+                    //             WebRequest request = WebRequest.Create("http://xspell.ga/?token=c9acedeff1e873a46bef7a6c38e5d82d&check=\"" + text + "\"");
+
+                    string responseFromServer = "";
+                    request.Method = "GET";
+                    request.ContentType = "application/x-www-form-urlencoded";
+                    using (WebResponse response = request.GetResponse())
                     {
 
-                        responseFromServer = reader.ReadToEnd();
-                    }
-                }
-            }
+                        using (Stream dataStream = response.GetResponseStream())
+                        {
+                            using (StreamReader reader = new StreamReader(dataStream))
+                            {
 
-            if(responseFromServer != null && !responseFromServer.Contains("Invalid") && !(responseFromServer.Length > text.Length + 50))
-                {
-                    return new string(responseFromServer.Where(x=> ((x >= 0x0590) && (x <= 0x05FF)) || char.IsPunctuation(x) || char.IsWhiteSpace(x)).ToArray());
+                                responseFromServer = reader.ReadToEnd();
+                            }
+                        }
+                    }
+
+                    if (responseFromServer == null || responseFromServer.Contains("Invalid") || !(responseFromServer.Length > text.Length - 10))
+                    {
+                        return null;
+                    }
+                    else
+                    {
+                        return HttpUtility.HtmlDecode(responseFromServer);
+                    }
                 }else
                 {
                     return null;

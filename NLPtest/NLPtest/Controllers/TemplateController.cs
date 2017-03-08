@@ -41,7 +41,7 @@ namespace NLPtest.Controllers
                // new HebTemplate(new ITemplate[] { new WordObject("",adjectiveWord) },new AdjObject("0"),1),
                // new HebTemplate(new ITemplate[] { new WordObject("",participleWord) },new ParticipleObject("0"),1),
                 new HebTemplate(new ITemplate[] { new WordObject("",conceptWord) },new ConceptObject("0"),1),
-                new HebTemplate(new ITemplate[] { new WordObject("",orginazationWord) },new OrginazationObject("0"),1),
+                new HebTemplate(new ITemplate[] { new WordObject("",organizationWord) },new OrganizationObject("0"),1),
                 new HebTemplate(new ITemplate[] { new WordObject("",eventWord) },new EventObject("0"),1),
 
 

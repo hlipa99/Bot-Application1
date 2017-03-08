@@ -2,14 +2,14 @@
 
 namespace NLPtest
 {
-    internal class personObject :WorldObject
+    public class personObject :WorldObject
     {
         private  amountType amount;
         private  personType person;
         private  timeType time;
         private genderType gender;
 
-        internal amountType Amount
+        public amountType Amount
         {
             get
             {
@@ -22,7 +22,7 @@ namespace NLPtest
             }
         }
 
-        internal personType Guf
+        public personType Guf
         {
             get
             {
@@ -35,7 +35,7 @@ namespace NLPtest
             }
         }
 
-        internal timeType Time
+        public timeType Time
         {
             get
             {
@@ -48,7 +48,7 @@ namespace NLPtest
             }
         }
 
-        internal genderType Gender
+        public genderType Gender
         {
             get
             {

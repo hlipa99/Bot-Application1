@@ -344,15 +344,19 @@ namespace NLPtest.NLP
                     if (o.ObjectType() == Word_Type)
                     {
                         var w = o as WordObject;
-                        if (w.isA(personWord))
+                        if (w.isA(personWord) && gufObject.Amount == personObject.amountType.singular && gufObject.Gender == w.Gender)
                         {
                             return o;
                         }
-                        else if (w.isA(orginazationWord) && gufObject.Amount == personObject.amountType.plural)
+                        else if (w.isA(organizationWord) && gufObject.Amount == personObject.amountType.plural)
                         {
                             return o;
                         }
                         else if (w.isA(conceptWord) && gufObject.Gender == w.Gender && gufObject.Amount == w.Amount)
+                        {
+                            return o;
+                        }
+                        else if (w.isA(eventWord))
                         {
                             return o;
                         }

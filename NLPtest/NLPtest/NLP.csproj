@@ -229,6 +229,7 @@
       <HintPath>..\..\packages\Microsoft.AspNet.WebApi.Client.5.2.2\lib\net45\System.Net.Http.Formatting.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -276,7 +277,7 @@
     <Compile Include="WorldObj\greetings\HisStatusObject.cs" />
     <Compile Include="WorldObj\greetings\MyStatusObject.cs" />
     <Compile Include="WorldObj\MessageDictionary.cs" />
-    <Compile Include="WorldObj\entities\OrginazationObject.cs" />
+    <Compile Include="WorldObj\entities\OrganizationObject.cs" />
     <Compile Include="WorldObj\entities\EventObject.cs" />
     <Compile Include="WorldObj\relations\copulaRelObject.cs" />
     <Compile Include="WorldObj\relations\expansionRelObject.cs" />
