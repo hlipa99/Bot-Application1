@@ -2,7 +2,7 @@
 
 using System;
 
-namespace NLPtest.WorldObj
+namespace NLP.WorldObj
 {
     internal class HelloObject : WorldObject
     {

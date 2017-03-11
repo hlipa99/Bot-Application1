@@ -1,7 +1,8 @@
-﻿using System;
+﻿using NLP.WorldObj;
+using System;
 using System.Runtime.Serialization;
 
-namespace NLPtest.Exceptions
+namespace NLP.Exceptions
 {
  
     internal class GufException : Exception

@@ -7,7 +7,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NLPtest.WorldObj
+namespace NLP.WorldObj
 {
 
 

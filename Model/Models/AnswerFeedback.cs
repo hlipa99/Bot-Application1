@@ -13,9 +13,12 @@ namespace Model.Models
 
         public void merge(AnswerFeedback f)
         {
-            score = (score + f.score) / 2;
-            missingEntitis.AddRange(f.missingEntitis);
-            missingAnswers.AddRange(f.missingAnswers);
+            if (f != null)
+            {
+                score = (score + f.score) / 2;
+                missingEntitis.AddRange(f.missingEntitis);
+                missingAnswers.AddRange(f.missingAnswers);
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
-﻿using Bot_Application1.dataBase;
+﻿
+using Model.dataBase;
 using Model.Models;
-using NLPtest.HebWords;
+using NLP.HebWords;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace NLPtest.WorldObj
+namespace NLP.WorldObj
 {
 
 
@@ -28,8 +29,8 @@ namespace NLPtest.WorldObj
         {
             this.Word = word; 
             this.Entity =  new entity();
-            Entity.EntityValue = word;
-            Entity.EntityType = "unknownWord";
+            Entity.entityValue = word;
+            Entity.entityType = "unknownWord";
         }
 
 
@@ -38,8 +39,8 @@ namespace NLPtest.WorldObj
         {
             this.Word = word.Text;
             this.Entity = new entity();
-            Entity.EntityValue = word.Text;
-            Entity.EntityType = word.TypefromEnum(word.WordT);
+            Entity.entityValue = word.Text;
+            Entity.entityType = word.TypefromEnum(word.WordT);
         }
 
         public List<RelationObject> Relations
@@ -152,6 +153,7 @@ namespace NLPtest.WorldObj
                     var word = obj as WordObject;
                     this.word = word.Lemma == null || word.Lemma.Length < 2 ? word.Text : word.Lemma ;
                     this.DefiniteArticle = word.IsDefinite;
+                    this.Entity = word.WorldObject.Entity;
                 }
             }catch(Exception ex)
             {

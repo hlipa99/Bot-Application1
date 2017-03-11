@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Runtime.Serialization;
-using NLPtest.WorldObj;
-using NLPtest.HebWords;
+using NLP.WorldObj;
+using NLP.HebWords;
 
-namespace NLPtest.Exceptions
+namespace NLP.Exceptions
 {
     [Serializable]
     internal class WorldObjectException : Exception

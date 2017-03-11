@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace NLPtest.WorldObj
+namespace NLP.WorldObj
 {
     public class RelationObject : WorldObject
     {

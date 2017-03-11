@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace NLPtest.QnA
+namespace NLP.Exceptions
 {
     [Serializable]
     internal class DBDataException : Exception

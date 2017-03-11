@@ -1,14 +1,15 @@
 ﻿using System;
-using static NLPtest.WorldObj.PrepRelObject;
-using NLPtest.WorldObj;
+using static NLP.WorldObj.PrepRelObject;
+using NLP.WorldObj;
 using vohmm.corpus;
-using static NLPtest.HebWords.WordObject.WordType;
-using static NLPtest.personObject;
+using static NLP.HebWords.WordObject.WordType;
 using Newtonsoft.Json;
-using NLPtest.Exceptions;
+using NLP.Exceptions;
 using System.Collections.Generic;
+using Model.dataBase;
+using static NLP.WorldObj.personObject;
 
-namespace NLPtest.HebWords
+namespace NLP.HebWords
 {
     public class WordObject : ITemplate
     {
@@ -91,18 +92,17 @@ namespace NLPtest.HebWords
         {
             if (lemma == null || lemma == "###NUMBER###" || lemma.Length <= 1) return text;
 
-            if(Ner != "O")
-            {
+
                 var chars = new List<char>();
                 foreach(var c in Prefixes)
                 {
-                    chars.Add(c[0]);
+                    text = text.Substring(1);
                 }
 
-                text = text.TrimStart(chars.ToArray());
-            }
+             
+            
 
-
+            if (text.Split(' ').Length > 1) return text;
 
             if (lemma.StartsWith("CARD")) return lemma.Remove(0, 4);
             if (lemma.StartsWith("ORD")) return lemma.Remove(0, 3);
@@ -120,7 +120,7 @@ namespace NLPtest.HebWords
             this.Prefixes = new string[0]; ;
             this.tense = "";
             this.suffixFunction = "";
-            this.Lemma = getLemma(lemma, text);
+            this.Lemma = getLemma(lemma, word);
 
         }
 
@@ -288,6 +288,29 @@ namespace NLPtest.HebWords
 
         }
 
+        internal WordObject clone()
+        {
+            var newWord = new WordObject(ner, text, "unspecified", "unspecified", "unspecified", polarity, pos, posType, prefixes, tense, suffixFunction, "unspecified", "unspecified", "unspecified", isDefinite, lemma);
+                newWord.amount = amount;
+            newWord.gender = gender;
+            newWord.person = person;
+            newWord.lemma = getLemma(lemma,text);
+            return newWord;
+
+        }
+
+        internal static WordType typeFromString(string entityType)
+        {
+            try
+            {
+                var word = (WordType)Enum.Parse(typeof(WordType), entityType);
+                return word;
+            }catch(Exception ex)
+            {
+                return unknownWord;
+            }
+        }
+
         public AnalysisInterface AnalysisInterface
         {
             get
@@ -402,10 +425,12 @@ namespace NLPtest.HebWords
                 }
 
 
-
-
-
-
+               var ent = new entity();
+                ent.entityValue = text;
+                ent.entityType = Enum.GetName(typeof(WordType), WordT);
+                ent.entityValue = text;
+                ent.entitySynonimus = ";" + text + ";";
+                worldObject.Entity = ent;
 
                 return worldObject;
             }

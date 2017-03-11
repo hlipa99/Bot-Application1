@@ -1,13 +1,13 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NLPtest.HebWords;
-using NLPtest.WorldObj;
+using NLP.HebWords;
+using NLP.WorldObj;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NLPtest.HebWords.Tests
+namespace NLP.HebWords.Tests
 {
     [TestClass()]
     public class WordObjectTests

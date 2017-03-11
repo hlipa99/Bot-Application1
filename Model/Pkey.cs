@@ -58,6 +58,8 @@ namespace Model
         unknownQuestion,
         shouldWeContinue,
         missingAnswrPart,
-        and
+        and,
+        missingAnswerEntity,
+        innerException
     }
 }

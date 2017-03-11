@@ -1,6 +1,6 @@
-﻿using NLPtest.WorldObj;
+﻿
 
-namespace NLPtest
+namespace NLP.WorldObj
 {
     internal class ConjunctionRelObject : RelationObject
     {

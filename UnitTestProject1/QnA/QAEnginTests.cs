@@ -2,9 +2,9 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Model.dataBase;
 using Moq;
-using NLPtest.Controllers;
-using NLPtest.QnA;
-using NLPtest.WorldObj;
+using NLP.Controllers;
+using NLP.QnA;
+using NLP.WorldObj;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnitTestProject1;
 
-namespace NLPtest.QnA.Tests
+namespace NLP.QnA.Tests
 {
     [TestClass()]
     public class QAEnginTests: MockObjectTestBase
@@ -43,8 +43,8 @@ namespace NLPtest.QnA.Tests
         
 
             //good
-            Assert.AreEqual(feedback.missingEntitis[0].EntityValue,eventO.Word);
-            Assert.AreEqual(feedback.missingEntitis[0].EntityType, "eventWord");
+            Assert.AreEqual(feedback.missingEntitis[0].entityValue,eventO.Word);
+            Assert.AreEqual(feedback.missingEntitis[0].entityType, "eventWord");
             Assert.AreEqual(feedback.score, 66);
 
             //bad
@@ -72,7 +72,7 @@ namespace NLPtest.QnA.Tests
             Assert.AreEqual(feedback.score, 66);
 
             //good
-            Assert.IsTrue(feedback.missingEntitis.Where(x=>x.EntityValue == eventO.Word && x.EntityType == "eventWord").Count() == 1);
+            Assert.IsTrue(feedback.missingEntitis.Where(x=>x.entityValue == eventO.Word && x.entityType == "eventWord").Count() == 1);
             Assert.AreEqual(feedback.score, 66);
 
             //bad

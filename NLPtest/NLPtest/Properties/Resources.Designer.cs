@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace NLPtest.Properties
+namespace NLP.Properties
 {
 
 

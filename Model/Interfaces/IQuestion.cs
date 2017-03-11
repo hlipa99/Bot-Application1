@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Model.Models
 {
+
     public interface IQuestion
     {
         bool Equals(object other);

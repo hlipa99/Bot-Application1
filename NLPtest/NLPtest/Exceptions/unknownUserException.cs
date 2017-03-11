@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Bot_Application1.Exceptions
+namespace NLP.Exceptions
 {
     [Serializable]
     public class unknownUserException : Exception

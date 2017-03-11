@@ -1,9 +1,9 @@
 ﻿
 using Model.dataBase;
-using NLPtest.Controllers;
-using NLPtest.HebWords;
-using NLPtest.QnA;
-using NLPtest.WorldObj;
+using NLP.Controllers;
+using NLP.HebWords;
+using NLP.QnA;
+using NLP.WorldObj;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,7 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace NLPtest
+namespace NLP
 {
     public partial class Form1 : Form
     {
@@ -152,7 +152,7 @@ namespace NLPtest
             var answerText = "Score:" + match.score + Environment.NewLine;
             foreach (var ent in match.missingEntitis)
             {
-                answerText += "Missing Entity:" + ent.EntityValue + Environment.NewLine;
+                answerText += "Missing Entity:" + ent.entityValue + Environment.NewLine;
               
             }
 

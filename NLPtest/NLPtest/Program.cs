@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 
-namespace NLPtest
+namespace NLP
 {
      class Program
     {

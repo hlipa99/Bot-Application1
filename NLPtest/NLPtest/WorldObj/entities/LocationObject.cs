@@ -1,8 +1,8 @@
 ﻿
 
-namespace NLPtest.WorldObj
+namespace NLP.WorldObj
 {
-    internal class LocationObject : EntityObject
+    public class LocationObject : EntityObject
     {
    
 

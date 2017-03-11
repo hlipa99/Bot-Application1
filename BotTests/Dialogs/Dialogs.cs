@@ -52,14 +52,10 @@ namespace UnitTestProject1
             // client = null;
         }
 
-        [TestMethod]
-        public void testALLDialogs()
-        {
-            assertNewUserDialog();
-            assertLearningDialog();
-        }
 
-        private void assertLearningDialog()
+
+        [TestMethod]
+        public void testLearningDialog()
         {
             options = getOptions(response[2]);
             response = sendBot(options[1]);   //learning options
@@ -101,7 +97,9 @@ namespace UnitTestProject1
             return db.getBotPhrase(Pkey.letsLearn, new string[] { }, new string[] { });
         }
 
-        private void assertNewUserDialog()
+
+        [TestMethod]
+        private void testNewUserDialog()
         {
             task = sendConversationContantUpdated("add");
             task.Wait();

@@ -1,6 +1,6 @@
 ﻿
 
-namespace NLPtest.WorldObj
+namespace NLP.WorldObj
 {
     public class VerbObject : WorldObject
     {

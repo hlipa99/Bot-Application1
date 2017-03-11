@@ -1,21 +1,21 @@
 ﻿
 
 
-using NLPtest.Models;
-using NLPtest.view;
-using NLPtest.WorldObj;
+using NLP.Models;
+using NLP.view;
+using NLP.WorldObj;
 using System;
 using System.Collections.Generic;
 
 using Model.dataBase;
 using Model;
 using Bot_Application1.Controllers;
-using NLPtest;
+using NLP;
 using Model.Models;
 using Bot_Application1.Exceptions;
 using Bot_Application1.Models;
-using NLPtest.NLP;
-using NLPtest.Controllers;
+using NLP.NLP;
+using NLP.Controllers;
 
 namespace Bot_Application1.Controllers
 {
@@ -30,7 +30,7 @@ namespace Bot_Application1.Controllers
         DataBaseController db;
         EducationController ec;
 
-        private ContentList last;
+        //private ContentList last;
         NLPControler nlpControler;
         IUser user;
         IStudySession studySession;
@@ -306,6 +306,27 @@ namespace Bot_Application1.Controllers
           //  return nlpControler.getClass(text);
         }
 
+        internal string[] mergeText(string[] v1, string v2)
+        {
+            if (v1.Length == 0) return new string[] { v2};
+            v1[v1.Length - 1] += " " +v2;
+            return v1;
+        }
+
+        internal string[] mergeText(string[] v1, string[] v2)
+        {
+            var list1 = new List<string>(v1);
+            list1.AddRange(v2);
+            return list1.ToArray();
+        }
+
+        internal string[] mergeText(string v1, string[] v2)
+        {
+            if (v2.Length == 0) return new string[] { v1 };
+            v2[0] = v1 + " " + v2[0];
+            return v2;
+        }
+
         //public string getGeneralFeeling(string text)   //TODO: real feeling
         //{
         // //   return nlpControler.GetGeneralFeeling(text);
@@ -326,7 +347,7 @@ namespace Bot_Application1.Controllers
             NLPControler nlp = new NLPControler();
             //  var answer = nlp.Analize(text);
             var answerIntent = nlp.getUserIntent(text, context.dialog);
-            if (context.dialog == "LerningDialog")
+            if (context.dialog == "LerningDialog" || context.dialog == "QuestionDialog")
             {
                 return ec.createReplayToUser(text, answerIntent);
             }
@@ -350,9 +371,8 @@ namespace Bot_Application1.Controllers
 
                         break;
 
-                    case UserIntent.question:
-
-                        break;
+                    case UserIntent.bot_questions:
+                        throw new UnrelatedSubjectException(getPhrase(Pkey.unknownQuestion)[0]);
 
                     case UserIntent.unknown:
 
@@ -387,7 +407,7 @@ namespace Bot_Application1.Controllers
 
                         break;
 
-                    case UserIntent.question:
+                    case UserIntent.bot_questions:
 
                         break;
 

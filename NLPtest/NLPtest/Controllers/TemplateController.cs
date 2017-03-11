@@ -1,14 +1,14 @@
-﻿using NLPtest.HebWords;
+﻿using NLP.HebWords;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NLPtest.WorldObj;
-using static NLPtest.HebWords.WordObject.WordType;
-using NLPtest.view;
+using NLP.WorldObj;
+using static NLP.HebWords.WordObject.WordType;
+using NLP.view;
 
-namespace NLPtest.Controllers
+namespace NLP.Controllers
 {
     class TemplateController
     {

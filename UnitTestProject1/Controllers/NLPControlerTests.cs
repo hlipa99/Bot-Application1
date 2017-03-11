@@ -1,7 +1,7 @@
 ﻿using Bot_Application1.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NLPtest.Controllers;
-using NLPtest.WorldObj;
+using NLP.Controllers;
+using NLP.WorldObj;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnitTestProject1;
 
-namespace NLPtest.Controllers.Tests
+namespace NLP.Controllers.Tests
 {
     [TestClass()]
     public class NLPControlerTests : MockObjectTestBase

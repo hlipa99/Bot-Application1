@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using vohmm.corpus;
 
-namespace NLPtest.MorfObjects
+namespace NLP.MorfObjects
 {
     class ExtTokenWithBuilder
     {

@@ -1,14 +1,14 @@
-using NLPtest;
+using NLP;
 using System.Collections.Generic;
 using System;
-using NLPtest.view;
-using NLPtest.WorldObj;
-using NLPtest.NLP;
+using NLP.view;
+using NLP.WorldObj;
+using NLP.NLP;
 using Model.dataBase;
-using static NLPtest.HebWords.WordObject;
-using NLPtest.HebWords;
+using static NLP.HebWords.WordObject;
+using NLP.HebWords;
 
-namespace NLPtest.Controllers
+namespace NLP.Controllers
 {
     public class NLPControler
     {

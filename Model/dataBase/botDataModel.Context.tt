@@ -622,7 +622,7 @@ public class TypeMapper
     public bool GenerateMergeOptionFunction(EdmFunction edmFunction, bool includeMergeOption)
     {
         var returnType = GetReturnType(edmFunction);
-        return !includeMergeOption && returnType != null && returnType.EdmType.BuiltInTypeKind == BuiltInTypeKind.EntityType;
+        return !includeMergeOption && returnType != null && returnType.EdmType.BuiltInTypeKind == BuiltInTypeKind.entityType;
     }
 }
 

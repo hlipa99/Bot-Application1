@@ -1,5 +1,5 @@
 ﻿
-using NLPtest.WorldObj;
+using NLP.WorldObj;
 
 using System;
 using System.Collections.Generic;
@@ -7,14 +7,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using vohmm.application;
-using NLPtest.HebWords;
-using NLPtest.Controllers;
-using NLPtest.MorfObjects;
-using NLPtest.view;
-using NLPtest.Exceptions;
-using static NLPtest.HebWords.WordObject.WordType;
+using NLP.HebWords;
+using NLP.Controllers;
+using NLP.MorfObjects;
+using NLP.view;
+using NLP.Exceptions;
+using static NLP.HebWords.WordObject.WordType;
+using static NLP.WorldObj.personObject;
 
-namespace NLPtest.NLP
+namespace NLP.NLP
 {
 
    
@@ -271,8 +272,8 @@ namespace NLPtest.NLP
             {
                 List<ITemplate> words = new List<ITemplate>();
                 words.AddRange(s);
-                var newS = findGufContextHlpr(words, words);
-                newS = findGufContextHlpr(newS, context);
+              //  var newS = findGufContextHlpr(words, words);
+               var newS = findGufContextHlpr(words, context);
                 context = newS;
                 res.Add(newS);
             }
@@ -327,9 +328,9 @@ namespace NLPtest.NLP
                     return new multyPersoneObject(new WorldObject[] { new UserObject("<userName>"), new BotObject("<botName>") }); //TODO det
                 }
               
-            }else if(gufObject.Person == NLPtest.personObject.personType.Second)
+            }else if(gufObject.Person == personType.Second)
             {
-                if (gufObject.Amount == NLPtest.personObject.amountType.singular)
+                if (gufObject.Amount == amountType.singular)
                 {
                     return new BotObject("botName");//TODO getUserObjectname
                 }
@@ -337,7 +338,7 @@ namespace NLPtest.NLP
                 {
                     throw new GufException(gufObject.Text);
                 }
-            }else //third person
+            }else if(context != null)
             {
                 foreach (var o in context)
                 {
@@ -367,12 +368,13 @@ namespace NLPtest.NLP
                     }
                     else
                     {
-
+                  //      throw new GufException(gufObject);
                     }
                 }
-           //     throw new GufException(gufObject);
-           return null;
+                
             }
+            return null;
+         
            
         }
 
@@ -606,7 +608,7 @@ namespace NLPtest.NLP
         dontKnow,
         stopSession,
         answer,
-        question,
+        bot_questions,
         introduction,
         howAreYou,
         unknown,

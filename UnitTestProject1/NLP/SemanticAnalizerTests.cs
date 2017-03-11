@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NLPtest.HebWords;
-using NLPtest.NLP;
-using NLPtest.WorldObj;
+using NLP.HebWords;
+using NLP.NLP;
+using NLP.WorldObj;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnitTestProject1;
 
-namespace NLPtest.NLP.Tests
+namespace NLP.NLP.Tests
 {
     [TestClass()]
     public class SemanticAnalizerTests: MockObjectTestBase
@@ -58,13 +58,36 @@ namespace NLPtest.NLP.Tests
             var listListObject = new List<List<WordObject>>();
             listListObject.Add(guftemplate.ToList());
             var res = sAnal.findGufContext(listListObject, listTemplate);
-            //good
-            Assert.IsTrue(res.FirstOrDefault().Contains(moqWordObject1.Object));
-            Assert.IsTrue(res.FirstOrDefault().Contains(moqWordObject2.Object));
-            Assert.IsTrue(res.FirstOrDefault().Contains(moqWordObject3.Object));
-            Assert.IsTrue(res.FirstOrDefault().Contains(moqWordObject4.Object));
-            Assert.IsTrue(res.FirstOrDefault().Count() == 4);
+            var single = res.Single().Cast<WordObject>();
 
+ 
+            //good
+            Assert.IsTrue(single.Where(x=> x == moqWordObject1.Object).Count() == 1);
+            Assert.IsTrue(single.Where(x => x == moqWordObject2.Object).Count() == 1);
+            Assert.IsTrue(single.Where(x => x == moqWordObject3.Object).Count() == 1);
+            Assert.IsTrue(single.Where(x => x == moqWordObject4.Object).Count() == 1);
+            Assert.IsTrue(single.Count() == 4);
+
+            listTemplate.Clear();
+            //bad
+             res = sAnal.findGufContext(listListObject, listTemplate);
+             single = res.Single().Cast<WordObject>();
+
+            Assert.IsFalse(single.Where(x => x == moqWordObject1.Object).Count() == 1);
+            Assert.IsFalse(single.Where(x => x == moqWordObject2.Object).Count() == 1);
+            Assert.IsFalse(single.Where(x => x == moqWordObject3.Object).Count() == 1);
+            Assert.IsFalse(single.Where(x => x == moqWordObject4.Object).Count() == 1);
+            Assert.IsTrue(single.Count() == 4);
+
+            //ugly
+            res = sAnal.findGufContext(listListObject, null);
+            single = res.Single().Cast<WordObject>();
+
+            Assert.IsFalse(single.Where(x => x == moqWordObject1.Object).Count() == 1);
+            Assert.IsFalse(single.Where(x => x == moqWordObject2.Object).Count() == 1);
+            Assert.IsFalse(single.Where(x => x == moqWordObject3.Object).Count() == 1);
+            Assert.IsFalse(single.Where(x => x == moqWordObject4.Object).Count() == 1);
+            Assert.IsTrue(single.Count() == 4);
         }
 
     }

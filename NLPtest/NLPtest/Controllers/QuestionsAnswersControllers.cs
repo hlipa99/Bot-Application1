@@ -1,12 +1,12 @@
 ﻿using Model.Models;
-using NLPtest.QnA;
+using NLP.QnA;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NLPtest.Controllers
+namespace NLP.Controllers
 {
     public class QuestionsAnswersControllers
     {

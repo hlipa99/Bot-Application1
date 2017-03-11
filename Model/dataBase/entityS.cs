@@ -4,16 +4,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Bot_Application1.dataBase
+namespace Model.dataBase
 {
     public partial class entity : Ientity
     {
-        public int EntityID { get; set; }
 
-        public string EntitySynonimus { get; set; }
+        public override bool Equals(Object obj)
+        {
 
-        public string EntityType { get; set; }
+            var ent = obj as Ientity;
+            if (ent == null) return false;
+            if (!(entitySynonimus.Contains(ent.entityValue) && entityType == ent.entityType))
+                return false;
 
-        public string EntityValue{ get; set; }
+
+            return true;
+        }
     }
 }

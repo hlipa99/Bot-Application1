@@ -1,8 +1,9 @@
-﻿using Bot_Application1.dataBase;
+﻿
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Model.dataBase;
 using Moq;
-using NLPtest;
-using NLPtest.NLP;
+using NLP;
+using NLP.NLP;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnitTestProject1;
 
-namespace NLPtest.Tests
+namespace NLP.Tests
 {
     [TestClass()]
     public class MorfAnalizerTest : MockObjectTestBase

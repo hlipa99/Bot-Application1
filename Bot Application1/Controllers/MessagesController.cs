@@ -6,7 +6,7 @@ using System.Web.Http;
 using Microsoft.Bot.Connector;
 using Microsoft.Bot.Builder.Dialogs;
 using Bot_Application1.IDialog;
-using Bot_Application1.dataBase;
+
 using System.Collections.Generic;
 using Model.dataBase;
 

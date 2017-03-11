@@ -1,9 +1,9 @@
-﻿using NLPtest.MorfObjects;
-using NLPtest.WorldObj;
+﻿using NLP.MorfObjects;
+using NLP.WorldObj;
 using System;
 using System.Collections.Generic;
 
-namespace NLPtest.NLP
+namespace NLP.NLP
 {
 
     public class MessageComposer
@@ -30,15 +30,15 @@ namespace NLPtest.NLP
 
         }
 
-        public List<string> compose(ContentList content,UserObject user)
-        {
-            List<string> res = new List<string>();
-            while (!content.empty())
-            {
-                res.Add(createMessage(content.pop(), user));
-            }
-            return res;
-        }
+        //public List<string> compose(ContentList content,UserObject user)
+        //{
+        //    List<string> res = new List<string>();
+        //    while (!content.empty())
+        //    {
+        //        res.Add(createMessage(content.pop(), user));
+        //    }
+        //    return res;
+        //}
 
             private string createMessage(WorldObject worldObject,UserObject user)
             {

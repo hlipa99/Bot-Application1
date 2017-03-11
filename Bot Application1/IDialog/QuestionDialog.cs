@@ -31,25 +31,31 @@ namespace Bot_Application1.IDialog
 
         public async Task intreduceQuestion(IDialogContext context)
         {
-            getStudySession(context);
-            var question = StudySession.CurrentQuestion;
+            try
+            {
+                getStudySession(context);
+            }
+            catch (Exception ex)
+            {
 
-            await writeMessageToUser(context, new string[] { '"' + question.QuestionText + '"' });
+            }
+            var question = StudySession.CurrentQuestion;
 
             if (question.SubQuestion.Count > 1)
             {
+                await writeMessageToUser(context, new string[] { '"' + question.QuestionText + '"' });
                 await writeMessageToUser(context, conv().getPhrase(Pkey.takeQuestionApart));
             }
-            await askQuestion(context,null);
+            await askSubQuestion(context,null);
         }
 
 
 
-        public async Task askQuestion(IDialogContext context, IAwaitable<IMessageActivity> result)
+        public async Task askSubQuestion(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
 
             var question = StudySession.CurrentSubQuestion;
-            await writeMessageToUser(context, new string[] { question.questionText.Trim() });
+            await writeMessageToUser(context, new string[] { '"' + question.questionText.Trim() + '"' });
 
             updateRequestTime(context);
             context.Wait(answerQuestion);
@@ -59,7 +65,7 @@ namespace Bot_Application1.IDialog
 
         public async Task answerQuestion(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            if (await outDatedMessage(context, askQuestion, result)) return;
+            if (await checkOutdatedMessage(context, askSubQuestion, result)) return;
 
             var message = await result;
             //      context.UserData.TryGetValue<StudySession>("studySession", out studySession);
@@ -67,11 +73,18 @@ namespace Bot_Application1.IDialog
 
             try
             {
+                typingTime(context);
                 var replay = conv().createReplayToUser(message.Text, getDialogContext());
                 await writeMessageToUser(context, replay);
             }
             catch(UnrelatedSubjectException ex) {
-                await context.Forward<IMessageActivity, IMessageActivity>(new SideDialog(), askQuestion, message, CancellationToken.None);
+                await context.Forward<IMessageActivity, IMessageActivity>(new SideDialog(), askSubQuestion, message, CancellationToken.None);
+                return;
+            }
+            catch (Exception ex)
+            {
+                await writeMessageToUser(context, conv().getPhrase(Pkey.innerException));
+                await askSubQuestion(context, null);
                 return;
             }
 
@@ -87,7 +100,7 @@ namespace Bot_Application1.IDialog
 
 
 
-            if (StudySession.CurrentQuestion.Enumerator == StudySession.CurrentQuestion.SubQuestion.Count)
+             if (StudySession.CurrentQuestion.Enumerator == StudySession.CurrentQuestion.SubQuestion.Count)
             {
                 //await writeMessageToUser(context, conv().getPhrase(Pkey.giveYourFeedback));
                 //updateRequestTime(context);
@@ -100,7 +113,7 @@ namespace Bot_Application1.IDialog
              
                 await writeMessageToUser(context, conv().getPhrase(Pkey.moveToNextSubQuestion));
                 edc().getNextQuestion();
-                await intreduceQuestion(context);
+                await askSubQuestion(context,null);
             }
         }
 
@@ -116,7 +129,7 @@ namespace Bot_Application1.IDialog
 
         public async Task giveFeedback(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            if (await outDatedMessage(context, askQuestion, result)) return;
+            if (await checkOutdatedMessage(context, askSubQuestion, result)) return;
 
             var message = await result;
 

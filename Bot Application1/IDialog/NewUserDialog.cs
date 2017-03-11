@@ -7,10 +7,10 @@ using System.Web;
 using System.Threading.Tasks;
 using System.Web.UI.WebControls;
 using Bot_Application1.Cardatt_achment;
-using Bot_Application1.dataBase;
-using NLPtest;
+
+using NLP;
 using Bot_Application1.YAndex;
-using NLPtest.WorldObj;
+using NLP.WorldObj;
 using Model.dataBase;
 using static Bot_Application1.Controllers.ConversationController;
 using Model;
@@ -87,7 +87,7 @@ namespace Bot_Application1.IDialog
 
         public async virtual Task CheckName(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            if(await outDatedMessage(context,CheckName,result)) return;
+            if(await checkOutdatedMessage(context,CheckName,result)) return;
 
 
 

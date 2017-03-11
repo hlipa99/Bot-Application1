@@ -7,9 +7,9 @@ using System.Web;
 using System.Threading.Tasks;
 using System.Web.UI.WebControls;
 using Bot_Application1.Cardatt_achment;
-using Bot_Application1.dataBase;
+
 using System.Threading;
-using NLPtest;
+using NLP;
 using Model.dataBase;
 using Bot_Application1.log;
 using static Bot_Application1.Controllers.ConversationController;
@@ -100,8 +100,10 @@ namespace Bot_Application1.IDialog
         {
             var text = await result;
             var option = "";
+            try
+            {
 
-            if (text is string)
+                if (text is string)
             {
                 option = (string)text;
             }
@@ -109,7 +111,6 @@ namespace Bot_Application1.IDialog
             {
                 option = ((IMessageActivity)text).Text;
             }
-
 
 
             if (options.Contains(option))
@@ -134,6 +135,11 @@ namespace Bot_Application1.IDialog
                 await MainMenu(context, result);
             }
 
+
+            }catch(Exception ex)
+            {
+
+            }
         }
 
         private async Task returnToMainMenu(IDialogContext context, IAwaitable<object> result)

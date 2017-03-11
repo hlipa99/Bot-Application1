@@ -1,6 +1,6 @@
 ﻿
 
-namespace NLPtest.WorldObj
+namespace NLP.WorldObj
 {
     internal class QuestionObject : WorldObject
     {

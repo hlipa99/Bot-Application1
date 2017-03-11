@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Moq;
 using Model.dataBase;
-using NLPtest.Models;
+using NLP.Models;
 using Model;
 using Model.Models;
 using UnitTestProject1;
@@ -54,7 +54,7 @@ namespace Bot_Application1.Controllers.Tests
         [TestMethod()]
         public void endOfSessionTest()
         {
-            var hs = new HashSet<IQuestion>();
+            var hs = new List<IQuestion>();
             hs.Add(mockQuestion1.Object);
             hs.Add(mockQuestion2.Object);
             hs.Add(mockQuestion3.Object);
@@ -71,7 +71,7 @@ namespace Bot_Application1.Controllers.Tests
             mockQuestion2.Setup(x => x.AnswerScore).Returns(30);
             mockQuestion3.Setup(x => x.AnswerScore).Returns(30);
 
-            hs = new HashSet<IQuestion>();
+            hs = new List<IQuestion>();
             hs.Add(mockQuestion1.Object);
             hs.Add(mockQuestion2.Object);
             hs.Add(mockQuestion3.Object);
@@ -80,7 +80,7 @@ namespace Bot_Application1.Controllers.Tests
             Assert.AreEqual(convCtrl.endOfSession()[0], EnumVal(Pkey.badSessionEnd));
 
             //bad
-            mockStudySession.Setup(x => x.QuestionAsked).Returns(new HashSet<IQuestion>());
+            mockStudySession.Setup(x => x.QuestionAsked).Returns(new List<IQuestion>());
             Assert.AreEqual(convCtrl.endOfSession()[0], EnumVal(Pkey.earlyDiparture));
 
 
@@ -88,7 +88,7 @@ namespace Bot_Application1.Controllers.Tests
             //sad
             mockQuestion1.Setup(x => x.AnswerScore).Returns(-99999);
 
-            hs = new HashSet<IQuestion>();
+            hs = new List<IQuestion>();
             hs.Add(mockQuestion1.Object);
             hs.Add(mockQuestion2.Object);
             hs.Add(mockQuestion3.Object);

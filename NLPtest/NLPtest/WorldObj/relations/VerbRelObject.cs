@@ -1,4 +1,4 @@
-﻿namespace NLPtest.WorldObj
+﻿namespace NLP.WorldObj
 {
     internal class VerbRelObject : RelationObject
     {

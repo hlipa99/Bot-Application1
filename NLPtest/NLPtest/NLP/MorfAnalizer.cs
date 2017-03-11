@@ -1,28 +1,28 @@
 ﻿
-using static NLPtest.HebWords.WordObject.WordType;
+using static NLP.HebWords.WordObject.WordType;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NLPtest.WorldObj;
+using NLP.WorldObj;
 using hebrewNER;
 //using java.io;
 //using static vohmm.corpus.Sentence;
 using System.Text.RegularExpressions;
-using NLPtest.view;
-using NLPtest.Controllers;
+using NLP.view;
+using NLP.Controllers;
 //using java.awt;
 using System.Xml.Serialization;
-using NLPtest.MorfObjects;
+using NLP.MorfObjects;
 using Newtonsoft.Json;
 using Model.dataBase;
-using static NLPtest.HebWords.WordObject;
-using NLPtest.HebWords;
+using static NLP.HebWords.WordObject;
+using NLP.HebWords;
 using Model.Models;
 
-namespace NLPtest.NLP
+namespace NLP.NLP
 {
       public class MorfAnalizer
     {
@@ -164,6 +164,7 @@ namespace NLPtest.NLP
                                     if (res.LastOrDefault().Ner == w.Ner && res.LastOrDefault().Ner != "O")
                                     {
                                         res.LastOrDefault().Text += " " + word.Text;
+                                        res.LastOrDefault().Lemma = res.LastOrDefault().Text;
                                         continue;
                                     }
                                 }
@@ -173,14 +174,14 @@ namespace NLPtest.NLP
                                     word = hebDictionary.get(word.Text);
                                 }
                                 //joinwords
-                                if (res.LastOrDefault() != null && word.isA(nounWord) && res.LastOrDefault().isA(nounWord))
-                                {
-                                    var last = res.LastOrDefault();
-                                    res.RemoveAt(res.Count - 1);
-                                    last.Text = last.Text + " " + word.Text;
-                                    last.WordT = last.WordT | word.WordT; //combin flages
-                                    word = last;
-                                }
+                                //if (res.LastOrDefault() != null && word.isA(nounWord) && res.LastOrDefault().isA(nounWord))
+                                //{
+                                //    var last = res.LastOrDefault();
+                                //    res.RemoveAt(res.Count - 1);
+                                //    last.Text = last.Text + " " + word.Text;
+                                //    last.WordT = last.WordT | word.WordT; //combin flages
+                                //    word = last;
+                                //}
 
                                 res.Add(word);
 
@@ -190,63 +191,115 @@ namespace NLPtest.NLP
                         }
 
                         // res = checkPhrases(res);
-                        allRes.Add(tryMatchEntities(res));
+                        res = tryMatchEntities(res, isUserInput);
+                        allRes.Add(res);
                     }
                 }
             }
             return allRes;
         }
 
-        public List<WordObject> tryMatchEntities(List<WordObject> sentence)
+        private List<WordObject> tryMatchEntities(List<WordObject> sentence,bool isUserInput)
         {
             //increase the match found to implement maximal munch
-            for(int i = 0; i < sentence.Count; i++)
+            var entities = DBctrl1.getEntitys();
+            var newSentence = new List<WordObject>();
+
+            for (int i = 0; i < sentence.Count; i++)
             {
                 WordObject word = sentence[i];
-
-                var entities = DBctrl1.getEntitys();
                 var searchText = "";
                 IQueryable<Ientity> match = null;
                 int j = i;
                 for (; j < sentence.Count; j++)
                 {
-                    searchText += sentence[i].Text;
-                    var tryMatch = findMatch(entities.AsQueryable(), searchText);
-                    if(tryMatch.Count() != 0)
+                    var searchText2 = (searchText + " " +sentence[j].Lemma).Trim();
+                    var searchText1 = (searchText + " " +sentence[j].Text).Trim();
+
+                  
+                    var tryMatch2 = findMatch(entities.AsQueryable(), searchText2);
+                    if (tryMatch2 != null && tryMatch2.Any())
                     {
-                        match = tryMatch;
-                    }else
+                        match = tryMatch2;
+                        searchText = searchText2;
+                    }
+                    else if (searchText1 == searchText2)
                     {
                         break;
+                    }
+                    else {
+                        var tryMatch = findMatch(entities.AsQueryable(), searchText1);
+                        if (tryMatch != null && tryMatch.Any())
+                        {
+                            match = tryMatch;
+                            searchText = searchText2;
+                        }
+                        else
+                        {
+                            break;
+                        }
                     }
                     
                 }
 
-                if (match != null && match.Count() != 0)
+                //finish the word
+                if (match != null && match.Any())
+                {
+                    match = findMatch(match, searchText + ";");
+                }
+
+                if (match != null && match.Any())
                 {
                          //TODO implament selector or create multiple answer
                         var entity = match.FirstOrDefault();
-                    var newWord = sentence[i];
-                     for (int k = i ; k < j; k++)
+                   
+                     //for (int k = i ; k < j; k++)
+                     //   {
+                     //       sentence.RemoveAt(i);
+                     //   }
+
+                    if (isUserInput)
+                    {
+                        var newWord = sentence[i].clone(); ;
+                        newWord.Text = entity.entityValue;
+                        if (i != j)
                         {
-                            sentence.RemoveAt(i);
+                            newWord.Lemma = entity.entityValue;
                         }
-                        foreach(var w in match)
-                          {
-                              
-                                newWord.Text = entity.EntityValue;
-                                 newWord.WordT = (WordType)Enum.Parse(typeof(WordType), entity.EntityType);
-                                sentence.Insert(i, newWord);
-                          }
+                        newWord.WordT = WordObject.typeFromString(entity.entityType);
+                        newSentence.Add(newWord);
+
+                    }
+                    else
+                    {
+                        foreach (var w in match)
+                        {
+                            var newWord = sentence[i].clone(); ;
+                            newWord.Text = w.entityValue;
+                            if (i != j)
+                            {
+                                newWord.Lemma = w.entityValue;
+                            }
+                            newWord.WordT = WordObject.typeFromString(w.entityType);
+                            newSentence.Add(newWord);
+
+                        }
+                    }
+
+                  
+
+                }else
+                {
+                    newSentence.Add(sentence[i]);
                 }
  
             }
-            return sentence;
+            return newSentence;
         }
 
-        public IQueryable<Ientity> findMatch(IQueryable<Ientity> quarible, string text)
+        private IQueryable<Ientity> findMatch(IQueryable<Ientity> quarible, string text)
         {
-            quarible = quarible.Where(x => x.EntitySynonimus.Contains(";" +text + ";") || x.EntitySynonimus.StartsWith(text + ";") || x.EntitySynonimus.EndsWith(";"+text));
+            quarible = quarible.Where(x=>x.entitySynonimus.Contains(";" +text));
             return quarible;
         }
 
@@ -395,7 +448,7 @@ namespace NLPtest.NLP
 
 
 
-        public   string removeParentheses(string input, char start, char end)
+        private   string removeParentheses(string input, char start, char end)
         {
             string res = input;
             while (res.Contains(start) && res.Contains(end))

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace NLPtest.Models.Exceptions
+namespace NLP.Models.Exceptions
 {
     [Serializable]
     internal class DBException : Exception

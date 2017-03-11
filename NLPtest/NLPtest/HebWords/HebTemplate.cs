@@ -1,15 +1,15 @@
-﻿using NLPtest;
-using NLPtest.WorldObj;
-using static NLPtest.HebWords.WordObject.WordType;
+﻿using NLP;
+using NLP.WorldObj;
+using static NLP.HebWords.WordObject.WordType;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NLPtest.view;
+using NLP.view;
 
 
-namespace NLPtest.HebWords
+namespace NLP.HebWords
 {
 
      public class HebTemplate

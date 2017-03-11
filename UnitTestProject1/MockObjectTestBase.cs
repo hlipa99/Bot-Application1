@@ -3,19 +3,19 @@ using Model;
 using Model.dataBase;
 using Model.Models;
 using Moq;
-using NLPtest;
-using NLPtest.Controllers;
-using NLPtest.HebWords;
-using NLPtest.Models;
-using NLPtest.NLP;
-using NLPtest.WorldObj;
+using NLP;
+using NLP.Controllers;
+using NLP.HebWords;
+using NLP.Models;
+using NLP.NLP;
+using NLP.WorldObj;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static NLPtest.personObject;
+using static NLP.personObject;
 
 namespace UnitTestProject1
 {
@@ -94,34 +94,34 @@ namespace UnitTestProject1
             mockSubQqestion1.Setup(x => x.AnswerScore).Returns(100);
             mockSubQqestion1.Setup(x => x.answerText).Returns("תשובה טובה לתת שאלה 1");
 
-            mockEntity1.Setup(x => x.EntityValue).Returns("טובה");
-            mockEntity1.Setup(x => x.EntitySynonimus).Returns(";טובה;");
-            mockEntity1.Setup(x => x.EntityType).Returns("personWord");
+            mockEntity1.Setup(x => x.entityValue).Returns("טובה");
+            mockEntity1.Setup(x => x.entitySynonimus).Returns(";טובה;");
+            mockEntity1.Setup(x => x.entityType).Returns("personWord");
 
 
-            mockEntity2.Setup(x => x.EntityValue).Returns("הדברים");
-            mockEntity2.Setup(x => x.EntitySynonimus).Returns(";הדברים;");
-            mockEntity2.Setup(x => x.EntityType).Returns("conceptWord");
+            mockEntity2.Setup(x => x.entityValue).Returns("הדברים");
+            mockEntity2.Setup(x => x.entitySynonimus).Returns(";הדברים;");
+            mockEntity2.Setup(x => x.entityType).Returns("conceptWord");
 
-            mockEntity3.Setup(x => x.EntityValue).Returns("מקום");
-            mockEntity3.Setup(x => x.EntitySynonimus).Returns(";מקום;");
-            mockEntity3.Setup(x => x.EntityType).Returns("locationWord");
+            mockEntity3.Setup(x => x.entityValue).Returns("מקום");
+            mockEntity3.Setup(x => x.entitySynonimus).Returns(";מקום;");
+            mockEntity3.Setup(x => x.entityType).Returns("locationWord");
 
-            mockEntity4.Setup(x => x.EntityValue).Returns("הכרזת העצמאות");
-            mockEntity4.Setup(x => x.EntitySynonimus).Returns(";הכרזת העצמאות;");
-            mockEntity4.Setup(x => x.EntityType).Returns("eventWord");
+            mockEntity4.Setup(x => x.entityValue).Returns("הכרזת העצמאות");
+            mockEntity4.Setup(x => x.entitySynonimus).Returns(";הכרזת העצמאות;");
+            mockEntity4.Setup(x => x.entityType).Returns("eventWord");
 
-            mockEntity5.Setup(x => x.EntityValue).Returns("מגילת העצמאות");
-            mockEntity5.Setup(x => x.EntitySynonimus).Returns(";מגילת העצמאות;");
-            mockEntity5.Setup(x => x.EntityType).Returns("conceptWord");
+            mockEntity5.Setup(x => x.entityValue).Returns("מגילת העצמאות");
+            mockEntity5.Setup(x => x.entitySynonimus).Returns(";מגילת העצמאות;");
+            mockEntity5.Setup(x => x.entityType).Returns("conceptWord");
 
-            mockEntity6.Setup(x => x.EntityValue).Returns("ההגנה");
-            mockEntity6.Setup(x => x.EntitySynonimus).Returns(";ההגנה;");
-            mockEntity6.Setup(x => x.EntityType).Returns("organizationWord");
+            mockEntity6.Setup(x => x.entityValue).Returns("ההגנה");
+            mockEntity6.Setup(x => x.entitySynonimus).Returns(";ההגנה;");
+            mockEntity6.Setup(x => x.entityType).Returns("organizationWord");
 
-            mockEntity7.Setup(x => x.EntityValue).Returns("דוד בן גוריון");
-            mockEntity7.Setup(x => x.EntitySynonimus).Returns(";דוד בן גוריון;");
-            mockEntity7.Setup(x => x.EntityType).Returns("personWord");
+            mockEntity7.Setup(x => x.entityValue).Returns("דוד בן גוריון");
+            mockEntity7.Setup(x => x.entitySynonimus).Returns(";דוד בן גוריון;");
+            mockEntity7.Setup(x => x.entityType).Returns("personWord");
 
             mockStudySession.Setup(x => x.Category).Returns("לאומיות");
             mockStudySession.Setup(x => x.SessionLength).Returns(3);

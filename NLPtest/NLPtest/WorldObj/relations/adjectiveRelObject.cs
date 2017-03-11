@@ -1,6 +1,6 @@
-﻿using NLPtest.WorldObj;
+﻿using NLP.WorldObj;
 
-namespace NLPtest.view
+namespace NLP.view
 {
     internal class adjectiveRelObject : RelationObject
     {

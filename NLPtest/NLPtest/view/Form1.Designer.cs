@@ -1,4 +1,4 @@
-﻿namespace NLPtest
+﻿namespace NLP
 {
     partial class Form1
     {

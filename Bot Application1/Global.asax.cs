@@ -1,5 +1,5 @@
-﻿using NLPtest;
-using NLPtest.Controllers;
+﻿using NLP;
+using NLP.Controllers;
 using System;
 using System.Collections.Generic;
 using System.Linq;

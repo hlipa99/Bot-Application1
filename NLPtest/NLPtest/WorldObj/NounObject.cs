@@ -1,7 +1,7 @@
 ﻿
 using System;
 
-namespace NLPtest.WorldObj
+namespace NLP.WorldObj
 {
  
     public class NounObject : WorldObject

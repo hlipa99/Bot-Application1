@@ -1,13 +1,13 @@
 ﻿using Bot_Application1.YAndex;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NLPtest.Controllers;
+using NLP.Controllers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NLPtest.Controllers.Tests
+namespace NLP.Controllers.Tests
 {
     [TestClass()]
     public class OuterAPIControllerTests

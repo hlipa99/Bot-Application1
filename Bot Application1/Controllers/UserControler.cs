@@ -1,7 +1,7 @@
-﻿using Bot_Application1.dataBase;
+﻿
 using Model.dataBase;
 using Model.Models;
-using NLPtest;
+using NLP;
 using System;
 using System.Collections.Generic;
 using System.Linq;

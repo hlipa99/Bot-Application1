@@ -7,7 +7,7 @@ using Bot_Application1.Exceptions;
 using System.Threading.Tasks;
 using Moq;
 using Model.Models;
-using NLPtest.Models;
+using NLP.Models;
 using Model;
 using Model.dataBase;
 using UnitTestProject1;
@@ -43,7 +43,7 @@ namespace Bot_Application1.Controllers.Tests
             try
             {
                 mockStudySession.Setup(x => x.Category).Returns("לאומיות");
-                mockStudySession.Setup(x => x.QuestionAsked).Returns(mockDB.Object.getQuestion("לאומיות"));
+                mockStudySession.Setup(x => x.QuestionAsked).Returns(new List<IQuestion>(mockDB.Object.getQuestion("לאומיות")));
                 eduCtrl.getQuestion();
                 Assert.Fail();
             }
@@ -54,27 +54,6 @@ namespace Bot_Application1.Controllers.Tests
     
         }
 
-        [TestMethod()]
-        public void checkAnswerTest()
-        {
-            Mock<ISubQuestion> mockQuestion4 = new Mock<ISubQuestion>();
-            eduCtrl.Nlp = mockNLPCtrl.Object;
-            mockQuestion4.SetupProperty(x => x.AnswerScore);
-            mockSubQqestion1.Setup(x => x.answerText).Returns("תשובה טובה כוללת את כל הדברים");
-
-            //good
-            Assert.AreEqual(eduCtrl.checkAnswer( "תשובה טובה כוללת את כל הדברים").score, 100);
-
-            //doog
-            Assert.AreEqual(eduCtrl.checkAnswer("תשובה טובה אבל לא מושלמת ").score, 50);
-
-            //bad
-            Assert.AreEqual(eduCtrl.checkAnswer("תשובה לא נכונה ולא קשורה בשיט ").score, 0);
-
-            //ugly
-            Assert.AreEqual(eduCtrl.checkAnswer("").score, 0);
-
-        }
 
     private string EnumVal(Pkey key)
     {

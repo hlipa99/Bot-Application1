@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Threading.Tasks;
-using Bot_Application1.dataBase;
+
 using Model.dataBase;
 using Microsoft.Bot.Connector;
 using System.Threading;
-using NLPtest;
+using NLP;
 using Bot_Application1.Controllers;
-using NLPtest.Models;
+using NLP.Models;
 using Newtonsoft.Json.Linq;
 using Model;
 using Model.Models;
@@ -145,11 +145,11 @@ namespace Bot_Application1.IDialog
                 }
                 else
                 {
-                    if (m.Length > 220)
+                    if (m.Length > 440)
                     {
                         await context.PostAsync(typingReplay);
   
-                        var idx = m.IndexOf(' ', 200);
+                        var idx = m.IndexOf(' ', 400);
                         if (idx > 0)
                         {
                             var str1 = m.Substring(0, idx);
@@ -162,14 +162,14 @@ namespace Bot_Application1.IDialog
                     } else
                     {
                         //facebook cuts messages from 300 chars
-                        if (newMessage.Length > 10)
+                        if (m.Length > 10)
                         {
                             typingTime(context);
-                            Thread.Sleep(m.Length * 10);
+                            Thread.Sleep(m.Length * 20);
                         }
 
                         //send message
-                        if (m != null && m != "") await context.PostAsync(m);
+                        if (m != null && m.Trim() != "") await context.PostAsync(m);
                     }
                 }
          
@@ -222,7 +222,7 @@ namespace Bot_Application1.IDialog
         }
 
    
-        public async virtual Task createRMenuOptions(IDialogContext context, string title, string[] options, ResumeAfter<object> resume)
+        public async virtual Task createRMenuOptions(IDialogContext context, string title, string[] options, ResumeAfter<string> resume)
         {
 
         //    await writeMessageToUser(context, new string[] { title });
@@ -239,7 +239,7 @@ namespace Bot_Application1.IDialog
 
         }
 
-        private void typingTime(IDialogContext context)
+        internal void typingTime(IDialogContext context)
         {
             var message = context.MakeMessage();
             message.Type = ActivityTypes.Typing;
@@ -253,7 +253,7 @@ namespace Bot_Application1.IDialog
         }
 
 
-        public async Task<bool> outDatedMessage(IDialogContext context,ResumeAfter<IMessageActivity> resume, IAwaitable<IMessageActivity> message)
+        public async Task<bool> checkOutdatedMessage(IDialogContext context,ResumeAfter<IMessageActivity> resume, IAwaitable<IMessageActivity> message)
         {
             var mes = await message;
             if (mes.Timestamp <= Request)
@@ -271,6 +271,14 @@ namespace Bot_Application1.IDialog
         public virtual Task StartAsync(IDialogContext context)
         {
             throw new NotImplementedException();
+        }
+
+        internal  AwaitableFromItem<IMessageActivity> stringToMessageActivity(IDialogContext context,string message)
+        {
+            var messageActivity = context.MakeMessage();
+            messageActivity.Text = message;
+            var awaitble = new AwaitableFromItem<IMessageActivity>(messageActivity);
+            return awaitble;
         }
     }
 

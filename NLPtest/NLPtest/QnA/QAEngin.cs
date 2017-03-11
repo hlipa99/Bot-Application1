@@ -1,14 +1,14 @@
 ﻿
 using Model.Models;
-using NLPtest.Controllers;
-using NLPtest.WorldObj;
+using NLP.Controllers;
+using NLP.WorldObj;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NLPtest.QnA
+namespace NLP.QnA
 {
     public class QAEngin
     {
@@ -29,67 +29,76 @@ namespace NLPtest.QnA
 
         public AnswerFeedback matchAnswers(ISubQuestion subquestion, string answer)
         {
-            var userAnswer = Nlp.Analize(answer, subquestion.questionText);
-            AnswerFeedback feedback = new AnswerFeedback();
-
-            if (subquestion.answerText.Contains("|")){
-
-                AnswerFeedback f = null; //helpers
-                AnswerFeedback f1 = null;
-                AnswerFeedback f2 = null;
-
-                foreach (var ans in subquestion.answerText.Split('|'))
+            if (subquestion != null && answer != null)
+            {
+                var userAnswer = Nlp.Analize(answer, subquestion.questionText);
+                AnswerFeedback feedback = new AnswerFeedback() ;
+                if (subquestion.answerText.Contains("|"))
                 {
-                    var systemAnswerWords = Nlp.Analize(ans);
-                    if (ans.Trim() != "")
+
+                    AnswerFeedback f = new AnswerFeedback(); //helpers
+                    AnswerFeedback f1 = new AnswerFeedback();
+                    AnswerFeedback f2 = new AnswerFeedback();
+
+                    foreach (var ans in subquestion.answerText.Split('|'))
                     {
-                        switch (subquestion.flags.Trim())
+                        var systemAnswerWords = Nlp.Analize(ans);
+                        if (ans.Trim() != "" && subquestion.flags != null)
                         {
-                            case ("needAll"):
+                            switch (subquestion.flags.Trim())
+                            {
+                                default:
+                                case ("needAll"):
 
-                                f = matchAnswers(userAnswer, systemAnswerWords, ans);
-                                feedback.merge(f);
-                                break;
-
-                            case ("need1"):
-                                f = matchAnswers(userAnswer, systemAnswerWords, ans);
-                                if (f.score > feedback.score)
-                                {
+                                    f = matchAnswers(userAnswer, systemAnswerWords, ans);
+                                    f.merge(feedback);
                                     feedback = f;
-                                }
+                                    break;
 
-                                break;
-                            case ("need2"):
-                                f = matchAnswers(userAnswer, systemAnswerWords, ans);
-                                if (f.score > f1.score || f.score > f2.score)
-                                {
-                                    if (f1.score > f2.score)
+                                case ("need1"):
+                                    f = matchAnswers(userAnswer, systemAnswerWords, ans);
+                                    if (f.score > feedback.score)
                                     {
-                                        f2 = f;
+                                        feedback = f;
                                     }
-                                    else
-                                    {
-                                        f1 = f;
-                                    }
-                                }
 
-                                f1.merge(f2);
-                                feedback = f1;
-                                break;
-                            default:
-                                throw new DBDataException();
-                                break;
+                                    break;
+                                case ("need2"):
+                                    f = matchAnswers(userAnswer, systemAnswerWords, ans);
+                                    if (f.score > f1.score || f.score > f2.score)
+                                    {
+                                        if (f1.score > f2.score)
+                                        {
+                                            f2 = f;
+                                        }
+                                        else
+                                        {
+                                            f1 = f;
+                                        }
+                                    }
+
+                                    f1.merge(f2);
+                                    feedback = f1;
+                                    break;
+                                //default:
+                                //    throw new DBDataException();
+                                //    break;
+                            }
+
                         }
-
                     }
-                }
 
+                }
+                else
+                {
+                    var systemAnswer = Nlp.Analize(subquestion.answerText);
+                    feedback = matchAnswers(userAnswer, systemAnswer);
+                }
+                return feedback;
             }else
             {
-                var systemAnswer = Nlp.Analize(subquestion.answerText);
-                feedback = matchAnswers(userAnswer, systemAnswer);
+                return new AnswerFeedback();
             }
-            return feedback;
         }
 
 
@@ -97,7 +106,7 @@ namespace NLPtest.QnA
         {
            
                 AnswerFeedback f = matchAnswers(userAnswer, systemAnswerWords);
-                if (f.missingEntitis.Where(x => x.EntityType != "locationWord").Count() > 0)
+                if (f.missingEntitis.Count == systemAnswerWords.Count)
                 {
                     f.missingAnswers.Add(ans);
                 }

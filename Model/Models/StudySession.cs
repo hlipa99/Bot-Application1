@@ -1,38 +1,41 @@
 ﻿
-using Bot_Application1.dataBase;
+
+using Model;
 using Model.dataBase;
 using Model.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace NLPtest.Models
+namespace Model.Models
 {
     [Serializable]
     public class StudySession : IStudySession
     {
+    
+        private List<IQuestion> questionAsked;
 
-        private ICollection<IQuestion> questionAsked;
+   
         private IQuestion currentQuestion;
         private int sessionLength = 3;
+
+   
         private ISubQuestion currentSubQuestion;
 
         public string SubCategory { get; set; }
         public string Category { get; set; }
 
         public StudySession(){
-                Category = "";
-                SessionLength = 0;
-                QuestionAsked = new HashSet<IQuestion>();
-                currentQuestion = null;
+                QuestionAsked = new List<IQuestion>();
                 sessionLength = 3;
             }
 
 
-       
-      
 
+
+        [JsonConverter(typeof(ConcreteTypeConverter<Question>))]
         public IQuestion CurrentQuestion
         {
             get
@@ -59,7 +62,8 @@ namespace NLPtest.Models
             }
         }
 
-        public ICollection<IQuestion> QuestionAsked
+        [JsonConverter(typeof(ConcreteListTypeConverter<IQuestion,Question>))]
+        public List<IQuestion> QuestionAsked
         {
             get
             {
@@ -72,6 +76,7 @@ namespace NLPtest.Models
             }
         }
 
+        [JsonConverter(typeof(ConcreteTypeConverter<SubQuestion>))]
         public ISubQuestion CurrentSubQuestion
         {
             get

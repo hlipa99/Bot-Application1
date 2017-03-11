@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NLPtest.WorldObj;
+using NLP.WorldObj;
 
-using static NLPtest.HebWords.WordObject.WordType;
-namespace NLPtest.HebWords
+using static NLP.HebWords.WordObject.WordType;
+namespace NLP.HebWords
 {
      class HebDictionary
     {

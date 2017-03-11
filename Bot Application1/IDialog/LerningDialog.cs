@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Bot.Connector;
-using NLPtest.Models;
+using NLP.Models;
 using Model.dataBase;
 using Bot_Application1.Controllers;
 using Model;
@@ -106,28 +106,28 @@ namespace Bot_Application1.IDialog
 
         public async virtual Task StartLearning(IDialogContext context, IAwaitable<object> result)
         {
-            if (context.Activity.Timestamp <= Request)
-            {
-                context.Wait(StartLearning);
-                return;
-            }
 
-            if(StudySession.Category != "")
-            {
-                return;
-            }
+            await StartLearning(context, stringToMessageActivity(context,await result as string));
+        }
+
+
+
+        public async virtual Task StartLearning(IDialogContext context, IAwaitable<IMessageActivity> result)
+        {
+
+            await checkOutdatedMessage(context, StartLearning, result);
 
             string message = null;
             var res = await result;
-            if (res is string)
-            {
-                message = res as string;
-            }
-            else
-            {
+            //if (res is string)
+            //{
+            //    message = res as string;
+            //}
+            //else
+            //{
                 var r =  res as IMessageActivity;
                 message = r.Text;
-            }
+       //     }
 
            
            if (edc().getStudyCategory().Contains(message))
@@ -173,8 +173,7 @@ namespace Bot_Application1.IDialog
 
             if (StudySession.CurrentQuestion != null)
             {
-             
-                await writeMessageToUser(context, conv().getPhrase(Pkey.beforAskQuestion));
+
                 try
                 {
                     context.Call(new QuestionDialog(), questionSummery);
@@ -191,7 +190,9 @@ namespace Bot_Application1.IDialog
 
         private async Task questionSummery(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
+            //var res = await result;
             await writeMessageToUser(context, conv().getPhrase(Pkey.moveToNextQuestion));
+            await writeMessageToUser(context, conv().getPhrase(Pkey.beforAskQuestion));
             await intreduceQuestion(context);
         }
 

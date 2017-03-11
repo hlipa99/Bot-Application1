@@ -7,11 +7,12 @@ using System.Web;
 using System.Threading.Tasks;
 using System.Web.UI.WebControls;
 using Bot_Application1.Cardatt_achment;
-using Bot_Application1.dataBase;
+
 using System.Threading;
-using NLPtest;
+using NLP;
 using Bot_Application1.Controllers;
-using NLPtest.Models;
+using NLP.Models;
+using Model.Models;
 
 namespace Bot_Application1.IDialog
 {

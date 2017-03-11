@@ -246,6 +246,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Answer.cs" />
+    <Compile Include="ContentList.cs" />
     <Compile Include="Controllers\OuterAPIController.cs" />
     <Compile Include="Controllers\QuestionsAnswersControllers.cs" />
     <Compile Include="Controllers\TemplateController.cs" />

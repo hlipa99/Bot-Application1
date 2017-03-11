@@ -7,9 +7,9 @@ using System.Web;
 using System.Threading.Tasks;
 using System.Web.UI.WebControls;
 using Bot_Application1.Cardatt_achment;
-using Bot_Application1.dataBase;
+
 using System.Threading;
-using NLPtest;
+using NLP;
 using Model.dataBase;
 using Bot_Application1.log;
 using static Bot_Application1.Controllers.ConversationController;
@@ -46,7 +46,7 @@ namespace Bot_Application1.IDialog
 
         private async Task HowAreYouRes(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            if (await outDatedMessage(context, returnToParent, result)) return;
+            if (await checkOutdatedMessage(context, returnToParent, result)) return;
 
             var text = await result;
             await writeMessageToUser(context, conv().getPhrase(Pkey.ok));

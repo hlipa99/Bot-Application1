@@ -1,5 +1,5 @@
-﻿using NLPtest.Exceptions;
-using NLPtest.MorfObjects;
+﻿using NLP.Exceptions;
+using NLP.MorfObjects;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NLPtest.WorldObj
+namespace NLP.WorldObj
 {
     class MessageDictionary : IDictionary<string, HashSet<MessageObject>>
     {

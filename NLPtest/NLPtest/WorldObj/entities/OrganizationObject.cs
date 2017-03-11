@@ -1,6 +1,6 @@
-﻿using NLPtest.WorldObj;
+﻿
+namespace NLP.WorldObj
 
-namespace NLPtest
 {
     public class OrganizationObject : EntityObject
     {

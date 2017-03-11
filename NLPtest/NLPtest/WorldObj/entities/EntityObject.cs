@@ -1,6 +1,5 @@
-﻿using NLPtest.WorldObj;
-
-namespace NLPtest
+﻿
+namespace NLP.WorldObj
 {
     public class EntityObject : NounObject
     {

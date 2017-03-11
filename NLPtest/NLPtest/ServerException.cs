@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace NLPtest.NLP
+namespace NLP.NLP
 {
     [Serializable]
     internal class ServerException : Exception

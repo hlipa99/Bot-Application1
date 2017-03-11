@@ -1,12 +1,12 @@
 ﻿
-using Bot_Application1.dataBase;
+
 using Bot_Application1.log;
 //using Bot_Application1.Exceptions;
 //using Bot_Application1.log;
 using Model;
 using Model.dataBase;
 using Model.Models;
-using NLPtest.Models.Exceptions;
+using NLP.Models.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -109,7 +109,7 @@ namespace Model.dataBase
             }
             catch (Exception e)
             {
-                Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
+             //   Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
                 throw new DBException();
             }
 
@@ -140,7 +140,7 @@ namespace Model.dataBase
             }
             catch (Exception e)
             {
-                Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
+             //   Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
                 throw new DBException();
             }
 
@@ -163,7 +163,7 @@ namespace Model.dataBase
             }
             catch (Exception e)
             {
-                Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
+            //    Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
                 throw new DBException();
             }
 
@@ -191,7 +191,7 @@ namespace Model.dataBase
             }
             catch (Exception e)
             {
-                Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
+              //  Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
                 throw new DBException();
             }
 
@@ -224,7 +224,7 @@ namespace Model.dataBase
             }
             catch (Exception e)
             {
-                Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
+           //     Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
                 throw new DBException();
             }
 
@@ -249,7 +249,7 @@ namespace Model.dataBase
             }
             catch (Exception e)
             {
-                Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
+           //     Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
                 throw new DBException();
             }
 
@@ -274,7 +274,7 @@ namespace Model.dataBase
             }
             catch (Exception e)
             {
-                Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
+            //    Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
                 throw new DBException();
             }
 
@@ -300,7 +300,7 @@ namespace Model.dataBase
             }
             catch (Exception e)
             {
-                Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
+            //    Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
                 throw new DBException();
             }
 
@@ -310,7 +310,12 @@ namespace Model.dataBase
 
         public virtual IEnumerable<Ientity> getEntitys()
         {
-            return DB.entity.Cast<Ientity>().ToArray();
+            var entityList = new List<Ientity>();
+            foreach(var e in DB.entity)
+            {
+                entityList.Add((Ientity)e);
+            }
+            return entityList.ToArray();
         }
 
         public virtual string[] getAllSubCategory(string catgoty)
@@ -329,7 +334,7 @@ namespace Model.dataBase
             }
             catch (Exception e)
             {
-                Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
+               // Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
                 throw new DBException();
             }
 
@@ -354,7 +359,7 @@ namespace Model.dataBase
             }
             catch (Exception e)
             {
-                Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
+             //   Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
                 throw new DBException();
             }
 
@@ -393,7 +398,7 @@ namespace Model.dataBase
             }
             catch (Exception e)
             {
-                Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
+             //   Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
                 throw e;
             }
 

@@ -9,7 +9,7 @@ using ApiAiSDK;
 using ApiAiSDK.Model;
 using System.Web;
 
-namespace NLPtest.Controllers
+namespace NLP.Controllers
 {
     public class OuterAPIController
     {
@@ -31,7 +31,7 @@ namespace NLPtest.Controllers
                 RequestExtras exstra = new RequestExtras();
                 var contextAI = new AIContext();
                 contextAI.Name =context;
-                contextAI.Lifespan = 10;
+                contextAI.Lifespan = 15;
                 exstra.Contexts = new List<AIContext>();
                 exstra.Contexts.Add(contextAI);
                 var response = apiAi.TextRequest(str,exstra);
