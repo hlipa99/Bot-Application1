@@ -453,11 +453,16 @@ namespace Bot_Application1.Controllers
                  //   throw new botphraseException();
                 }
 
-
+            if (phraseRes != null)
+            {
                 phraseRes = formateVars(phraseRes, textVar);
-
                 return phraseRes.Split('|');
-            
+            }
+            else
+            {
+                return new string[] { };
+            }
+   
         }
 
         private string formateVars(string phraseRes,string textVar)

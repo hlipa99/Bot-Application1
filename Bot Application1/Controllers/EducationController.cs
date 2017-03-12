@@ -242,11 +242,11 @@ namespace Bot_Application1.Controllers
         {
             string[] verbalFeedback = null;
             //check sub question
-            if (answerFeedback.score >= 85)
+            if (answerFeedback.score >= 60)
             {
                 verbalFeedback =  ConversationController.getPhrase(Pkey.goodAnswer);
             }
-            else if (answerFeedback.score >= 30)
+            else if (answerFeedback.score >= 10)
             {
                 verbalFeedback =  ConversationController.getPhrase(Pkey.partialAnswer);
             }
@@ -269,7 +269,7 @@ namespace Bot_Application1.Controllers
             {
                 verbalFeedback = ConversationController.mergeText(verbalFeedback, ConversationController.getPhrase(Pkey.missingAnswerEntity));
                 verbalFeedback = ConversationController.mergeText(verbalFeedback, answerFeedback.missingEntitis[0].entityValue);
-                answerFeedback.missingAnswers.RemoveAt(0);
+                answerFeedback.missingEntitis.RemoveAt(0);
                 foreach (var e in answerFeedback.missingEntitis)
                 {
                     verbalFeedback = ConversationController.mergeText(verbalFeedback, ConversationController.mergeText(ConversationController.getPhrase(Pkey.and), e.entityValue));

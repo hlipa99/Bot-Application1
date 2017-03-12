@@ -133,7 +133,7 @@ namespace NLP.QnA
                             {
                                 if (se.Word == ue.Word && se.Negat == ue.Negat)
                                 {
-                                    feedback.score += 100 / systemEntitis.Count();
+                                    feedback.score += (100 / systemEntitis.Count())*2;
                                     found = true;
                                     break;
                                 }

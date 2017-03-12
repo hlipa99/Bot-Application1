@@ -51,7 +51,7 @@ namespace NLP.Controllers
         {
             try
             {
-                WebRequest request = WebRequest.Create("http://6a554add.ngrok.io/parse");
+                WebRequest request = WebRequest.Create("https://e3f22255.ngrok.io/parse");
                 string responseFromServer = "";
                 request.Method = "POST";
                 byte[] byteArray = Encoding.UTF8.GetBytes(text);
@@ -123,7 +123,7 @@ namespace NLP.Controllers
         }
         catch (Exception ex)
         {
-            return null;
+            return text;
         }
     }
 }
