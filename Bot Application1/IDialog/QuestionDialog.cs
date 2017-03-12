@@ -75,11 +75,21 @@ namespace Bot_Application1.IDialog
             {
                 typingTime(context);
                 var replay = conv().createReplayToUser(message.Text, getDialogContext());
+                setStudySession(context);
                 await writeMessageToUser(context, replay);
             }
             catch(UnrelatedSubjectException ex) {
+      
                 await context.Forward<IMessageActivity, IMessageActivity>(new SideDialog(), askSubQuestion, message, CancellationToken.None);
                 return;
+            }
+            catch (StopSessionException ex)
+            {
+                await writeMessageToUser(context, conv().getPhrase(Pkey.earlyDiparture));
+                await writeMessageToUser(context, conv().getPhrase(Pkey.areYouSure));
+                await context.Forward<bool, IMessageActivity>(new YesNoQuestionDialog(), stopSession, message, CancellationToken.None);
+                return;
+               
             }
             catch (Exception ex)
             {
@@ -105,6 +115,7 @@ namespace Bot_Application1.IDialog
                 //await writeMessageToUser(context, conv().getPhrase(Pkey.giveYourFeedback));
                 //updateRequestTime(context);
                 //await giveFeedbackMessage(context);
+                StudySession.QuestionAsked.Add(StudySession.CurrentQuestion);
                 setStudySession(context);
                 context.Done("");
             }
@@ -117,6 +128,22 @@ namespace Bot_Application1.IDialog
             }
         }
 
+        private async Task stopSession(IDialogContext context, IAwaitable<bool> result)
+        {
+            var sure = await result;
+            if (sure)
+            {
+                await writeMessageToUser(context, conv().getPhrase(Pkey.goodbye));
+                throw new StopSessionException();
+                return;
+            }
+            else
+            {
+                await writeMessageToUser(context, conv().getPhrase(Pkey.letsContinue));
+                await intreduceQuestion(context);
+            }
+
+        }
 
         public async Task giveFeedbackMessage(IDialogContext context)
         {
@@ -124,7 +151,6 @@ namespace Bot_Application1.IDialog
             updateRequestTime(context);
             context.Wait(giveFeedback);
         }
-
 
 
         public async Task giveFeedback(IDialogContext context, IAwaitable<IMessageActivity> result)

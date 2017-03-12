@@ -181,13 +181,15 @@ namespace Bot_Application1.Controllers
             if (studySession.CurrentQuestion == null)
             {
                 studySession.CurrentQuestion = getQuestion();
-                studySession.CurrentQuestion.Enumerator = 0;
+                studySession.CurrentQuestion.Enumerator = 1;
+            }
+            else
+            {
+                studySession.CurrentQuestion.Enumerator++;
+                studySession.CurrentQuestion = getQuestion();
             }
 
-
-            studySession.CurrentQuestion.Enumerator++;
             studySession.CurrentSubQuestion = getSubQuestion(studySession.CurrentQuestion.Enumerator);
-
 
             if (studySession.CurrentSubQuestion == null)
             {
@@ -219,7 +221,7 @@ namespace Bot_Application1.Controllers
             {
                 case UserIntent.DefaultFallbackIntent:
                 case UserIntent.unknown:
-                case UserIntent.answer:
+                case UserIntent.historyAnswer:
                     return createFeedBack(checkAnswer(text));
 
                 case UserIntent.dontKnow:
@@ -242,6 +244,7 @@ namespace Bot_Application1.Controllers
         {
             string[] verbalFeedback = null;
             //check sub question
+            studySession.CurrentSubQuestion.AnswerScore = answerFeedback.score;
             if (answerFeedback.score >= 60)
             {
                 verbalFeedback =  ConversationController.getPhrase(Pkey.goodAnswer);
@@ -255,7 +258,9 @@ namespace Bot_Application1.Controllers
                 verbalFeedback =  ConversationController.getPhrase(Pkey.notAnAnswer);
             }
 
-            if(answerFeedback.missingAnswers.Count > 0)
+            answerFeedback.missingEntitis.RemoveAll(x => x.entityType == "conceptWord");
+
+            if (answerFeedback.missingAnswers.Count > 0)
             {
                 verbalFeedback = ConversationController.mergeText(verbalFeedback, ConversationController.getPhrase(Pkey.missingAnswrPart));
                 verbalFeedback = ConversationController.mergeText(verbalFeedback, answerFeedback.missingAnswers[0]);
@@ -267,6 +272,7 @@ namespace Bot_Application1.Controllers
             }
             else if (answerFeedback.missingEntitis.Count > 0)
             {
+                
                 verbalFeedback = ConversationController.mergeText(verbalFeedback, ConversationController.getPhrase(Pkey.missingAnswerEntity));
                 verbalFeedback = ConversationController.mergeText(verbalFeedback, answerFeedback.missingEntitis[0].entityValue);
                 answerFeedback.missingEntitis.RemoveAt(0);

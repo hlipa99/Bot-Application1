@@ -33,22 +33,44 @@ namespace Bot_Application1.IDialog
 
         public override async Task StartAsync(IDialogContext context)
         {
-            await writeMessageToUser(context, conv().getPhrase(Pkey.greetings));
-            await HowAreYouQuestion(context,null);
+            getUser(context);
+            if (User.UserLastSession == null || User.UserLastSession.Value.AddHours(1) > context.Activity.Timestamp)
+            {
+                await writeMessageToUser(context, conv().getPhrase(Pkey.shortHello));
+                context.Done("");
+            }
+            else
+            {
+                await writeMessageToUser(context, conv().getPhrase(Pkey.greetings));
+                User.UserLastSession = context.Activity.Timestamp;
+                setUser(context);
+                context.Wait(HowAreYouQuestion);
+            }
+          
         }
 
 
         private async Task HowAreYouQuestion(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
+
+            //the user sent a message
+            if (result.GetAwaiter().IsCompleted)
+            {
+                var text = await result;
+                var replay = conv().createReplayToUser(text.Text, UserContext);
+                await writeMessageToUser(context, replay);
+            }
+
             await writeMessageToUser(context, conv().getPhrase(Pkey.howAreYou));
             context.Wait(HowAreYouRes);
+
+
         }
 
         private async Task HowAreYouRes(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            if (await checkOutdatedMessage(context, returnToParent, result)) return;
-
-            var text = await result;
+             if (await checkOutdatedMessage(context, returnToParent, result)) return;
+  
             await writeMessageToUser(context, conv().getPhrase(Pkey.ok));
             context.Done("");
         }

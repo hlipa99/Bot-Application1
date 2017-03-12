@@ -37,16 +37,9 @@ namespace Bot_Application1.IDialog
                 getUser(context);
                 if (User != null)
                 {
-                    if (User.UserLastSession == null || User.UserLastSession.Value.AddHours(1) > context.Activity.Timestamp)
-                    {
-                        User.UserLastSession = context.Activity.Timestamp;
-                        context.UserData.SetValue("user", User);
-                        context.Wait(MainMenu);
-                    }
-                    else
-                    {
-                        context.Call(new GreetingDialog(), MainMenu);
-                    }
+        
+                    context.Call(new GreetingDialog(), MainMenu);
+                    
                 }
                 else
                 {
@@ -163,7 +156,10 @@ namespace Bot_Application1.IDialog
 
         private async Task EndSession(IDialogContext context, IAwaitable<object> result)
         {
-         //   context.Wait(MainMenu);
+            //   context.Wait(MainMenu);
+
+            StudySession = new StudySession();
+            setStudySession(context);
             context.Call(new FarewellDialog(), MainMenu);
         }
 

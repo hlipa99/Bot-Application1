@@ -60,6 +60,10 @@ namespace Model
         missingAnswrPart,
         and,
         missingAnswerEntity,
-        innerException
+        innerException,
+        shortHello,
+        IAmFine,
+        letsContinue,
+        didntUnderstand
     }
 }

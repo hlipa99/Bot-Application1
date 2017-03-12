@@ -145,11 +145,11 @@ namespace Bot_Application1.IDialog
                 }
                 else
                 {
-                    if (m.Length > 440)
+                    if (m.Length > 400)
                     {
                         await context.PostAsync(typingReplay);
-  
-                        var idx = m.IndexOf(' ', 400);
+
+                        var idx = m.IndexOf(' ', 385);
                         if (idx > 0)
                         {
                             var str1 = m.Substring(0, idx);
@@ -162,14 +162,15 @@ namespace Bot_Application1.IDialog
                     } else
                     {
                         //facebook cuts messages from 300 chars
-                        if (m.Length > 10)
-                        {
-                            typingTime(context);
-                            Thread.Sleep(m.Length * 20);
-                        }
+
 
                         //send message
-                        if (m != null && m.Trim() != "") await context.PostAsync(m);
+                        if (m != null && m.Trim() != "")
+                        {
+                            typingTime(context);
+                            Thread.Sleep(m.Length * 30); //writing time
+                            await context.PostAsync(m);
+                        }
                     }
                 }
          
@@ -249,6 +250,7 @@ namespace Bot_Application1.IDialog
 
         public ConversationController conv()
         {
+
             return new ConversationController(User, StudySession);
         }
 

@@ -607,7 +607,6 @@ namespace NLP.NLP
         DefaultFallbackIntent,
         dontKnow,
         stopSession,
-        answer,
         bot_questions,
         introduction,
         howAreYou,
@@ -615,6 +614,7 @@ namespace NLP.NLP
         historyAnswer,
         yes,
         no,
+        hello,
     }
 }
 

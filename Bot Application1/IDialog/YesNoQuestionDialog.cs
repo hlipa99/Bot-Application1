@@ -29,27 +29,38 @@ namespace Bot_Application1.IDialog
 
         public override async Task StartAsync(IDialogContext context)
         {
-            await userYesNo(context,null);
+            getUser(context);
+            getStudySession(context);
+            context.Wait<string[]>(userYesNo);
         }
 
-        private async Task userYesNo(IDialogContext context, IAwaitable<IMessageActivity> result)
+        private async Task userYesNo(IDialogContext context, IAwaitable<string[]> result)
         {
+            var question = await result;
+            await writeMessageToUser(context, question);
             context.Wait(userYesNoRes);
         }
 
         private async Task userYesNoRes(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            if (await checkOutdatedMessage(context, userYesNo, result)) return;
-
-
+          
             var res = await result;
-            if (res.Text == "כן")
+            var intent = conv().getUserIntente(res.Text, getDialogContext());
+
+            if(intent == NLP.NLP.UserIntent.yes)
             {
                 context.Done(true);
-            }else
+            }
+            else if(intent == NLP.NLP.UserIntent.no)
             {
                 context.Done(false);
             }
+            else
+            {
+                await writeMessageToUser(context, conv().getPhrase(Pkey.didntUnderstand));
+                context.Wait(userYesNoRes);
+            }
+
   
         }
 

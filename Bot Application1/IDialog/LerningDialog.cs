@@ -43,10 +43,16 @@ namespace Bot_Application1.IDialog
             else
             {
                 var question = conv().getPhrase(Pkey.shouldWeContinue);
-                await writeMessageToUser(context, question);
+              
                 await context.Forward<Boolean,string[]>(new YesNoQuestionDialog(), shouldWeContinue, question, new System.Threading.CancellationToken());
                 return;
             }
+
+            await chooseSubject(context);
+        }
+
+        private async Task chooseSubject(IDialogContext context)
+        {
 
             StudySession.CurrentQuestion = null;
             await writeMessageToUser(context, conv().getPhrase(Pkey.letsLearn));
@@ -60,13 +66,13 @@ namespace Bot_Application1.IDialog
                 foreach (var m in edc().getStudyCategory())
                 {
                     var action = new CardAction(type: "imBack", value: m, title: m);
-                    var hc = new HeroCard(title: m, images: getImage(m),tap: action, buttons:
-                        new CardAction[] { action });
-                    message.Attachments.Add(hc.ToAttachment());
+        var hc = new HeroCard(title: m, images: getImage(m), tap: action, buttons:
+            new CardAction[] { action });
+        message.Attachments.Add(hc.ToAttachment());
                     message.AttachmentLayout = "carousel";
 
                 }
-            }else
+}else
             {
                 await createMenuOptions(context, conv().getPhrase(Pkey.chooseStudyUnits)[0], edc().getStudyCategory(), StartLearning);
                 return;
@@ -76,17 +82,19 @@ namespace Bot_Application1.IDialog
             context.UserData.RemoveValue("studySession");
             StudySession = new StudySession();
             setStudySession(context);
-            await context.PostAsync(message);
+await context.PostAsync(message);
             updateRequestTime(context);
-            context.Wait(StartLearning);
-        }
+context.Wait(StartLearning);
+
+             }
+
 
         private async Task shouldWeContinue(IDialogContext context, IAwaitable<Boolean> result)
         {
             var cont = await result;
             if (cont)
             {
-                context.Wait(StartLearning);
+               await chooseSubject(context);
             }else
             {
                 setStudySession(context);
@@ -102,6 +110,9 @@ namespace Bot_Application1.IDialog
             var cardImg = new CardImage(url: urlAdd);
             return new CardImage[] { cardImg };
         }
+
+
+
 
 
         public async virtual Task StartLearning(IDialogContext context, IAwaitable<object> result)
@@ -149,7 +160,7 @@ namespace Bot_Application1.IDialog
                 if(question.QuestionText == null)
                 {
                     await writeMessageToUser(context, conv().getPhrase(Pkey.SubjectNotAvialable));
-                    await StartAsync(context);
+                    await chooseSubject(context);
                 }
 
                 await writeMessageToUser(context, conv().getPhrase(Pkey.areUReaddyToLearn));
@@ -161,7 +172,7 @@ namespace Bot_Application1.IDialog
             }else
             {
                 await writeMessageToUser(context, conv().getPhrase(Pkey.NotAnOption, textVar: message));
-                await StartAsync(context);
+                await chooseSubject(context);
             }
         }
 
@@ -180,11 +191,11 @@ namespace Bot_Application1.IDialog
                 }
                catch (StopSessionException ex)
                 {
-
+                    await EndOfLearningSession(context);
                 }
             }else
             {
-                context.Wait(EndOfLearningSession);
+                EndOfLearningSession(context);
             }
         }
 
@@ -198,18 +209,12 @@ namespace Bot_Application1.IDialog
 
 
 
-        public async Task EndOfLearningSession(IDialogContext context, IAwaitable<object> result)
+        public async Task EndOfLearningSession(IDialogContext context)
         {
             await writeMessageToUser(context, conv().endOfSession());
             await writeMessageToUser(context, conv().getPhrase(Pkey.endOfSession));
 
             //TODO: save user sussion to DB
-            updateRequestTime(context);
-            if (context.Activity.Timestamp <= Request)
-            {
-                context.Wait(EndOfLearningSession);
-                return;
-            }
             context.Done("learningSession");
         }
 

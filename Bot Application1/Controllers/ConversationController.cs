@@ -16,6 +16,7 @@ using Bot_Application1.Exceptions;
 using Bot_Application1.Models;
 using NLP.NLP;
 using NLP.Controllers;
+using Microsoft.Bot.Connector;
 
 namespace Bot_Application1.Controllers
 {
@@ -31,7 +32,7 @@ namespace Bot_Application1.Controllers
         EducationController ec;
 
         //private ContentList last;
-        NLPControler nlpControler;
+        NLPControler nlpControler = new NLPControler();
         IUser user;
         IStudySession studySession;
   
@@ -72,6 +73,11 @@ namespace Bot_Application1.Controllers
             {
                 studySession = value;
             }
+        }
+
+        internal UserIntent getUserIntente(string res, UserContext userContext)
+        {
+            return nlpControler.getUserIntent(res, userContext.dialog);
         }
 
         public ConversationController(){}
@@ -351,76 +357,25 @@ namespace Bot_Application1.Controllers
             {
                 return ec.createReplayToUser(text, answerIntent);
             }
-            else if (context.dialog == "startConv")
+
+            else if (context.dialog == "GreetingDialog")
             {
 
                 switch (answerIntent)
                 {
-                    case UserIntent.answer:
-                        if (context.dialog == "lerningSession")
-                        {
-                            throw new StopSessionException();
-                        }
-                        break;
-                        if (context.dialog == "farewell")
-                        {
-                            throw new StopSessionException();
-                        }
-
-                    case UserIntent.dontKnow:
-
+                   
+                    case UserIntent.howAreYou:
+                        return mergeText(getPhrase(Pkey.greetings), getPhrase(Pkey.IAmFine));
                         break;
 
                     case UserIntent.bot_questions:
-                        throw new UnrelatedSubjectException(getPhrase(Pkey.unknownQuestion)[0]);
-
-                    case UserIntent.unknown:
-
+                        return getPhrase(Pkey.unknownQuestion);
                         break;
 
-                    case UserIntent.stopSession:
-
-                        throw new StopSessionException();
-
+                    case UserIntent.hello:
+                    case UserIntent.DefaultFallbackIntent:
                     default:
-
-                        break;
-                }
-            }
-            else if (context.dialog == "farewell")
-            {
-
-                switch (answerIntent)
-                {
-                    case UserIntent.answer:
-                        if (context.dialog == "lerningSession")
-                        {
-                            throw new StopSessionException();
-                        }
-                        break;
-                        if (context.dialog == "farewell")
-                        {
-                            throw new StopSessionException();
-                        }
-
-                    case UserIntent.dontKnow:
-
-                        break;
-
-                    case UserIntent.bot_questions:
-
-                        break;
-
-                    case UserIntent.unknown:
-
-                        break;
-
-                    case UserIntent.stopSession:
-
-                        throw new StopSessionException();
-
-                    default:
-
+                        return getPhrase(Pkey.greetings);
                         break;
                 }
             }
