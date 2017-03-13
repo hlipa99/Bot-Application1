@@ -86,8 +86,8 @@ namespace Bot_Application1.IDialog
             catch (StopSessionException ex)
             {
                 await writeMessageToUser(context, conv().getPhrase(Pkey.earlyDiparture));
-                await writeMessageToUser(context, conv().getPhrase(Pkey.areYouSure));
-                await context.Forward<bool, IMessageActivity>(new YesNoQuestionDialog(), stopSession, message, CancellationToken.None);
+                var msg = conv().getPhrase(Pkey.areYouSure);
+                await context.Forward<bool, string[]>(new YesNoQuestionDialog(), stopSession, msg, CancellationToken.None);
                 return;
                
             }
@@ -124,6 +124,7 @@ namespace Bot_Application1.IDialog
              
                 await writeMessageToUser(context, conv().getPhrase(Pkey.moveToNextSubQuestion));
                 edc().getNextQuestion();
+                setStudySession(context);
                 await askSubQuestion(context,null);
             }
         }

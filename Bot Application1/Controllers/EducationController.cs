@@ -186,7 +186,6 @@ namespace Bot_Application1.Controllers
             else
             {
                 studySession.CurrentQuestion.Enumerator++;
-                studySession.CurrentQuestion = getQuestion();
             }
 
             studySession.CurrentSubQuestion = getSubQuestion(studySession.CurrentQuestion.Enumerator);
@@ -196,7 +195,6 @@ namespace Bot_Application1.Controllers
                 studySession.QuestionAsked.Add(studySession.CurrentQuestion);
                 studySession.CurrentQuestion = null;
                 getNextQuestion();
-
             }
         }
 

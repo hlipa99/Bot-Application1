@@ -149,7 +149,9 @@ context.Wait(StartLearning);
                 try
                 {
                     edc().getNextQuestion();
-                }catch(CategoryOutOfQuestionException ex)
+                    setStudySession(context);
+                }
+                catch(CategoryOutOfQuestionException ex)
                 {
                     await writeMessageToUser(context, conv().getPhrase(Pkey.SubjectNotAvialable));
                     await StartAsync(context);
