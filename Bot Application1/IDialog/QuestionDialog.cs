@@ -110,7 +110,7 @@ namespace Bot_Application1.IDialog
 
 
 
-             if (StudySession.CurrentQuestion.Enumerator == StudySession.CurrentQuestion.SubQuestion.Count)
+             if (StudySession.CurrentQuestion.Enumerator >= StudySession.CurrentQuestion.SubQuestion.Count)
             {
                 //await writeMessageToUser(context, conv().getPhrase(Pkey.giveYourFeedback));
                 //updateRequestTime(context);
@@ -178,7 +178,6 @@ namespace Bot_Application1.IDialog
 
                 StudySession.CurrentQuestion.AnswerScore = number;
                 setStudySession(context);
-
                 context.Done("");
             }
             else

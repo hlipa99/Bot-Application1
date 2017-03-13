@@ -72,8 +72,7 @@ namespace Bot_Application1.IDialog
                     message.AttachmentLayout = "carousel";
 
                 }
-}else
-            {
+            }else{
                 await createMenuOptions(context, conv().getPhrase(Pkey.chooseStudyUnits)[0], edc().getStudyCategory(), StartLearning);
                 return;
             }
@@ -82,9 +81,9 @@ namespace Bot_Application1.IDialog
             context.UserData.RemoveValue("studySession");
             StudySession = new StudySession();
             setStudySession(context);
-await context.PostAsync(message);
+            await context.PostAsync(message);
             updateRequestTime(context);
-context.Wait(StartLearning);
+            context.Wait(StartLearning);
 
              }
 
