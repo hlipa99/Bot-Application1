@@ -181,7 +181,7 @@ namespace Bot_Application1.Controllers
             if (studySession.CurrentQuestion == null)
             {
                 studySession.CurrentQuestion = getQuestion();
-                studySession.CurrentQuestion.Enumerator = 1;
+                studySession.CurrentQuestion.Enumerator = 0;
             }
             else
             {
