@@ -46,25 +46,23 @@
             // text_TB
             // 
             this.text_TB.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.text_TB.Location = new System.Drawing.Point(22, 11);
-            this.text_TB.Margin = new System.Windows.Forms.Padding(2);
+            this.text_TB.Location = new System.Drawing.Point(33, 17);
             this.text_TB.Multiline = true;
             this.text_TB.Name = "text_TB";
             this.text_TB.ReadOnly = true;
             this.text_TB.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.text_TB.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.text_TB.Size = new System.Drawing.Size(630, 324);
+            this.text_TB.Size = new System.Drawing.Size(943, 496);
             this.text_TB.TabIndex = 0;
             this.text_TB.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // input_TB
             // 
             this.input_TB.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.input_TB.Location = new System.Drawing.Point(109, 349);
-            this.input_TB.Margin = new System.Windows.Forms.Padding(2);
+            this.input_TB.Location = new System.Drawing.Point(164, 537);
             this.input_TB.Name = "input_TB";
             this.input_TB.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.input_TB.Size = new System.Drawing.Size(543, 26);
+            this.input_TB.Size = new System.Drawing.Size(812, 35);
             this.input_TB.TabIndex = 1;
             this.input_TB.Text = "לנצל את ההזדמנות | פגיעה במורל אם לא יכריזו | לאפשר חוק גיוס חובה ולחזק את הצבא |" +
     " הפסקת אש תחזק את מדינות ערב | תואמת את החלטת האו\"ם |";
@@ -75,10 +73,9 @@
             // 
             this.send_BTN.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
             this.send_BTN.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.send_BTN.Location = new System.Drawing.Point(37, 349);
-            this.send_BTN.Margin = new System.Windows.Forms.Padding(2);
+            this.send_BTN.Location = new System.Drawing.Point(56, 537);
             this.send_BTN.Name = "send_BTN";
-            this.send_BTN.Size = new System.Drawing.Size(67, 24);
+            this.send_BTN.Size = new System.Drawing.Size(100, 37);
             this.send_BTN.TabIndex = 2;
             this.send_BTN.Text = "send";
             this.send_BTN.UseVisualStyleBackColor = true;
@@ -86,34 +83,35 @@
             // 
             // treeView
             // 
-            this.treeView.Location = new System.Drawing.Point(666, 12);
+            this.treeView.Location = new System.Drawing.Point(999, 18);
+            this.treeView.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.treeView.Name = "treeView";
             treeNode1.Name = "root";
             treeNode1.Text = "root";
             this.treeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode1});
-            this.treeView.Size = new System.Drawing.Size(529, 323);
+            this.treeView.Size = new System.Drawing.Size(792, 495);
             this.treeView.TabIndex = 3;
             // 
             // treeView2
             // 
-            this.treeView2.Location = new System.Drawing.Point(666, 392);
+            this.treeView2.Location = new System.Drawing.Point(999, 603);
+            this.treeView2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.treeView2.Name = "treeView2";
             treeNode2.Name = "root";
             treeNode2.Text = "root";
             this.treeView2.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode2});
-            this.treeView2.Size = new System.Drawing.Size(529, 323);
+            this.treeView2.Size = new System.Drawing.Size(792, 495);
             this.treeView2.TabIndex = 7;
             // 
             // send_BTN2
             // 
             this.send_BTN2.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
             this.send_BTN2.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.send_BTN2.Location = new System.Drawing.Point(37, 729);
-            this.send_BTN2.Margin = new System.Windows.Forms.Padding(2);
+            this.send_BTN2.Location = new System.Drawing.Point(56, 1122);
             this.send_BTN2.Name = "send_BTN2";
-            this.send_BTN2.Size = new System.Drawing.Size(67, 24);
+            this.send_BTN2.Size = new System.Drawing.Size(100, 37);
             this.send_BTN2.TabIndex = 6;
             this.send_BTN2.Text = "send";
             this.send_BTN2.UseVisualStyleBackColor = true;
@@ -122,32 +120,31 @@
             // input_TB2
             // 
             this.input_TB2.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.input_TB2.Location = new System.Drawing.Point(109, 729);
-            this.input_TB2.Margin = new System.Windows.Forms.Padding(2);
+            this.input_TB2.Location = new System.Drawing.Point(164, 1122);
             this.input_TB2.Name = "input_TB2";
             this.input_TB2.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.input_TB2.Size = new System.Drawing.Size(543, 26);
+            this.input_TB2.Size = new System.Drawing.Size(812, 35);
             this.input_TB2.TabIndex = 5;
             this.input_TB2.Text = "מתאים להחלתה של האום ומאפשר חוק גוס חובה לצהל";
             // 
             // text_TB2
             // 
             this.text_TB2.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.text_TB2.Location = new System.Drawing.Point(22, 391);
-            this.text_TB2.Margin = new System.Windows.Forms.Padding(2);
+            this.text_TB2.Location = new System.Drawing.Point(33, 602);
             this.text_TB2.Multiline = true;
             this.text_TB2.Name = "text_TB2";
             this.text_TB2.ReadOnly = true;
             this.text_TB2.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.text_TB2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.text_TB2.Size = new System.Drawing.Size(630, 324);
+            this.text_TB2.Size = new System.Drawing.Size(943, 496);
             this.text_TB2.TabIndex = 4;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(577, 772);
+            this.button1.Location = new System.Drawing.Point(866, 1188);
+            this.button1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.Size = new System.Drawing.Size(112, 35);
             this.button1.TabIndex = 8;
             this.button1.Text = "compare";
             this.button1.UseVisualStyleBackColor = true;
@@ -156,21 +153,21 @@
             // text_TB3
             // 
             this.text_TB3.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.text_TB3.Location = new System.Drawing.Point(666, 736);
-            this.text_TB3.Margin = new System.Windows.Forms.Padding(2);
+            this.text_TB3.Location = new System.Drawing.Point(999, 1132);
             this.text_TB3.Multiline = true;
             this.text_TB3.Name = "text_TB3";
             this.text_TB3.ReadOnly = true;
             this.text_TB3.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.text_TB3.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.text_TB3.Size = new System.Drawing.Size(529, 73);
+            this.text_TB3.Size = new System.Drawing.Size(792, 110);
             this.text_TB3.TabIndex = 9;
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(293, 772);
+            this.button2.Location = new System.Drawing.Point(440, 1188);
+            this.button2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(215, 23);
+            this.button2.Size = new System.Drawing.Size(322, 35);
             this.button2.TabIndex = 10;
             this.button2.Text = "update entity table";
             this.button2.UseVisualStyleBackColor = true;
@@ -179,9 +176,11 @@
             // Form1
             // 
             this.AcceptButton = this.send_BTN;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1276, 820);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.AutoScroll = true;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.ClientSize = new System.Drawing.Size(1912, 1038);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.text_TB3);
             this.Controls.Add(this.button1);
@@ -194,7 +193,6 @@
             this.Controls.Add(this.input_TB);
             this.Controls.Add(this.text_TB);
             this.KeyPreview = true;
-            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
             this.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.RightToLeftLayout = true;

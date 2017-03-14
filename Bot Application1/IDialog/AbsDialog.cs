@@ -45,13 +45,9 @@ namespace Bot_Application1.IDialog
 
         public void getUser(IDialogContext context)
             {
-                if (user == null) 
-                {
-                    User thisUser = User as User;
-                    context.UserData.TryGetValue<User>("user", out thisUser);
-                    user = thisUser;
-                }
-               
+                User thisUser = User as User;
+                context.UserData.TryGetValue<User>("user", out thisUser);
+                user = thisUser;
             }
 
         public void setUser(IDialogContext context)
@@ -63,10 +59,7 @@ namespace Bot_Application1.IDialog
 
         public void getStudySession(IDialogContext context)
         {
-            if (studySession == null)
-            {
-                context.UserData.TryGetValue<StudySession>("studySession", out studySession);
-            }
+            context.UserData.TryGetValue<StudySession>("studySession", out studySession);
         }
 
         public EducationController edc()
@@ -133,27 +126,31 @@ namespace Bot_Application1.IDialog
         {
             var typingReplay = context.MakeMessage();
             typingReplay.Type = ActivityTypes.Typing;
-
-            foreach (var m in newMessage)
+            var msgList = newMessage.ToList();
+            msgList.ForEach(x => x.Trim());
+            foreach (var m in msgList)
             {
-                if (m.Contains('|'))
+                var m2 = m.Trim();
+                if (m2.Contains('|'))
                 {
+
+
                     await context.PostAsync(typingReplay);
                     //| is a sign for new line
                   //  await writeMessageToUser(context,m.Split('|').Where(x=> x.Trim().Length > 0 ).Select(x=> "\U00002705" + x).ToArray());
-                    await writeMessageToUser(context, m.Split('|'));
+                    await writeMessageToUser(context, m2.Split('|'));
                 }
                 else
                 {
-                    if (m.Length > 400)
+                    if (m2.Length > 400)
                     {
                         await context.PostAsync(typingReplay);
 
-                        var idx = m.IndexOf(' ', 385);
+                        var idx = m2.IndexOf(' ', 385);
                         if (idx > 0)
                         {
-                            var str1 = m.Substring(0, idx);
-                            var str2 = m.Substring(idx);
+                            var str1 = m2.Substring(0, idx);
+                            var str2 = m2.Substring(idx);
                             await writeMessageToUser(context, new string[] { str1, str2 });
                         } else
                         {
@@ -165,11 +162,11 @@ namespace Bot_Application1.IDialog
 
 
                         //send message
-                        if (m != null && m.Trim() != "")
+                        if (m2 != null && m2 != "")
                         {
                             typingTime(context);
-                            Thread.Sleep(m.Length * 30); //writing time
-                            await context.PostAsync(m);
+                            Thread.Sleep(m2.Length * 30); //writing time
+                            await context.PostAsync(m2);
                         }
                     }
                 }
@@ -255,10 +252,10 @@ namespace Bot_Application1.IDialog
         }
 
 
-        public async Task<bool> checkOutdatedMessage(IDialogContext context,ResumeAfter<IMessageActivity> resume, IAwaitable<IMessageActivity> message)
+        public async Task<bool> checkOutdatedMessage<A>(IDialogContext context,ResumeAfter<T> resume, IAwaitable<A> message)
         {
             var mes = await message;
-            if (mes.Timestamp <= Request)
+            if (context.Activity.Timestamp <= Request)
             {
              //   mes.Summary = getDialogContext();
                 context.Wait(resume);

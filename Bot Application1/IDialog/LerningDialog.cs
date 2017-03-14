@@ -25,10 +25,7 @@ namespace Bot_Application1.IDialog
 
         public override async Task StartAsync(IDialogContext context)
         {
-            User thisUser = User as User;
-            UserContext = new UserContext("LerningDialog");
-            context.UserData.TryGetValue<User>("user", out thisUser);
-            User = thisUser;
+            getUser(context);
 
             if (User == null)
             {
@@ -147,7 +144,7 @@ namespace Bot_Application1.IDialog
 
                 try
                 {
-                    edc().getNextQuestion();
+                    edc().getQuestion();
                     setStudySession(context);
                 }
                 catch(CategoryOutOfQuestionException ex)
@@ -157,13 +154,7 @@ namespace Bot_Application1.IDialog
                     return;
                 }
               
-                var question = StudySession.CurrentQuestion;
-                if(question.QuestionText == null)
-                {
-                    await writeMessageToUser(context, conv().getPhrase(Pkey.SubjectNotAvialable));
-                    await chooseSubject(context);
-                }
-
+      
                 await writeMessageToUser(context, conv().getPhrase(Pkey.areUReaddyToLearn));
                 await writeMessageToUser(context, conv().getPhrase(Pkey.firstQuestion));
 
@@ -196,7 +187,7 @@ namespace Bot_Application1.IDialog
                 }
             }else
             {
-                EndOfLearningSession(context);
+                await EndOfLearningSession(context);
             }
         }
 

@@ -177,28 +177,17 @@ namespace Bot_Application1.Controllers
 
         internal void getNextQuestion()
         {
+            if (studySession.CurrentQuestion != null) studySession.QuestionAsked.Add(studySession.CurrentQuestion);
 
-            if (studySession.CurrentQuestion == null)
-            {
                 studySession.CurrentQuestion = getQuestion();
                 studySession.CurrentQuestion.Enumerator = 0;
-            }
-            else
-            {
-                studySession.CurrentQuestion.Enumerator++;
-            }
-
-            studySession.CurrentSubQuestion = getSubQuestion(studySession.CurrentQuestion.Enumerator);
-
-            if (studySession.CurrentSubQuestion == null)
-            {
-                studySession.QuestionAsked.Add(studySession.CurrentQuestion);
-                studySession.CurrentQuestion = null;
-                getNextQuestion();
-            }
         }
 
-
+        internal void getNextSubQuestion()
+        {
+            studySession.CurrentQuestion.Enumerator++;
+            studySession.CurrentSubQuestion = getSubQuestion(studySession.CurrentQuestion.Enumerator);
+        }
 
 
 
@@ -224,9 +213,6 @@ namespace Bot_Application1.Controllers
 
                 case UserIntent.dontKnow:
                     return ConversationController.mergeText(ConversationController.getPhrase(Pkey.neverMind), ConversationController.mergeText(ConversationController.getPhrase(Pkey.MyAnswerToQuestion), studySession.CurrentSubQuestion.answerText));
-                   
-
-       
 
                 case UserIntent.stopSession:
                     throw new StopSessionException();
@@ -268,19 +254,11 @@ namespace Bot_Application1.Controllers
                     verbalFeedback = ConversationController.mergeText(verbalFeedback, ConversationController.mergeText(ConversationController.getPhrase(Pkey.and) , a));
                 }
             }
-            else if (answerFeedback.missingEntitis.Count > 0)
+            else if (answerFeedback.score < 75)
             {
                 
-                verbalFeedback = ConversationController.mergeText(verbalFeedback, ConversationController.getPhrase(Pkey.missingAnswerEntity));
-                verbalFeedback = ConversationController.mergeText(verbalFeedback, answerFeedback.missingEntitis[0].entityValue);
-                answerFeedback.missingEntitis.RemoveAt(0);
-                foreach (var e in answerFeedback.missingEntitis)
-                {
-                    verbalFeedback = ConversationController.mergeText(verbalFeedback, ConversationController.mergeText(ConversationController.getPhrase(Pkey.and), e.entityValue));
-                }
-            }else if(answerFeedback.score < 40)
-            {
-                verbalFeedback = ConversationController.mergeText(verbalFeedback, ConversationController.mergeText(ConversationController.getPhrase(Pkey.MyAnswerToQuestion), studySession.CurrentSubQuestion.answerText));
+                verbalFeedback = ConversationController.mergeText(verbalFeedback, ConversationController.getPhrase(Pkey.MyAnswerToQuestion));
+                verbalFeedback = ConversationController.mergeText(verbalFeedback, studySession.CurrentSubQuestion.answerText);
             }
 
             return verbalFeedback;

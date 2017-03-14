@@ -91,6 +91,8 @@ namespace Bot_Application1.IDialog
 
         private async Task MainMenuResualt(IDialogContext context, IAwaitable<object> result)
         {
+            if (await checkOutdatedMessage(context, MainMenuResualt, result)) return;
+
             var text = await result;
             var option = "";
             try
@@ -134,6 +136,8 @@ namespace Bot_Application1.IDialog
 
             }
         }
+
+
 
         private async Task returnToMainMenu(IDialogContext context, IAwaitable<object> result)
         {
