@@ -31,14 +31,8 @@ namespace Bot_Application1.IDialog
 
         public async Task intreduceQuestion(IDialogContext context)
         {
-            try
-            {
-                getStudySession(context);
-            }
-            catch (Exception ex)
-            {
 
-            }
+            getStudySession(context);
             var question = StudySession.CurrentQuestion;
 
             if (question.SubQuestion.Count > 1)
@@ -54,6 +48,9 @@ namespace Bot_Application1.IDialog
 
         public async Task askSubQuestion(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
+            getStudySession(context);
+            edc().getNextSubQuestion();
+            setStudySession(context);
 
             var question = StudySession.CurrentSubQuestion;
             await writeMessageToUser(context, new string[] { '"' + question.questionText.Trim() + '"' });
@@ -111,22 +108,18 @@ namespace Bot_Application1.IDialog
 
 
 
-             if (StudySession.CurrentQuestion.Enumerator >= StudySession.CurrentQuestion.SubQuestion.Count)
+             if (StudySession.CurrentQuestion.Enumerator < StudySession.CurrentQuestion.SubQuestion.Count)
+            {
+                await writeMessageToUser(context, conv().getPhrase(Pkey.moveToNextSubQuestion));
+                await askSubQuestion(context, null);
+            }
+            else
             {
                 //await writeMessageToUser(context, conv().getPhrase(Pkey.giveYourFeedback));
                 //updateRequestTime(context);
                 //await giveFeedbackMessage(context);
-                StudySession.QuestionAsked.Add(StudySession.CurrentQuestion);
                 setStudySession(context);
                 context.Done("");
-            }
-            else
-            {
-             
-                await writeMessageToUser(context, conv().getPhrase(Pkey.moveToNextSubQuestion));
-                edc().getNextQuestion();
-                setStudySession(context);
-                await askSubQuestion(context,null);
             }
         }
 
@@ -147,47 +140,47 @@ namespace Bot_Application1.IDialog
 
         }
 
-        public async Task giveFeedbackMessage(IDialogContext context)
-        {
-            await writeMessageToUser(context, conv().getPhrase(Pkey.giveYourFeedback));
-            updateRequestTime(context);
-            context.Wait(giveFeedback);
-        }
+        //public async Task giveFeedbackMessage(IDialogContext context)
+        //{
+        //    await writeMessageToUser(context, conv().getPhrase(Pkey.giveYourFeedback));
+        //    updateRequestTime(context);
+        //    context.Wait(giveFeedback);
+        //}
 
 
-        public async Task giveFeedback(IDialogContext context, IAwaitable<IMessageActivity> result)
-        {
-            if (await checkOutdatedMessage(context, askSubQuestion, result)) return;
+        //public async Task giveFeedback(IDialogContext context, IAwaitable<IMessageActivity> result)
+        //{
+        //    if (await checkOutdatedMessage(context, askSubQuestion, result)) return;
 
-            var message = await result;
+        //    var message = await result;
 
-            int number;
-            if ((number = conv().getNum(message.Text)) >= 0)
-            {
-                if (number < 45)
-                {
-                    await writeMessageToUser(context, conv().getPhrase(Pkey.neverMind));
-                }
-                else if (number < 75)
-                {
-                    await writeMessageToUser(context, conv().getPhrase(Pkey.GeneralAck, textVar: (number + "")));
-                }
-                else
-                {
-                    await writeMessageToUser(context, conv().getPhrase(Pkey.veryGood));
-                }
+        //    int number;
+        //    if ((number = conv().getNum(message.Text)) >= 0)
+        //    {
+        //        if (number < 45)
+        //        {
+        //            await writeMessageToUser(context, conv().getPhrase(Pkey.neverMind));
+        //        }
+        //        else if (number < 75)
+        //        {
+        //            await writeMessageToUser(context, conv().getPhrase(Pkey.GeneralAck, textVar: (number + "")));
+        //        }
+        //        else
+        //        {
+        //            await writeMessageToUser(context, conv().getPhrase(Pkey.veryGood));
+        //        }
 
-                StudySession.CurrentQuestion.AnswerScore = number;
-                setStudySession(context);
-                context.Done("");
-            }
-            else
-            {
-                await writeMessageToUser(context, conv().getPhrase(Pkey.notNumber));
-                updateRequestTime(context);
-                context.Wait(giveFeedback);
-            }
-        }
+        //        StudySession.CurrentQuestion.AnswerScore = number;
+        //        setStudySession(context);
+        //        context.Done("");
+        //    }
+        //    else
+        //    {
+        //        await writeMessageToUser(context, conv().getPhrase(Pkey.notNumber));
+        //        updateRequestTime(context);
+        //        context.Wait(giveFeedback);
+        //    }
+        //}
 
 
     }
