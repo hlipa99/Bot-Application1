@@ -46,6 +46,7 @@ namespace Bot_Application1.IDialog
                 await writeMessageToUser(context, new string[] { '"' + question.QuestionText + '"' });
                 await writeMessageToUser(context, conv().getPhrase(Pkey.takeQuestionApart));
             }
+
             await askSubQuestion(context,null);
         }
 
