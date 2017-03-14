@@ -170,8 +170,6 @@ namespace Bot_Application1.IDialog
                         }
                     }
                 }
-         
-
 
             }
         }
