@@ -122,33 +122,7 @@ namespace Bot_Application1.Controllers
         }
 
 
-        public  bool isStopSession(string answer)
-        {
-
-            //TODONLP
-            var stop =  new string[]
-         {
-                "מספיק",
-                "נמאס",
-                "אין לי כח",
-                "לא בא לי",
-                "נמשיך מחר",
-                "תשתוק"
-         };
-
-            foreach(var s in stop)
-            {
-                if (answer.Contains(s))
-                {
-                    return true;
-                }
-            }
-
-
-            return false;
-        }
-
-
+      
         public string[] getGenderOptions()
         {
             return new string[]

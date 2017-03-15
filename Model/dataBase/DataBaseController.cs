@@ -244,7 +244,7 @@ namespace Model.dataBase
 
                 questions = (from t in DB.Question
                             where t.Category == category &&
-                             t.Flags != "sorcePic"   //TODO tempfix
+                             t.Flags == "sorcePic"   //TODO tempfix
                              select t).ToArray();
 
             }

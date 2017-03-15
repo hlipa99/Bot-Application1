@@ -69,7 +69,7 @@ namespace Bot_Application1.IDialog
 
         private async Task HowAreYouRes(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-             if (await checkOutdatedMessage(context, returnToParent, result)) return;
+             if (await checkOutdatedMessage<IMessageActivity,IMessageActivity>(context, returnToParent, result)) return;
   
             await writeMessageToUser(context, conv().getPhrase(Pkey.ok));
             context.Done("");

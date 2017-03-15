@@ -615,6 +615,7 @@ namespace NLP.NLP
         yes,
         no,
         hello,
+        sessionBreak,
         //intresting
     }
 }

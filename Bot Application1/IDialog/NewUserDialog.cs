@@ -87,7 +87,7 @@ namespace Bot_Application1.IDialog
 
         public async virtual Task CheckName(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            if(await checkOutdatedMessage(context,CheckName,result)) return;
+            if(await checkOutdatedMessage<IMessageActivity, IMessageActivity>(context,CheckName,result)) return;
 
 
 

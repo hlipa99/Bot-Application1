@@ -254,6 +254,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Carda_factory\ManagerCard.cs" />
+    <Compile Include="Controllers\sessionBreakException.cs" />
     <Compile Include="Controllers\UnrelatedSubjectException.cs" />
     <Compile Include="Exceptions\ContextException.cs" />
     <Compile Include="Controllers\MediaController.cs" />

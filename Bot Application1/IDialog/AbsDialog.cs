@@ -175,6 +175,21 @@ namespace Bot_Application1.IDialog
         }
 
 
+        public static async Task postImageToUser(IDialogContext context, string mediaKey)
+        {
+            MediaController mc = new MediaController();
+            var url = mc.getFileUrl(mediaKey);
+            var cardImg = new CardImage(url: url);
+            var img = new Attachment();
+            img.ContentType = "image/png";
+            img.ContentUrl = url;
+            img.Name = mediaKey;
+            var message = context.MakeMessage();
+            message.Attachments.Add(img);
+            await context.PostAsync(message);
+        }
+
+
         public virtual async Task createMenuOptions(IDialogContext context, string title, string[] options, ResumeAfter<object> resume)
         {
             if(context.Activity.ChannelId == "facebook")
@@ -250,7 +265,7 @@ namespace Bot_Application1.IDialog
         }
 
 
-        public async Task<bool> checkOutdatedMessage<A>(IDialogContext context,ResumeAfter<T> resume, IAwaitable<A> message)
+        public async Task<bool> checkOutdatedMessage<A,R>(IDialogContext context,ResumeAfter<R> resume, IAwaitable<A> message)
         {
             var mes = await message;
             if (context.Activity.Timestamp <= Request)
@@ -269,6 +284,11 @@ namespace Bot_Application1.IDialog
         {
             throw new NotImplementedException();
         }
+        public async Task waitForUserInputToContinu(IDialogContext context, ResumeAfter<IMessageActivity> resume)
+        {
+            context.Wait(resume);
+        }
+
 
         internal  AwaitableFromItem<IMessageActivity> stringToMessageActivity(IDialogContext context,string message)
         {

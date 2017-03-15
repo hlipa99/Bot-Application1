@@ -64,6 +64,9 @@ namespace Model
         shortHello,
         IAmFine,
         letsContinue,
-        didntUnderstand
+        didntUnderstand,
+        suggestBreak,
+        takeAbreak,
+        imWaiting
     }
 }

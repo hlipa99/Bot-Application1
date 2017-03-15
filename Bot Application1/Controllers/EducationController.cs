@@ -217,6 +217,9 @@ namespace Bot_Application1.Controllers
                 case UserIntent.stopSession:
                     throw new StopSessionException();
 
+                case UserIntent.sessionBreak:
+                    throw new sessionBreakException();
+
                 default:
                     return createFeedBack(checkAnswer(text));
 

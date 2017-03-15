@@ -10,6 +10,7 @@ using Model;
 using Model.Models;
 using Bot_Application1.Exceptions;
 using Bot_Application1.Models;
+using System.Threading;
 
 namespace Bot_Application1.IDialog
 {
@@ -122,7 +123,7 @@ namespace Bot_Application1.IDialog
         public async virtual Task StartLearning(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
 
-            await checkOutdatedMessage(context, StartLearning, result);
+            await checkOutdatedMessage<IMessageActivity, IMessageActivity>(context, StartLearning, result);
 
             string message = null;
             var res = await result;
@@ -197,10 +198,11 @@ namespace Bot_Application1.IDialog
             }
         }
 
-        private async Task questionSummery(IDialogContext context, IAwaitable<IMessageActivity> result)
+        private async Task questionSummery(IDialogContext context, IAwaitable<string> result)
         {
             try {
                 var res = await result;
+                getStudySession(context);
             }
             catch (StopSessionException ex)
             {
@@ -213,9 +215,37 @@ namespace Bot_Application1.IDialog
                 await intreduceQuestion(context);
                 return;
             }
-            await writeMessageToUser(context, conv().getPhrase(Pkey.moveToNextQuestion));
-            await writeMessageToUser(context, conv().getPhrase(Pkey.beforAskQuestion));
-            await intreduceQuestion(context);
+
+            if (StudySession.QuestionAsked.Count < StudySession.SessionLength)
+            {
+                await writeMessageToUser(context, conv().getPhrase(Pkey.moveToNextQuestion));
+                await writeMessageToUser(context, conv().getPhrase(Pkey.beforAskQuestion));
+                await intreduceQuestion(context);
+            }
+            else
+            {
+                await writeMessageToUser(context, conv().getPhrase(Pkey.endOfSession));
+            }
+        }
+
+        public async Task suggestBreak(IDialogContext context)
+        {
+            await context.Forward(new YesNoQuestionDialog(), takeAbreak, conv().getPhrase(Pkey.suggestBreak),new CancellationToken());
+        }
+
+        public async Task takeAbreak(IDialogContext context, IAwaitable<bool> result)
+        {
+            var cont = await result;
+            if (cont)
+            {
+                await writeMessageToUser(context, conv().getPhrase(Pkey.takeAbreak));
+            }
+            else
+            {
+                await writeMessageToUser(context, conv().getPhrase(Pkey.ok));
+                await writeMessageToUser(context, conv().getPhrase(Pkey.letsContinue));
+                intreduceQuestion(context);
+            }
         }
 
 
@@ -223,7 +253,7 @@ namespace Bot_Application1.IDialog
         public async Task EndOfLearningSession(IDialogContext context)
         {
             await writeMessageToUser(context, conv().endOfSession());
-            await writeMessageToUser(context, conv().getPhrase(Pkey.endOfSession));
+       //     await writeMessageToUser(context, conv().getPhrase(Pkey.endOfSession));
 
             //TODO: save user sussion to DB
             context.Done("learningSession");

@@ -18,6 +18,10 @@ namespace Model.Models
         string Category { get; set; }
         string SubCategory { get; set; }
         string QuestionText { get; set; }
+        string Flags { get; set; }
+        string questionType { get; set; }
+        string questionMedia { get; set; }
+
         int AnswerScore { get; set; }
 
         ICollection<SubQuestion> SubQuestion { get; set; }

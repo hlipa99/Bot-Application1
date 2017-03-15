@@ -14,7 +14,7 @@ using System.Threading;
 namespace Bot_Application1.IDialog
 {
     [Serializable]
-    public class QuestionDialog : AbsDialog<IMessageActivity>
+    public class QuestionDialog : AbsDialog<string>
     {
 
 
@@ -35,16 +35,22 @@ namespace Bot_Application1.IDialog
             getStudySession(context);
             var question = StudySession.CurrentQuestion;
 
-            if (question.SubQuestion.Count > 1)
+            if (question.Flags.Contains("sorcePic"))
             {
-                await writeMessageToUser(context, new string[] { '"' + question.QuestionText + '"' });
-                await writeMessageToUser(context, conv().getPhrase(Pkey.takeQuestionApart));
+                var mediaKey = question.questionMedia;
+                await postImageToUser(context, mediaKey);
             }
+            if (question.SubQuestion.Count > 1)
+                {
+                    await writeMessageToUser(context, new string[] { '"' + question.QuestionText + '"' });
+                    await writeMessageToUser(context, conv().getPhrase(Pkey.takeQuestionApart));
+                }
+                await askSubQuestion(context, null);
+            
 
-            await askSubQuestion(context,null);
         }
 
-
+      
 
         public async Task askSubQuestion(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
@@ -58,12 +64,16 @@ namespace Bot_Application1.IDialog
             updateRequestTime(context);
             context.Wait(answerQuestion);
         }
-
-
+     
+       public async Task continuAfterBreak(IDialogContext context, IAwaitable<IMessageActivity> result)
+        {
+            await writeMessageToUser(context, conv().getPhrase(Pkey.letsContinue));
+            await intreduceQuestion(context);
+        }
 
         public async Task answerQuestion(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            if (await checkOutdatedMessage(context, askSubQuestion, result)) return;
+            if (await checkOutdatedMessage<IMessageActivity, IMessageActivity>(context, askSubQuestion, result)) return;
 
             var message = await result;
             //      context.UserData.TryGetValue<StudySession>("studySession", out studySession);
@@ -88,6 +98,10 @@ namespace Bot_Application1.IDialog
                 await context.Forward<bool, string[]>(new YesNoQuestionDialog(), stopSession, msg, CancellationToken.None);
                 return;
                
+            }catch (sessionBreakException ex){
+                await writeMessageToUser(context, conv().getPhrase(Pkey.ok));
+                await writeMessageToUser(context, conv().getPhrase(Pkey.imWaiting));
+                await waitForUserInputToContinu(context, continuAfterBreak);
             }
             catch (Exception ex)
             {
@@ -123,12 +137,16 @@ namespace Bot_Application1.IDialog
             }
         }
 
+
+
+
+
         private async Task stopSession(IDialogContext context, IAwaitable<bool> result)
         {
             var sure = await result;
             if (sure)
             {
-                await writeMessageToUser(context, conv().getPhrase(Pkey.goodbye));
+             //   await writeMessageToUser(context, conv().getPhrase(Pkey.goodbye));
                 throw new StopSessionException();
                 return;
             }
