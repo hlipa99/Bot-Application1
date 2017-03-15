@@ -114,7 +114,7 @@ namespace Bot_Application1.IDialog
                 switch (optionIdx)
                 {
                     case 0:  //start learning
-                        context.Call(new LerningDialog(),EndOfLearningSession);
+                        context.Call<string>(new LerningDialog(), EndSession);
                         break;
                     case 1:  //not implamented
                         context.Call(new NotImplamentedDialog(), returnToMainMenu);
@@ -145,33 +145,32 @@ namespace Bot_Application1.IDialog
             await MainMenu(context, result);
         }
 
-        private async Task UnknownException(IDialogContext context, IAwaitable<object> result)
-        {
-            await writeMessageToUser(context, new string[] { "אוקיי זה מביך " + "\U0001F633", "קרתה לי תקלה בשרת ואני לא יודע מה לעשות", "אני אתחיל עכשיו מהתחלה ונעמיד פנים שלא קרה כלום, " + "\U0001F648", "טוב" + "?" });
-            await StartAsync(context);
-        }
 
-
-
-        private async Task EndOfLearningSession(IDialogContext context, IAwaitable<object> result)
-        {
-            await EndSession(context,result);
-        }
-
-        private async Task EndSession(IDialogContext context, IAwaitable<object> result)
+        private async Task EndSession(IDialogContext context, IAwaitable<string> result)
         {
             //   context.Wait(MainMenu);
+            try
+            {
+                await result;
+            }catch(Exception ex)
+            {
+                try
+                {
+                    await writeMessageToUser(context, conv().getPhrase(Pkey.innerException));
+                    await MainMenu(context, null);
+                    return;
+                }
+                catch
+                {
+                    await writeMessageToUser(context, new string[] { "אוקיי זה מביך " + "\U0001F633", "קרתה לי תקלה בשרת ואני לא יודע מה לעשות", "אני מציע שנחכה כמה דקות שהכל יסתדר, " + "\U0001F648", "טוב" + "?" });
+                    await StartAsync(context);
+                }
+            }
 
-            StudySession = new StudySession();
             setStudySession(context);
             context.Call(new FarewellDialog(), MainMenu);
         }
 
-        private async Task NotAvialable(IDialogContext context, IAwaitable<object> result)
-        {
-
-            context.Call(new NotImplamentedDialog(), EndOfLearningSession);
-        }
 
 
     }

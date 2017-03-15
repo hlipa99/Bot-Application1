@@ -171,28 +171,25 @@ namespace Bot_Application1.Controllers
 
         public string[] endOfSession()
         {
-            if (StudySession.QuestionAsked.Count <= 1)
-            {
-                return getPhrase(Pkey.earlyDiparture);
-             } else
-            {
-                var average = 0;
-                foreach (var q in StudySession.QuestionAsked)
-                {
-                    average += q.AnswerScore / StudySession.QuestionAsked.Count;
-                }
 
-                if (average > 60)
-                {
-                    return getPhrase(Pkey.goodSessionEnd, textVar: average + "");
-                 }else{
-                               return getPhrase(Pkey.badSessionEnd,textVar: average + "");
+                //var average = 0;
+                //foreach (var q in StudySession.QuestionAsked)
+                //{
+                //    average += q.AnswerScore / StudySession.QuestionAsked.Count;
+                //}
 
-                }
+                //if (average > 60)
+                //{
+                //    return getPhrase(Pkey.goodSessionEnd, textVar: average + "");
+                // }else{
+                //               return getPhrase(Pkey.badSessionEnd,textVar: average + "");
+
+                //}
+
+              return getPhrase(Pkey.endOfSession);
 
 
-
-            }
+        
         }
 
 

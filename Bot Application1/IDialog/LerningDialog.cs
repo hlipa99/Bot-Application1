@@ -14,7 +14,7 @@ using Bot_Application1.Models;
 namespace Bot_Application1.IDialog
 {
     [Serializable]
-    public class LerningDialog : AbsDialog<IMessageActivity>
+    public class LerningDialog : AbsDialog<string>
     {
         public override UserContext getDialogContext()
         {
@@ -183,9 +183,15 @@ namespace Bot_Application1.IDialog
                 }
                catch (StopSessionException ex)
                 {
-                    await EndOfLearningSession(context);
+   
                 }
-            }else
+                catch (Exception ex)
+                {
+                    await writeMessageToUser(context, conv().getPhrase(Pkey.innerException));
+                    await intreduceQuestion(context);
+                }
+            }
+            else
             {
                 await EndOfLearningSession(context);
             }
@@ -193,7 +199,20 @@ namespace Bot_Application1.IDialog
 
         private async Task questionSummery(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            //var res = await result;
+            try {
+                var res = await result;
+            }
+            catch (StopSessionException ex)
+            {
+                await EndOfLearningSession(context);
+                return;
+            }
+            catch (Exception ex)
+            {
+                await writeMessageToUser(context, conv().getPhrase(Pkey.innerException));
+                await intreduceQuestion(context);
+                return;
+            }
             await writeMessageToUser(context, conv().getPhrase(Pkey.moveToNextQuestion));
             await writeMessageToUser(context, conv().getPhrase(Pkey.beforAskQuestion));
             await intreduceQuestion(context);
