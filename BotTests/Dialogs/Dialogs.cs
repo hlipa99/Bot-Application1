@@ -10,16 +10,16 @@ using Model.dataBase;
 
 namespace UnitTestProject1
 {
-    [TestClass]
-    public class DialogsTest
+    public class DialogsTestsBase
     {
         
-        string convID = "";
+        string ConvID = "";
         DirectLineClient client = null;
         Task<List<string>> task;
         string[] options = null;
         List<string> response = null;
         DataBaseController db;
+
         public DirectLineClient Client
         {
             get
@@ -33,97 +33,24 @@ namespace UnitTestProject1
             }
         }
 
-        [TestInitialize]
-        public void TestInitializeAttribute()
+        public string ConvID1 { get => ConvID; set => ConvID = value; }
+
+        public DialogsTestsBase()
         {
             db = DataBaseController.getInstance();
-            createNewClientConversation(out convID);
-            Client = createNewClientConversation(out convID);
-            var task = sendMessage("/deleteprofile");
-            task.Wait();
-            var response = task.Result;
-            Assert.IsTrue(Contains(response, new string[] { "User profile deleted!" }));
-        }
-
-        [TestCleanup]
-        public void TestCleanup()
-        {
-             convID = "";
-            // client = null;
+            createNewClientConversation(out ConvID);
+            Client = createNewClientConversation(out ConvID);
+        
         }
 
 
-
-        [TestMethod]
-        public void testLearningDialog()
-        {
-            options = getOptions(response[2]);
-            response = sendBot(options[1]);   //learning options
-            Assert.IsTrue(response.Count > 2); //learning options number
-
-            response = sendBot("בלה בלה");   //learning topic options
-            Assert.IsTrue(Contains(response, DBbotPhrase(Pkey.NotAnOption))); 
-
-            response = sendBot("לאומיות");   //learning topic options
-            Assert.IsTrue(Contains(response, DBbotPhrase(Pkey.letsLearn))); //class assert
-
-            response = sendBot("תשובה 1");   //class options
-            Assert.IsTrue(Contains(response, DBbotPhrase(Pkey.notAnAnswer))); //class assert
-
-            response = sendBot("sdsdds");   //evaluation wrong option
-            Assert.IsTrue(Contains(response, DBbotPhrase(Pkey.notNumber)));
-
-            response = sendBot("100");   //evaluation wrong option
-            Assert.IsTrue(Contains(response, DBbotPhrase(Pkey.GeneralAck)));
-
-            response = sendBot(" תשובה תשובה 2 2");   //class options
-            Assert.IsTrue(Contains(response, DBbotPhrase(Pkey.goodAnswer))); //class assert
-
-            response = sendBot("100");   //evaluation wrong option
-            Assert.IsTrue(Contains(response, DBbotPhrase(Pkey.GeneralAck)));
-
-            response = sendBot(" תשובה תשובה 3 3");   //class options
-            Assert.IsTrue(Contains(response, DBbotPhrase(Pkey.goodAnswer))); //class assert
-
-            response = sendBot("100");   //evaluation wrong option
-            Assert.IsTrue(Contains(response, DBbotPhrase(Pkey.GeneralAck)));
-            Assert.IsTrue(Contains(response, DBbotPhrase(Pkey.endOfSession)));
-            Assert.IsTrue(Contains(response, DBbotPhrase(Pkey.goodSessionEnd)));
-            Assert.IsTrue(Contains(response, DBbotPhrase(Pkey.MainMenuText)));
-        }
-
-        private string[] DBbotPhrase(Pkey key)
+        public string[] DBbotPhrase(Pkey key)
         {
             return db.getBotPhrase(Pkey.letsLearn, new string[] { }, new string[] { });
         }
 
 
-        [TestMethod]
-        private void testNewUserDialog()
-        {
-            task = sendConversationContantUpdated("add");
-            task.Wait();
-            response = task.Result;
-            Assert.IsTrue(Contains(response, DBbotPhrase(Pkey.selfIntroduction))); //wellcome message
-            response = sendBot("יוחאי");
-            Assert.IsTrue(Contains(response, DBbotPhrase(Pkey.NewUserGreeting))); //bot using user name
-
-
-            options = getOptions(response[2]);  //gender options
-            response = sendBot(options[1]);
-            Assert.IsTrue(Contains(response, DBbotPhrase(Pkey.GenderAck))); //gender assert
-
-            options = getOptions(response[1]);
-            response = sendBot(options[1]);   //class options
-            Assert.IsTrue(Contains(response, DBbotPhrase(Pkey.GeneralAck))); //class assert
-        }
-
-  
-
-
-
-
-        private bool Contains(List<string> response, string[] options)
+        public bool Contains(List<string> response, string[] options)
         {
             string res = "";
             foreach (var r in response)
@@ -134,9 +61,9 @@ namespace UnitTestProject1
                 foreach (var o in options)
                 {
                     var pStr = o;
-                    while(pStr.Contains("<") || pStr.Contains("<"))
+                    while(pStr.Contains("<") && pStr.Contains(">"))
                     {
-                        pStr.Remove(pStr.IndexOf("<"), pStr.IndexOf(">") - pStr.IndexOf("<"));
+                        pStr = pStr.Remove(pStr.IndexOf("<"), pStr.IndexOf(">") - pStr.IndexOf("<"));
                     }
 
                     foreach (var w in pStr.Split(' '))
@@ -150,7 +77,7 @@ namespace UnitTestProject1
             return true;
         }
 
-        private string[] getOptions(string response)
+        public string[] getOptions(string response)
         {
             List < string > res = new List<string>();
             string[] result = null;
@@ -163,12 +90,23 @@ namespace UnitTestProject1
             return res.ToArray();
         }
 
-        private List<string> sendBot(string test)
+        public List<string> sendBot(string test)
         {
             var task = sendMessage(test);
             task.Wait();
             var response = task.Result;
             return response;
+        }
+
+        public List<string> sendBot(string test1, string test2)
+        {
+            var task1 = sendMessage(test1);
+            var task2 = sendMessage(test2);
+            task1.Wait();
+            var response1 = task1.Result;
+            var response2 = task1.Result;
+            response1.AddRange(response2);
+            return response1;
         }
 
         public DirectLineClient createNewClientConversation(out string convID)
@@ -199,7 +137,7 @@ namespace UnitTestProject1
 
         }
 
-        private async Task<List<string>> sendConversationContantUpdated(string action)
+        public async Task<List<string>> sendConversationContantUpdated(string action)
         {
             Activity activity = new Activity
             {
@@ -214,10 +152,10 @@ namespace UnitTestProject1
 
         public async Task<List<string>> sendActivity(Activity activity)
         {
-            var i = client.Conversations.GetActivities(convID).Activities.Count;
-            await client.Conversations.PostActivityAsync(convID, activity);
+            var i = client.Conversations.GetActivities(ConvID1).Activities.Count;
+            await client.Conversations.PostActivityAsync(ConvID1, activity);
          
-            var activities = client.Conversations.GetActivities(convID);
+            var activities = client.Conversations.GetActivities(ConvID1);
             i++;
             List<string> resualtTest = new List<string>();
 
@@ -247,6 +185,22 @@ namespace UnitTestProject1
 
         }
 
+
+        public List<string> endConversation()
+        {
+            var res = sendBot("ביי");
+            res = sendBot("יום טוב");
+            return res;
+        }
+
+        public List<string> createUser(string v1, string v2, string v3)
+        {
+            var res = sendBot("היי");
+            res = sendBot("יוחאי");
+            res = sendBot("בן");
+            res = sendBot("יא");
+            return res;
+        }
 
 
     }
