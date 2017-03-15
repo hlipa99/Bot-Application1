@@ -243,8 +243,8 @@ namespace Model.dataBase
             {
 
                 questions = (from t in DB.Question
-                            where t.Category == category &&
-                             t.Flags == "sorcePic"   //TODO tempfix
+                            where t.Category == category
+                             //   &&   t.Flags == "sorcePic"   //TODO tempfix
                              select t).ToArray();
 
             }
@@ -380,19 +380,19 @@ namespace Model.dataBase
            Entities2 DB = new Entities2();
             media media = new media();
             string[] phrases = null;
-            var key = Enum.GetName(typeof(Pkey), pKey);
+            var key = Enum.GetName(typeof(Pkey), pKey).ToLower();
             try
             {
                 //improvse runtime 
                 if(flags.Length + flagsNot.Length > 0)
                 {
                     phrases = (from t in DB.botphrase
-                               where t.Pkey == key && flags.All(x => t.Flags.Contains(x)) && flagsNot.All(x => !t.Flags.Contains(x))
+                               where t.Pkey.ToLower() == key && flags.All(x => t.Flags.Contains(x)) && flagsNot.All(x => !t.Flags.Contains(x))
                                select t.Text).ToArray();
                 }else
                 {
                     phrases = (from t in DB.botphrase
-                               where t.Pkey == key
+                               where t.Pkey == key.ToLower() && !t.Flags.Contains("text")
                                select t.Text).ToArray();
                 }
  

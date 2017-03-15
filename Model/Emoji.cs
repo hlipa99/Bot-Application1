@@ -66,6 +66,19 @@ namespace Model
             d.Add("fire", "\U0001F525");
             d.Add("oldMan", "\U0001F474\U0001F3FB");
             d.Add("bulletBlue", "\U0001F539");
+
+
+
+            d.Add("shnorkel", "");
+            d.Add("shnorkel", "");
+            d.Add("shnorkel", "");
+            d.Add("shnorkel", "");
+            d.Add("shnorkel", "");
+            d.Add("shnorkel", "");
+            d.Add("shnorkel", "");
+            d.Add("shnorkel", "");
+            d.Add("shnorkel", "");
+
         }
 
 
