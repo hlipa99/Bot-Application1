@@ -96,6 +96,9 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssertNLP.cs" />
+    <Compile Include="Dialogs\LearningDialogTest.cs" />
+    <Compile Include="Dialogs\GreetingFerwallDialogTest.cs" />
     <Compile Include="Dialogs\NewUserDialogTest.cs" />
     <Compile Include="Dialogs\MainDialogTest.cs" />
     <Compile Include="Integration Tests\Controllers\ConversationControllerTests.cs" />

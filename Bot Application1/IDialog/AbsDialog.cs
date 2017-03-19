@@ -274,10 +274,41 @@ namespace Bot_Application1.IDialog
                 context.Wait(resume);
                 //await context.Forward<IMessageActivity, IMessageActivity>(new SideDialog(), resume, mes, CancellationToken.None);
                 return true;
+            }else if(context.Activity.Timestamp >= Request.AddHours(1))
+            {
+                await writeMessageToUser(context, conv().getPhrase(Pkey.whereDidYouGone));
+                context.ConversationData.SetValue<ResumeAfter<R>>("resume", resume);
+             //   await context.Forward<bool,string[]>(new YesNoQuestionDialog(), continuFromLastPlace, conv().getPhrase(Pkey.youWantToContinue),new CancellationToken());
+
             }
+
             return false;
         }
 
+
+        internal async Task continuFromLastPlace(IDialogContext context, IAwaitable<bool> resualt)
+        {
+            var boolres = await resualt;
+            if (boolres)
+            {
+                ResumeAfter<object> resume = null;
+                 context.ConversationData.SetValue<ResumeAfter<object>>("resume",resume);
+                if (resume != null)
+                {
+                    context.Wait(resume);
+                }
+                else
+                {
+                    context.Done("");
+                }
+            }
+            else
+            {
+                context.Done("");
+            }
+
+
+        }
         public abstract UserContext getDialogContext();
 
         public virtual Task StartAsync(IDialogContext context)

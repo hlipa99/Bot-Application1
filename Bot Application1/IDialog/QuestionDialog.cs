@@ -35,6 +35,7 @@ namespace Bot_Application1.IDialog
             getStudySession(context);
             var question = StudySession.CurrentQuestion;
 
+
             if (question.Flags.Contains("sorcePic"))
             {
                 var mediaKey = question.questionMedia;
@@ -42,6 +43,7 @@ namespace Bot_Application1.IDialog
             }
             if (question.SubQuestion.Count > 1)
                 {
+                    
                     await writeMessageToUser(context, new string[] { '"' + question.QuestionText + '"' });
                     await writeMessageToUser(context, conv().getPhrase(Pkey.takeQuestionApart));
                 }
