@@ -445,7 +445,7 @@ namespace NLP.HebWords
         {
             return WordT == organizationWord || WordT == conceptWord ||
                  WordT == eventWord || WordT == personWord ||
-                  WordT == timeWord || WordT == numeralWord || WordT == nounWord; 
+                  WordT == timeWord || WordT == numeralWord || WordT == nounWord || WordT == verbWord;
         }
 
         public virtual string Text

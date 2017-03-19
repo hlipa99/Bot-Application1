@@ -81,7 +81,7 @@ namespace Model.dataBase
             var questions = DB.SubQuestion;
             foreach(var e in Entities)
             {
-                if(e.entityValue.Length < 50)
+                if(e!= null && e.entityValue.Length < 50)
                 DB.entity.Add(e);
             }
             try

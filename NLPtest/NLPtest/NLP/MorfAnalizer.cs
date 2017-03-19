@@ -306,7 +306,8 @@ namespace NLP.NLP
 
         public void searchAllAnswerForentities()
         {
-            List<entity> entList = new List<entity>(); 
+            List<entity> entList = new List<entity>();
+            var entities = DBctrl1.getEntitys().AsQueryable();
             foreach (var s in DBctrl1.getAllSubQuestions())
             {
                 var sentenses = meniAnalize(s.answerText,false);
@@ -315,16 +316,15 @@ namespace NLP.NLP
                     var relevant = sen.Where(x => x.isEntity());
                     foreach(var w in relevant)
                     {
-                      
                         var wText = w.Lemma == null || w.Lemma.Length == 1 ? w.Text : w.Lemma;
-                        if (wText == null)
+                        if (!findMatch(entities, wText).Any())
                         {
-
+                            var ent = new entity();
+                            ent.entitySynonimus = ";" + wText + ";";
+                           ent.entityType = Enum.GetName(typeof(WordType), w.WordT);
+                            ent.entityValue = wText;
+                            entList.Add(ent);
                         }
-
-                        var ent = new entity();
-                        ent.entitySynonimus = ";" + wText + ";";
-                        entList.Add(ent);
                     }
                 }
             }
