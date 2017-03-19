@@ -137,12 +137,43 @@ namespace Bot_Application1.Controllers
             var r = new Random();
             if (res.Count > 0)
             {
-                return res[r.Next(res.Count)];
+                var question = res[r.Next(res.Count)];
+                question = ajustGender(question);
+                return question;
             }
             else
             {
                 throw new CategoryOutOfQuestionException();
             }
+        }
+
+        private IQuestion ajustGender(IQuestion question)
+        {
+            if (user.UserGender == "femenine")
+            {
+                question.QuestionText = ajustGender(question.QuestionText);
+                foreach(var s in question.SubQuestion)
+                {
+                    s.questionText = ajustGender(question.QuestionText);
+                }
+                return question;
+            }
+            else
+            {
+                return question;
+            }
+        }
+
+        private string ajustGender(string questionText)
+        {
+           questionText = questionText.Replace("הצג","הציגי");
+           questionText = questionText.Replace("הסבר", "הסבירי");
+           questionText = questionText.Replace("ציין", "צייני");
+           questionText = questionText.Replace("לפניך", "לפנייך");
+           questionText = questionText.Replace("כתוב", "כתבי");
+           questionText = questionText.Replace("עיין", "עייני");
+           questionText = questionText.Replace("הסתכל", "הסתכלי");
+           return questionText;
         }
 
         public AnswerFeedback checkAnswer(string text)

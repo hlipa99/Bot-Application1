@@ -64,28 +64,14 @@ namespace Bot_Application1.IDialog
                 if (User != null)
                 {
                     options = conv().MainMenuOptions();
+                    updateRequestTime(context);
                     await createMenuOptions(context, conv().getPhrase(Pkey.MainMenuText)[0], options, MainMenuResualt);
                     
-                    //var menu = new MenuOptionDialog<string>(
-                  //      conv().MainMenuOptions(),
-                  //      conv().getPhrase(Pkey.MainMenuText)[0],
-                  //      conv().getPhrase(Pkey.wrongOption)[0],
-                  //      3, new IDialog<object>[] {
-                  //  new StartLerningDialog(),
-                  //  new NotImplamentedDialog(),},
-                  //       new ResumeAfter<object>[] {
-                  //     EndOfLearningSession,EndOfLearningSession}
-                  //       );
-
-                  //  context.Call(menu, UnknownException);
-
                 }
                 else
                 {
                     context.Call(new NewUserDialog(), MainMenu);
                 }
-            
-     
      
         }
 

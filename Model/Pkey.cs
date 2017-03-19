@@ -67,6 +67,8 @@ namespace Model
         didntUnderstand,
         suggestBreak,
         takeAbreak,
-        imWaiting
+        imWaiting,
+        whereDidYouGone,
+        youWantToContinue
     }
 }

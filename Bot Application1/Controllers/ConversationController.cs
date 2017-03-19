@@ -17,6 +17,7 @@ using Bot_Application1.Models;
 using NLP.NLP;
 using NLP.Controllers;
 using Microsoft.Bot.Connector;
+using System.IO;
 
 namespace Bot_Application1.Controllers
 {
@@ -361,8 +362,12 @@ namespace Bot_Application1.Controllers
 
         public virtual string[] getPhrase(Pkey key,string[] flags = null, string[] flagesNot = null, string textVar = null)
         {
-          
-                if (flags == null) flags = new string[] { };
+
+            var strem = File.AppendText("logFile");
+            strem.WriteLine("Bot: " + Enum.GetName(typeof(Pkey), key));
+
+
+            if (flags == null) flags = new string[] { };
                 if (flagesNot == null) flagesNot = new string[] { };
 
                 var phrases = Db.getBotPhrase(key, flags, flagesNot);

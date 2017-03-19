@@ -9,6 +9,7 @@ using Bot_Application1.IDialog;
 
 using System.Collections.Generic;
 using Model.dataBase;
+using System.IO;
 
 namespace Bot_Application1.Controllers
 {
@@ -33,6 +34,12 @@ namespace Bot_Application1.Controllers
                     {
                         try
                         {
+
+                            var text = activity.Text;
+                            var strem = File.AppendText("logFile");
+                            strem.WriteLine("User: " + text);
+
+
 
                             var dialog = new MainDialog();
                             await Conversation.SendAsync(activity, () => new MainDialog());
