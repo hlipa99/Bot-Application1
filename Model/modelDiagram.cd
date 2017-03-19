@@ -37,18 +37,18 @@
   <Class Name="Model.dataBase.DataBaseController">
     <Position X="8.5" Y="4" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAAAEAAAIAACAAAAAAAAAFEIAAAAAABAQBAAABAAQAQ=</HashCode>
+      <HashCode>AAAAEAAAIAACAAEAAAAAAFkIAAAAAARAQBAAABIAwBQ=</HashCode>
       <FileName>dataBase\DataBaseController.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Model.Models.AnswerFeedback">
     <Position X="1.25" Y="2" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAACA=</HashCode>
+      <HashCode>AAAAAAAAACAAAAAAAAAIAAAAAAAAAAAAAAEAAAAAACA=</HashCode>
       <FileName>Models\AnswerFeedback.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="NLPtest.Models.StudySession" Collapsed="true" BaseTypeListCollapsed="true">
+  <Class Name="Model.Models.StudySession" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="4.75" Y="4" Width="1.5" />
     <TypeIdentifier>
       <HashCode>EAAAEBAAAAAAAAAAAAAACAAACAgAAIAAAACAAAAACBA=</HashCode>
@@ -59,9 +59,11 @@
   <Class Name="Model.dataBase.entity">
     <Position X="8.25" Y="1.75" Width="2" />
     <TypeIdentifier>
-      <HashCode>gAAAAAAAAAAAAAAAAAAAAAAAAgAAAgAAAAAAAAAAQAA=</HashCode>
-      <FileName>dataBase\entity.cs</FileName>
+      <HashCode>gAAAAAAAAAAAAAAAgAAAAAAAAgAAAgAAAAAAAAAAQAA=</HashCode>
+      <FileName>dataBase\entityS.cs</FileName>
+      <NewMemberFileName>dataBase\entity.cs</NewMemberFileName>
     </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="Model.dataBase.botphrase">
     <Position X="6.5" Y="1.5" Width="1.5" />
@@ -73,22 +75,22 @@
   <Interface Name="Model.Models.IQuestion">
     <Position X="1.25" Y="4.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>BAAAAAEAAAAAAAAEgAAAAAAACAAAAIAAAAQAAAAACAA=</HashCode>
-      <FileName>Models\IQuestion.cs</FileName>
+      <HashCode>BAAABAEAAAAAAAAEgAAAAAAACAAAAIwAAAQAAAAACAA=</HashCode>
+      <FileName>Interfaces\IQuestion.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="Model.Models.ISubQuestion">
     <Position X="3" Y="4.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAQAAAAAAAAAAAAEAAAAAIAAAAAEAAAEAAAAAAAAAAQ=</HashCode>
-      <FileName>Models\ISubQuestion.cs</FileName>
+      <FileName>Interfaces\ISubQuestion.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="Model.Models.IUser">
     <Position X="6.5" Y="4.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AgIAAIAAAAAAAAAAAAAAAAgABAAAAAAAAQAAAAAAAAA=</HashCode>
-      <FileName>Models\IUser.cs</FileName>
+      <FileName>Interfaces\IUser.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="NLPtest.Models.IStudySession">

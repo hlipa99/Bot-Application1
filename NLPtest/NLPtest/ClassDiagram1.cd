@@ -25,21 +25,21 @@
     <Position X="31.5" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABA=</HashCode>
-      <FileName>WorldObj\entities\EntityObject.cs</FileName>
+      <FileName>WorldObj\Entities2\EntityObject.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="NLPtest.EventObject" Collapsed="true">
     <Position X="34" Y="3.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABA=</HashCode>
-      <FileName>WorldObj\entities\EventObject.cs</FileName>
+      <FileName>WorldObj\Entities2\EventObject.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="NLPtest.OrginazationObject" Collapsed="true">
     <Position X="30.5" Y="3.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABA=</HashCode>
-      <FileName>WorldObj\entities\OrginazationObject.cs</FileName>
+      <FileName>WorldObj\Entities2\OrginazationObject.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="NLPtest.Controllers.OuterAPIController">
@@ -74,7 +74,7 @@
     <Position X="34" Y="4.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAQAAAAAAABA=</HashCode>
-      <FileName>WorldObj\entities\multyPersoneObject.cs</FileName>
+      <FileName>WorldObj\Entities2\multyPersoneObject.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="NLPtest.view.adjectiveRelObject" Collapsed="true">
@@ -102,7 +102,7 @@
     <Position X="28.75" Y="3.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABA=</HashCode>
-      <FileName>WorldObj\entities\LocationObject.cs</FileName>
+      <FileName>WorldObj\Entities2\LocationObject.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="NLPtest.WorldObj.NounObject" Collapsed="true">
@@ -124,7 +124,7 @@
     <Position X="32.25" Y="3.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAACAAAAAAAQAAAAEAAAAAAAAAAAAABA=</HashCode>
-      <FileName>WorldObj\entities\PersonObject.cs</FileName>
+      <FileName>WorldObj\Entities2\PersonObject.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="NLPtest.WorldObj.PrepRelObject" Collapsed="true">
@@ -159,7 +159,7 @@
     <Position X="30.5" Y="4.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAIAAACAAAAAAAAAgAEAAAAAAAAAAAAAAAIAABA=</HashCode>
-      <FileName>WorldObj\entities\UserObject.cs</FileName>
+      <FileName>WorldObj\Entities2\UserObject.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="NLPtest.WorldObj.VerbObject" Collapsed="true">

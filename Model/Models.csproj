@@ -67,41 +67,53 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="dataBase\botDataModel.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>botDataModel.Context.tt</DependentUpon>
+    <Compile Include="dataBase\answersLog.cs">
+      <DependentUpon>botData.tt</DependentUpon>
     </Compile>
-    <Compile Include="dataBase\botDataModel.cs">
+    <Compile Include="dataBase\botData.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>botDataModel.tt</DependentUpon>
+      <DependentUpon>botData.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="dataBase\botDataModel.Designer.cs">
+    <Compile Include="dataBase\botData.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>botDataModel.edmx</DependentUpon>
+      <DependentUpon>botData.tt</DependentUpon>
+    </Compile>
+    <Compile Include="dataBase\botData.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>botData.edmx</DependentUpon>
     </Compile>
     <Compile Include="dataBase\botphrase.cs">
-      <DependentUpon>botDataModel.tt</DependentUpon>
+      <DependentUpon>botData.tt</DependentUpon>
     </Compile>
     <Compile Include="dataBase\DataBaseController.cs" />
     <Compile Include="dataBase\entity.cs">
-      <DependentUpon>botDataModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="dataBase\media.cs">
-      <DependentUpon>botDataModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="dataBase\Question.cs">
-      <DependentUpon>botDataModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="dataBase\SubQuestion.cs">
-      <DependentUpon>botDataModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="dataBase\User.cs">
-      <DependentUpon>botDataModel.tt</DependentUpon>
+      <DependentUpon>botData.tt</DependentUpon>
     </Compile>
     <Compile Include="dataBase\entityS.cs" />
+    <Compile Include="dataBase\ErrorLog.cs">
+      <DependentUpon>botData.tt</DependentUpon>
+    </Compile>
+    <Compile Include="dataBase\intent.cs">
+      <DependentUpon>botData.tt</DependentUpon>
+    </Compile>
+    <Compile Include="dataBase\media.cs">
+      <DependentUpon>botData.tt</DependentUpon>
+    </Compile>
+    <Compile Include="dataBase\OtherLog.cs">
+      <DependentUpon>botData.tt</DependentUpon>
+    </Compile>
+    <Compile Include="dataBase\Question.cs">
+      <DependentUpon>botData.tt</DependentUpon>
+    </Compile>
+    <Compile Include="dataBase\SubQuestion.cs">
+      <DependentUpon>botData.tt</DependentUpon>
+    </Compile>
+    <Compile Include="dataBase\User.cs">
+      <DependentUpon>botData.tt</DependentUpon>
+    </Compile>
     <Compile Include="DBException.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Interfaces\Ientity.cs" />
@@ -123,31 +135,34 @@
     <Compile Include="ConcreteTypeConverter.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-    <EntityDeploy Include="dataBase\botDataModel.edmx">
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <EntityDeploy Include="dataBase\botData.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>botDataModel.Designer.cs</LastGenOutput>
+      <LastGenOutput>botData.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="dataBase\botDataModel.edmx.diagram">
-      <DependentUpon>botDataModel.edmx</DependentUpon>
+    <None Include="dataBase\botData.edmx.diagram">
+      <DependentUpon>botData.edmx</DependentUpon>
     </None>
     <None Include="modelDiagram.cd" />
     <None Include="packages.config" />
-    <Content Include="dataBase\botDataModel.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>botDataModel.edmx</DependentUpon>
-      <LastGenOutput>botDataModel.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="dataBase\botDataModel.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>botDataModel.edmx</DependentUpon>
-      <LastGenOutput>botDataModel.cs</LastGenOutput>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="dataBase\botData.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>botData.edmx</DependentUpon>
+      <LastGenOutput>botData.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="dataBase\botData.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>botData.edmx</DependentUpon>
+      <LastGenOutput>botData.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

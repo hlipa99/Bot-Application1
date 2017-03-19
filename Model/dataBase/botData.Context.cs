@@ -13,10 +13,10 @@ namespace Model.dataBase
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class Entities2 : DbContext
+    public partial class Entities8 : DbContext
     {
-        public Entities2()
-            : base("name=Entities2")
+        public Entities8()
+            : base("name=Entities8")
         {
         }
     
@@ -25,11 +25,15 @@ namespace Model.dataBase
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<answersLog> answersLog { get; set; }
         public virtual DbSet<botphrase> botphrase { get; set; }
         public virtual DbSet<entity> entity { get; set; }
+        public virtual DbSet<ErrorLog> ErrorLog { get; set; }
         public virtual DbSet<media> media { get; set; }
+        public virtual DbSet<OtherLog> OtherLog { get; set; }
         public virtual DbSet<Question> Question { get; set; }
         public virtual DbSet<SubQuestion> SubQuestion { get; set; }
         public virtual DbSet<User> User { get; set; }
+        public virtual DbSet<intent> intent { get; set; }
     }
 }

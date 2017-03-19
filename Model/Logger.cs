@@ -1,63 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Web;
+using System.Text;
+using System.Threading.Tasks;
+using Model.Models;
+using Model.dataBase;
 
-namespace Bot_Application1.log
+namespace Model
 {
-    public class Logger
+    public static class Logger
     {
-
-        /** 
-          * Log file path 
-          *  
-          * @var string 
-          */
-        //private static string __log_file_path = Environment.CurrentDirectory + "/log/" ;
-
-        /** 
-         * __log_file_path get/set 
-         */
-     //   public static string filePath
-    //    {
-    //        get { return Logger.__log_file_path; }
-    //        set { if (value.Length > 0) Logger.__log_file_path = value; }
-     //   }
-
-        /** 
-         * Flush log file contents 
-         *  
-         * @return void 
-         */
-        public static void flush()
+        public static void addLog(string v)
         {
-      //      File.WriteAllText(Logger.filePath, string.Empty);
+            var log = new OtherLog();
+            log.time = DateTime.UtcNow;
+            log.data = v;
+            DataBaseController.getInstance().addOtherLog(log);
         }
 
-        /** 
-         * Log message 
-         *  
-         * @param string msg 
-         * @return void 
-         */
-        public static void log(string className, string methodName, string msg)
+        public static void addAnswerOutput(string answerText, string userAnswer, AnswerFeedback feedback)
         {
-            if (msg.Length > 0)
+            var log = new answersLog();
+            log.time = DateTime.UtcNow;
+            log.userAnswer = userAnswer;
+            log.question = answerText;
+            log.missingEntities = "";
+            log.entities = feedback.score.ToString();
+            foreach (var e in feedback.missingEntitis)
             {
-                /*      using (StreamWriter sw = File.AppendText(Logger.filePath))
-                      {
-                          sw.WriteLine("{0} {1}: {2} {3}: {4}", DateTime.Now.ToShortDateString(), DateTime.Now.ToShortTimeString(),className,methodName, msg);
-                          sw.Flush();
-                      } */
-
-            //    System.Diagnostics.Trace.WriteLine(DateTime.Now.ToShortDateString() + " " +  DateTime.Now.ToShortTimeString() + " " + className + " "+ methodName + " "+ msg);
-            //    System.Diagnostics.Trace.Flush();
-
+                log.missingEntities += ";" + e.entityType + "#" + e.entityValue + ";";
             }
+            DataBaseController.getInstance().addAnswerLog(log);
         }
-
-
-        
     }
 }

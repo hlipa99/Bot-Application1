@@ -38,16 +38,16 @@ namespace Bot_Application1.Controllers.Tests
             Assert.AreEqual(convCtrl.FindMatchFromOptions("", new string[] { "1", "2", "3" }), null);
         }
 
-        [TestMethod()]
-        public void isStopSessionTest()
-        {
-            //good
-            Assert.IsTrue(convCtrl.isStopSession("מספיק"));
-            //bad
-            Assert.IsFalse(convCtrl.isStopSession("תמשיך"));
-            //sad
-            Assert.IsFalse(convCtrl.isStopSession(""));
-        }
+        //[TestMethod()]
+        //public void isStopSessionTest()
+        //{
+        //    //good
+        //    Assert.IsTrue(convCtrl.isStopSession("מספיק"));
+        //    //bad
+        //    Assert.IsFalse(convCtrl.isStopSession("תמשיך"));
+        //    //sad
+        //    Assert.IsFalse(convCtrl.isStopSession(""));
+        //}
 
 
 

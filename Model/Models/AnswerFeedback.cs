@@ -10,6 +10,7 @@ namespace Model.Models
         public List<string> missingAnswers = new List<string>();
 
         public int score;
+        public string answer;
 
         public void merge(AnswerFeedback f)
         {

@@ -267,11 +267,14 @@ namespace Bot_Application1.Controllers
             {
                 verbalFeedback =  ConversationController.getPhrase(Pkey.goodAnswer);
             }
-            else if (answerFeedback.score >= 10)
+            else if (answerFeedback.score >= 35)
             {
                 verbalFeedback =  ConversationController.getPhrase(Pkey.partialAnswer);
             }
-            else
+            else if (answerFeedback.answer.Split(' ').Length > 2)
+            {
+                verbalFeedback = ConversationController.getPhrase(Pkey.wrongAnswer);
+            }else
             {
                 verbalFeedback =  ConversationController.getPhrase(Pkey.notAnAnswer);
             }

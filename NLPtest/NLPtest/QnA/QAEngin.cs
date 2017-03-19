@@ -1,4 +1,4 @@
-﻿
+﻿using Model;
 using Model.Models;
 using NLP.Controllers;
 using NLP.WorldObj;
@@ -94,6 +94,9 @@ namespace NLP.QnA
                     var systemAnswer = Nlp.Analize(subquestion.answerText);
                     feedback = matchAnswers(userAnswer, systemAnswer);
                 }
+
+                Logger.addAnswerOutput(subquestion.answerText, answer, feedback);
+
                 return feedback;
             }else
             {

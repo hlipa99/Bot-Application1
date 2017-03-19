@@ -1,6 +1,6 @@
 ﻿
 
-using Bot_Application1.log;
+
 //using Bot_Application1.Exceptions;
 //using Bot_Application1.log;
 using Model;
@@ -22,7 +22,7 @@ namespace Model.dataBase
     public class DataBaseController
     {
         static object syncLock = new object();
-        static Entities2 DB;
+        static Entities8 DB;
         static DataBaseController controller;
 
         public static void setStubInstance(DataBaseController ctrl)
@@ -39,7 +39,7 @@ namespace Model.dataBase
                 {
                    
                     controller = new DataBaseController();
-                    DB = new Entities2();
+                    DB = new Entities8();
                     return controller;
                 }
                 else
@@ -50,7 +50,11 @@ namespace Model.dataBase
              
         }
 
-
+        internal void addAnswerLog(answersLog log)
+        {
+            DB.answersLog.Add(log);
+            DB.SaveChanges();
+        }
 
         public virtual bool isUserExist(string userId)
         {
@@ -72,11 +76,10 @@ namespace Model.dataBase
 
         }
 
-        public virtual void saveEntitiesFromQuestions(List<entity> Entities2)
+        public virtual void saveEntitiesFromQuestions(List<entity> Entities)
         {
-            Entities2 DB = new Entities2();
             var questions = DB.SubQuestion;
-            foreach(var e in Entities2)
+            foreach(var e in Entities)
             {
                 if(e.entityValue.Length < 50)
                 DB.entity.Add(e);
@@ -94,7 +97,6 @@ namespace Model.dataBase
 
         public virtual void addNewUser(string channelId, string id, string name)
         {
-           Entities2 DB = new Entities2();
             try
             {
 
@@ -120,7 +122,7 @@ namespace Model.dataBase
 
         public virtual void addNewEntity(string value, string type)
         {
-           Entities2 DB = new Entities2();
+
             try
             {
 
@@ -152,7 +154,7 @@ namespace Model.dataBase
 
         public virtual void addNewUser(IUser user)
         {
-           Entities2 DB = new Entities2();
+
             try
             {
 
@@ -175,7 +177,6 @@ namespace Model.dataBase
 
         public virtual IUser getUser(string userId)
         {
-           Entities2 DB = new Entities2();
             IUser NewIUser = new User();
             List<User> visitors = new List<User>();
 
@@ -204,7 +205,7 @@ namespace Model.dataBase
 
         public virtual void deleteUser(string userId)
         {
-           Entities2 DB = new Entities2();
+
             IUser NewIUser = new User();
             List<IUser> visitors = new List<IUser>();
 
@@ -235,7 +236,7 @@ namespace Model.dataBase
 
         public virtual IQuestion[] getQuestion(string category)
         {
-           Entities2 DB = new Entities2();
+
             IQuestion question = new Question();
             Question[] questions = null;
 
@@ -261,7 +262,7 @@ namespace Model.dataBase
 
         public virtual IQuestion[] getQuestion(string catgoty, string subCategory)
         {
-           Entities2 DB = new Entities2();
+
             Question question = new Question();
             Question[] questions = null;
 
@@ -288,7 +289,7 @@ namespace Model.dataBase
 
         public virtual string[] getAllCategory()
         {
-           Entities2 DB = new Entities2();
+
             Question question = new Question();
             string[] catagories = null;
 
@@ -321,7 +322,7 @@ namespace Model.dataBase
 
         public virtual string[] getAllSubCategory(string catgoty)
         {
-           Entities2 DB = new Entities2();
+ 
             Question question = new Question();
             string[] catagory = null;
 
@@ -346,7 +347,7 @@ namespace Model.dataBase
 
         public virtual string[] getMedia(string key, string type, string flags)
         {
-           Entities2 DB = new Entities2();
+
             media media = new media();
             string[] urls = new string[] { };
 
@@ -371,13 +372,13 @@ namespace Model.dataBase
         public virtual ISubQuestion[] getAllSubQuestions()
         {
      //       var x = System.Configuration.ConfigurationManager.ConnectionStrings;
-            Entities2 DB = new Entities2();
+
             return DB.SubQuestion.ToArray();
         }
 
         public virtual string[] getBotPhrase(Pkey pKey, string[] flags, string[] flagsNot)
         {
-           Entities2 DB = new Entities2();
+     
             media media = new media();
             string[] phrases = null;
             var key = Enum.GetName(typeof(Pkey), pKey).ToLower();
@@ -392,7 +393,7 @@ namespace Model.dataBase
                 }else
                 {
                     phrases = (from t in DB.botphrase
-                               where t.Pkey == key.ToLower() && !t.Flags.Contains("text")
+                               where t.Pkey.ToLower() == key && !t.Flags.Contains("text")
                                select t.Text).ToArray();
                 }
  
@@ -407,5 +408,11 @@ namespace Model.dataBase
 
         }
 
+        internal void addOtherLog(OtherLog log)
+        {
+         //   var DB = new Entities();
+            DB.OtherLog.Add(log);
+            DB.SaveChanges();
+        }
     }
 }

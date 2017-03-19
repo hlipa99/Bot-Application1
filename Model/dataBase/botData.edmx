@@ -5,6 +5,17 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
       <Schema Namespace="mindcetModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="answersLog">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="question" Type="nvarchar(max)" />
+          <Property Name="userAnswer" Type="nvarchar(max)" />
+          <Property Name="entities" Type="nvarchar(max)" />
+          <Property Name="missingEntities" Type="nvarchar(max)" />
+          <Property Name="time" Type="datetime" />
+        </EntityType>
         <EntityType Name="botphrase">
           <Key>
             <PropertyRef Name="Id" />
@@ -19,9 +30,29 @@
             <PropertyRef Name="entityID" />
           </Key>
           <Property Name="entityID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="entityValue" Type="nvarchar" MaxLength="50" />
-          <Property Name="entityType" Type="nvarchar" MaxLength="50" />
+          <Property Name="entityValue" Type="nvarchar" MaxLength="100" />
+          <Property Name="entityType" Type="nvarchar" MaxLength="100" />
           <Property Name="entitySynonimus" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="ErrorLog">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="context" Type="nvarchar(max)" />
+          <Property Name="error" Type="nvarchar(max)" />
+          <Property Name="time" Type="datetime" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'mindcet.dbo.intent' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="intent">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nchar" MaxLength="10" />
+          <Property Name="synonymus" Type="nchar" MaxLength="10" />
+          <Property Name="context" Type="nchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="media">
           <Key>
@@ -32,6 +63,14 @@
           <Property Name="mediaKey" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="value" Type="nvarchar" MaxLength="200" />
           <Property Name="flags" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="OtherLog">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="time" Type="datetime" />
+          <Property Name="data" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="Question">
           <Key>
@@ -82,12 +121,23 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="mindcetModelStoreContainer">
+          <EntitySet Name="answersLog" EntityType="Self.answersLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="botphrase" EntityType="Self.botphrase" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="entity" EntityType="Self.entity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ErrorLog" EntityType="Self.ErrorLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="media" EntityType="Self.media" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OtherLog" EntityType="Self.OtherLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Question" EntityType="Self.Question" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SubQuestion" EntityType="Self.SubQuestion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="intent" EntityType="Self.intent" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [intent].[id] AS [id], 
+    [intent].[name] AS [name], 
+    [intent].[synonymus] AS [synonymus], 
+    [intent].[context] AS [context]
+    FROM [dbo].[intent] AS [intent]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_SubQuestion_Question" Association="Self.FK_SubQuestion_Question">
             <End Role="Question" EntitySet="Question" />
             <End Role="SubQuestion" EntitySet="SubQuestion" />
@@ -98,6 +148,17 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="mindcetModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="answersLog">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="question" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="userAnswer" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="entities" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="missingEntities" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="time" Type="DateTime" Precision="3" />
+        </EntityType>
         <EntityType Name="botphrase">
           <Key>
             <PropertyRef Name="Id" />
@@ -112,9 +173,18 @@
             <PropertyRef Name="entityID" />
           </Key>
           <Property Name="entityID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="entityValue" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="entityType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="entityValue" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="entityType" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="entitySynonimus" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ErrorLog">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="context" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="error" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="time" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="media">
           <Key>
@@ -125,6 +195,14 @@
           <Property Name="mediaKey" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="value" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="flags" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="OtherLog">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="time" Type="DateTime" Precision="3" />
+          <Property Name="data" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Question">
           <Key>
@@ -162,6 +240,15 @@
           <Property Name="UserCreated" Type="DateTime" Precision="3" />
           <Property Name="UserLastSession" Type="DateTime" Precision="3" />
         </EntityType>
+        <EntityType Name="intent">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="synonymus" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="context" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+        </EntityType>
         <Association Name="FK_SubQuestion_Question">
           <End Role="Question" Type="Self.Question" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -176,13 +263,17 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="Entities2" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="Entities8" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="answersLog" EntityType="Self.answersLog" />
           <EntitySet Name="botphrase" EntityType="Self.botphrase" />
           <EntitySet Name="entity" EntityType="Self.entity" />
+          <EntitySet Name="ErrorLog" EntityType="Self.ErrorLog" />
           <EntitySet Name="media" EntityType="Self.media" />
+          <EntitySet Name="OtherLog" EntityType="Self.OtherLog" />
           <EntitySet Name="Question" EntityType="Self.Question" />
           <EntitySet Name="SubQuestion" EntityType="Self.SubQuestion" />
           <EntitySet Name="User" EntityType="Self.User" />
+          <EntitySet Name="intent" EntityType="Self.intent" />
           <AssociationSet Name="FK_SubQuestion_Question" Association="Self.FK_SubQuestion_Question">
             <End Role="Question" EntitySet="Question" />
             <End Role="SubQuestion" EntitySet="SubQuestion" />
@@ -193,7 +284,19 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="mindcetModelStoreContainer" CdmEntityContainer="Entities2">
+        <EntityContainerMapping StorageEntityContainer="mindcetModelStoreContainer" CdmEntityContainer="Entities8">
+          <EntitySetMapping Name="answersLog">
+            <EntityTypeMapping TypeName="mindcetModel.answersLog">
+              <MappingFragment StoreEntitySet="answersLog">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="question" ColumnName="question" />
+                <ScalarProperty Name="userAnswer" ColumnName="userAnswer" />
+                <ScalarProperty Name="entities" ColumnName="entities" />
+                <ScalarProperty Name="missingEntities" ColumnName="missingEntities" />
+                <ScalarProperty Name="time" ColumnName="time" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="botphrase">
             <EntityTypeMapping TypeName="mindcetModel.botphrase">
               <MappingFragment StoreEntitySet="botphrase">
@@ -214,6 +317,16 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="ErrorLog">
+            <EntityTypeMapping TypeName="mindcetModel.ErrorLog">
+              <MappingFragment StoreEntitySet="ErrorLog">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="context" ColumnName="context" />
+                <ScalarProperty Name="error" ColumnName="error" />
+                <ScalarProperty Name="time" ColumnName="time" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="media">
             <EntityTypeMapping TypeName="mindcetModel.media">
               <MappingFragment StoreEntitySet="media">
@@ -222,6 +335,15 @@
                 <ScalarProperty Name="mediaKey" ColumnName="mediaKey" />
                 <ScalarProperty Name="value" ColumnName="value" />
                 <ScalarProperty Name="flags" ColumnName="flags" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OtherLog">
+            <EntityTypeMapping TypeName="mindcetModel.OtherLog">
+              <MappingFragment StoreEntitySet="OtherLog">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="time" ColumnName="time" />
+                <ScalarProperty Name="data" ColumnName="data" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -258,6 +380,16 @@
                 <ScalarProperty Name="UserClass" ColumnName="UserClass" />
                 <ScalarProperty Name="UserCreated" ColumnName="UserCreated" />
                 <ScalarProperty Name="UserLastSession" ColumnName="UserLastSession" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="intent">
+            <EntityTypeMapping TypeName="mindcetModel.intent">
+              <MappingFragment StoreEntitySet="intent">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="synonymus" ColumnName="synonymus" />
+                <ScalarProperty Name="context" ColumnName="context" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

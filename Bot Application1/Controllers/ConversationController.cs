@@ -287,7 +287,8 @@ namespace Bot_Application1.Controllers
         internal string[] mergeText(string[] v1, string v2)
         {
             if (v1.Length == 0) return new string[] { v2};
-            v1[v1.Length - 1] += " " +v2;
+            var space = v1[v1.Length - 1].Length == 1 ? "" : " ";
+            v1[v1.Length - 1] += space + v2;
             return v1;
         }
 
@@ -301,7 +302,9 @@ namespace Bot_Application1.Controllers
         internal string[] mergeText(string v1, string[] v2)
         {
             if (v2.Length == 0) return new string[] { v1 };
-            v2[0] = v1 + " " + v2[0];
+
+            var space = v1.Length == 1 ? "" : " ";
+            v2[0] = v1 + space + v2[0];
             return v2;
         }
 
@@ -362,11 +365,8 @@ namespace Bot_Application1.Controllers
 
         public virtual string[] getPhrase(Pkey key,string[] flags = null, string[] flagesNot = null, string textVar = null)
         {
-
-            var strem = File.AppendText("logFile");
-            strem.WriteLine("Bot: " + Enum.GetName(typeof(Pkey), key));
-
-
+            Logger.addLog("Bot: " + Enum.GetName(typeof(Pkey), key));
+     
             if (flags == null) flags = new string[] { };
                 if (flagesNot == null) flagesNot = new string[] { };
 

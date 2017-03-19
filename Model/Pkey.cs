@@ -69,6 +69,7 @@ namespace Model
         takeAbreak,
         imWaiting,
         whereDidYouGone,
-        youWantToContinue
+        youWantToContinue,
+        wrongAnswer
     }
 }

@@ -112,7 +112,8 @@ namespace NLP.WorldObj
             none,
             unspecified,
              imperative,
-                infinitive
+                infinitive,
+                beinoni
         }
 
         public override IWorldObject Clone()

@@ -1,4 +1,4 @@
-﻿using Bot_Application1.log;
+﻿
 using Bot_Application1.YAndex;
 
 using System;
@@ -31,7 +31,7 @@ namespace Bot_Application1.YAndex
                 return tr.text[0];
             }catch(Exception e)
             {
-                Logger.log("ControlerTranslate", MethodBase.GetCurrentMethod().Name, e.ToString());
+                //Logger.log("ControlerTranslate", MethodBase.GetCurrentMethod().Name, e.ToString());
             }
 
             return tr.text[0];

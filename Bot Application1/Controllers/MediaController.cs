@@ -32,16 +32,24 @@ namespace Bot_Application1.Controllers
 
         public string getFileUrl(string key)
         {
-            CloudBlockBlob blockBlob;
-            blockBlob = container.GetBlockBlobReference(key);
-            var sas = blockBlob.GetSharedAccessSignature(new SharedAccessBlobPolicy()
+            try
             {
-                Permissions = SharedAccessBlobPermissions.Read,
-                SharedAccessExpiryTime = DateTime.UtcNow.AddMinutes(15),
-            });
+                CloudBlockBlob blockBlob;
+                blockBlob = container.GetBlockBlobReference(key);
+                var sas = blockBlob.GetSharedAccessSignature(new SharedAccessBlobPolicy()
+                {
+                    Permissions = SharedAccessBlobPermissions.Read,
+                    SharedAccessExpiryTime = DateTime.UtcNow.AddMinutes(15),
+                });
 
-            string sasUrl = string.Format(CultureInfo.InvariantCulture, "{0}{1}", blockBlob.Uri, sas);
-            return sasUrl;
+                string sasUrl = string.Format(CultureInfo.InvariantCulture, "{0}{1}", blockBlob.Uri, sas);
+                return sasUrl;
+
+            }
+            catch (Exception ex)
+            {
+                return "";
+            }
 
         }
 

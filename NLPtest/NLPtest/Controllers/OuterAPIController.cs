@@ -22,6 +22,14 @@ namespace NLP.Controllers
 
         }
 
+        public virtual string getFBgender(string id)
+        {
+            //https://graph.facebook.com/v2.6//" + id + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=EAAbq7vO3A0ABAHit1bZAwZAY6F21AnaDB52iCWfbZBLuhwTRnWtIMDaIwWOpZBoRHZAM07eYWa6ZAZAYJRqCh0VooPRAWNYvaTbGgVKXI6bnvdWRc6Hmrc5pcUxw2ZBc9zXYcXCozBcEIhZCGfX5TJCyUvZC4e1qYyHbRIZBn1DQRMZCcwZDZD
+            return "";
+        }
+
+
+
 
         public virtual string getIntentApiAi(string str,string context)
         {
@@ -51,7 +59,7 @@ namespace NLP.Controllers
         {
             try
             {
-                WebRequest request = WebRequest.Create("https://e3f22255.ngrok.io/parse");
+                WebRequest request = WebRequest.Create("https://8e64979e.ngrok.io/parse");
                 string responseFromServer = "";
                 request.Method = "POST";
                 byte[] byteArray = Encoding.UTF8.GetBytes(text);
@@ -126,5 +134,7 @@ namespace NLP.Controllers
             return text;
         }
     }
-}
+
+
+           }
 }
