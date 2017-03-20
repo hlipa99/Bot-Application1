@@ -33,6 +33,7 @@ namespace NLP.QnA
             {
                 var userAnswer = Nlp.Analize(answer, subquestion.questionText);
                 AnswerFeedback feedback = new AnswerFeedback() ;
+                feedback.answer = answer;
                 if (subquestion.answerText.Contains("|"))
                 {
 
@@ -134,7 +135,11 @@ namespace NLP.QnA
                         {
                             if (se.GetType() == ue.GetType())
                             {
-                                if (se.Word == ue.Word && se.Negat == ue.Negat)
+                                var a = se.Word.Equals(ue.Word);
+                                var b = se.Negat == ue.Negat;
+
+
+                                if (se.Word.Equals(ue.Word) && se.Negat == ue.Negat)
                                 {
                                     feedback.score += (100 / systemEntitis.Count())*2;
                                     found = true;
@@ -149,7 +154,6 @@ namespace NLP.QnA
                         }
 
                     }
-
 
                 }
                 else

@@ -240,11 +240,16 @@ namespace Bot_Application1.IDialog
 
          
 
-            var menu = new PromptDialog.PromptChoice<string>(
-              options,
-             title,
-             conv().getPhrase(Pkey.wrongOption)[0],
-             3);
+            //var menu = new PromptDialog.PromptChoice<string>(
+            //  options,
+            // title,
+            // conv().getPhrase(Pkey.wrongOption)[0],
+            // 1);
+
+            var menu = new MenuOptionDialog(
+            options,
+           title,
+           conv().getPhrase(Pkey.wrongOption)[0]);
 
             context.Call(menu, resume);
 

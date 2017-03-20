@@ -135,12 +135,12 @@ namespace Bot_Application1.IDialog
             //{
                 var r =  res as IMessageActivity;
                 message = r.Text;
-       //     }
+            //     }
 
-           
-           if (edc().getStudyCategory().Contains(message))
+            var option = conv().FindMatchFromOptions(edc().getStudyCategory(), message);
+           if (option != null )
             {
-                StudySession.Category = message;
+                StudySession.Category = option;
                 setStudySession(context);
 
                 try
@@ -206,7 +206,7 @@ namespace Bot_Application1.IDialog
             }
             catch (StopSessionException ex)
             {
-                await EndOfLearningSession(context);
+                context.Done("learningSession");
                 return;
             }
             catch (Exception ex)

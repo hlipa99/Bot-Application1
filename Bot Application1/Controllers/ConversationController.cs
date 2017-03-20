@@ -41,6 +41,7 @@ namespace Bot_Application1.Controllers
         public static string BOT_NAME = "מיסטר אייצ" + "'";
 
         public static string BOT_SUBJECT = "היסטוריה";
+        private readonly int SUCCESS_THRESHHOLD = 35;
 
         public virtual DataBaseController Db
         {
@@ -61,6 +62,30 @@ namespace Bot_Application1.Controllers
             {
                 user = value;
             }
+        }
+
+        public string FindMatchFromOptions(string[] options, string matchString)
+        {
+            var best = "";
+            var bestInt = -1;
+            foreach (var o in options)
+            {
+                int precent = nlpControler.matchStrings(o, matchString);
+                if(precent > bestInt)
+                {
+                    bestInt = precent;
+                    best = o;
+                }
+            }
+
+            if(bestInt > SUCCESS_THRESHHOLD)
+            {
+                return best;
+            }else
+            {
+                return null;
+            }
+
         }
 
         public virtual IStudySession StudySession
@@ -92,27 +117,27 @@ namespace Bot_Application1.Controllers
         }
 
 
-        public  T FindMatchFromOptions<T>(string str, IEnumerable<T> options)
-        {
-            var res = "";
-            if (str != "")
-            {
-                foreach (var o in options as IEnumerable<string>)
-                {
+        //public  T FindMatchFromOptions<T>(string str, IEnumerable<T> options)
+        //{
+        //    var res = "";
+        //    if (str != "")
+        //    {
+        //        foreach (var o in options as IEnumerable<string>)
+        //        {
 
-                    if (str.Contains(o)) res = o;
-                    if (o.Contains(str)) res = o;
-                }
+        //            if (str.Contains(o)) res = o;
+        //            if (o.Contains(str)) res = o;
+        //        }
 
 
-                //bypass to keep the type T
-                foreach (var o in options)
-                {
-                    if (o.Equals(res)) return o;
-                }
-            }
-            return default(T);
-        }
+        //        //bypass to keep the type T
+        //        foreach (var o in options)
+        //        {
+        //            if (o.Equals(res)) return o;
+        //        }
+        //    }
+        //    return default(T);
+        //}
 
         internal string[] MainMenuOptions()
         {

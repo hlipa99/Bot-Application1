@@ -1,5 +1,7 @@
 ﻿
+using Model;
 using Model.dataBase;
+using Model.Models;
 using NLP.Controllers;
 using NLP.HebWords;
 using NLP.QnA;
@@ -161,12 +163,95 @@ namespace NLP
                 answerText += "Missing Answer:" + ans + Environment.NewLine;
 
             }
+
+            var res = createFeedBack(match);
+            answerText += res + Environment.NewLine;
+
             text_TB3.Text = answerText;
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             new NLPControler().updateEntityTable();
+        }
+
+
+
+        public string createFeedBack(AnswerFeedback answerFeedback)
+        {
+            string verbalFeedback = null;
+            //check sub question
+           
+            if (answerFeedback.score >= 60)
+            {
+                verbalFeedback = getPhrase(Pkey.goodAnswer);
+            }
+            else if (answerFeedback.score >= 35)
+            {
+                verbalFeedback = getPhrase(Pkey.partialAnswer);
+            }
+            else if (answerFeedback.answer != null && answerFeedback.answer.Split(' ').Length > 2)
+            {
+                verbalFeedback = getPhrase(Pkey.wrongAnswer);
+            }
+            else
+            {
+                verbalFeedback = getPhrase(Pkey.notAnAnswer);
+            }
+
+            answerFeedback.missingEntitis.RemoveAll(x => x.entityType == "conceptWord");
+
+            if (answerFeedback.missingAnswers.Count > 0)
+            {
+                verbalFeedback = verbalFeedback+" " + getPhrase(Pkey.missingAnswrPart;
+                verbalFeedback = verbalFeedback+" "+answerFeedback.missingAnswers[0];
+                answerFeedback.missingAnswers.RemoveAt(0);
+                foreach (var a in answerFeedback.missingAnswers)
+                {
+                    verbalFeedback = verbalFeedback + " " + getPhrase(Pkey.and) + " " + a;
+                }
+            }
+            else if (answerFeedback.score < 75)
+            {
+
+                verbalFeedback = verbalFeedback + " " + Pkey.MyAnswerToQuestion;
+                verbalFeedback = verbalFeedback + " " + "answerText";
+            }
+
+            return verbalFeedback;
+        }
+
+
+        public virtual string getPhrase(Pkey key, string[] flags = null, string[] flagesNot = null, string textVar = null)
+        {
+            Logger.addLog("Bot: " + Enum.GetName(typeof(Pkey), key));
+
+            if (flags == null) flags = new string[] { };
+            if (flagesNot == null) flagesNot = new string[] { };
+
+            var phrases = new DataBaseController().getBotPhrase(key, flags, flagesNot);
+            string phraseRes = null;
+            if (phrases.Length > 0)
+            {
+
+                var rundomInt = 0;
+                phraseRes = phrases[rundomInt];
+
+            }
+            else
+            {
+                //   throw new botphraseException();
+            }
+
+            if (phraseRes != null)
+            {
+                return phraseRes;
+            }
+            else
+            {
+                return new string[] { };
+            }
+
         }
     }
 }

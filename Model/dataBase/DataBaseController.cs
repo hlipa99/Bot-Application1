@@ -393,7 +393,7 @@ namespace Model.dataBase
                 }else
                 {
                     phrases = (from t in DB.botphrase
-                               where t.Pkey.ToLower() == key && !t.Flags.Contains("text")
+                               where t.Pkey.ToLower() == key && (t.Flags == null || !t.Flags.Contains("text"))
                                select t.Text).ToArray();
                 }
  

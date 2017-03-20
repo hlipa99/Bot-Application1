@@ -25,12 +25,7 @@ namespace Bot_Application1.IDialog
       
         public override async Task StartAsync(IDialogContext context)
         {
-            if(User == null)
-            {
-                User = new User();
-                User.UserName = "";
-                User.UserGender = "masculine";
-            }
+            getUser(context);
          
 
             await context.PostAsync(conv().getPhrase(Pkey.NotImplamented)[0]);

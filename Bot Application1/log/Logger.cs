@@ -10,7 +10,8 @@ namespace Bot_Application1.log
     {
 
         /** 
-          * Log file path 
+          * Log 
+          *  path 
           *  
           * @var string 
           */

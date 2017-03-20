@@ -13,80 +13,64 @@ using NLP;
 using Bot_Application1.Controllers;
 using NLP.Models;
 using Model.Models;
+using Bot_Application1.Models;
+using Model;
 
 namespace Bot_Application1.IDialog
 {
     [Serializable]
-    public class MenuOptionDialog<T> : PromptDialog.PromptChoice<T>
+    public class MenuOptionDialog : AbsDialog<string>
     {
-        private T[] options;
-        private IDialog<object>[] dialogOptions;
-        private ResumeAfter<object>[] contFunction;
-     
+        private string[] options;
+        private string prompt;
+        private string retry;
 
-        public MenuOptionDialog(T[] options, string prompt, string retry, int attempts, IDialog<object>[] dialogOptions, ResumeAfter<object>[] contFunction)
-            : base (options, prompt, retry,attempts)
+        public MenuOptionDialog(string[] options, string prompt, string retry)
         {
-            this.dialogOptions = dialogOptions;
-            this.contFunction = contFunction;
             this.options = options;
+            this.prompt = prompt;
+            this.retry = retry;
         }
 
-        protected async override Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> message)
+        public override UserContext getDialogContext()
         {
+            UserContext.dialog = "MenuOptionDialog";
+            return UserContext;
+        }
+
+        public override async Task StartAsync(IDialogContext context)
+        {
+
+            await checkOutdatedMessage(context, null);
+        }
+
+        private async Task checkOutdatedMessage(IDialogContext context, IAwaitable<IMessageActivity> result)
+        {
+            var message = context.MakeMessage();
+            message.AddHeroCard(prompt, options);
+            await context.PostAsync(message);
+            context.Wait(optionsRes);
+        }
+
+        protected async Task optionsRes(IDialogContext context, IAwaitable<IMessageActivity> result)
+        {
+            if (await checkOutdatedMessage<object, IMessageActivity>(context, checkOutdatedMessage, result)) return;
 
             //    var message = await result;
-          
-             T result;
-          if (this.TryParse(await message, out result))
-              {
-                var i = 0;
-                string resultMA = result as string;
-                foreach (var o in options)
-                {
-                    if (o.Equals(resultMA))
-                    {
-                        context.Call(dialogOptions[i], contFunction[i]);
-                        return;
-                    }
-                    i++;
-                }
 
-                //defualt
-                context.Call(dialogOptions[dialogOptions.Length - 1], contFunction[i]);
+            var message = await result;
 
-              }
-             else
-              {
-              --promptOptions.Attempts;
-              if (promptOptions.Attempts > 0)
-                {
-                    await context.PostAsync(this.MakePrompt(context, promptOptions.Retry ?? promptOptions.DefaultRetry, promptOptions.Options));
-                    context.Wait(MessageReceivedAsync);
-                }
-                else
-                 {
-                  //too many attempts, throw.
-                    await context.PostAsync(this.MakePrompt(context, promptOptions.TooManyAttempts));
-                                      throw new TooManyAttemptsException(promptOptions.TooManyAttempts);
-                 }
-             }
+            var coise = conv().FindMatchFromOptions(options,message.Text);
+            if(coise != null)
+            {
+                context.Done(coise);
+            }else
+            {
+                await writeMessageToUser(context, new string[] { retry });
+                await StartAsync(context);
+            }
 
 
-
-        }
-
-
-
-
-      protected override bool TryParse(IMessageActivity message, out T result)
-        {
-
-            // context.UserData.TryGetValue<Users>("user", out user);
-            ConversationController conv = new ConversationController(new Model.dataBase.User(),new StudySession());
-           
-            result = conv.FindMatchFromOptions<T>(message.Text, promptOptions.Options);
-            return result != null;
         }
 
     }

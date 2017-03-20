@@ -66,6 +66,25 @@ namespace NLP.Controllers
             return Analize(inputText);
         }
 
+        public int matchStrings(string target, string matchString)
+        {
+           if(target == matchString) return 100;
+            else{
+                var targetAnlz = Ma.meniAnalize(target, false);
+                var matchStringAnlz = Ma.meniAnalize(matchString, true);
+                var score = 0;
+                var points = 100/(target.Split(' ').Length);
+                foreach (var s in targetAnlz[0])
+                {
+                    if (matchStringAnlz.FindAll(x => x.FindAll(w => w.Lemma == s.Lemma).Count > 0).Count > 0)
+                    {
+                        score += points;
+                    }
+                }
+                return score;
+            }
+        }
+
         public UserIntent getUserIntent(string str,string context)
         {
             return sa.getUserIntent(str, context);

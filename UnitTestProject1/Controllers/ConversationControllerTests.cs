@@ -31,11 +31,11 @@ namespace Bot_Application1.Controllers.Tests
         public void FindMatchFromOptionsTest()
         {
             //good
-           Assert.AreEqual(convCtrl.FindMatchFromOptions("3 אופציה", new string[] { "1", "2", "3" }),"3");
+           Assert.AreEqual(convCtrl.FindMatchFromOptions(new string[] { "1", "2", "3" }, "3 אופציה"),"3");
             //bad
-            Assert.AreEqual(convCtrl.FindMatchFromOptions("dsds אופציה", new string[] { "1", "2", "3" }), null);
+            Assert.AreEqual(convCtrl.FindMatchFromOptions(new string[] { "1", "2", "3" }, "dsds אופציה" ), null);
             //sad
-            Assert.AreEqual(convCtrl.FindMatchFromOptions("", new string[] { "1", "2", "3" }), null);
+            Assert.AreEqual(convCtrl.FindMatchFromOptions(new string[] { "1", "2", "3" }, ""), null);
         }
 
         //[TestMethod()]

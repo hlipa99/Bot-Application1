@@ -181,28 +181,8 @@ namespace Bot_Application1.Controllers
 
             ISubQuestion question = studySession.CurrentSubQuestion;
 
-            //var systemAnswerText = studySession.CurrentSubQuestion.answerText;
-            //var systemAnswer = nlp.Analize(text, question.questionText);
             var answerFeedback = Qac.matchAnswers(question, text);
 
-
-            //var answerFeedback = new AnswerFeedback();
-            //var anslength = text.Split(' ').Length;
-            //    if (anslength > 7)
-            //    {
-            //    answerFeedback.score =  100;
-            //    }else if(anslength > 4)
-            //    {
-            //    answerFeedback.score = 60;
-            //}else if (anslength >= 2)
-            //{
-            //    answerFeedback.score = 30;
-            //}else
-            //{
-            //    answerFeedback.score = 0;
-            //}
-            
-         
             return answerFeedback;
         }
 
@@ -258,7 +238,7 @@ namespace Bot_Application1.Controllers
            return null;
         }
 
-        private string[] createFeedBack(AnswerFeedback answerFeedback)
+        public string[] createFeedBack(AnswerFeedback answerFeedback)
         {
             string[] verbalFeedback = null;
             //check sub question
@@ -271,7 +251,7 @@ namespace Bot_Application1.Controllers
             {
                 verbalFeedback =  ConversationController.getPhrase(Pkey.partialAnswer);
             }
-            else if (answerFeedback.answer.Split(' ').Length > 2)
+            else if (answerFeedback.answer != null && answerFeedback.answer.Split(' ').Length > 2)
             {
                 verbalFeedback = ConversationController.getPhrase(Pkey.wrongAnswer);
             }else
