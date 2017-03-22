@@ -19,7 +19,7 @@ using Model;
 namespace Bot_Application1.IDialog
 {
     [Serializable]
-    public class MenuOptionDialog : AbsDialog<string>
+    public class MenuOptionDialog : AbsDialog<IMessageActivity>
     {
         private string[] options;
         private string prompt;
@@ -54,7 +54,7 @@ namespace Bot_Application1.IDialog
 
         protected async Task optionsRes(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            if (await checkOutdatedMessage<object, IMessageActivity>(context, checkOutdatedMessage, result)) return;
+            if (await checkOutdatedMessage<IMessageActivity>(context, checkOutdatedMessage, result)) return;
 
             //    var message = await result;
 
@@ -63,7 +63,8 @@ namespace Bot_Application1.IDialog
             var coise = conv().FindMatchFromOptions(options,message.Text);
             if(coise != null)
             {
-                context.Done(coise);
+                message.Text = coise;
+                context.Done(message);
             }else
             {
                 await writeMessageToUser(context, new string[] { retry });

@@ -54,7 +54,7 @@ namespace Bot_Application1.Controllers
 
                         }catch (Exception ex)
                         {
-
+                            Logger.addErrorLog("messageController", ex.Message + Environment.NewLine + ex.StackTrace);
                         }
                         //
 

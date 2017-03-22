@@ -76,13 +76,13 @@ namespace Bot_Application1.IDialog
 
         public async Task answerQuestion(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            if (await checkOutdatedMessage<IMessageActivity, IMessageActivity>(context, askSubQuestion, result)) return;
+            if (await checkOutdatedMessage<IMessageActivity>(context, askSubQuestion, result)) return;
 
             var message = await result;
 
-            if(User.Language == "en") {
-                message.Text = ControlerTranslate.TranslateToEng(message.Text);
-            }
+        //    if(User.Language == "en") {
+        //        message.Text = ControlerTranslate.TranslateToEng(message.Text);
+        //    }
 
             //      context.UserData.TryGetValue<StudySession>("studySession", out studySession);
             var question = StudySession.CurrentSubQuestion;

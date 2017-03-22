@@ -102,7 +102,18 @@ namespace Bot_Application1.Controllers
             }
         }
 
-        public NLPControler NlpControler { get => nlpControler; set => nlpControler = value; }
+        public NLPControler NlpControler
+        {
+            get
+            {
+                return nlpControler;
+            }
+
+            set
+            {
+                nlpControler = value;
+            }
+        }
 
         internal UserIntent getUserIntente(string res, UserContext userContext)
         {

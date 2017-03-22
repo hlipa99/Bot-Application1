@@ -47,15 +47,31 @@ namespace Bot_Application1.IDialog
         {
 
             var message = await result;
-            if (conv().isEnglish(message.Text))
-            {
-                User.Language = "en";
-            }
+            //if (conv().isEnglish(message.Text))
+            //{
+            //    await context.Forward(new YesNoQuestionDialog(), replaceLanguge, conv().getPhrase(Pkey.replaceLanguge), new System.Threading.CancellationToken());
+            //    return;
+            //}
 
             var newMessage = conv().getPhrase(Pkey.selfIntroduction);
             await writeMessageToUser(context, newMessage);
             await NewUserGetName(context);
           
+        }
+
+        private async Task replaceLanguge(IDialogContext context, IAwaitable<bool> result)
+        {
+
+            var res = await result;
+            //if (res)
+            //{
+            //    User.Language = "en";
+            //}
+
+            var newMessage = conv().getPhrase(Pkey.selfIntroduction);
+            await writeMessageToUser(context, newMessage);
+
+            await NewUserGetName(context);
         }
 
         public async virtual Task NewUserGetName(IDialogContext context)
@@ -79,9 +95,9 @@ namespace Bot_Application1.IDialog
                 else
                 {
                 await writeMessageToUser(context, conv().getPhrase(Pkey.NewUserGetName));
-                    updateRequestTime(context);
-                    context.Wait(CheckName);
 
+                    context.Wait(CheckName);
+                    updateRequestTime(context);
                 } 
                    
             }
@@ -94,17 +110,10 @@ namespace Bot_Application1.IDialog
 
         public async virtual Task CheckName(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            if(await checkOutdatedMessage<IMessageActivity, IMessageActivity>(context,CheckName,result)) return;
-
-
-
+            if(await checkOutdatedMessage<IMessageActivity>(context,CheckName,result)) return;
 
             var message = await result;
             var userText = await result;
-            if (conv().isHebrew(message.Text))
-            {
-                User.Language = "heb";
-            }
 
             if ((User.UserName = conv().getName(userText.Text)) != null)
             {
@@ -125,10 +134,6 @@ namespace Bot_Application1.IDialog
                 context.Wait(CheckName);
             }
         }
-
-       
-
-     
 
         public async virtual Task NewUserGetGender(IDialogContext context)
         {

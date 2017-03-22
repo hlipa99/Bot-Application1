@@ -38,14 +38,23 @@ namespace Bot_Application1.IDialog
         {
             var question = await result;
             await writeMessageToUser(context, question);
-            context.Wait(userYesNoRes);
+            await createMenuOptions(context, question[0], conv().getPhrase(Pkey.yesNoOptions), userYesNoRes);
+        
+            // context.Wait(userYesNoRes);
         }
 
-        private async Task userYesNoRes(IDialogContext context, IAwaitable<IMessageActivity> result)
+        private async Task userYesNoRes(IDialogContext context, IAwaitable<object> result)
         {
-          
-            var res = await result;
-            var intent = conv().getUserIntente(res.Text, getDialogContext());
+    
+              var res = await result;
+
+            var text = res as string;
+            if( text == null)
+            {
+                text = (res as IMessageActivity).Text;
+            }
+
+            var intent = conv().getUserIntente(text, getDialogContext());
 
             if(intent == NLP.NLP.UserIntent.yes)
             {

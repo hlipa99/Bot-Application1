@@ -70,6 +70,8 @@ namespace Model
         imWaiting,
         whereDidYouGone,
         youWantToContinue,
-        wrongAnswer
+        wrongAnswer,
+        replaceLanguge,
+        yesNoOptions
     }
 }

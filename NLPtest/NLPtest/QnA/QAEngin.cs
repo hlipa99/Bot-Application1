@@ -37,59 +37,49 @@ namespace NLP.QnA
                 if (subquestion.answerText.Contains("|"))
                 {
 
-                    AnswerFeedback f = new AnswerFeedback(); //helpers
+                 //   AnswerFeedback f = new AnswerFeedback(); //helpers
                     AnswerFeedback f1 = new AnswerFeedback();
                     AnswerFeedback f2 = new AnswerFeedback();
+                    AnswerFeedback f3 = new AnswerFeedback();
+                    var feedbacks = new List<AnswerFeedback>();
 
                     foreach (var ans in subquestion.answerText.Split('|'))
                     {
-                        var systemAnswerWords = Nlp.Analize(ans);
                         if (ans.Trim() != "" && subquestion.flags != null)
                         {
-                            switch (subquestion.flags.Trim())
+                            var systemAnswerWords = Nlp.Analize(ans);
+                            var f = matchAnswers(userAnswer, systemAnswerWords, ans);
+                            feedbacks.Add(f);
+                        }
+                    }
+                    var flags = subquestion.flags.Trim();
+                    if(flags == "needAll")
+                    {
+                        foreach (var f in feedbacks)
+                        {
+                            f.merge(feedback);
+                            feedback = f;
+                        }
+                    }
+                    else {
+                        int numberInt;
+
+                            var numberStr = flags.Replace("need", "");
+                   int.TryParse(numberStr,out numberInt);
+                           numberInt = numberInt == 0 ? feedbacks.Count : numberInt;
+
+                           feedbacks.Sort((x , y) => y.score - x.score);
+                            feedbacks = feedbacks.GetRange(0,numberInt-1);
+                            foreach (var f in feedbacks)
                             {
-                                default:
-                                case ("needAll"):
-
-                                    f = matchAnswers(userAnswer, systemAnswerWords, ans);
-                                    f.merge(feedback);
-                                    feedback = f;
-                                    break;
-
-                                case ("need1"):
-                                    f = matchAnswers(userAnswer, systemAnswerWords, ans);
-                                    if (feedback != null && f.score > feedback.score)
-                                    {
-                                        feedback = f;
-                                    }
-
-                                    break;
-                                case ("need2"):
-                                    f = matchAnswers(userAnswer, systemAnswerWords, ans);
-                                    if (f.score > f1.score || f.score > f2.score)
-                                    {
-                                        if (f1.score > f2.score)
-                                        {
-                                            f2 = f;
-                                        }
-                                        else
-                                        {
-                                            f1 = f;
-                                        }
-                                    }
-
-                                    f1.merge(f2);
-                                    feedback = f1;
-                                    break;
-                                //default:
-                                //    throw new DBDataException();
-                                //    break;
+                                f.merge(feedback);
+                                feedback = f;
                             }
 
                         }
+                       
                     }
 
-                }
                 else
                 {
                     var systemAnswer = Nlp.Analize(subquestion.answerText);
@@ -108,11 +98,13 @@ namespace NLP.QnA
 
         private AnswerFeedback matchAnswers(List<WorldObject> userAnswer, List<WorldObject> systemAnswerWords, string ans)
         {
-           
                 AnswerFeedback f = matchAnswers(userAnswer, systemAnswerWords);
                 if (f.missingEntitis.Count == systemAnswerWords.Count)
                 {
                     f.missingAnswers.Add(ans);
+                }else
+                {
+                    f.foundAnswers.Add(ans);
                 }
                 return f;
             
@@ -152,6 +144,9 @@ namespace NLP.QnA
                         if (!found)
                         {
                             feedback.missingEntitis.Add(se.Entity);
+                        }else
+                        {
+                            feedback.foundEntitis.Add(se.Entity);
                         }
 
                     }

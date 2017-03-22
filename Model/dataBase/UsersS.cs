@@ -15,7 +15,18 @@ namespace Model.dataBase
 
         string language = "heb";
 
-        public string Language { get => language; set => language = value; }
+        public string Language
+        {
+            get
+            {
+                return language;
+            }
+
+            set
+            {
+                language = value;
+            }
+        }
 
         public bool Equals(User other)
         {

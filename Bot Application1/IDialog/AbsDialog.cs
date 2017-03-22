@@ -39,7 +39,8 @@ namespace Bot_Application1.IDialog
 
         internal void updateRequestTime(IDialogContext context)
         {
-            request = context.Activity.Timestamp.Value;
+            request = DateTime.UtcNow;
+           // request = context.Activity.Timestamp.Value;
         }
 
 
@@ -190,7 +191,7 @@ namespace Bot_Application1.IDialog
         }
 
 
-        public virtual async Task createMenuOptions(IDialogContext context, string title, string[] options, ResumeAfter<object> resume)
+        public virtual async Task createMenuOptions(IDialogContext context, string title, string[] options, ResumeAfter<IMessageActivity> resume)
         {
             if(context.Activity.ChannelId == "facebook")
             {
@@ -233,7 +234,7 @@ namespace Bot_Application1.IDialog
         }
 
    
-        public async virtual Task createRMenuOptions(IDialogContext context, string title, string[] options, ResumeAfter<string> resume)
+        public async virtual Task createRMenuOptions(IDialogContext context, string title, string[] options, ResumeAfter<IMessageActivity> resume)
         {
 
         //    await writeMessageToUser(context, new string[] { title });
@@ -270,10 +271,10 @@ namespace Bot_Application1.IDialog
         }
 
 
-        public async Task<bool> checkOutdatedMessage<A,R>(IDialogContext context,ResumeAfter<R> resume, IAwaitable<A> message)
+        public async Task<bool> checkOutdatedMessage<R>(IDialogContext context,ResumeAfter<R> resume, IAwaitable<IMessageActivity> message)
         {
             var mes = await message;
-            if (context.Activity.Timestamp <= Request)
+            if (mes.Timestamp <= Request)
             {
              //   mes.Summary = getDialogContext();
                 context.Wait(resume);

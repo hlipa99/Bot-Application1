@@ -33,7 +33,7 @@ namespace Bot_Application1.IDialog
         public override async Task StartAsync(IDialogContext context)
         {
             try
-            {
+           {
                 getUser(context);
                 if (User != null)
                 {
@@ -49,7 +49,8 @@ namespace Bot_Application1.IDialog
             catch (Exception ex)
             {
                 await writeMessageToUser(context, new string[] { "אוקיי זה מביך " + "\U0001F633", "קרתה לי תקלה בשרת ואני לא יודע מה לעשות", "אני אתחיל עכשיו מהתחלה ונעמיד פנים שלא קרה כלום, " + "\U0001F648", "טוב" + "?" });
-            //    await writeMessageToUser(context, new string[] { ex.Data.ToString(), ex.InnerException.ToString(), ex.StackTrace.ToString(), ex.TargetSite.ToString(), ex.ToString() });
+                Logger.addErrorLog(getDialogContext().dialog, ex.Message + Environment.NewLine + ex.StackTrace);
+                //    await writeMessageToUser(context, new string[] { ex.Data.ToString(), ex.InnerException.ToString(), ex.StackTrace.ToString(), ex.TargetSite.ToString(), ex.ToString() });
                 //     Logger.log("MainDialog", "MainMenu", ex.ToString());
                 await StartAsync(context);
             }
@@ -75,9 +76,9 @@ namespace Bot_Application1.IDialog
      
         }
 
-        private async Task MainMenuResualt(IDialogContext context, IAwaitable<object> result)
+        private async Task MainMenuResualt(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            if (await checkOutdatedMessage<object, IMessageActivity>(context, MainMenuResualt, result)) return;
+            if (await checkOutdatedMessage<IMessageActivity>(context, MainMenuResualt, result)) return;
 
             var text = await result;
             var option = "";
@@ -86,7 +87,7 @@ namespace Bot_Application1.IDialog
 
                 if (text is string)
             {
-                option = (string)text;
+          //      option = (string)text;
             }
             else
             {
@@ -143,6 +144,7 @@ namespace Bot_Application1.IDialog
                 try
                 {
                     await writeMessageToUser(context, conv().getPhrase(Pkey.innerException));
+                    Logger.addErrorLog(getDialogContext().dialog, ex.Message + Environment.NewLine + ex.StackTrace);
                     await MainMenu(context, null);
                     return;
                 }
