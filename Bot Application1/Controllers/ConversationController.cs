@@ -18,6 +18,7 @@ using NLP.NLP;
 using NLP.Controllers;
 using Microsoft.Bot.Connector;
 using System.IO;
+using Bot_Application1.YAndex;
 
 namespace Bot_Application1.Controllers
 {
@@ -70,7 +71,7 @@ namespace Bot_Application1.Controllers
             var bestInt = -1;
             foreach (var o in options)
             {
-                int precent = nlpControler.matchStrings(o, matchString);
+                int precent = NlpControler.matchStrings(o, matchString);
                 if(precent > bestInt)
                 {
                     bestInt = precent;
@@ -101,9 +102,11 @@ namespace Bot_Application1.Controllers
             }
         }
 
+        public NLPControler NlpControler { get => nlpControler; set => nlpControler = value; }
+
         internal UserIntent getUserIntente(string res, UserContext userContext)
         {
-            return nlpControler.getUserIntent(res, userContext.dialog);
+            return NlpControler.getUserIntent(res, userContext.dialog);
         }
 
         public ConversationController(){}
@@ -172,21 +175,27 @@ namespace Bot_Application1.Controllers
         public string[] endOfSession()
         {
 
-                //var average = 0;
-                //foreach (var q in StudySession.QuestionAsked)
-                //{
-                //    average += q.AnswerScore / StudySession.QuestionAsked.Count;
-                //}
+            var average = 0;
+            foreach (var q in StudySession.QuestionAsked)
+            {
+                average += q.AnswerScore / StudySession.QuestionAsked.Count;
+            }
+            if(StudySession.QuestionAsked.Count < StudySession.SessionLength)
+            {
+                return getPhrase(Pkey.earlyDiparture);
 
-                //if (average > 60)
-                //{
-                //    return getPhrase(Pkey.goodSessionEnd, textVar: average + "");
-                // }else{
-                //               return getPhrase(Pkey.badSessionEnd,textVar: average + "");
+            }
+            if (average > 60)
+            {
+                return getPhrase(Pkey.goodSessionEnd, textVar: average + "");
+            }
+            else
+            {
+                return getPhrase(Pkey.badSessionEnd, textVar: average + "");
 
-                //}
+            }
 
-              return getPhrase(Pkey.endOfSession);
+          //  return getPhrase(Pkey.endOfSession);
 
 
         
@@ -221,11 +230,10 @@ namespace Bot_Application1.Controllers
 
         public string getName(string text)
         {
-            if (text[0] >= '\u05D0' && text[0] <= '\u05EA')
-            {
+
                 if (text.Split(' ').Length == 1)
                     return text;
-            }
+
             return null;
           //  return nlpControler.getName(text);
         }
@@ -386,6 +394,30 @@ namespace Bot_Application1.Controllers
             return null;
         }
 
+        public bool isEnglish(string text)
+        {
+            foreach (var c in text)
+                {
+                    if((c <= 90 && c >= 65) || (c <= 122 && c >= 97))
+                    {
+                         return true;
+                    }
+                }
+            return false;
+        }
+
+        public bool isHebrew(string text)
+        {
+            foreach (var c in text)
+            {
+                if (c <= 0x0005EA && c >= 0x0005D0)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
 
 
         public virtual string[] getPhrase(Pkey key,string[] flags = null, string[] flagesNot = null, string textVar = null)
@@ -412,6 +444,13 @@ namespace Bot_Application1.Controllers
             if (phraseRes != null)
             {
                 phraseRes = formateVars(phraseRes, textVar);
+
+                if(user.Language == "en")
+                {
+                    phraseRes = ControlerTranslate.TranslateToEng(phraseRes);
+
+                }
+
                 return phraseRes.Split('|');
             }
             else

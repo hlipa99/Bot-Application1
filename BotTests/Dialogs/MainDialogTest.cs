@@ -109,7 +109,7 @@ namespace UnitTestProject1
 
 
         [TestMethod]
-        public void testMenuFreeText()
+        public void testMenuFreeIntegrationText()
         {
             var response = createUser("יוחאי", "בן", "יא");
             AssertNLP.contains(response, DBbotPhrase(Pkey.MainMenuText));

@@ -27,7 +27,7 @@ namespace NLP.NLP.Tests
         }
 
         [TestMethod()]
-        public void findTemplateTest()
+        public void findTemplateIntegrationTest()
         {
 
             listTemplate.AddRange(new ITemplate[] { WordObject1, WordObject2 , WordObject3 , WordObject4  });

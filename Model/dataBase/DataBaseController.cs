@@ -50,10 +50,34 @@ namespace Model.dataBase
              
         }
 
+        internal void addErrorLog(ErrorLog log)
+        {
+            try
+            {
+                DB.ErrorLog.Add(log);
+                DB.SaveChanges();
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
         internal void addAnswerLog(answersLog log)
         {
-            DB.answersLog.Add(log);
-            DB.SaveChanges();
+
+            try
+            {
+                DB.answersLog.Add(log);
+                DB.SaveChanges();
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+         
         }
 
         public virtual bool isUserExist(string userId)
@@ -410,9 +434,16 @@ namespace Model.dataBase
 
         internal void addOtherLog(OtherLog log)
         {
-         //   var DB = new Entities();
+            //   var DB = new Entities();
+            try
+            {
             DB.OtherLog.Add(log);
             DB.SaveChanges();
+
+            }catch(Exception ex)
+            {
+
+            }
         }
     }
 }

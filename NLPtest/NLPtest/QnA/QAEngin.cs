@@ -32,8 +32,8 @@ namespace NLP.QnA
             if (subquestion != null && answer != null)
             {
                 var userAnswer = Nlp.Analize(answer, subquestion.questionText);
-                AnswerFeedback feedback = new AnswerFeedback() ;
-                feedback.answer = answer;
+                AnswerFeedback feedback = null ;
+
                 if (subquestion.answerText.Contains("|"))
                 {
 
@@ -58,7 +58,7 @@ namespace NLP.QnA
 
                                 case ("need1"):
                                     f = matchAnswers(userAnswer, systemAnswerWords, ans);
-                                    if (f.score > feedback.score)
+                                    if (feedback != null && f.score > feedback.score)
                                     {
                                         feedback = f;
                                     }
@@ -97,7 +97,7 @@ namespace NLP.QnA
                 }
 
                 Logger.addAnswerOutput(subquestion.answerText, answer, feedback);
-
+                feedback.answer = answer;
                 return feedback;
             }else
             {
@@ -141,10 +141,11 @@ namespace NLP.QnA
 
                                 if (se.Word.Equals(ue.Word) && se.Negat == ue.Negat)
                                 {
-                                    feedback.score += (100 / systemEntitis.Count())*2;
+                                    feedback.score += (int) Math.Ceiling(new Decimal(100 / systemEntitis.Count()));
                                     found = true;
                                     break;
                                 }
+                           
                             }
                         }
 

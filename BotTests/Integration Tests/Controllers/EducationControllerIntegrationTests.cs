@@ -29,7 +29,7 @@ namespace Bot_Application1.Controllers.Tests
        
 
         [TestMethod()]
-        public void getQuestionTest()
+        public void getQuestionIntegrationTest()
         {
             //good
              SStudySession .Category = "לאומיות";
@@ -52,22 +52,50 @@ namespace Bot_Application1.Controllers.Tests
         }
 
         [TestMethod()]
-        public void checkAnswerTest()
+        public void checkAnswerIntegrationTest()
         {
-             ISubQuestion  Question4 = new  SubQuestion();
-            eduCtrl.Nlp =  NLPCtrl ;
+           
          
             //good
-            Assert.AreEqual(eduCtrl.checkAnswer( "תשובה טובה כוללת את כל הדברים").score, 100);
+            foreach(var c in DataBaseController.getInstance().getAllCategory())
+            {
+                foreach (var q in DataBaseController.getInstance().getQuestion(c))
+                {
+                    foreach (var sq in q.SubQuestion)
+                    {
+                        SStudySession.CurrentSubQuestion = sq;
+                        eduCtrl = new EducationController(UserMus, SStudySession, ConvCtrl);
+                        var feedback = eduCtrl.checkAnswer(sq.answerText);
+                        if(feedback.score < 99)
+                        {
+                             feedback = eduCtrl.checkAnswer(sq.answerText);
+                            //debug
+                        }
+                        Assert.IsTrue(feedback.score >= 99);
+                    }
+                }
+            }
 
             //doog
-            Assert.AreEqual(eduCtrl.checkAnswer("תשובה טובה אבל לא מושלמת ").score, 50);
+            foreach (var c in DataBaseController.getInstance().getAllCategory())
+            {
+                foreach (var q in DataBaseController.getInstance().getQuestion(c))
+                {
+                    foreach (var sq in q.SubQuestion)
+                    {
+                        SStudySession.CurrentSubQuestion = sq;
+                        eduCtrl = new EducationController(UserMus, SStudySession, ConvCtrl);
+                        Assert.AreEqual(eduCtrl.checkAnswer(sq.answerText.Substring(sq.answerText.Length/2)).score, 100);
+                    }
+                }
+            }
 
             //bad
             Assert.AreEqual(eduCtrl.checkAnswer("תשובה לא נכונה ולא קשורה בשיט ").score, 0);
 
             //ugly
             Assert.AreEqual(eduCtrl.checkAnswer("").score, 0);
+            Assert.AreEqual(eduCtrl.checkAnswer(null).score, 0);
 
         }
 

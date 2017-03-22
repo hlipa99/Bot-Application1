@@ -12,6 +12,11 @@ namespace Model.dataBase
     public partial class User : IUser
     {
 
+
+        string language = "heb";
+
+        public string Language { get => language; set => language = value; }
+
         public bool Equals(User other)
         {
 

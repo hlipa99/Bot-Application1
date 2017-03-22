@@ -345,7 +345,7 @@ namespace NLP.NLP
                     if (o.ObjectType() == Word_Type)
                     {
                         var w = o as WordObject;
-                        if (w.isA(personWord) && gufObject.Amount == personObject.amountType.singular && gufObject.Gender == w.Gender)
+                        if (w.isA(personWord) && gufObject.Amount == personObject.amountType.singular)
                         {
                             return o;
                         }

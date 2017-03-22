@@ -120,10 +120,19 @@ namespace UnitTestProject1
 
 
 
+            Question1.QuestionID = "1";
+            Question2.QuestionID = "2";
+            Question3.QuestionID = "3";
 
 
 
         }
+
+        public string[] DBbotPhrase(Pkey key)
+        {
+            return DataBaseController.getInstance().getBotPhrase(key, new string[] { }, new string[] { });
+        }
+
         public string EnumVal(Pkey key)
         {
             return Enum.GetName(typeof(Pkey), key);

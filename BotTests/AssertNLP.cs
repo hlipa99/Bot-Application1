@@ -33,26 +33,52 @@ namespace BotTests
 
         static bool contains(string sorcse, string input)
         {
-            var counter = sorcse.Length;
-            foreach (var o in input)
+            var counter = sorcse.Split(' ').Length;
+            foreach (var o in input.Split(new char[] {' '}))
             {
                 if (!sorcse.Contains(o)){
                     counter--;
                 }
             }
 
-            if (counter < sorcse.Length * 0.5) return false;
+            if (counter < sorcse.Split(' ').Length * 0.5) return false;
             else return true;
         }
 
 
         public static void contains(List<string> listOptions, string[] str)
         {
-
+            var flage = false;
+            var res = "[";
             foreach (var o in str)
             {
-                contains(listOptions, o);
+                try
+                {
+                    res += o + ",";
+                    contains(listOptions, o);
+                    flage = true;
+                    break;
+                }catch(AssertFailedException ex)
+                {
+
+                }
             }
+
+
+                if (!flage)
+                {
+                    res += "]";
+                    res = str[0] + " Not in Array " + res;
+                    throw new AssertFailedException(res);
+                }
+            
+        }
+
+        public static void contains(string[] listOptions, string[] str)
+        {
+
+              contains(new List<string>(listOptions), str);
+
 
         }
     }

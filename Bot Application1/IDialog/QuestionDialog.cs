@@ -10,6 +10,7 @@ using Bot_Application1.Models;
 using Bot_Application1.Controllers;
 using Bot_Application1.Exceptions;
 using System.Threading;
+using Bot_Application1.YAndex;
 
 namespace Bot_Application1.IDialog
 {
@@ -78,6 +79,11 @@ namespace Bot_Application1.IDialog
             if (await checkOutdatedMessage<IMessageActivity, IMessageActivity>(context, askSubQuestion, result)) return;
 
             var message = await result;
+
+            if(User.Language == "en") {
+                message.Text = ControlerTranslate.TranslateToEng(message.Text);
+            }
+
             //      context.UserData.TryGetValue<StudySession>("studySession", out studySession);
             var question = StudySession.CurrentSubQuestion;
 
@@ -108,6 +114,7 @@ namespace Bot_Application1.IDialog
             catch (Exception ex)
             {
                 await writeMessageToUser(context, conv().getPhrase(Pkey.innerException));
+                Logger.addErrorLog(getDialogContext().dialog, ex.Message + Environment.NewLine + ex.StackTrace);
                 await askSubQuestion(context, null);
                 return;
             }

@@ -203,7 +203,7 @@ namespace NLP
 
             if (answerFeedback.missingAnswers.Count > 0)
             {
-                verbalFeedback = verbalFeedback+" " + getPhrase(Pkey.missingAnswrPart;
+                verbalFeedback = verbalFeedback+" " + getPhrase(Pkey.missingAnswrPart);
                 verbalFeedback = verbalFeedback+" "+answerFeedback.missingAnswers[0];
                 answerFeedback.missingAnswers.RemoveAt(0);
                 foreach (var a in answerFeedback.missingAnswers)
@@ -249,7 +249,7 @@ namespace NLP
             }
             else
             {
-                return new string[] { };
+                return "";
             }
 
         }

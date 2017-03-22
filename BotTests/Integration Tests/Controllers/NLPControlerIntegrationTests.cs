@@ -27,7 +27,7 @@ namespace NLP.Controllers.Tests
 
 
         [TestMethod()]
-        public void AnalizeTest()
+        public void AnalizeIntegrationTest()
         {
             var res = nlpCtrl.Analize("בן גוריון הקריא את מגילת העצמאות בהכרזת העצמאות וההגנה היתה מחתרת לוחמת");
             //good
@@ -37,7 +37,7 @@ namespace NLP.Controllers.Tests
             var ob = new OrganizationObject("ההגנה");
             ob.DefiniteArticle = true;
             Assert.IsTrue(res.Contains(ob));
-            Assert.IsTrue(res.Count() == 4);
+        
 
             //bad
             Assert.IsFalse(res.Contains(new PersonObject("")));
@@ -49,7 +49,7 @@ namespace NLP.Controllers.Tests
 
 
         [TestMethod()]
-        public void AnalizeTestWithGufContext()
+        public void AnalizeTestWithGufContextIntegration()
         {
             var res = nlpCtrl.Analize("הוא הקריא את מגילת העצמאות בהכרזת העצמאות והם היו מחתרת לוחמת","ההגנה ובן גוריון");
             //good
@@ -59,8 +59,7 @@ namespace NLP.Controllers.Tests
             var ob = new OrganizationObject("ההגנה");
             ob.DefiniteArticle = true;
             Assert.IsTrue(res.Contains(ob));
-            Assert.IsTrue(res.Count() == 4);
-
+ 
             //bad
             Assert.IsFalse(res.Contains(new PersonObject("")));
 

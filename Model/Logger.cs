@@ -18,6 +18,15 @@ namespace Model
             DataBaseController.getInstance().addOtherLog(log);
         }
 
+        public static void addErrorLog(string context,string error)
+        {
+            var log = new ErrorLog();
+            log.time = DateTime.UtcNow;
+            log.context = context;
+            log.error = error;
+            DataBaseController.getInstance().addErrorLog(log);
+        }
+
         public static void addAnswerOutput(string answerText, string userAnswer, AnswerFeedback feedback)
         {
             var log = new answersLog();

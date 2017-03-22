@@ -15,7 +15,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static NLP.personObject;
+using static NLP.WorldObj.personObject;
 
 namespace UnitTestProject1
 {
@@ -125,7 +125,7 @@ namespace UnitTestProject1
 
             mockStudySession.Setup(x => x.Category).Returns("לאומיות");
             mockStudySession.Setup(x => x.SessionLength).Returns(3);
-            mockStudySession.Setup(x => x.QuestionAsked).Returns(new HashSet<IQuestion>());
+            mockStudySession.Setup(x => x.QuestionAsked).Returns(new List<IQuestion>());
             mockStudySession.Setup(x => x.CurrentSubQuestion).Returns(mockSubQqestion1.Object);
 
 

@@ -24,7 +24,7 @@ namespace NLP.Controllers.Tests
 
 
         [TestMethod()]
-        public void getIntentApiAiTest()
+        public void getIntentApiAiIntegrationTest()
         {
 
 
@@ -58,7 +58,7 @@ namespace NLP.Controllers.Tests
         }
 
         [TestMethod()]
-        public void sendToHebrewMorphAnalizerTest()
+        public void sendToHebrewMorphAnalizerIntegrationTest()
         {
             //good
                var res =  outerAPICtrl.sendToHebrewMorphAnalizer("אתמול בחמש אחרי הצהריים הלכתי עם אמא למכולת ובדרך ראינו");
@@ -78,7 +78,7 @@ namespace NLP.Controllers.Tests
         }
 
         [TestMethod()]
-        public void correctSpellingTest()
+        public void correctSpellingIntegrationTest()
         {
 
 
@@ -97,7 +97,7 @@ namespace NLP.Controllers.Tests
 
 
         [TestMethod()]
-        public void TranslateTest()
+        public void TranslateIntegrationTest()
         {
             ControlerTranslate ct = new ControlerTranslate();
             //good

@@ -66,7 +66,7 @@ namespace NLP.Controllers
             return Analize(inputText);
         }
 
-        public int matchStrings(string target, string matchString)
+        public virtual int matchStrings(string target, string matchString)
         {
            if(target == matchString) return 100;
             else{
@@ -131,10 +131,10 @@ namespace NLP.Controllers
             List<ITemplate> context = new List<ITemplate>();
 
 
-            if (systemAnswerText != null)
+            if (systemAnswerText != null && textAnlz.FindAll(x => x.FindAll(y=>y.isA(WordType.gufWord)).Count > 0).Count > 0)
             {
                 //add mising data to entity DB
-                var contextAnlz = Ma.meniAnalize(systemAnswerText,false);
+                var contextAnlz = Ma.meniAnalize(systemAnswerText,true);
 
 
                 //create context 

@@ -33,7 +33,7 @@ namespace NLP.QnA.Tests
         }
 
         [TestMethod()]
-        public void matchAnswersWithListsTest()
+        public void matchAnswersWithListsIntegrationTest()
         {
             
             var feedback = qae.matchAnswers(SubQqestion1, userAnswerSubQuestion1);

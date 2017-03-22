@@ -38,6 +38,8 @@ namespace Bot_Application1.Controllers
 
                   //          var text = activity.Text;
                    //         Logger.addLog("User: " + text);
+                            
+                           
 
 
                             var dialog = new MainDialog();

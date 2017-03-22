@@ -8,7 +8,10 @@ namespace Model.Models
 {
     public interface IUser
     {
-       string UserID { get; set; }
+
+        
+             string Language { get; set; }
+        string UserID { get; set; }
        string UserName { get; set; }
        string UserGender { get; set; }
        string UserClass { get; set; }

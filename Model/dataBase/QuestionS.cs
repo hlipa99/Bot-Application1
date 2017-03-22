@@ -55,7 +55,10 @@ namespace Model.dataBase
 
             public override int GetHashCode()
             {
-                   return this.QuestionID.GetHashCode();
+            if (this.QuestionID != null)
+                return this.QuestionID.GetHashCode();
+            else
+                return this.QuestionText.GetHashCode();
              }
         
     }

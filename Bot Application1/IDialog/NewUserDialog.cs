@@ -37,14 +37,21 @@ namespace Bot_Application1.IDialog
                 User = new User();
                 setUser(context);
             }
-           
-            await NewUser(context);
+
+            context.Wait(NewUser);
         }
 
 
 
-        public async virtual Task NewUser(IDialogContext context)
+        public async virtual Task NewUser(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
+
+            var message = await result;
+            if (conv().isEnglish(message.Text))
+            {
+                User.Language = "en";
+            }
+
             var newMessage = conv().getPhrase(Pkey.selfIntroduction);
             await writeMessageToUser(context, newMessage);
             await NewUserGetName(context);
@@ -94,7 +101,10 @@ namespace Bot_Application1.IDialog
 
             var message = await result;
             var userText = await result;
-
+            if (conv().isHebrew(message.Text))
+            {
+                User.Language = "heb";
+            }
 
             if ((User.UserName = conv().getName(userText.Text)) != null)
             {

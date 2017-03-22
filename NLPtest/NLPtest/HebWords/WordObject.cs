@@ -88,19 +88,15 @@ namespace NLP.HebWords
             }
         }
 
-        private string getLemma(string lemma,string text)
+        public string getLemma(string lemma,string text)
         {
+            var chars = new List<char>();
+            foreach (var c in Prefixes)
+            {
+                text = text.Substring(1);
+            }
+
             if (lemma == null || lemma == "###NUMBER###" || lemma.Length <= 1) return text;
-
-
-                var chars = new List<char>();
-                foreach(var c in Prefixes)
-                {
-                    text = text.Substring(1);
-                }
-
-             
-            
 
             if (text.Split(' ').Length > 1) return text;
 

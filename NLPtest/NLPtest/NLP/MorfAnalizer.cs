@@ -164,7 +164,7 @@ namespace NLP.NLP
                                     if (res.LastOrDefault().Ner == w.Ner && res.LastOrDefault().Ner != "O")
                                     {
                                         res.LastOrDefault().Text += " " + word.Text;
-                                        res.LastOrDefault().Lemma = res.LastOrDefault().Text;
+                                        res.LastOrDefault().Lemma = res.LastOrDefault().getLemma(null, res.LastOrDefault().Text);
                                         continue;
                                     }
                                 }
@@ -258,7 +258,7 @@ namespace NLP.NLP
                      //       sentence.RemoveAt(i);
                      //   }
 
-                    if (isUserInput)
+                    if (!isUserInput)
                     {
                         var newWord = sentence[i].clone(); ;
                         newWord.Text = entity.entityValue;

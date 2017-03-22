@@ -11,6 +11,7 @@ using NLP.Models;
 using Model;
 using Model.Models;
 using UnitTestProject1;
+using BotTests;
 
 namespace Bot_Application1.Controllers.Tests
 {
@@ -27,16 +28,16 @@ namespace Bot_Application1.Controllers.Tests
             //convCtrl = new ConversationController( UserFem , StudySession );
         }
 
-        [TestMethod()]
-        public void FindMatchFromOptionsTest()
-        {
-            //good
-           Assert.AreEqual(convCtrl.FindMatchFromOptions("3 אופציה", new string[] { "1", "2", "3" }),"3");
-            //bad
-            Assert.AreEqual(convCtrl.FindMatchFromOptions("dsds אופציה", new string[] { "1", "2", "3" }), null);
-            //sad
-            Assert.AreEqual(convCtrl.FindMatchFromOptions("", new string[] { "1", "2", "3" }), null);
-        }
+        //[TestMethod()]
+        //public void FindMatchFromOptionsTest()
+        //{
+        //    //good
+        //   Assert.AreEqual(convCtrl.FindMatchFromOptions("3 אופציה", new string[] { "1", "2", "3" }),"3");
+        //    //bad
+        //    Assert.AreEqual(convCtrl.FindMatchFromOptions("dsds אופציה", new string[] { "1", "2", "3" }), null);
+        //    //sad
+        //    Assert.AreEqual(convCtrl.FindMatchFromOptions("", new string[] { "1", "2", "3" }), null);
+        //}
 
         //[TestMethod()]
         //public void isStopSessionTest()
@@ -50,52 +51,74 @@ namespace Bot_Application1.Controllers.Tests
         //}
 
         [TestMethod()]
-        public void endOfSessionTest()
+        public void endOfSessionIntegrationTest()
         {
-            var hs = new HashSet<IQuestion>();
-            hs.Add(Question1);
-            hs.Add(Question2);
-            hs.Add(Question3);
+            var ss = new StudySession();
+            Question1.AnswerScore = 100;
+            Question2.AnswerScore = 90;
+            Question3.AnswerScore = 80;
+
+            ss.QuestionAsked.Add(Question1); 
+            ss.QuestionAsked.Add(Question2);
+            ss.QuestionAsked.Add(Question3);
+
+            convCtrl = new ConversationController(new User(),ss );
 
  
             //good
 
-            var a = convCtrl.endOfSession();
-            var b = convCtrl.getPhrase(Pkey.goodSessionEnd, new string[] { }, new string[] { });
-            Assert.AreEqual(convCtrl.endOfSession()[0], EnumVal(Pkey.goodSessionEnd));
+            AssertNLP.contains(convCtrl.endOfSession(),DBbotPhrase(Pkey.goodSessionEnd));
 
 
+                       ss = new StudySession();
+            Question1.AnswerScore = 45;
+            Question2.AnswerScore = 34;
+            Question3.AnswerScore = 12;
 
+            ss.QuestionAsked.Add(Question1);
+            ss.QuestionAsked.Add(Question2);
+            ss.QuestionAsked.Add(Question3);
 
-            hs = new HashSet<IQuestion>();
-            hs.Add(Question1);
-            hs.Add(Question2);
-            hs.Add(Question3);
-
-
-            Assert.AreEqual(convCtrl.endOfSession()[0], EnumVal(Pkey.badSessionEnd));
+            convCtrl = new ConversationController(new User(), ss);
 
             //bad
-
-            Assert.AreEqual(convCtrl.endOfSession()[0], EnumVal(Pkey.earlyDiparture));
-
+            AssertNLP.contains(convCtrl.endOfSession(), DBbotPhrase(Pkey.badSessionEnd));
 
 
-            //sad
-        
-            hs = new HashSet<IQuestion>();
-            hs.Add(Question1);
-            hs.Add(Question2);
-            hs.Add(Question3);
-    
+            ss = new StudySession();
+            Question1.AnswerScore = 45;
+            Question2.AnswerScore = 34;
 
-            Assert.AreEqual(convCtrl.endOfSession()[0], EnumVal(Pkey.badSessionEnd));
+
+            ss.QuestionAsked.Add(Question1);
+            ss.QuestionAsked.Add(Question2);
+
+
+            convCtrl = new ConversationController(new User(), ss);
+            
+            AssertNLP.contains(convCtrl.endOfSession(), DBbotPhrase(Pkey.earlyDiparture));
+
+
+
+
+            ss = new StudySession();
+
+
+            ss.QuestionAsked.Add(Question1);
+            ss.QuestionAsked.Add(Question2);
+            ss.QuestionAsked.Add(Question3);
+
+            convCtrl = new ConversationController(new User(), ss);//sad
+
+
+            AssertNLP.contains(convCtrl.endOfSession(), DBbotPhrase(Pkey.goodSessionEnd));
+
         }
 
       
 
         [TestMethod()]
-        public void getNumTest()
+        public void getNumIntegrationTest()
         {
             //good
             Assert.AreEqual(convCtrl.getNum("50"), 50);
@@ -110,7 +133,7 @@ namespace Bot_Application1.Controllers.Tests
         }
 
         [TestMethod()]
-        public void getNameTest()
+        public void getNameIntegrationTest()
         {
             //good
           //  Assert.AreEqual(convCtrl.getName("קוראים לי יוחאי"), "יוחאי");
@@ -125,7 +148,7 @@ namespace Bot_Application1.Controllers.Tests
         }
 
         [TestMethod()]
-        public void getGenderValueTest()
+        public void getGenderValueIntegrationTest()
         {
            
             //good
@@ -143,7 +166,7 @@ namespace Bot_Application1.Controllers.Tests
         }
 
         [TestMethod()]
-        public void getClassTest()
+        public void getClassIntegrationTest()
         {
             //good
             //  Assert.AreEqual(convCtrl.getName("קוראים לי יוחאי"), "יוחאי");
