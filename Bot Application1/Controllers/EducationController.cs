@@ -77,6 +77,7 @@ namespace Bot_Application1.Controllers
         public EducationController(IUser user, IStudySession studySession, ConversationController cc)
         {
             this.user = user;
+            this.db = new DataBaseController();
             this.studySession = studySession;
             this.ConversationController = cc;
              Qac = new QuestionsAnswersControllers();

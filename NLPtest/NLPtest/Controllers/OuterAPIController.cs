@@ -55,11 +55,48 @@ namespace NLP.Controllers
 
 
 
+        //public virtual string sendToHebrewMorphAnalizer(string text)
+        //{
+        //    try
+        //    {
+        //        WebRequest request = WebRequest.Create("https://8e64979e.ngrok.io/parse");
+        //        WebRequest request = WebRequest.Create("https://8e64979e.ngrok.io/parse");
+        //        string responseFromServer = "";
+        //        request.Method = "POST";
+        //        byte[] byteArray = Encoding.UTF8.GetBytes(text);
+        //        request.ContentType = "application/json;charset=utf-8";
+
+        //        using (Stream dataStream = request.GetRequestStream())
+        //        {
+        //            dataStream.Write(byteArray, 0, byteArray.Length);
+        //        }
+        //        using (WebResponse response = request.GetResponse())
+        //        {
+
+        //            using (Stream dataStream = response.GetResponseStream())
+        //            {
+        //                using (StreamReader reader = new StreamReader(dataStream))
+        //                {
+
+        //                    responseFromServer = reader.ReadToEnd();
+        //                }
+        //            }
+        //        }
+
+        //        return responseFromServer;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return null;
+        //    }
+        //}
+
         public virtual string sendToHebrewMorphAnalizer(string text)
         {
             try
             {
-                WebRequest request = WebRequest.Create("https://8e64979e.ngrok.io/parse");
+                WebRequest request = WebRequest.Create("http://TextAPI2.azurewebsites.net/TextAPI/Api");
+        
                 string responseFromServer = "";
                 request.Method = "POST";
                 byte[] byteArray = Encoding.UTF8.GetBytes(text);

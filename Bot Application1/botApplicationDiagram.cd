@@ -20,12 +20,10 @@
       <Method Name="getTimeOfDay" Hidden="true" />
       <Method Name="getYesNoOptions" Hidden="true" />
       <Method Name="ifGufFemenin" Hidden="true" />
-      <Method Name="isStopSession" Hidden="true" />
-      <Field Name="last" Hidden="true" />
       <Field Name="nlpControler" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>UIAAAAQAAAAQgCAAEAIIACIBAIhAkCAAQAQGAAYAAwA=</HashCode>
+      <HashCode>cIABAIQAAEAQgCAIEAIIACIBAAhAkCAARAQGAAYAAQg=</HashCode>
       <FileName>Controllers\ConversationController.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -39,7 +37,7 @@
       <Method Name="getSubQuestion" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>CAAAAAAAAAAQAAAAECAAAAAAAgAQAQAARAAQAAaAAQA=</HashCode>
+      <HashCode>CAAABAABACAQAQAAECAAAAAAAgAQAQAARCEQABaBAQA=</HashCode>
       <FileName>Controllers\EducationController.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -63,7 +61,7 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>ABABAAAAAAAAAACAAAAAEACAoIgEgAAABQABIDQABWA=</HashCode>
+      <HashCode>AAABAAAACAAAAACAAAAAEACAsIgkgBAABQABIDQABWA=</HashCode>
       <FileName>IDialog\AbsDialog.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -84,7 +82,7 @@
       <Method Name="StartAsync" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAACAMAAABAAAAAAAAgAAAAAAQAgAAAAAQA=</HashCode>
+      <HashCode>ACBAAAAAAAACAMAAABAAAABAAAgAAAAAAQAgAAAAAQA=</HashCode>
       <FileName>IDialog\LerningDialog.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -94,7 +92,7 @@
       <Method Name="StartAsync" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>EEAACAAAAAAAgEAAAAAAAAAUAAgACAAAAQAAAAAAAAA=</HashCode>
+      <HashCode>EEAACAAAAAAAgAAAAAAAAAAQAAgAAAAAAQAAAAAAAAA=</HashCode>
       <FileName>IDialog\MainDialog.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -104,7 +102,7 @@
       <Method Name="StartAsync" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>AACAAAAAAAABCAAAAAAAACAAAQoAAAAACSAAAAAAAAA=</HashCode>
+      <HashCode>AACAAAAAAAABCAAAAAAAACAAAUoAAAAACSAAAAAAAAA=</HashCode>
       <FileName>IDialog\NewUserDialog.cs</FileName>
     </TypeIdentifier>
   </Class>

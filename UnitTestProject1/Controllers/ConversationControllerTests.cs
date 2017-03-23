@@ -65,6 +65,8 @@ namespace Bot_Application1.Controllers.Tests
 
             mockStudySession.Setup(x => x.QuestionAsked).Returns(hs);
             //good
+            convCtrl.Db = mockDB.Object;
+
 
             var a = convCtrl.endOfSession();
             var b = convCtrl.getPhrase(Pkey.goodSessionEnd, new string[] { }, new string[] { });

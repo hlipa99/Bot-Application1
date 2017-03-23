@@ -31,6 +31,9 @@ namespace Bot_Application1.Controllers.Tests
         [TestMethod()]
         public void getQuestionTest()
         {
+            eduCtrl.Db = mockDB.Object;
+
+
             //good
             mockStudySession.Object.Category = "לאומיות";
             Assert.AreEqual(eduCtrl.getQuestion(), mockQuestion1.Object);

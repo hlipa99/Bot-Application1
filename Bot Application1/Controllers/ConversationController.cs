@@ -30,7 +30,7 @@ namespace Bot_Application1.Controllers
 
         MessageComposer composer;
         // Dictionary<string, string[]> PraseDictionary;
-        DataBaseController db;
+        DataBaseController db = new DataBaseController();
         EducationController ec;
 
         //private ContentList last;
@@ -44,11 +44,17 @@ namespace Bot_Application1.Controllers
         public static string BOT_SUBJECT = "היסטוריה";
         private readonly int SUCCESS_THRESHHOLD = 35;
 
+
         public virtual DataBaseController Db
         {
             get
             {
-                return new DataBaseController();
+                return db;
+            }
+
+            set
+            {
+                db = value;
             }
         }
 

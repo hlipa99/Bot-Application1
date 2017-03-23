@@ -31,6 +31,7 @@ namespace Bot_Application1.Controllers.Tests
         [TestMethod()]
         public void getQuestionIntegrationTest()
         {
+            eduCtrl.Db = new DataBaseController();
             //good
             var counter = 0;
             foreach (var c in DB.getAllCategory())
