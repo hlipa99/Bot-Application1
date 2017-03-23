@@ -29,10 +29,7 @@ namespace NLP.QnA
 
         public AnswerFeedback matchAnswers(ISubQuestion subquestion, string answer)
         {
-            if (subquestion.questionID == "13")
-            {
 
-            }
 
             if (subquestion != null && answer != null)
             {
@@ -77,7 +74,7 @@ namespace NLP.QnA
                         numberInt = numberInt == 0 ? feedbacks.Count : numberInt;
 
                         feedbacks.Sort((x, y) => y.score - x.score);
-                        feedbacks = feedbacks.GetRange(0, numberInt - 1);
+                        feedbacks = feedbacks.GetRange(0, numberInt);
                         foreach (var f in feedbacks)
                         {
                             f.merge(feedback);
@@ -138,7 +135,10 @@ namespace NLP.QnA
 
                                 if (se.Word.Equals(ue.Word) && se.Negat == ue.Negat)
                                 {
-                                    feedback.score += (int) Math.Ceiling(new Decimal(100 / systemEntitis.Count()));
+                                    Double d = 100.0 / systemEntitis.Count();
+
+                                    feedback.score += (int)Math.Ceiling(d);
+
                                     found = true;
                                     break;
                                 }

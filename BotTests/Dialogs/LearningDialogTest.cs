@@ -71,12 +71,12 @@ namespace UnitTestProject1
 
 
                 AssertNLP.contains(res, DBbotPhrase(Pkey.firstQuestion));
-                foreach (var i in options) {
+
                     var questions = new DataBaseController().getQuestion(category);
                     var questionOpt = new List<IQuestion>(questions).FindAll(x => res.Contains(x.QuestionText));
                     Assert.AreEqual(questionOpt.Count, 1);
                     var question = questionOpt[0];
-
+                
                     Assert.AreEqual(question.Category,category);
 
                     var counter = 0;
@@ -151,7 +151,7 @@ namespace UnitTestProject1
 
                     AssertNLP.contains(res, DBbotPhrase(Pkey.SubjectNotAvialable));
                     res = sendBot("כן");
-                }
+                
             }
         }
 

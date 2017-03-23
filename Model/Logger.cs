@@ -17,7 +17,7 @@ namespace Model
                 var log = new OtherLog();
                 log.time = DateTime.UtcNow;
                 log.data = v;
-                DataBaseController.getInstance().addOtherLog(log);
+                new DataBaseController().addOtherLog(log);
             }
             catch (Exception ex)
             {
@@ -33,7 +33,7 @@ namespace Model
                 log.time = DateTime.UtcNow;
                 log.context = context;
                 log.error = error;
-                DataBaseController.getInstance().addErrorLog(log);
+                new DataBaseController().addErrorLog(log);
             } catch(Exception ex)
             {
 
@@ -54,7 +54,7 @@ namespace Model
                 {
                     log.missingEntities += ";" + e.entityType + "#" + e.entityValue + ";";
                 }
-                DataBaseController.getInstance().addAnswerLog(log);
+                new DataBaseController().addAnswerLog(log);
             }catch(Exception ex)
             {
 

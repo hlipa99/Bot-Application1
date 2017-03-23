@@ -131,7 +131,7 @@ namespace UnitTestProject1
 
         public string[] DBbotPhrase(Pkey key)
         {
-            return DataBaseController.getInstance().getBotPhrase(key, new string[] { }, new string[] { });
+            return DB.getBotPhrase(key, new string[] { }, new string[] { });
         }
 
         public string EnumVal(Pkey key)

@@ -22,40 +22,27 @@ namespace Model.dataBase
     public class DataBaseController
     {
         static object syncLock = new object();
-        static Entities8 DB;
-        static DataBaseController controller;
+        Entities8 DB;
+    //    static DataBaseController controller;
 
-        public static void setStubInstance(DataBaseController ctrl)
+        public DataBaseController()
         {
-            controller = ctrl;
+            DB = new Entities8();
         }
 
-        public static DataBaseController getInstance()
-        {
 
-            lock (syncLock)
-            {
-                if (controller == null)
-                {
-                   
-                    controller = new DataBaseController();
-                    DB = new Entities8();
-                    return controller;
-                }
-                else
-                {
-                    return controller;
-                }
-            }
-             
+        public void setStubInstance(Entities8 text)
+        {
+            DB = text;
         }
 
-        internal void addErrorLog(ErrorLog log)
+
+        internal async void addErrorLog(ErrorLog log)
         {
             try
             {
                 DB.ErrorLog.Add(log);
-                DB.SaveChanges();
+                await DB.SaveChangesAsync();
 
             }
             catch (Exception ex)
@@ -64,13 +51,13 @@ namespace Model.dataBase
             }
         }
 
-        internal void addAnswerLog(answersLog log)
+        internal async void addAnswerLog(answersLog log)
         {
 
             try
             {
                 DB.answersLog.Add(log);
-                DB.SaveChanges();
+                await DB.SaveChangesAsync();
 
             }
             catch (Exception ex)
@@ -100,7 +87,7 @@ namespace Model.dataBase
 
         }
 
-        public virtual void saveEntitiesFromQuestions(List<entity> Entities)
+        public async virtual void saveEntitiesFromQuestions(List<entity> Entities)
         {
             var questions = DB.SubQuestion;
             foreach(var e in Entities)
@@ -110,16 +97,17 @@ namespace Model.dataBase
             }
             try
             {
-                DB.SaveChangesAsync();
-            }catch(Exception ex)
+                await DB.SaveChangesAsync();
+            }
+            catch(Exception ex)
             {
 
             }
         }
-         
 
 
-        public virtual void addNewUser(string channelId, string id, string name)
+
+        public async virtual void addNewUser(string channelId, string id, string name)
         {
             try
             {
@@ -130,7 +118,7 @@ namespace Model.dataBase
                 NewIUser.UserCreated = DateTime.UtcNow;
 
                 DB.User.Add(NewIUser);
-                DB.SaveChanges();
+                await DB.SaveChangesAsync();
 
             }
             catch (Exception e)
@@ -144,7 +132,7 @@ namespace Model.dataBase
         }
 
 
-        public virtual void addNewEntity(string value, string type)
+        public async virtual void addNewEntity(string value, string type)
         {
 
             try
@@ -159,7 +147,7 @@ namespace Model.dataBase
                     entity.entitySynonimus = ";" + value + ";";
                     entity.entityType = type;
                     DB.entity.Add(entity);
-                    DB.SaveChanges();
+                    await DB.SaveChangesAsync();
                 }
               
 
@@ -176,7 +164,7 @@ namespace Model.dataBase
 
 
 
-        public virtual void addNewUser(IUser user)
+        public async virtual void addNewUser(IUser user)
         {
 
             try
@@ -184,7 +172,7 @@ namespace Model.dataBase
 
 
                 DB.User.Add((User)user);
-                DB.SaveChanges();
+                await DB.SaveChangesAsync();
 
             }
             catch (Exception e)
@@ -227,7 +215,7 @@ namespace Model.dataBase
 
 
 
-        public virtual void deleteUser(string userId)
+        public async virtual void deleteUser(string userId)
         {
 
             IUser NewIUser = new User();
@@ -243,7 +231,7 @@ namespace Model.dataBase
                 if (itemToRemove != null)
                 {
                     DB.User.Remove(itemToRemove);
-                    DB.SaveChanges();
+                    await DB.SaveChangesAsync();
                 }
 
             }
@@ -432,15 +420,16 @@ namespace Model.dataBase
 
         }
 
-        internal void addOtherLog(OtherLog log)
+        internal async  void addOtherLog(OtherLog log)
         {
             //   var DB = new Entities();
             try
             {
             DB.OtherLog.Add(log);
-            DB.SaveChanges();
+            await DB.SaveChangesAsync();
 
-            }catch(Exception ex)
+            }
+            catch(Exception ex)
             {
 
             }

@@ -21,16 +21,16 @@ namespace Bot_Application1.Controllers
         ConversationController conversationController;
         NLPControler nlp = new NLPControler();
         QuestionsAnswersControllers qac;
-
+        DataBaseController db;
         public virtual DataBaseController Db
         {
             get
             {
-                return DataBaseController.getInstance();
+                return db;
             }
             set
             {
-                DataBaseController.setStubInstance (value);
+                db = value;
             }
 
         }
@@ -264,18 +264,32 @@ namespace Bot_Application1.Controllers
             if (answerFeedback.missingAnswers.Count > 0)
             {
                 verbalFeedback = ConversationController.mergeText(verbalFeedback, ConversationController.getPhrase(Pkey.missingAnswrPart));
-                verbalFeedback = ConversationController.mergeText(verbalFeedback, answerFeedback.missingAnswers[0]);
-                answerFeedback.missingAnswers.RemoveAt(0);
-                foreach (var a in answerFeedback.missingAnswers)
-                {
-                    verbalFeedback = ConversationController.mergeText(verbalFeedback, ConversationController.mergeText(ConversationController.getPhrase(Pkey.and) , a));
-                }
+                verbalFeedback = answerArrayToString(answerFeedback.missingAnswers, verbalFeedback);
             }
             else if (answerFeedback.score < 75)
             {
-                
                 verbalFeedback = ConversationController.mergeText(verbalFeedback, ConversationController.getPhrase(Pkey.MyAnswerToQuestion));
-                verbalFeedback = ConversationController.mergeText(verbalFeedback, studySession.CurrentSubQuestion.answerText);
+                verbalFeedback = answerArrayToString(answerFeedback.missingAnswers, verbalFeedback);
+            }
+
+            return verbalFeedback;
+        }
+
+        private string[] answerArrayToString(List<string> answers, string[] verbalFeedback)
+        {
+
+            if (answers.Count > 1) {
+                var last = answers[answers.Count - 1];
+                answers.RemoveAt(answers.Count - 1);
+                foreach (var a in answers)
+                {
+                    verbalFeedback = ConversationController.mergeText(verbalFeedback, a + ",");
+                }
+
+                verbalFeedback = ConversationController.mergeText(verbalFeedback, ConversationController.mergeText(ConversationController.getPhrase(Pkey.and), last));
+            }else
+            {
+                verbalFeedback = ConversationController.mergeText(verbalFeedback, answers[0]);
             }
 
             return verbalFeedback;

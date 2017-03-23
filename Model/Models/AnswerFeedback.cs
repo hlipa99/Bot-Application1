@@ -19,7 +19,8 @@ namespace Model.Models
         {
             if (f != null)
             {
-                score = (score + f.score) / 2;
+                Double d = (score + f.score) / 2.0;
+                score = (int)Math.Ceiling(d);
                 missingEntitis.AddRange(f.missingEntitis);
                 missingAnswers.AddRange(f.missingAnswers);
             }

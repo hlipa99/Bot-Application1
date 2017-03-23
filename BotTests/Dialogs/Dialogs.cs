@@ -33,11 +33,11 @@ namespace UnitTestProject1
             }
         }
 
-        public string ConvID1 { get => ConvID; set => ConvID = value; }
+        public string ConvID1 { get; set; }
 
         public DialogsTestsBase()
         {
-            db = DataBaseController.getInstance();
+            db = new DataBaseController();
             createNewClientConversation(out ConvID);
             Client = createNewClientConversation(out ConvID);
         

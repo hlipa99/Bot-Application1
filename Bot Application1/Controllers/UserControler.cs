@@ -12,7 +12,7 @@ namespace Bot_Application1.Controllers
     public class UserControler
     {
 
-        DataBaseController dc = DataBaseController.getInstance();
+        DataBaseController dc = new DataBaseController();
 
 
         public void addUser(IUser user)

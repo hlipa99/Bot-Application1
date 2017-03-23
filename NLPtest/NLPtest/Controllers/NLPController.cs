@@ -123,7 +123,7 @@ namespace NLP.Controllers
         public virtual List<WorldObject> Analize(string text, string systemAnswerText)
         {
             // var context = new TextContext();
-            var textAnlz = Ma.meniAnalize(text,true);
+            var textAnlz = Ma.meniAnalize(text, systemAnswerText != null);
             List<WorldObject> input = new List<WorldObject>();
             List<WorldObject> sentence = new List<WorldObject>();
             List<WorldObject> last = new List<WorldObject>();

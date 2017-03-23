@@ -72,8 +72,8 @@ namespace UnitTestProject1
 
         internal void initializeMocksObject()
         {
-            DataBaseController.setStubInstance(mockDB.Object);
-
+          
+          //  mockDB.Object.setStubInstance()
 
             mockConvCtrl.Setup(x => x.StudySession).Returns(mockStudySession.Object);
             mockConvCtrl.Setup(x => x.Db).Returns(mockDB.Object);

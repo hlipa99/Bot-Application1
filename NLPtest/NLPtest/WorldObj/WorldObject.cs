@@ -187,8 +187,9 @@ namespace NLP.WorldObj
             var objres = obj as WorldObject;
 
             if (!(this.Word == objres.Word &&
-            this.Negat == objres.Negat &&
-            this.DefiniteArticle == objres.DefiniteArticle)) return false;
+            this.Negat == objres.Negat
+            //  && this.DefiniteArticle == objres.DefiniteArticle
+            )) return false;
 
             foreach(var r in Relations)
             {

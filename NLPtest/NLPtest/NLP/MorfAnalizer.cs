@@ -33,7 +33,7 @@ namespace NLP.NLP
         private   HebDictionary hebDictionary;
         OuterAPIController httpCtrl = new OuterAPIController();
        // private IEnumerable<Word> wordList;
-        DataBaseController DBctrl = DataBaseController.getInstance();
+        DataBaseController DBctrl = new DataBaseController();
 
         public OuterAPIController HttpCtrl
         {
@@ -85,6 +85,7 @@ namespace NLP.NLP
                     var correctSpelling = HttpCtrl.correctSpelling(str);
                     if (correctSpelling != null)
                     {
+                        correctSpelling = correctSpelling.Replace("\\", "");
                         return getWordsObjectFromParserServer(correctSpelling, true);
                     }
                 }
@@ -122,13 +123,13 @@ namespace NLP.NLP
 
             if (str != null && str.Length > 0)
             {
-                var sentenses = str.Split('.', ',');
+                var sentenses = str.Split('.','|');
      
 
                 foreach (var s in sentenses)
                 {
 
-                    var strRes = s;
+                    var strRes = s.Trim();
 
                     List<WordObject> res = new List<WordObject>();
                     strRes = removeParentheses(strRes, '(', ')');
@@ -146,8 +147,7 @@ namespace NLP.NLP
                         if (sentenceFromServer != null && sentenceFromServer.Count >= 0)
                         {
                             //remove nikod etc.s
-                            sentenceFromServer.RemoveAll(x => (x.Text.Length <= 1) && (x.Pos == "punctuation"));
-
+                            sentenceFromServer.RemoveAll(x => (x.Text.Length <= 1) && (x.Pos == "punctuation") && (x.Text != "|"));
                             // print tagged sentence by using AnalysisInterface, as follows:
                             foreach (WordObject w in sentenceFromServer)
                             {
@@ -161,7 +161,7 @@ namespace NLP.NLP
 
                                 if (res.Count > 0)
                                 {
-                                    if (res.LastOrDefault().Ner == w.Ner && res.LastOrDefault().Ner != "O")
+                                    if (res.LastOrDefault().Ner == w.Ner && res.LastOrDefault().Ner != "O" && res.LastOrDefault().Prefixes.Contains("ו"))
                                     {
                                         res.LastOrDefault().Text += " " + word.Text;
                                         res.LastOrDefault().Lemma = res.LastOrDefault().getLemma(null, res.LastOrDefault().Text);
@@ -199,6 +199,36 @@ namespace NLP.NLP
             return allRes;
         }
 
+
+        private List<WordObject> fixFunctuation(List<WordObject> sentenceFromServer)
+        {
+            List<WordObject> newList = new List<WordObject>();
+
+            for (int i = 0; i < sentenceFromServer.Count; i++)
+            {
+                var word = sentenceFromServer[i];
+                if (word.Text == "\\")
+                {
+                    if (i + 2 < sentenceFromServer.Count && newList.Any())
+                    {
+                        if (sentenceFromServer[i + 1].Text == "'")
+                        {
+                            newList.LastOrDefault().Lemma += "'" + sentenceFromServer[i + 1];
+                            newList.LastOrDefault().Text = newList.LastOrDefault().Lemma;
+                            i = i + 2;
+                        }
+                    }
+                }
+                else
+                {
+                    newList.Add(sentenceFromServer[i]);
+                }
+
+            }
+
+            return newList;
+
+        }
         private List<WordObject> tryMatchEntities(List<WordObject> sentence,bool isUserInput)
         {
             //increase the match found to implement maximal munch

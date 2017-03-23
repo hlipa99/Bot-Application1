@@ -82,9 +82,9 @@ namespace Bot_Application1.Controllers.Tests
            
          
             //good
-            foreach(var c in DataBaseController.getInstance().getAllCategory())
+            foreach(var c in DB.getAllCategory())
             {
-                foreach (var q in DataBaseController.getInstance().getQuestion(c))
+                foreach (var q in DB.getQuestion(c))
                 {
                     foreach (var sq in q.SubQuestion)
                     {
@@ -95,22 +95,11 @@ namespace Bot_Application1.Controllers.Tests
                         {
                              feedback = eduCtrl.checkAnswer(sq.answerText);
                             //debug
+                   //         feedback = eduCtrl.checkAnswer(sq.answerText);
+
+                       //     feedback = eduCtrl.checkAnswer(sq.answerText);
                         }
                         Assert.IsTrue(feedback.score >= 95);
-                    }
-                }
-            }
-
-            //doog
-            foreach (var c in DataBaseController.getInstance().getAllCategory())
-            {
-                foreach (var q in DataBaseController.getInstance().getQuestion(c))
-                {
-                    foreach (var sq in q.SubQuestion)
-                    {
-                        SStudySession.CurrentSubQuestion = sq;
-                        eduCtrl = new EducationController(UserMus, SStudySession, ConvCtrl);
-                        Assert.AreEqual(eduCtrl.checkAnswer(sq.answerText.Substring(sq.answerText.Length/2)).score, 100);
                     }
                 }
             }

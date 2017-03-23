@@ -47,7 +47,7 @@ namespace UnitTestProject1
 
 
         [TestMethod]
-        public void testMenu()
+        public void testMainDialogTest()
         {
             var response = createUser("יוחאי", "בן", "יא");
             AssertNLP.contains(response, DBbotPhrase(Pkey.MainMenuText));

@@ -54,7 +54,7 @@ namespace NLP.QnA.Tests
             list1.Clear();
             //ugly
             Assert.AreEqual(qae.matchAnswers(list1, list1).missingEntitis.Count, 0);
-            Assert.AreEqual(qae.matchAnswers(list1, list1).score, 0);
+            Assert.AreEqual(qae.matchAnswers(list1, list1).score, 100);
 
         }
 

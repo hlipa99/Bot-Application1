@@ -48,7 +48,7 @@ namespace Bot_Application1.Controllers
         {
             get
             {
-                return DataBaseController.getInstance();
+                return new DataBaseController();
             }
         }
 
