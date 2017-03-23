@@ -34,7 +34,7 @@ namespace NLP.NLP.Tests
             string log = "";
             var res = sAnal.findTemplate(listTemplate.ToArray(), out log);
             //good
-            Assert.IsTrue(res.Contains(new OrganizationObject("כנופיות ערביות")));
+            Assert.IsTrue(res.Contains(new OrganizationObject("ערבי")));
             Assert.IsTrue(res.Contains(new LocationObject("ירושלים")));
             Assert.IsTrue(res.Contains(new ConceptObject("פליט")));
             Assert.IsTrue(res.Contains(new OrganizationObject("ירדן")));

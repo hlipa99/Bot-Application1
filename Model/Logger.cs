@@ -12,34 +12,53 @@ namespace Model
     {
         public static void addLog(string v)
         {
-            var log = new OtherLog();
-            log.time = DateTime.UtcNow;
-            log.data = v;
-            DataBaseController.getInstance().addOtherLog(log);
+            try
+            {
+                var log = new OtherLog();
+                log.time = DateTime.UtcNow;
+                log.data = v;
+                DataBaseController.getInstance().addOtherLog(log);
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
 
         public static void addErrorLog(string context,string error)
         {
-            var log = new ErrorLog();
-            log.time = DateTime.UtcNow;
-            log.context = context;
-            log.error = error;
-            DataBaseController.getInstance().addErrorLog(log);
-        }
+            try
+            {
+                var log = new ErrorLog();
+                log.time = DateTime.UtcNow;
+                log.context = context;
+                log.error = error;
+                DataBaseController.getInstance().addErrorLog(log);
+            } catch(Exception ex)
+            {
+
+            }
+}
 
         public static void addAnswerOutput(string answerText, string userAnswer, AnswerFeedback feedback)
         {
-            var log = new answersLog();
-            log.time = DateTime.UtcNow;
-            log.userAnswer = userAnswer;
-            log.question = answerText;
-            log.missingEntities = "";
-            log.entities = feedback.score.ToString();
-            foreach (var e in feedback.missingEntitis)
+            try
             {
-                log.missingEntities += ";" + e.entityType + "#" + e.entityValue + ";";
+                var log = new answersLog();
+                log.time = DateTime.UtcNow;
+                log.userAnswer = userAnswer;
+                log.question = answerText;
+                log.missingEntities = "";
+                log.entities = feedback.score.ToString();
+                foreach (var e in feedback.missingEntitis)
+                {
+                    log.missingEntities += ";" + e.entityType + "#" + e.entityValue + ";";
+                }
+                DataBaseController.getInstance().addAnswerLog(log);
+            }catch(Exception ex)
+            {
+
             }
-            DataBaseController.getInstance().addAnswerLog(log);
         }
     }
 }

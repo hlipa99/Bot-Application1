@@ -29,6 +29,11 @@ namespace NLP.QnA
 
         public AnswerFeedback matchAnswers(ISubQuestion subquestion, string answer)
         {
+            if (subquestion.questionID == "13")
+            {
+
+            }
+
             if (subquestion != null && answer != null)
             {
                 var userAnswer = Nlp.Analize(answer, subquestion.questionText);
@@ -37,23 +42,25 @@ namespace NLP.QnA
                 if (subquestion.answerText.Contains("|"))
                 {
 
-                 //   AnswerFeedback f = new AnswerFeedback(); //helpers
-                    AnswerFeedback f1 = new AnswerFeedback();
-                    AnswerFeedback f2 = new AnswerFeedback();
-                    AnswerFeedback f3 = new AnswerFeedback();
+             
                     var feedbacks = new List<AnswerFeedback>();
 
                     foreach (var ans in subquestion.answerText.Split('|'))
                     {
-                        if (ans.Trim() != "" && subquestion.flags != null)
+                        if (ans.Trim() != "")
                         {
                             var systemAnswerWords = Nlp.Analize(ans);
                             var f = matchAnswers(userAnswer, systemAnswerWords, ans);
                             feedbacks.Add(f);
                         }
                     }
+
+                    if(feedbacks.Count == 0)
+                    {
+                        throw new Exception(subquestion.answerText);
+                    }
                     var flags = subquestion.flags.Trim();
-                    if(flags == "needAll")
+                    if (flags == "needAll" || flags == "" || flags == null)
                     {
                         foreach (var f in feedbacks)
                         {
@@ -61,32 +68,30 @@ namespace NLP.QnA
                             feedback = f;
                         }
                     }
-                    else {
+                    else
+                    {
                         int numberInt;
 
-                            var numberStr = flags.Replace("need", "");
-                   int.TryParse(numberStr,out numberInt);
-                           numberInt = numberInt == 0 ? feedbacks.Count : numberInt;
+                        var numberStr = flags.Replace("need", "");
+                        int.TryParse(numberStr, out numberInt);
+                        numberInt = numberInt == 0 ? feedbacks.Count : numberInt;
 
-                           feedbacks.Sort((x , y) => y.score - x.score);
-                            feedbacks = feedbacks.GetRange(0,numberInt-1);
-                            foreach (var f in feedbacks)
-                            {
-                                f.merge(feedback);
-                                feedback = f;
-                            }
-
+                        feedbacks.Sort((x, y) => y.score - x.score);
+                        feedbacks = feedbacks.GetRange(0, numberInt - 1);
+                        foreach (var f in feedbacks)
+                        {
+                            f.merge(feedback);
+                            feedback = f;
                         }
-                       
                     }
 
-                else
-                {
+                    } else {
                     var systemAnswer = Nlp.Analize(subquestion.answerText);
                     feedback = matchAnswers(userAnswer, systemAnswer);
                 }
 
                 Logger.addAnswerOutput(subquestion.answerText, answer, feedback);
+                
                 feedback.answer = answer;
                 return feedback;
             }else
@@ -154,6 +159,7 @@ namespace NLP.QnA
                 }
                 else
                 {
+                    feedback.score = 100;
 
                 }
 

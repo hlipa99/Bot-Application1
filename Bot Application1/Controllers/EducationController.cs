@@ -186,7 +186,7 @@ namespace Bot_Application1.Controllers
             return answerFeedback;
         }
 
-        internal void getNextQuestion()
+        public void getNextQuestion()
         {
             if (studySession.CurrentQuestion != null) studySession.QuestionAsked.Add(studySession.CurrentQuestion);
 
@@ -194,7 +194,7 @@ namespace Bot_Application1.Controllers
                 studySession.CurrentQuestion.Enumerator = 0;
         }
 
-        internal void getNextSubQuestion()
+        public void getNextSubQuestion()
         {
             studySession.CurrentQuestion.Enumerator++;
             studySession.CurrentSubQuestion = getSubQuestion(studySession.CurrentQuestion.Enumerator);
@@ -213,7 +213,7 @@ namespace Bot_Application1.Controllers
             return null;
         }
 
-        internal string[] createReplayToUser(string text, UserIntent answerIntent)
+        public string[] createReplayToUser(string text, UserIntent answerIntent)
         {
             switch (answerIntent)
             {

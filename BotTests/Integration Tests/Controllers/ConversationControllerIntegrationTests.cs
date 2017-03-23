@@ -19,35 +19,34 @@ namespace Bot_Application1.Controllers.Tests
     public class ConversationControllerIntegrationTests : ObjectTestBase
     {
 
-        ConversationController convCtrl;
-
+       
         [TestInitialize()]
         public void ConversationControllerTest()
         {
             initializeObject();
-            //convCtrl = new ConversationController( UserFem , StudySession );
+            //ConvCtrl = new ConversationController( UserFem , StudySession );
         }
 
         //[TestMethod()]
         //public void FindMatchFromOptionsTest()
         //{
         //    //good
-        //   Assert.AreEqual(convCtrl.FindMatchFromOptions("3 אופציה", new string[] { "1", "2", "3" }),"3");
+        //   Assert.AreEqual(ConvCtrl.FindMatchFromOptions("3 אופציה", new string[] { "1", "2", "3" }),"3");
         //    //bad
-        //    Assert.AreEqual(convCtrl.FindMatchFromOptions("dsds אופציה", new string[] { "1", "2", "3" }), null);
+        //    Assert.AreEqual(ConvCtrl.FindMatchFromOptions("dsds אופציה", new string[] { "1", "2", "3" }), null);
         //    //sad
-        //    Assert.AreEqual(convCtrl.FindMatchFromOptions("", new string[] { "1", "2", "3" }), null);
+        //    Assert.AreEqual(ConvCtrl.FindMatchFromOptions("", new string[] { "1", "2", "3" }), null);
         //}
 
         //[TestMethod()]
         //public void isStopSessionTest()
         //{
         //    //good
-        //    Assert.IsTrue(convCtrl.isStopSession("מספיק"));
+        //    Assert.IsTrue(ConvCtrl.isStopSession("מספיק"));
         //    //bad
-        //    Assert.IsFalse(convCtrl.isStopSession("תמשיך"));
+        //    Assert.IsFalse(ConvCtrl.isStopSession("תמשיך"));
         //    //sad
-        //    Assert.IsFalse(convCtrl.isStopSession(""));
+        //    Assert.IsFalse(ConvCtrl.isStopSession(""));
         //}
 
         [TestMethod()]
@@ -62,12 +61,12 @@ namespace Bot_Application1.Controllers.Tests
             ss.QuestionAsked.Add(Question2);
             ss.QuestionAsked.Add(Question3);
 
-            convCtrl = new ConversationController(new User(),ss );
+            ConvCtrl = new ConversationController(new User(),ss );
 
  
             //good
 
-            AssertNLP.contains(convCtrl.endOfSession(),DBbotPhrase(Pkey.goodSessionEnd));
+            AssertNLP.contains(ConvCtrl.endOfSession(),DBbotPhrase(Pkey.goodSessionEnd));
 
 
                        ss = new StudySession();
@@ -79,10 +78,10 @@ namespace Bot_Application1.Controllers.Tests
             ss.QuestionAsked.Add(Question2);
             ss.QuestionAsked.Add(Question3);
 
-            convCtrl = new ConversationController(new User(), ss);
+            ConvCtrl = new ConversationController(new User(), ss);
 
             //bad
-            AssertNLP.contains(convCtrl.endOfSession(), DBbotPhrase(Pkey.badSessionEnd));
+            AssertNLP.contains(ConvCtrl.endOfSession(), DBbotPhrase(Pkey.badSessionEnd));
 
 
             ss = new StudySession();
@@ -94,9 +93,9 @@ namespace Bot_Application1.Controllers.Tests
             ss.QuestionAsked.Add(Question2);
 
 
-            convCtrl = new ConversationController(new User(), ss);
+            ConvCtrl = new ConversationController(new User(), ss);
             
-            AssertNLP.contains(convCtrl.endOfSession(), DBbotPhrase(Pkey.earlyDiparture));
+            AssertNLP.contains(ConvCtrl.endOfSession(), DBbotPhrase(Pkey.earlyDiparture));
 
 
 
@@ -108,10 +107,10 @@ namespace Bot_Application1.Controllers.Tests
             ss.QuestionAsked.Add(Question2);
             ss.QuestionAsked.Add(Question3);
 
-            convCtrl = new ConversationController(new User(), ss);//sad
+            ConvCtrl = new ConversationController(new User(), ss);//sad
 
 
-            AssertNLP.contains(convCtrl.endOfSession(), DBbotPhrase(Pkey.goodSessionEnd));
+            AssertNLP.contains(ConvCtrl.endOfSession(), DBbotPhrase(Pkey.goodSessionEnd));
 
         }
 
@@ -121,30 +120,31 @@ namespace Bot_Application1.Controllers.Tests
         public void getNumIntegrationTest()
         {
             //good
-            Assert.AreEqual(convCtrl.getNum("50"), 50);
-          //  Assert.AreEqual(convCtrl.getNum("מאה"), 100);
+            Assert.AreEqual(ConvCtrl.getNum("50"), 50);
+          //  Assert.AreEqual(ConvCtrl.getNum("מאה"), 100);
 
 
             //bad
-            Assert.AreEqual(convCtrl.getNum("גדגדגדגד"), -1);
+            Assert.AreEqual(ConvCtrl.getNum("גדגדגדגד"), -1);
 
             //sad
-            Assert.AreEqual(convCtrl.getNum(int.MinValue.ToString()), -1);
+            Assert.AreEqual(ConvCtrl.getNum(int.MinValue.ToString()), -1);
         }
 
         [TestMethod()]
         public void getNameIntegrationTest()
         {
             //good
-          //  Assert.AreEqual(convCtrl.getName("קוראים לי יוחאי"), "יוחאי");
-            Assert.AreEqual(convCtrl.getName("יוחאי"), "יוחאי");
+          //  Assert.AreEqual(ConvCtrl.getName("קוראים לי יוחאי"), "יוחאי");
+            Assert.AreEqual(ConvCtrl.getName("יוחאי"), "יוחאי");
 
 
             //bad
-            Assert.AreEqual(convCtrl.getName("אין לי שם"), null);
+            Assert.AreEqual(ConvCtrl.getName("אין לי שם"), null);
 
             //sad
-            Assert.AreEqual(convCtrl.getName("asassasaas"), null);
+            Assert.AreEqual(ConvCtrl.getName(""), null);
+            Assert.AreEqual(ConvCtrl.getName(null), null);
         }
 
         [TestMethod()]
@@ -152,48 +152,50 @@ namespace Bot_Application1.Controllers.Tests
         {
            
             //good
-            //  Assert.AreEqual(convCtrl.getName("קוראים לי יוחאי"), "יוחאי");
-            Assert.AreEqual(convCtrl.getGenderValue("בן"), "masculine");
-            Assert.AreEqual(convCtrl.getGenderValue("בת"), "feminine");
-            //Assert.AreEqual(convCtrl.getGenderValue("בחור"), "masculine");
-            //Assert.AreEqual(convCtrl.getGenderValue("בחורה"), "feminine");
+            //  Assert.AreEqual(ConvCtrl.getName("קוראים לי יוחאי"), "יוחאי");
+            Assert.AreEqual(ConvCtrl.getGenderValue("בן"), "masculine");
+            Assert.AreEqual(ConvCtrl.getGenderValue("בת"), "feminine");
+            //Assert.AreEqual(ConvCtrl.getGenderValue("בחור"), "masculine");
+            //Assert.AreEqual(ConvCtrl.getGenderValue("בחורה"), "feminine");
             //bad
 
-            Assert.AreEqual(convCtrl.getGenderValue("אני א-מיני"), null);
+            Assert.AreEqual(ConvCtrl.getGenderValue("אני א-מיני"), null);
 
             //sad
-            Assert.AreEqual(convCtrl.getGenderValue("asassasaas"), null);
+            Assert.AreEqual(ConvCtrl.getGenderValue("asassasaas"), null);
         }
 
         [TestMethod()]
         public void getClassIntegrationTest()
         {
             //good
-            //  Assert.AreEqual(convCtrl.getName("קוראים לי יוחאי"), "יוחאי");
-            Assert.AreEqual(convCtrl.getClass("יא"), "יא");
-            //Assert.AreEqual(convCtrl.getClass("שמינית"), "יב");
+            //  Assert.AreEqual(ConvCtrl.getName("קוראים לי יוחאי"), "יוחאי");
+
+
+            Assert.AreEqual(ConvCtrl.getClass("יא"), "יא");
+            //Assert.AreEqual(ConvCtrl.getClass("שמינית"), "יב");
             //bad
 
-            Assert.AreEqual(convCtrl.getClass("אני באקסטרני"), null);
+            Assert.AreEqual(ConvCtrl.getClass("אני באקסטרני"), null);
 
             //sad
-            Assert.AreEqual(convCtrl.getClass("asassasaas"), null);
+            Assert.AreEqual(ConvCtrl.getClass("asassasaas"), null);
         }
 
         //[TestMethod()]  //NOT_IMPLAMENTED_IN_THIS_VERSION
         //public void getGeneralFeelingTest()
         //{
         //    //good
-        //    //  Assert.AreEqual(convCtrl.getName("קוראים לי יוחאי"), "יוחאי");
-        //    Assert.AreEqual(convCtrl.getGeneralFeeling("סבבה"), "good");
-        //    Assert.AreEqual(convCtrl.getGeneralFeeling("באסה"), "bad");
-        //    //Assert.AreEqual(convCtrl.getClass("שמינית"), "יב");
+        //    //  Assert.AreEqual(ConvCtrl.getName("קוראים לי יוחאי"), "יוחאי");
+        //    Assert.AreEqual(ConvCtrl.getGeneralFeeling("סבבה"), "good");
+        //    Assert.AreEqual(ConvCtrl.getGeneralFeeling("באסה"), "bad");
+        //    //Assert.AreEqual(ConvCtrl.getClass("שמינית"), "יב");
         //    //bad
 
-        //    Assert.AreEqual(convCtrl.getGeneralFeeling("גו גו פאוור רנג'ר"), null);
+        //    Assert.AreEqual(ConvCtrl.getGeneralFeeling("גו גו פאוור רנג'ר"), null);
 
         //    //sad
-        //    Assert.AreEqual(convCtrl.getGeneralFeeling("asassasaas"), null);
+        //    Assert.AreEqual(ConvCtrl.getGeneralFeeling("asassasaas"), null);
         //}
 
 

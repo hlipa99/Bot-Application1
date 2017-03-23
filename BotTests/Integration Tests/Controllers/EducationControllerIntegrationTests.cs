@@ -32,23 +32,48 @@ namespace Bot_Application1.Controllers.Tests
         public void getQuestionIntegrationTest()
         {
             //good
-             SStudySession .Category = "לאומיות";
-            Assert.AreEqual(eduCtrl.getQuestion(),  Question1 );
+            var counter = 0;
+            foreach (var c in DB.getAllCategory())
+            {
+                counter = 0;
+                SStudySession.Category = c;
+                    IQuestion q;
+                    while(true)
+                    {
+                    
+                    try
+                    {
+                        eduCtrl.getNextQuestion();
+                    }
+                    catch (Exception ex)
+                    {
+                        //ugly
+                        Assert.AreEqual(typeof(CategoryOutOfQuestionException), ex.GetType());
+                        break;
+                    }
 
-            //bad
-             Assert.AreEqual(eduCtrl.getQuestion(), null);
-          
-            //ugly
-            try
-            {
-                 eduCtrl.getQuestion();
-                Assert.Fail();
+                    Assert.IsTrue(counter++ < DB.getQuestion(c).Count());
+
+                    q = SStudySession.CurrentQuestion;
+                        Assert.AreEqual(q.Category, c);
+
+                        //bad
+                        Assert.IsFalse(SStudySession.QuestionAsked.Contains(q), null);
+
+
+                        foreach(var sq in q.SubQuestion)
+                        {
+                        eduCtrl.getNextSubQuestion();
+                        Assert.AreEqual(SStudySession.CurrentSubQuestion, sq);
+                          
+
+                        }
+
+                    }
+
+           
+
             }
-            catch(Exception ex)
-            {
-                Assert.AreEqual(typeof(CategoryOutOfQuestionException), ex.GetType());
-            }
-    
         }
 
         [TestMethod()]
@@ -66,12 +91,12 @@ namespace Bot_Application1.Controllers.Tests
                         SStudySession.CurrentSubQuestion = sq;
                         eduCtrl = new EducationController(UserMus, SStudySession, ConvCtrl);
                         var feedback = eduCtrl.checkAnswer(sq.answerText);
-                        if(feedback.score < 99)
+                        if(feedback.score < 95)
                         {
                              feedback = eduCtrl.checkAnswer(sq.answerText);
                             //debug
                         }
-                        Assert.IsTrue(feedback.score >= 99);
+                        Assert.IsTrue(feedback.score >= 95);
                     }
                 }
             }

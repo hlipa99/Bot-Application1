@@ -22,6 +22,7 @@ namespace UnitTestProject1
 {
     public class ObjectTestBase
     {
+
        public ConversationController  ConvCtrl = new ConversationController ();
   //      public EducationController  EduCtrl = new EducationController();
         public NLPControler  NLPCtrl = new NLPControler ();
@@ -104,12 +105,12 @@ namespace UnitTestProject1
             Entity2.entityType = "locationWord";
 
             WordObject3.Text = "פליט";
-            WordObject3.WordT = WordObject.WordType.conceptWord;
+            WordObject3.WordT = WordObject.WordType.personWord;
             WordObject3.Gender = genderType.masculine;
             WordObject3.Amount = amountType.plural;
 
             Entity3.entityValue = "פליט";
-            Entity3.entityType = "conceptWord";
+            Entity3.entityType = "personWord";
 
             WordObject4.Text = "ירדן";
             WordObject4.WordT = WordObject.WordType.organizationWord;

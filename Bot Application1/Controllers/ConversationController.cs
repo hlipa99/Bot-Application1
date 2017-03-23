@@ -242,7 +242,7 @@ namespace Bot_Application1.Controllers
         public string getName(string text)
         {
 
-                if (text.Split(' ').Length == 1)
+                if (text != null && text.Split(' ').Length == 1 && text.Length > 1)
                     return text;
 
             return null;
