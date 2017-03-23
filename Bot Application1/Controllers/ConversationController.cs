@@ -440,18 +440,40 @@ namespace Bot_Application1.Controllers
         public virtual string[] getPhrase(Pkey key,string[] flags = null, string[] flagesNot = null, string textVar = null)
         {
             Logger.addLog("Bot: " + Enum.GetName(typeof(Pkey), key));
-     
-            if (flags == null) flags = new string[] { };
+            var keyInt = (int)key;
+
+
+                if(user.PreviusParses[keyInt] == null)
+                {
+                    user.PreviusParses[keyInt] = new int[] { };
+                }
+
+                if (flags == null) flags = new string[] { };
                 if (flagesNot == null) flagesNot = new string[] { };
 
                 var phrases = Db.getBotPhrase(key, flags, flagesNot);
+
+
+                var parses = new List<string>(phrases);
+
+             
+                
+                var lastParses = new List<int>(user.PreviusParses[keyInt]);
+                
+                if(lastParses.Count == phrases.Length)
+                {
+                     lastParses.RemoveAt(0);
+                }
+
+                parses.RemoveAll(x => lastParses.Contains(x.GetHashCode()));
                 string phraseRes = null;
                 if (phrases.Length > 0)
                 {
 
                     var rundomInt = RandomNum.getNumber(phrases.Length);
                     phraseRes = phrases[rundomInt];
-
+                    lastParses.Add(phraseRes.GetHashCode());
+                    user.PreviusParses[keyInt] = lastParses.ToArray();
                 }
                 else
                 {

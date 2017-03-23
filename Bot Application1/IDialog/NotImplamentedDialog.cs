@@ -25,7 +25,7 @@ namespace Bot_Application1.IDialog
       
         public override async Task StartAsync(IDialogContext context)
         {
-            getUser(context);
+            getDialogsVars(context);
          
 
             await context.PostAsync(conv().getPhrase(Pkey.NotImplamented)[0]);

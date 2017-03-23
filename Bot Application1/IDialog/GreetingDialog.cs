@@ -33,7 +33,7 @@ namespace Bot_Application1.IDialog
 
         public override async Task StartAsync(IDialogContext context)
         {
-            getUser(context);
+            getDialogsVars(context);
             if (User.UserLastSession == null || User.UserLastSession.Value.AddHours(1) > context.Activity.Timestamp)
             {
                 await writeMessageToUser(context, conv().getPhrase(Pkey.shortHello));
@@ -43,7 +43,7 @@ namespace Bot_Application1.IDialog
             {
                 await writeMessageToUser(context, conv().getPhrase(Pkey.greetings));
                 User.UserLastSession = context.Activity.Timestamp;
-                setUser(context);
+                setDialogsVars(context);
                 context.Wait(HowAreYouQuestion);
             }
           

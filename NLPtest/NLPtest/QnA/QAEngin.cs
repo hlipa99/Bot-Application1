@@ -85,6 +85,10 @@ namespace NLP.QnA
                     } else {
                     var systemAnswer = Nlp.Analize(subquestion.answerText);
                     feedback = matchAnswers(userAnswer, systemAnswer);
+                    if(feedback.score < 75)
+                    {
+                        feedback.missingAnswers.Add(subquestion.answerText);
+                    }
                 }
 
                 Logger.addAnswerOutput(subquestion.answerText, answer, feedback);

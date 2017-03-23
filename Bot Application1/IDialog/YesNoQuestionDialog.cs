@@ -29,8 +29,8 @@ namespace Bot_Application1.IDialog
 
         public override async Task StartAsync(IDialogContext context)
         {
-            getUser(context);
-            getStudySession(context);
+            getDialogsVars(context);
+            
             context.Wait<string[]>(userYesNo);
         }
 

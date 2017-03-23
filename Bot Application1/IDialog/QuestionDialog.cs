@@ -33,7 +33,7 @@ namespace Bot_Application1.IDialog
         public async Task intreduceQuestion(IDialogContext context)
         {
 
-            getStudySession(context);
+            getDialogsVars(context);
             var question = StudySession.CurrentQuestion;
 
 
@@ -57,9 +57,9 @@ namespace Bot_Application1.IDialog
 
         public async Task askSubQuestion(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            getStudySession(context);
+            getDialogsVars(context);
             edc().getNextSubQuestion();
-            setStudySession(context);
+            setDialogsVars(context);
 
             var question = StudySession.CurrentSubQuestion;
             await writeMessageToUser(context, new string[] { '"' + question.questionText.Trim() + '"' });
@@ -91,7 +91,7 @@ namespace Bot_Application1.IDialog
             {
                 typingTime(context);
                 var replay = conv().createReplayToUser(message.Text, getDialogContext());
-                setStudySession(context);
+                setDialogsVars(context);
                 await writeMessageToUser(context, replay);
             }
             catch(UnrelatedSubjectException ex) {
@@ -114,7 +114,7 @@ namespace Bot_Application1.IDialog
             catch (Exception ex)
             {
                 await writeMessageToUser(context, conv().getPhrase(Pkey.innerException));
-                Logger.addErrorLog(getDialogContext().dialog, ex.Message + Environment.NewLine + ex.StackTrace);
+                Logger.addErrorLog(getDialogContext().dialog, ex.Message + Environment.NewLine + ex.StackTrace + ex.InnerException);
                 await askSubQuestion(context, null);
                 return;
             }
@@ -141,7 +141,7 @@ namespace Bot_Application1.IDialog
                 //await writeMessageToUser(context, conv().getPhrase(Pkey.giveYourFeedback));
                 //updateRequestTime(context);
                 //await giveFeedbackMessage(context);
-                setStudySession(context);
+                setDialogsVars(context);
                 context.Done("");
             }
         }
@@ -198,7 +198,7 @@ namespace Bot_Application1.IDialog
         //        }
 
         //        StudySession.CurrentQuestion.AnswerScore = number;
-        //        setStudySession(context);
+        //        setDialogsVars(context);
         //        context.Done("");
         //    }
         //    else

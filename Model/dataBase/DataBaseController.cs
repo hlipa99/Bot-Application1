@@ -391,7 +391,7 @@ namespace Model.dataBase
         public virtual string[] getBotPhrase(Pkey pKey, string[] flags, string[] flagsNot)
         {
      
-            media media = new media();
+          //  media media = new media();
             string[] phrases = null;
             var key = Enum.GetName(typeof(Pkey), pKey).ToLower();
             try

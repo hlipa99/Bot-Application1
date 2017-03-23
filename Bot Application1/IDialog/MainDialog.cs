@@ -34,7 +34,7 @@ namespace Bot_Application1.IDialog
         {
             try
            {
-                getUser(context);
+                getDialogsVars(context);
                 if (User != null)
                 {
         
@@ -49,7 +49,7 @@ namespace Bot_Application1.IDialog
             catch (Exception ex)
             {
                 await writeMessageToUser(context, new string[] { "אוקיי זה מביך " + "\U0001F633", "קרתה לי תקלה בשרת ואני לא יודע מה לעשות", "אני אתחיל עכשיו מהתחלה ונעמיד פנים שלא קרה כלום, " + "\U0001F648", "טוב" + "?" });
-                Logger.addErrorLog(getDialogContext().dialog, ex.Message + Environment.NewLine + ex.StackTrace);
+                Logger.addErrorLog(getDialogContext().dialog, ex.Message + Environment.NewLine + ex.StackTrace + ex.InnerException);
                 //    await writeMessageToUser(context, new string[] { ex.Data.ToString(), ex.InnerException.ToString(), ex.StackTrace.ToString(), ex.TargetSite.ToString(), ex.ToString() });
                 //     Logger.log("MainDialog", "MainMenu", ex.ToString());
                 await StartAsync(context);
@@ -61,7 +61,7 @@ namespace Bot_Application1.IDialog
         private async Task MainMenu(IDialogContext context, IAwaitable<object> result)
         {
            
-                getUser(context);
+                getDialogsVars(context);
                 if (User != null)
                 {
                     options = conv().MainMenuOptions();
@@ -144,7 +144,7 @@ namespace Bot_Application1.IDialog
                 try
                 {
                     await writeMessageToUser(context, conv().getPhrase(Pkey.innerException));
-                    Logger.addErrorLog(getDialogContext().dialog, ex.Message + Environment.NewLine + ex.StackTrace);
+                    Logger.addErrorLog(getDialogContext().dialog, ex.Message + Environment.NewLine + ex.StackTrace + ex.InnerException);
                     await MainMenu(context, null);
                     return;
                 }
@@ -155,7 +155,7 @@ namespace Bot_Application1.IDialog
                 }
             }
 
-         //   setStudySession(context);
+         //   setDialogsVars(context);
             context.Call(new FarewellDialog(), MainMenu);
         }
 

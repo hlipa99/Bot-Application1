@@ -288,7 +288,8 @@ namespace Bot_Application1.Controllers
                 }
 
                 verbalFeedback = ConversationController.mergeText(verbalFeedback, ConversationController.mergeText(ConversationController.getPhrase(Pkey.and), last));
-            }else
+            }
+            else if (answers.Count == 1)
             {
                 verbalFeedback = ConversationController.mergeText(verbalFeedback, answers[0]);
             }

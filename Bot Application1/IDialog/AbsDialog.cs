@@ -44,23 +44,25 @@ namespace Bot_Application1.IDialog
         }
 
 
-        public void getUser(IDialogContext context)
-            {
-                User thisUser = User as User;
-                context.UserData.TryGetValue<User>("user", out thisUser);
-                user = thisUser;
-            }
 
-        public void setUser(IDialogContext context)
+
+        public void setDialogsVars(IDialogContext context)
         {
                 User thisUser = user as User;
                 context.UserData.SetValue<User>("user",thisUser);
-            
+
+            context.UserData.SetValue<StudySession>("studySession", studySession);
+
         }
 
-        public void getStudySession(IDialogContext context)
+        public void getDialogsVars(IDialogContext context)
         {
             context.UserData.TryGetValue<StudySession>("studySession", out studySession);
+           
+
+            User thisUser = User as User;
+            context.UserData.TryGetValue<User>("user", out thisUser);
+            user = thisUser;
         }
 
         public EducationController edc()
@@ -69,10 +71,7 @@ namespace Bot_Application1.IDialog
         }
 
 
-        public void setStudySession(IDialogContext context)
-        {
-            context.UserData.SetValue<StudySession>("studySession", studySession);
-        }
+     
 
 
 
