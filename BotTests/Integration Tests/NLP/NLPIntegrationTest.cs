@@ -35,11 +35,11 @@ namespace NLP.Tests
 
 
             //good
-            Assert.IsTrue(res[1].Contains(WordObject1));
+            Assert.IsTrue(res.FirstOrDefault().Contains(WordObject1));
             Assert.IsTrue(res.FirstOrDefault().Contains(WordObject2));
+            Assert.IsTrue(res.FirstOrDefault().Contains(WordObject3));
 
             //bad
-            Assert.IsFalse(res.FirstOrDefault().Contains(WordObject3));
             Assert.IsFalse(res.FirstOrDefault().Contains(WordObject4));
 
 

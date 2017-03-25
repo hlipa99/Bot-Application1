@@ -324,12 +324,12 @@ namespace Model.dataBase
 
         public virtual IEnumerable<Ientity> getEntitys()
         {
-            var entityList = new List<Ientity>();
-            foreach(var e in DB.entity)
-            {
-                entityList.Add((Ientity)e);
-            }
-            return entityList.ToArray();
+            //var entityList = new List<Ientity>();
+            //foreach(var e in DB.entity)
+            //{
+            //    entityList.Add((Ientity)e);
+            //}
+            return DB.entity;
         }
 
         public virtual string[] getAllSubCategory(string catgoty)

@@ -33,6 +33,8 @@ namespace Model
                 log.time = DateTime.UtcNow;
                 log.context = context;
                 log.error = error;
+                System.Diagnostics.Trace.TraceError(log.error);
+
                 new DataBaseController().addErrorLog(log);
             } catch(Exception ex)
             {
@@ -55,7 +57,10 @@ namespace Model
                     log.missingEntities += ";" + e.entityType + "#" + e.entityValue + ";";
                 }
                 new DataBaseController().addAnswerLog(log);
-            }catch(Exception ex)
+                System.Diagnostics.Trace.TraceInformation("question:" + log.question + ",userAnswer:" + log.userAnswer + "score:" + log.entities);
+
+            }
+            catch (Exception ex)
             {
 
             }

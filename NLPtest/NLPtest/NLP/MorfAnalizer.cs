@@ -128,7 +128,7 @@ namespace NLP.NLP
 
                 foreach (var s in sentenses)
                 {
-
+                    var firstWord = true;
                     var strRes = s.Trim();
 
                     List<WordObject> res = new List<WordObject>();
@@ -153,15 +153,13 @@ namespace NLP.NLP
                             {
                                 WordObject word = w;
 
-
-
-
                                 //two NRI in a row
                                 //join word if ist part of a name
 
                                 if (res.Count > 0)
                                 {
-                                    if (res.LastOrDefault().Ner == w.Ner && res.LastOrDefault().Ner != "O" && res.LastOrDefault().Prefixes.Contains("ו"))
+                                    if (res.LastOrDefault().Ner == w.Ner && res.LastOrDefault().Ner != "O" && 
+                                        !res.LastOrDefault().Prefixes.Contains("ו") && !firstWord)
                                     {
                                         res.LastOrDefault().Text += " " + word.Text;
                                         res.LastOrDefault().Lemma = res.LastOrDefault().getLemma(null, res.LastOrDefault().Text);
@@ -184,8 +182,7 @@ namespace NLP.NLP
                                 //}
 
                                 res.Add(word);
-
-
+                                firstWord = false;
                             }
 
                         }
@@ -246,7 +243,6 @@ namespace NLP.NLP
                     var searchText2 = (searchText + " " +sentence[j].Lemma).Trim();
                     var searchText1 = (searchText + " " +sentence[j].Text).Trim();
 
-                  
                     var tryMatch2 = findMatch(entities.AsQueryable(), searchText2);
                     if (tryMatch2 != null && tryMatch2.Any())
                     {
@@ -280,8 +276,19 @@ namespace NLP.NLP
 
                 if (match != null && match.Any())
                 {
-                         //TODO implament selector or create multiple answer
-                        var entity = match.FirstOrDefault();
+                    //TODO implament selector or create multiple answer
+                    Ientity entity = null;
+                    if (match.Count() > 1)
+                    {
+                        var list = match.ToList();
+                        list.Sort((x, y) => entitySelector(x) - entitySelector(y));
+                        entity = list.FirstOrDefault();
+                    }
+                    else
+                    {
+                        entity = match.FirstOrDefault();
+                    }
+              
                    
                      //for (int k = i ; k < j; k++)
                      //   {
@@ -325,6 +332,21 @@ namespace NLP.NLP
  
             }
             return newSentence;
+        }
+
+        private int entitySelector(Ientity x)
+        {
+            switch (x.entityType)
+            {
+                case ("eventWord"): return 0;
+                case ("personWord"): return 1;
+                case ("locationWord"): return 2;
+                case ("organizationWord"): return 3;
+                case ("conceptWord"): return 4;
+                case ("nounWord"): return 5;
+                case ("verbWord"): return 6;
+                default: return 99;
+            }
         }
 
         private IQueryable<Ientity> findMatch(IQueryable<Ientity> quarible, string text)

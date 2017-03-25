@@ -48,9 +48,11 @@ namespace Bot_Application1.IDialog
 
         public void setDialogsVars(IDialogContext context)
         {
+            if (user == null) user = new User();
                 User thisUser = user as User;
                 context.UserData.SetValue<User>("user",thisUser);
 
+            if (studySession == null) studySession = new StudySession();
             context.UserData.SetValue<StudySession>("studySession", studySession);
 
         }
