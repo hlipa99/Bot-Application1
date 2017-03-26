@@ -25,41 +25,49 @@ namespace Bot_Application1.IDialog
     {
 
 
-        public override UserContext getDialogContext()
+        public override UserContext getDialogContext(IDialogContext context)
         {
+            base.getDialogContext(context);
             UserContext.dialog = "GreetingDialog";
+
             return UserContext;
         }
 
         public override async Task StartAsync(IDialogContext context)
         {
             getDialogsVars(context);
+            context.Wait(HelloRes);
+
+
+        }
+
+        private async Task HelloRes(IDialogContext context, IAwaitable<IMessageActivity> result)
+        {
+            var message = await result;
+            var respond = conv().createReplayToUser(message.Text, getDialogContext(context));
+            await writeMessageToUser(context, respond);
+
             if (User.UserLastSession == null || User.UserLastSession.Value.AddHours(1) > context.Activity.Timestamp)
             {
-                await writeMessageToUser(context, conv().getPhrase(Pkey.shortHello));
                 context.Done("");
             }
             else
             {
-                await writeMessageToUser(context, conv().getPhrase(Pkey.greetings));
-                User.UserLastSession = context.Activity.Timestamp;
-                setDialogsVars(context);
                 context.Wait(HowAreYouQuestion);
             }
-          
         }
+
+
 
 
         private async Task HowAreYouQuestion(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
 
             //the user sent a message
-            if (result.GetAwaiter().IsCompleted)
-            {
-                var text = await result;
-                var replay = conv().createReplayToUser(text.Text, UserContext);
-                await writeMessageToUser(context, replay);
-            }
+
+            var text = await result;
+            var replay = conv().createReplayToUser(text.Text, UserContext);
+            await writeMessageToUser(context, replay);
 
             await writeMessageToUser(context, conv().getPhrase(Pkey.howAreYou));
             context.Wait(HowAreYouRes);

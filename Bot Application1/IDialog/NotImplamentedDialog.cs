@@ -33,8 +33,9 @@ namespace Bot_Application1.IDialog
 
         }
 
-        public override UserContext getDialogContext()
+        public override UserContext getDialogContext(IDialogContext context)
         {
+            base.getDialogContext(context);
             UserContext.dialog = "NotImplamentedDialog";
             return UserContext;
         }

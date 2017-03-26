@@ -22,8 +22,9 @@ namespace Bot_Application1.IDialog
     [Serializable]
     public class YesNoQuestionDialog : AbsDialog<Boolean>
     {
-        public override UserContext getDialogContext()
+        public override UserContext getDialogContext(IDialogContext context)
         {
+            base.getDialogContext(context);
             UserContext.dialog = "YesNoQuestionDialog";
             return UserContext;
         }
@@ -38,7 +39,7 @@ namespace Bot_Application1.IDialog
         private async Task userYesNo(IDialogContext context, IAwaitable<string[]> result)
         {
             var question = await result;
-            await writeMessageToUser(context, question);
+           // await writeMessageToUser(context, question);
             await createMenuOptions(context, question[0], conv().getPhrase(Pkey.yesNoOptions), userYesNoRes);
         
             // context.Wait(userYesNoRes);
@@ -58,7 +59,7 @@ namespace Bot_Application1.IDialog
             UserIntent intent;
             if (text != null)
             {
-                intent = conv().getUserIntente(text, getDialogContext());
+                intent = conv().getUserIntente(text, getDialogContext(context));
 
             }
             else //facebook like

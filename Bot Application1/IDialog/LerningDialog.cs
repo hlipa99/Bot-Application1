@@ -17,7 +17,7 @@ namespace Bot_Application1.IDialog
     [Serializable]
     public class LerningDialog : AbsDialog<string>
     {
-        public override UserContext getDialogContext()
+        public override UserContext getDialogContext(IDialogContext context)
         {
             UserContext.dialog = "LerningDialog";
             return UserContext;
@@ -27,11 +27,10 @@ namespace Bot_Application1.IDialog
         public override async Task StartAsync(IDialogContext context)
         {
             getDialogsVars(context);
-
-            if(StudySession == null)
+            if(StudySession == null || StudySession.Category == null)
             {
-                StudySession = new StudySession();
-                setDialogsVars(context);
+                await chooseSubject(context);
+                return;
             }
             else
             {
@@ -41,7 +40,7 @@ namespace Bot_Application1.IDialog
                 return;
             }
 
-            await chooseSubject(context);
+
         }
 
         private async Task chooseSubject(IDialogContext context)
@@ -73,6 +72,7 @@ namespace Bot_Application1.IDialog
 
             context.UserData.RemoveValue("studySession");
             StudySession = new StudySession();
+            User.UserLastSession = context.Activity.Timestamp;
             setDialogsVars(context);
             await context.PostAsync(message);
             updateRequestTime(context);
@@ -86,11 +86,13 @@ namespace Bot_Application1.IDialog
             var cont = await result;
             if (cont)
             {
-               await chooseSubject(context);
+                await intreduceQuestion(context);
             }else
             {
+                await writeMessageToUser(context, conv().getPhrase(Pkey.letsStartOver));
+                StudySession = new StudySession();
                 setDialogsVars(context);
-                context.Done("");
+                await chooseSubject(context);
             }
         }
 
@@ -184,7 +186,7 @@ namespace Bot_Application1.IDialog
                 catch (Exception ex)
                 {
                     await writeMessageToUser(context, conv().getPhrase(Pkey.innerException));
-                    Logger.addErrorLog(getDialogContext().dialog, ex.Message + Environment.NewLine + ex.StackTrace + ex.InnerException);
+                    Logger.addErrorLog(getDialogContext(context).dialog, ex.Message + Environment.NewLine + ex.StackTrace + ex.InnerException);
                     await intreduceQuestion(context);
                 }
             }
@@ -208,7 +210,7 @@ namespace Bot_Application1.IDialog
             catch (Exception ex)
             {
                 await writeMessageToUser(context, conv().getPhrase(Pkey.innerException));
-                Logger.addErrorLog(getDialogContext().dialog, ex.Message + Environment.NewLine + ex.StackTrace + ex.InnerException);
+                Logger.addErrorLog(getDialogContext(context).dialog, ex.Message + Environment.NewLine + ex.StackTrace + ex.InnerException);
                 await intreduceQuestion(context);
                 return;
             }
@@ -221,7 +223,7 @@ namespace Bot_Application1.IDialog
             }
             else
             {
-                await writeMessageToUser(context, conv().getPhrase(Pkey.endOfSession));
+                await EndOfLearningSession(context);
             }
         }
 
@@ -232,6 +234,7 @@ namespace Bot_Application1.IDialog
 
         public async Task takeAbreak(IDialogContext context, IAwaitable<bool> result)
         {
+            getDialogsVars(context);
             var cont = await result;
             if (cont)
             {
@@ -240,9 +243,12 @@ namespace Bot_Application1.IDialog
             else
             {
                 await writeMessageToUser(context, conv().getPhrase(Pkey.ok));
-                await writeMessageToUser(context, conv().getPhrase(Pkey.letsContinue));
-                intreduceQuestion(context);
+                StudySession.SessionLength += 3;
+                await writeMessageToUser(context, conv().getPhrase(Pkey.letsContinueWitoutBreak));
+                setDialogsVars(context);
+                await intreduceQuestion(context);
             }
+
         }
 
 
@@ -250,8 +256,7 @@ namespace Bot_Application1.IDialog
         public async Task EndOfLearningSession(IDialogContext context)
         {
             await writeMessageToUser(context, conv().endOfSession());
-       //     await writeMessageToUser(context, conv().getPhrase(Pkey.endOfSession));
-
+            await writeMessageToUser(context, conv().getPhrase(Pkey.endOfSession));
             //TODO: save user sussion to DB
             context.Done("learningSession");
         }

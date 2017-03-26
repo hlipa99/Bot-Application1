@@ -224,7 +224,11 @@ namespace Bot_Application1.Controllers
                     return createFeedBack(checkAnswer(text));
 
                 case UserIntent.dontKnow:
-                    return ConversationController.mergeText(ConversationController.getPhrase(Pkey.neverMind), ConversationController.mergeText(ConversationController.getPhrase(Pkey.MyAnswerToQuestion), studySession.CurrentSubQuestion.answerText));
+                    
+                        var feedback = ConversationController.getPhrase(Pkey.neverMind);
+                    feedback = ConversationController.mergeText(feedback,ConversationController.getPhrase(Pkey.MyAnswerToQuestion));
+                    feedback = answerArrayToString(new List<string>(studySession.CurrentSubQuestion.answerText.Split('|')),feedback);
+                    return feedback;
 
                 case UserIntent.stopSession:
                     throw new StopSessionException();
@@ -248,7 +252,7 @@ namespace Bot_Application1.Controllers
             {
                 verbalFeedback =  ConversationController.getPhrase(Pkey.goodAnswer);
             }
-            else if (answerFeedback.score >= 35)
+            else if (answerFeedback.score >= 20)
             {
                 verbalFeedback =  ConversationController.getPhrase(Pkey.partialAnswer);
             }
@@ -260,7 +264,7 @@ namespace Bot_Application1.Controllers
                 verbalFeedback =  ConversationController.getPhrase(Pkey.notAnAnswer);
             }
 
-            answerFeedback.missingEntitis.RemoveAll(x => x.entityType == "conceptWord");
+          //  answerFeedback.missingEntitis.RemoveAll(x => x.entityType == "conceptWord");
 
             if (answerFeedback.missingAnswers.Count > 0)
             {
@@ -270,7 +274,13 @@ namespace Bot_Application1.Controllers
             else if (answerFeedback.score < 75)
             {
                 verbalFeedback = ConversationController.mergeText(verbalFeedback, ConversationController.getPhrase(Pkey.MyAnswerToQuestion));
-                verbalFeedback = answerArrayToString(answerFeedback.missingAnswers, verbalFeedback);
+                if (answerFeedback.missingAnswers.Count > 0)
+                {
+                    verbalFeedback = answerArrayToString(answerFeedback.missingAnswers, verbalFeedback);
+                }else
+                {
+                    verbalFeedback = ConversationController.mergeText(verbalFeedback, studySession.CurrentSubQuestion.answerText);
+                }
             }
 
             return verbalFeedback;
@@ -284,7 +294,7 @@ namespace Bot_Application1.Controllers
                 answers.RemoveAt(answers.Count - 1);
                 foreach (var a in answers)
                 {
-                    verbalFeedback = ConversationController.mergeText(verbalFeedback, a + ",");
+                    verbalFeedback = ConversationController.mergeText(verbalFeedback, a.Trim() + ",");
                 }
 
                 verbalFeedback = ConversationController.mergeText(verbalFeedback, ConversationController.mergeText(ConversationController.getPhrase(Pkey.and), last));

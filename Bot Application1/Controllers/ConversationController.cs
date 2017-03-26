@@ -344,10 +344,21 @@ namespace Bot_Application1.Controllers
 
         internal string[] mergeText(string[] v1, string[] v2)
         {
-            var list1 = new List<string>(v1);
-            list1.AddRange(v2);
-            return list1.ToArray();
-        }
+            if (v1.Length > 0 && v2.Length > 0)
+            {
+                var newArr = new string[v1.Length + v2.Length - 1];
+                v1.CopyTo(newArr, 0);
+                v2.CopyTo(newArr, v1.Length - 1);
+                newArr[v1.Length - 1] = v1[v1.Length - 1] + " " + newArr[v1.Length - 1];
+                return newArr;
+            }
+            else
+            {
+                var list1 = new List<string>(v1);
+                list1.AddRange(v2);
+                return list1.ToArray();
+            }
+        }        
 
         internal string[] mergeText(string v1, string[] v2)
         {
@@ -400,7 +411,13 @@ namespace Bot_Application1.Controllers
                     case UserIntent.hello:
                     case UserIntent.DefaultFallbackIntent:
                     default:
-                        return getPhrase(Pkey.greetings);
+                        if (context.lastSeen.Value.AddHours(1) < DateTime.UtcNow)
+                        {
+                            return getPhrase(Pkey.greetings);
+                        }else
+                        {
+                            return getPhrase(Pkey.shortHello);
+                        }
                         break;
                 }
             }
@@ -439,11 +456,13 @@ namespace Bot_Application1.Controllers
 
         public virtual string[] getPhrase(Pkey key,string[] flags = null, string[] flagesNot = null, string textVar = null)
         {
-            Logger.addLog("Bot: " + Enum.GetName(typeof(Pkey), key));
-            var keyInt = (int)key;
+            try
+            {
+
+                var keyInt = (int)key;
 
 
-                if(user.PreviusParses[keyInt] == null)
+                if (user.PreviusParses[keyInt] == null)
                 {
                     user.PreviusParses[keyInt] = new int[] { };
                 }
@@ -456,16 +475,16 @@ namespace Bot_Application1.Controllers
 
                 var parses = new List<string>(phrases);
 
-             
-                
+
+
                 var lastParses = new List<int>(user.PreviusParses[keyInt]);
-                
-                if(lastParses.Count == phrases.Length)
+
+                if (lastParses.Count == phrases.Length && lastParses.Count > 0)
                 {
-                     lastParses.RemoveAt(0);
+                    lastParses.RemoveAt(0);
                 }
 
-                parses.RemoveAll(x => lastParses.Contains(x.GetHashCode()));
+               parses.RemoveAll(x => x!= null && lastParses.Contains(x.GetHashCode()));
                 string phraseRes = null;
                 if (phrases.Length > 0)
                 {
@@ -477,24 +496,31 @@ namespace Bot_Application1.Controllers
                 }
                 else
                 {
-                 //   throw new botphraseException();
+                    //   throw new botphraseException();
                 }
 
-            if (phraseRes != null)
-            {
-                phraseRes = formateVars(phraseRes, textVar);
 
-                if(user.Language == "en")
+                Logger.addLog("Bot: " + Enum.GetName(typeof(Pkey), key));
+                if (phraseRes != null)
                 {
-                    phraseRes = ControlerTranslate.TranslateToEng(phraseRes);
+                    phraseRes = formateVars(phraseRes, textVar);
 
+                    if (user.Language == "en")
+                    {
+                        phraseRes = ControlerTranslate.TranslateToEng(phraseRes);
+
+                    }
+
+                    return phraseRes.Split('|');
                 }
-
-                return phraseRes.Split('|');
-            }
-            else
+                else
+                {
+                    return new string[] { };
+                }
+            }catch(Exception ex)
             {
-                return new string[] { };
+                Logger.addErrorLog("getPhrase: " + Enum.GetName(typeof(Pkey), key), ex.Message + ex.StackTrace);
+                return new string [] { };
             }
    
         }

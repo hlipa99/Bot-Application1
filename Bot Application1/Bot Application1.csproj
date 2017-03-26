@@ -260,7 +260,6 @@
     <Compile Include="Controllers\MediaController.cs" />
     <Compile Include="Exceptions\StopSessionException.cs" />
     <Compile Include="IDialog\GreetingDialog.cs" />
-    <Compile Include="IDialog\MenuObject.cs" />
     <Compile Include="IDialog\SideDialog.cs" />
     <Compile Include="IDialog\YesNoQuestionDialog.cs" />
     <Compile Include="Models\UserContext.cs" />

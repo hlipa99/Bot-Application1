@@ -32,15 +32,16 @@ namespace Bot_Application1.IDialog
             this.retry = retry;
         }
 
-        public override UserContext getDialogContext()
+        public override UserContext getDialogContext(IDialogContext context)
         {
+            base.getDialogContext(context);
             UserContext.dialog = "MenuOptionDialog";
             return UserContext;
         }
 
         public override async Task StartAsync(IDialogContext context)
         {
-
+            getDialogsVars(context);
             await checkOutdatedMessage(context, null);
         }
 

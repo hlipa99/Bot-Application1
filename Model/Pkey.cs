@@ -72,6 +72,8 @@ namespace Model
         youWantToContinue,
         wrongAnswer,
         replaceLanguge,
-        yesNoOptions
+        yesNoOptions,
+        letsStartOver,
+        letsContinueWitoutBreak
     }
 }

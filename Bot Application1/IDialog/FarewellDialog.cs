@@ -21,21 +21,22 @@ namespace Bot_Application1.IDialog
     [Serializable]
     public class FarewellDialog : AbsDialog<IMessageActivity>
     {
-        public override UserContext getDialogContext()
+        public override UserContext getDialogContext(IDialogContext context)
         {
+            base.getDialogContext(context);
             UserContext.dialog = "FarewellDialog";
             return UserContext;
         }
 
         public override async Task StartAsync(IDialogContext context)
         {
+            getDialogsVars(context);
+            await writeMessageToUser(context, conv().getPhrase(Pkey.goodbye));
             context.Wait(userGoodbye);
         }
 
         private async Task userGoodbye(IDialogContext context, IAwaitable<object> result)
         {
-            
-            await writeMessageToUser(context, conv().getPhrase(Pkey.goodbye));
             context.Wait(waitForNextInteraction);
         }
 

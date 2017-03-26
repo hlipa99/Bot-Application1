@@ -34,7 +34,7 @@ namespace UnitTestProject1
             }
         }
 
-        public string ConvID { get => convID; set => convID = value; }
+        public string ConvID { get ; set; }
 
         public DialogsTestsBase()
         {
