@@ -131,7 +131,7 @@ namespace UnitTestProject1
            
             Activity userMessage = new Activity
             {
-                From = new ChannelAccount(),
+                From = new ChannelAccount(id: "testUser"),
                 Text = message,
                 Type = ActivityTypes.Message
             };
