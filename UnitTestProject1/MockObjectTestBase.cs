@@ -82,9 +82,12 @@ namespace UnitTestProject1
             mockUserMus.Setup(x => x.UserName).Returns("יוחאי");
             mockUserMus.Setup(x => x.UserClass).Returns("יא");
             mockUserMus.Setup(x => x.UserGender).Returns("musculine");
+            mockUserMus.Setup(x => x.PreviusParses).Returns(new int[100][]);
+
             mockUserFem.Setup(x => x.UserName).Returns("מיה");
             mockUserFem.Setup(x => x.UserClass).Returns("י");
             mockUserFem.Setup(x => x.UserGender).Returns("feminine");
+            mockUserFem.Setup(x => x.PreviusParses).Returns(new int[100][]);
 
             mockQuestion1.Setup(x => x.AnswerScore).Returns(100);
             mockQuestion1.Setup(x => x.Category).Returns("לאומיות");

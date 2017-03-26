@@ -13,12 +13,13 @@ namespace UnitTestProject1
     public class DialogsTestsBase
     {
         
-        string ConvID = "";
+        string convID = "";
         DirectLineClient client = null;
         Task<List<string>> task;
         string[] options = null;
         List<string> response = null;
         DataBaseController db;
+
 
         public DirectLineClient Client
         {
@@ -33,13 +34,13 @@ namespace UnitTestProject1
             }
         }
 
-        public string ConvID1 { get; set; }
+        public string ConvID { get => convID; set => convID = value; }
 
         public DialogsTestsBase()
         {
             db = new DataBaseController();
-            createNewClientConversation(out ConvID);
-            Client = createNewClientConversation(out ConvID);
+           // createNewClientConversation(out ConvID);
+            Client = createNewClientConversation(out convID);
         
         }
 
@@ -111,6 +112,7 @@ namespace UnitTestProject1
 
         public DirectLineClient createNewClientConversation(out string convID)
         {
+
             string secret = "IK1o_f1fBYc.cwA.LZs.ZrbtNGSTAYzcLqc6DPbq_0bBOV_zzyMSYn7KCaoVdpI";
             Uri uri = new Uri("https://directline.botframework.com");
             var creds = new DirectLineClientCredentials(secret);
@@ -129,7 +131,7 @@ namespace UnitTestProject1
            
             Activity userMessage = new Activity
             {
-                From = new ChannelAccount("testDirectApi"),
+                From = new ChannelAccount(),
                 Text = message,
                 Type = ActivityTypes.Message
             };
@@ -152,10 +154,10 @@ namespace UnitTestProject1
 
         public async Task<List<string>> sendActivity(Activity activity)
         {
-            var i = client.Conversations.GetActivities(ConvID1).Activities.Count;
-            await client.Conversations.PostActivityAsync(ConvID1, activity);
+            var i = client.Conversations.GetActivities(ConvID).Activities.Count;
+            var x = await client.Conversations.PostActivityAsync(ConvID, activity);
          
-            var activities = client.Conversations.GetActivities(ConvID1);
+            var activities = client.Conversations.GetActivities(ConvID);
             i++;
             List<string> resualtTest = new List<string>();
 

@@ -35,7 +35,7 @@ namespace Bot_Application1.IDialog
             if (User == null)
             {
                 User = new User();
-                setUser(context);
+                setDialogsVars(context);
             }
 
             context.Wait(NewUser);
@@ -88,7 +88,7 @@ namespace Bot_Application1.IDialog
                     if(userTranslation != "")
                     {
                         User.UserName = userTranslation.Split(' ')[0];
-                        setUser(context);
+                        setDialogsVars(context);
                         await NewUserGetName(context);
                     }
                 }
@@ -117,7 +117,7 @@ namespace Bot_Application1.IDialog
 
             if ((User.UserName = conv().getName(userText.Text)) != null)
             {
-                setUser(context);
+                setDialogsVars(context);
                 var newMessage = conv().getPhrase(Pkey.NewUserGreeting);
 
 
@@ -185,7 +185,7 @@ namespace Bot_Application1.IDialog
 
             if ((User.UserGender = conv().getGenderValue(userText)) != null)
             {
-                setUser(context);
+                setDialogsVars(context);
 
                 await writeMessageToUser(context, conv().getPhrase(Pkey.GenderAck, textVar: conv().getGenderName("single")));
         
@@ -243,7 +243,7 @@ namespace Bot_Application1.IDialog
             
             if ((User.UserClass = conv().getClass(userText)) != null)
             {
-                setUser(context);
+                setDialogsVars(context);
 
                 await writeMessageToUser(context, conv().getPhrase(Pkey.GeneralAck,textVar:User.UserClass));
 

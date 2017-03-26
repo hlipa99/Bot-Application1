@@ -26,17 +26,12 @@ namespace Bot_Application1.IDialog
 
         public override async Task StartAsync(IDialogContext context)
         {
-            getUser(context);
-
-            if (User == null)
-            {
-                throw new unknownUserException();
-            }
+            getDialogsVars(context);
 
             if(StudySession == null)
             {
                 StudySession = new StudySession();
-                setStudySession(context);
+                setDialogsVars(context);
             }
             else
             {
@@ -78,7 +73,7 @@ namespace Bot_Application1.IDialog
 
             context.UserData.RemoveValue("studySession");
             StudySession = new StudySession();
-            setStudySession(context);
+            setDialogsVars(context);
             await context.PostAsync(message);
             updateRequestTime(context);
             context.Wait(StartLearning);
@@ -94,7 +89,7 @@ namespace Bot_Application1.IDialog
                await chooseSubject(context);
             }else
             {
-                setStudySession(context);
+                setDialogsVars(context);
                 context.Done("");
             }
         }
@@ -141,12 +136,12 @@ namespace Bot_Application1.IDialog
            if (option != null )
             {
                 StudySession.Category = option;
-                setStudySession(context);
+                setDialogsVars(context);
 
                 try
                 {
                     edc().getQuestion();
-                    setStudySession(context);
+                    setDialogsVars(context);
                 }
                 catch(CategoryOutOfQuestionException ex)
                 {
@@ -171,9 +166,9 @@ namespace Bot_Application1.IDialog
 
         private async Task intreduceQuestion(IDialogContext context)
         {
-            getStudySession(context);
+            getDialogsVars(context);
             edc().getNextQuestion();
-            setStudySession(context);
+            setDialogsVars(context);
 
             if (StudySession.CurrentQuestion != null)
             {
@@ -189,7 +184,7 @@ namespace Bot_Application1.IDialog
                 catch (Exception ex)
                 {
                     await writeMessageToUser(context, conv().getPhrase(Pkey.innerException));
-                    Logger.addErrorLog(getDialogContext().dialog, ex.Message + Environment.NewLine + ex.StackTrace);
+                    Logger.addErrorLog(getDialogContext().dialog, ex.Message + Environment.NewLine + ex.StackTrace + ex.InnerException);
                     await intreduceQuestion(context);
                 }
             }
@@ -203,7 +198,7 @@ namespace Bot_Application1.IDialog
         {
             try {
                 var res = await result;
-                getStudySession(context);
+                getDialogsVars(context);
             }
             catch (StopSessionException ex)
             {
@@ -213,7 +208,7 @@ namespace Bot_Application1.IDialog
             catch (Exception ex)
             {
                 await writeMessageToUser(context, conv().getPhrase(Pkey.innerException));
-                Logger.addErrorLog(getDialogContext().dialog, ex.Message + Environment.NewLine + ex.StackTrace);
+                Logger.addErrorLog(getDialogContext().dialog, ex.Message + Environment.NewLine + ex.StackTrace + ex.InnerException);
                 await intreduceQuestion(context);
                 return;
             }

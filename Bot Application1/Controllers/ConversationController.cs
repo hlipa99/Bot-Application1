@@ -439,44 +439,60 @@ namespace Bot_Application1.Controllers
 
         public virtual string[] getPhrase(Pkey key,string[] flags = null, string[] flagesNot = null, string textVar = null)
         {
-            try
-            {
-                Logger.addLog("Bot: " + Enum.GetName(typeof(Pkey), key));
+            Logger.addLog("Bot: " + Enum.GetName(typeof(Pkey), key));
+            var keyInt = (int)key;
+
+
+                if(user.PreviusParses[keyInt] == null)
+                {
+                    user.PreviusParses[keyInt] = new int[] { };
+                }
 
                 if (flags == null) flags = new string[] { };
                 if (flagesNot == null) flagesNot = new string[] { };
 
                 var phrases = Db.getBotPhrase(key, flags, flagesNot);
+
+
+                var parses = new List<string>(phrases);
+
+             
+                
+                var lastParses = new List<int>(user.PreviusParses[keyInt]);
+                
+                if(lastParses.Count == phrases.Length)
+                {
+                     lastParses.RemoveAt(0);
+                }
+
+                parses.RemoveAll(x => lastParses.Contains(x.GetHashCode()));
                 string phraseRes = null;
                 if (phrases.Length > 0)
                 {
 
                     var rundomInt = RandomNum.getNumber(phrases.Length);
                     phraseRes = phrases[rundomInt];
-
+                    lastParses.Add(phraseRes.GetHashCode());
+                    user.PreviusParses[keyInt] = lastParses.ToArray();
                 }
                 else
                 {
-                    //   throw new botphraseException();
+                 //   throw new botphraseException();
                 }
 
-                if (phraseRes != null)
+            if (phraseRes != null)
+            {
+                phraseRes = formateVars(phraseRes, textVar);
+
+                if(user.Language == "en")
                 {
-                    phraseRes = formateVars(phraseRes, textVar);
+                    phraseRes = ControlerTranslate.TranslateToEng(phraseRes);
 
-                    if (user.Language == "en")
-                    {
-                        phraseRes = ControlerTranslate.TranslateToEng(phraseRes);
-
-                    }
-
-                    return phraseRes.Split('|');
                 }
-                else
-                {
-                    return new string[] { };
-                }
-            }catch(Exception ex)
+
+                return phraseRes.Split('|');
+            }
+            else
             {
                 return new string[] { };
             }

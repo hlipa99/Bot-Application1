@@ -17,6 +17,6 @@ namespace Model.Models
        string UserClass { get; set; }
         DateTime? UserCreated { get; set; }
         DateTime? UserLastSession { get; set; }
-  
+        int[][] PreviusParses { get; set; }
     }
 }

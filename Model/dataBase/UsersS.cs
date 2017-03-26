@@ -14,6 +14,7 @@ namespace Model.dataBase
 
 
         string language = "heb";
+        private int[][] previusParses;
 
         public string Language
         {
@@ -25,6 +26,19 @@ namespace Model.dataBase
             set
             {
                 language = value;
+            }
+        }
+
+        public int[][] PreviusParses {
+            get
+            {
+                if (previusParses == null)
+                    previusParses =  new int[100][]; //TODO fix number
+                return previusParses;
+            }
+            set
+            {
+                previusParses = value;
             }
         }
 

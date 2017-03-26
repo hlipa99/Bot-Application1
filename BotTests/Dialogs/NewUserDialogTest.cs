@@ -18,7 +18,7 @@ namespace UnitTestProject1
         [TestInitialize]
         public void TestInitializeAttribute()
         {
-            var task = sendMessage("/deleteprofile");
+            var task = sendMessage("deleteprofile");
             var response = task.Result;
             AssertNLP.contains(response, "User profile deleted!" );
         }
@@ -26,7 +26,7 @@ namespace UnitTestProject1
         [TestCleanup]
         public void TestCleanup()
         {
-            ConvID1 = "";
+            ConvID = "";
             // client = null;
         }
 

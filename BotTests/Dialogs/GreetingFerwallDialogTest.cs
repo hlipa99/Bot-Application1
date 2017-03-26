@@ -26,7 +26,7 @@ namespace UnitTestProject1
         [TestCleanup]
         public void TestCleanup()
         {
-            ConvID1 = "";
+            ConvID = "";
             // client = null;
         }
 

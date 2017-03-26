@@ -29,7 +29,7 @@ namespace NLP.Controllers.Tests
         [TestMethod()]
         public void AnalizeIntegrationTest()
         {
-            var res = nlpCtrl.Analize("בן גוריון הקריא את מגילת העצמאות בהכרזת העצמאות וההגנה היתה מחתרת לוחמת");
+            var res = nlpCtrl.Analize("בן גוריון הקריא את מגילת העצמאות בהכרזת העצמאות וההגנה היתה מחתרת לוחמת","");
             //good
             Assert.IsTrue(res.Contains(new PersonObject("דוד בן גוריון")));
             Assert.IsTrue(res.Contains(new ConceptObject("מגילת העצמאות")));

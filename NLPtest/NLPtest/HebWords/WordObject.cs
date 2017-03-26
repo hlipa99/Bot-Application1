@@ -57,7 +57,8 @@ namespace NLP.HebWords
         {
             try
             {
-                this.Ner = ner;
+                //this.Ner = ner;
+                Ner = "O";
                 this.text = text;
                 this.polarity = polarity;
                 this.Pos = pos.ToLower();

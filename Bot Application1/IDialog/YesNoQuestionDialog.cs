@@ -15,6 +15,7 @@ using Bot_Application1.log;
 using static Bot_Application1.Controllers.ConversationController;
 using Model;
 using Bot_Application1.Models;
+using NLP.NLP;
 
 namespace Bot_Application1.IDialog
 {
@@ -29,8 +30,8 @@ namespace Bot_Application1.IDialog
 
         public override async Task StartAsync(IDialogContext context)
         {
-            getUser(context);
-            getStudySession(context);
+            getDialogsVars(context);
+            
             context.Wait<string[]>(userYesNo);
         }
 
@@ -54,9 +55,19 @@ namespace Bot_Application1.IDialog
                 text = (res as IMessageActivity).Text;
             }
 
-            var intent = conv().getUserIntente(text, getDialogContext());
+            UserIntent intent;
+            if (text != null)
+            {
+                intent = conv().getUserIntente(text, getDialogContext());
 
-            if(intent == NLP.NLP.UserIntent.yes)
+            }
+            else //facebook like
+            {
+                intent = NLP.NLP.UserIntent.yes;
+            }
+
+
+            if (intent == NLP.NLP.UserIntent.yes)
             {
                 context.Done(true);
             }

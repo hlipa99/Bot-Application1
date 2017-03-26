@@ -15,8 +15,6 @@ namespace UnitTestProject1
     public class MainDialogTest : DialogsTestsBase
     {
 
-
-
         [TestInitialize]
         public void TestInitializeAttribute()
         {
@@ -28,7 +26,7 @@ namespace UnitTestProject1
         [TestCleanup]
         public void TestCleanup()
         {
-            ConvID1 = "";
+            ConvID = "";
             // client = null;
         }
 
@@ -109,7 +107,7 @@ namespace UnitTestProject1
 
 
         [TestMethod]
-        public void testMenuFreeIntegrationText()
+        public void testDialogMenuFreeText()
         {
             var response = createUser("יוחאי", "בן", "יא");
             AssertNLP.contains(response, DBbotPhrase(Pkey.MainMenuText));

@@ -46,10 +46,10 @@ namespace NLP.QnA.Tests
             Assert.IsFalse(feedback.missingEntitis.Contains(Entity2));
             Assert.IsFalse(feedback.missingEntitis.Contains(Entity3));
 
-            Assert.AreEqual(feedback.score, 73);
+            Assert.AreEqual(feedback.score, 75);
 
             //bad
-            feedback = qae.matchAnswers(SubQqestion1, "");
+           feedback = qae.matchAnswers(SubQqestion1, "");
             Assert.IsTrue(feedback.missingEntitis.Contains(Entity4));
             Assert.IsTrue(feedback.missingEntitis.Contains(Entity1));
             Assert.IsTrue(feedback.missingEntitis.Contains(Entity2));
