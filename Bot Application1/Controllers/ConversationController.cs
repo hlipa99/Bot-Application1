@@ -439,9 +439,11 @@ namespace Bot_Application1.Controllers
 
         public virtual string[] getPhrase(Pkey key,string[] flags = null, string[] flagesNot = null, string textVar = null)
         {
-            Logger.addLog("Bot: " + Enum.GetName(typeof(Pkey), key));
-     
-            if (flags == null) flags = new string[] { };
+            try
+            {
+                Logger.addLog("Bot: " + Enum.GetName(typeof(Pkey), key));
+
+                if (flags == null) flags = new string[] { };
                 if (flagesNot == null) flagesNot = new string[] { };
 
                 var phrases = Db.getBotPhrase(key, flags, flagesNot);
@@ -455,22 +457,26 @@ namespace Bot_Application1.Controllers
                 }
                 else
                 {
-                 //   throw new botphraseException();
+                    //   throw new botphraseException();
                 }
 
-            if (phraseRes != null)
-            {
-                phraseRes = formateVars(phraseRes, textVar);
-
-                if(user.Language == "en")
+                if (phraseRes != null)
                 {
-                    phraseRes = ControlerTranslate.TranslateToEng(phraseRes);
+                    phraseRes = formateVars(phraseRes, textVar);
 
+                    if (user.Language == "en")
+                    {
+                        phraseRes = ControlerTranslate.TranslateToEng(phraseRes);
+
+                    }
+
+                    return phraseRes.Split('|');
                 }
-
-                return phraseRes.Split('|');
-            }
-            else
+                else
+                {
+                    return new string[] { };
+                }
+            }catch(Exception ex)
             {
                 return new string[] { };
             }
