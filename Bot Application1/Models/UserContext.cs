@@ -7,10 +7,15 @@ namespace Bot_Application1.Models
     public class UserContext
     {
         internal string dialog;
+        internal DateTime? lastSeen;
 
         public UserContext(string d)
         {
             dialog = d;
         }
+
+
+
+
     }
 }

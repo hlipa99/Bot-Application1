@@ -51,17 +51,13 @@
   <Class Name="Bot_Application1.IDialog.AbsDialog&lt;T&gt;">
     <Position X="8" Y="5" Width="1.75" />
     <Members>
-      <Method Name="getStudySession" Hidden="true" />
-      <Method Name="getUser" Hidden="true" />
-      <Method Name="setStudySession" Hidden="true" />
-      <Method Name="setUser" Hidden="true" />
       <Method Name="StartAsync" Hidden="true" />
     </Members>
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>AAABAAAACAAAAACAAAAAEACAsIgkgBAABQABIDQABWA=</HashCode>
+      <HashCode>QAABAAAACAAAAACAAAAAEACAsIgkgBAABQABICQABSA=</HashCode>
       <FileName>IDialog\AbsDialog.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />

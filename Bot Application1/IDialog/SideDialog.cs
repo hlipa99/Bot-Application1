@@ -21,8 +21,9 @@ namespace Bot_Application1.IDialog
     [Serializable]
     public class SideDialog : AbsDialog<IMessageActivity>
     {
-        public override UserContext getDialogContext()
+        public override UserContext getDialogContext(IDialogContext context)
         {
+            base.getDialogContext(context);
             UserContext.dialog = "SideDialog";
             return UserContext;
         }
@@ -31,6 +32,7 @@ namespace Bot_Application1.IDialog
 
         public override async Task StartAsync(IDialogContext context)
         {
+            getDialogsVars(context);
             await writeMessageToUser(context, conv().getPhrase(Pkey.unknownQuestion));
             context.Done("");
         }

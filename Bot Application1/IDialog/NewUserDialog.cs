@@ -22,8 +22,9 @@ namespace Bot_Application1.IDialog
     [Serializable]
     public class NewUserDialog : AbsDialog<IMessageActivity>
     {
-        public override UserContext getDialogContext()
+        public override UserContext getDialogContext(IDialogContext context)
         {
+            base.getDialogContext(context);
             UserContext.dialog = "NewUserDialog";
             return UserContext;
         }
@@ -31,7 +32,7 @@ namespace Bot_Application1.IDialog
         public override async Task StartAsync(IDialogContext context)
         {
 
-
+            getDialogsVars(context);
             if (User == null)
             {
                 User = new User();
@@ -47,11 +48,10 @@ namespace Bot_Application1.IDialog
         {
 
             var message = await result;
-            //if (conv().isEnglish(message.Text))
-            //{
-            //    await context.Forward(new YesNoQuestionDialog(), replaceLanguge, conv().getPhrase(Pkey.replaceLanguge), new System.Threading.CancellationToken());
-            //    return;
-            //}
+            if (conv().isEnglish(message.Text))
+            {
+                await writeMessageToUser(context, conv().getPhrase(Pkey.replaceLanguge));
+            }
 
             var newMessage = conv().getPhrase(Pkey.selfIntroduction);
             await writeMessageToUser(context, newMessage);

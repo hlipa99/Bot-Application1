@@ -316,7 +316,12 @@ namespace Bot_Application1.IDialog
 
 
         }
-        public abstract UserContext getDialogContext();
+        public virtual UserContext getDialogContext(IDialogContext context)
+        {
+            if (UserContext == null) UserContext = new UserContext("absDialog");
+            UserContext.lastSeen = context.Activity.Timestamp;
+            return UserContext;
+        }
 
         public virtual Task StartAsync(IDialogContext context)
         {

@@ -45,6 +45,7 @@ namespace NLP.HebWords
         private String suffixFunction;
 
         private bool isDefinite;
+        private WordType interjectionWord;
 
         public WordObject() {
             this.Amount =amountType.unspecified;
@@ -187,7 +188,7 @@ namespace NLP.HebWords
             }
             else if (Pos == "interjection")
             {
-                throw new DictionaryException(text);
+                wordType = interjectionWord;
             }
             else if (Pos == "verb")
             {

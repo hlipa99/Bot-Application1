@@ -74,21 +74,12 @@ namespace NLP.NLP
         }
 
 
-        public List<WordObject> getWordsObjectFromParserServer(String str,bool isSpellCorrected)
+        public List<WordObject> getWordsObjectFromParserServer(String str)
         {
             List<WordObject> sentenceFromServer = null;
             try
             {
 
-                if (!isSpellCorrected)
-                {
-                    var correctSpelling = HttpCtrl.correctSpelling(str);
-                    if (correctSpelling != null)
-                    {
-                        correctSpelling = correctSpelling.Replace("\\", "");
-                        return getWordsObjectFromParserServer(correctSpelling, true);
-                    }
-                }
 
                 string JsonRes = HttpCtrl.sendToHebrewMorphAnalizer(str);
 
@@ -120,82 +111,114 @@ namespace NLP.NLP
         public virtual List<List<WordObject>> meniAnalize(String str,bool isUserInput)
         {
             List<List<WordObject>> allRes = new List<List<WordObject>>();
-
+            str = str.Trim();
             if (str != null && str.Length > 0)
             {
-                var sentenses = str.Split('.','|');
-     
 
-                foreach (var s in sentenses)
+                if (isUserInput)
                 {
-                    var firstWord = true;
-                    var strRes = s.Trim();
-
-                    List<WordObject> res = new List<WordObject>();
-                    strRes = removeParentheses(strRes, '(', ')');
-                    strRes = removeParentheses(strRes, '[', ']');
-
-                    if (strRes.Length > 0)
+                    var correctSpelling = HttpCtrl.correctSpelling(str);
+                    if (correctSpelling != null)
                     {
-                        //   var taggedSentences = tagger.getTaggedSentences(strRes);
-
-
-                        var sentenceFromServer = getWordsObjectFromParserServer(strRes, !isUserInput);
-
-
-
-                        if (sentenceFromServer != null && sentenceFromServer.Count >= 0)
-                        {
-                            //remove nikod etc.s
-                            sentenceFromServer.RemoveAll(x => (x.Text.Length <= 1) && (x.Pos == "punctuation") && (x.Text != "|"));
-                            // print tagged sentence by using AnalysisInterface, as follows:
-                            foreach (WordObject w in sentenceFromServer)
-                            {
-                                WordObject word = w;
-
-                                //two NRI in a row
-                                //join word if ist part of a name
-
-                                if (res.Count > 0)
-                                {
-                                    if (res.LastOrDefault().Ner == w.Ner && res.LastOrDefault().Ner != "O" && 
-                                        !res.LastOrDefault().Prefixes.Contains("ו") && !firstWord)
-                                    {
-                                        res.LastOrDefault().Text += " " + word.Text;
-                                        res.LastOrDefault().Lemma = res.LastOrDefault().getLemma(null, res.LastOrDefault().Text);
-                                        continue;
-                                    }
-                                }
-
-                                if (hebDictionary.contains(word.Text))
-                                {
-                                    word = hebDictionary.get(word.Text);
-                                }
-                                //joinwords
-                                //if (res.LastOrDefault() != null && word.isA(nounWord) && res.LastOrDefault().isA(nounWord))
-                                //{
-                                //    var last = res.LastOrDefault();
-                                //    res.RemoveAt(res.Count - 1);
-                                //    last.Text = last.Text + " " + word.Text;
-                                //    last.WordT = last.WordT | word.WordT; //combin flages
-                                //    word = last;
-                                //}
-
-                                res.Add(word);
-                                firstWord = false;
-                            }
-
-                        }
-
-                        // res = checkPhrases(res);
-                        res = tryMatchEntities(res, isUserInput);
-                        allRes.Add(res);
+                        str = correctSpelling.Replace("\\", "");
                     }
                 }
+
+           
+                var strRes = removeParentheses(str, '(', ')');
+                strRes = removeParentheses(strRes, '[', ']');
+                var sentenceFromServer = getWordsObjectFromParserServer(strRes);
+                sentenceFromServer.RemoveAll(x => (x.Text.Length <= 1) && (x.Pos == "punctuation") && (x.Text != "|"));
+
+
+                if (sentenceFromServer != null && sentenceFromServer.Count >= 0)
+                {
+
+                    var allText = splitByLine(sentenceFromServer);
+                    List<WordObject> res = new List<WordObject>();
+                    foreach (var sentence in allText)
+                    {
+                       
+                            if (sentence != null && sentence.Count >= 0)
+                            {
+                            //remove nikod etc.s
+                            var firstWord = true;
+                            // print tagged sentence by using AnalysisInterface, as follows:
+                            foreach (WordObject w in sentence)
+                                {
+                           
+
+                                WordObject word = w;
+
+                                    //two NRI in a row
+                                    //join word if ist part of a name
+
+                                    if (res.Count > 0)
+                                    {
+                                        if (res.LastOrDefault().Ner == w.Ner && res.LastOrDefault().Ner != "O" &&
+                                            !res.LastOrDefault().Prefixes.Contains("ו") && !firstWord)
+                                        {
+                                            res.LastOrDefault().Text += " " + word.Text;
+                                            res.LastOrDefault().Lemma = res.LastOrDefault().getLemma(null, res.LastOrDefault().Text);
+                                            continue;
+                                        }
+                                    }
+
+                                    if (hebDictionary.contains(word.Text))
+                                    {
+                                        word = hebDictionary.get(word.Text);
+                                    }
+                                    //joinwords
+                                    //if (res.LastOrDefault() != null && word.isA(nounWord) && res.LastOrDefault().isA(nounWord))
+                                    //{
+                                    //    var last = res.LastOrDefault();
+                                    //    res.RemoveAt(res.Count - 1);
+                                    //    last.Text = last.Text + " " + word.Text;
+                                    //    last.WordT = last.WordT | word.WordT; //combin flages
+                                    //    word = last;
+                                    //}
+
+                                    res.Add(word);
+                                    firstWord = false;
+                                }
+                            res = tryMatchEntities(res, isUserInput);
+
+                         }
+
+                            // res = checkPhrases(res);
+                         
+                            allRes.Add(res);
+                        }
+                    }
+
+             
+                
             }
             return allRes;
         }
 
+        private List<List<WordObject>> splitByLine(List<WordObject> wordObjectList)
+        {
+            List<List<WordObject>> result = new List<List<WordObject>>();
+            var currentSentence = new List<WordObject>();
+            foreach (var w in wordObjectList)
+            {
+                if(w.Text == "|")
+                {
+                    if (currentSentence.Any())
+                    {
+                        result.Add(currentSentence);
+                    }
+                    currentSentence = new List<WordObject>();
+                }
+                else
+                {
+                    currentSentence.Add(w);
+                }
+            }
+            result.Add(currentSentence);
+            return result;
+        }
 
         private List<WordObject> fixFunctuation(List<WordObject> sentenceFromServer)
         {
@@ -226,10 +249,13 @@ namespace NLP.NLP
             return newList;
 
         }
+
+        IEnumerable<Ientity> entities;
         private List<WordObject> tryMatchEntities(List<WordObject> sentence,bool isUserInput)
         {
             //increase the match found to implement maximal munch
-            var entities = DBctrl1.getEntitys();
+            if(entities == null) entities = DBctrl1.getEntitys();
+
             var newSentence = new List<WordObject>();
 
             for (int i = 0; i < sentence.Count; i++)
