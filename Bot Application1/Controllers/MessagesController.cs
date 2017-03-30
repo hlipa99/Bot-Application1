@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using Model.dataBase;
 using System.IO;
 using Model;
+using Autofac;
+using Microsoft.Bot.Builder.Dialogs.Internals;
 
 namespace Bot_Application1.Controllers
 {
@@ -36,13 +38,20 @@ namespace Bot_Application1.Controllers
                         try
                         {
 
-                  //          var text = activity.Text;
-                   //         Logger.addLog("User: " + text);
-                            
-                           
+                            //          var text = activity.Text;
+                            //         Logger.addLog("User: " + text);
 
 
                             var dialog = new MainDialog();
+
+                            var builder = new ContainerBuilder();
+                            builder
+                                .Register(c => new CachingBotDataStore(c.Resolve<ConnectorStore>(), CachingBotDataStoreConsistencyPolicy.LastWriteWins))
+                                .As<IBotDataStore<BotData>>()
+                                .AsSelf()
+                                .InstancePerLifetimeScope();
+
+                            builder.Update(Conversation.Container);
                             await Conversation.SendAsync(activity, () => new MainDialog());
 
                             

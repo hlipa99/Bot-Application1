@@ -63,10 +63,16 @@ namespace Bot_Application1.IDialog
             setDialogsVars(context);
 
             var question = StudySession.CurrentSubQuestion;
-            await writeMessageToUser(context, new string[] { '"' + question.questionText.Trim() + '"' });
+            if (question != null)
+            {
+                await writeMessageToUser(context, new string[] { '"' + question.questionText.Trim() + '"' });
 
-            updateRequestTime(context);
-            context.Wait(answerQuestion);
+                updateRequestTime(context);
+                context.Wait(answerQuestion);
+            }else
+            {
+                await StartAsync(context);
+            }
         }
      
        public async Task continuAfterBreak(IDialogContext context, IAwaitable<IMessageActivity> result)
@@ -77,7 +83,7 @@ namespace Bot_Application1.IDialog
 
         public async Task answerQuestion(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            if (await checkOutdatedMessage<IMessageActivity>(context, askSubQuestion, result)) return;
+            if (await checkOutdatedMessage<IMessageActivity>(context, answerQuestion, result)) return;
 
             var message = await result;
 

@@ -21,6 +21,7 @@ using Model.dataBase;
 using static NLP.HebWords.WordObject;
 using NLP.HebWords;
 using Model.Models;
+using System.Data.Entity;
 
 namespace NLP.NLP
 {
@@ -254,22 +255,26 @@ namespace NLP.NLP
         private List<WordObject> tryMatchEntities(List<WordObject> sentence,bool isUserInput)
         {
             //increase the match found to implement maximal munch
-            if(entities == null) entities = DBctrl1.getEntitys();
-
+            if (entities == null)
+            {
+                //force to EF to execute
+                entities = DBctrl1.getEntitys().ToList();
+               // entities.;
+            }
             var newSentence = new List<WordObject>();
 
             for (int i = 0; i < sentence.Count; i++)
             {
                 WordObject word = sentence[i];
                 var searchText = "";
-                IQueryable<Ientity> match = null;
+                IEnumerable<Ientity> match = null;
                 int j = i;
                 for (; j < sentence.Count; j++)
                 {
                     var searchText2 = (searchText + " " +sentence[j].Lemma).Trim();
                     var searchText1 = (searchText + " " +sentence[j].Text).Trim();
 
-                    var tryMatch2 = findMatch(entities.AsQueryable(), searchText2);
+                    var tryMatch2 = findMatch(entities, searchText2);
                     if (tryMatch2 != null && tryMatch2.Any())
                     {
                         match = tryMatch2;
@@ -280,7 +285,7 @@ namespace NLP.NLP
                         break;
                     }
                     else {
-                        var tryMatch = findMatch(entities.AsQueryable(), searchText1);
+                        var tryMatch = findMatch(entities, searchText1);
                         if (tryMatch != null && tryMatch.Any())
                         {
                             match = tryMatch;
@@ -375,7 +380,7 @@ namespace NLP.NLP
             }
         }
 
-        private IQueryable<Ientity> findMatch(IQueryable<Ientity> quarible, string text)
+        private IEnumerable<Ientity> findMatch(IEnumerable<Ientity> quarible, string text)
         {
             quarible = quarible.Where(x=>x.entitySynonimus.Contains(";" +text));
             return quarible;

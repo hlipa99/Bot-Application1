@@ -48,23 +48,37 @@ namespace Bot_Application1.IDialog
 
         public void setDialogsVars(IDialogContext context)
         {
-            if (user == null) user = new User();
+            try
+            {
+      
+                if (user == null) user = new User();
                 User thisUser = user as User;
-                context.UserData.SetValue<User>("user",thisUser);
+                context.UserData.SetValue<User>("user", thisUser);
 
-            if (studySession == null) studySession = new StudySession();
-            context.UserData.SetValue<StudySession>("studySession", studySession);
+                if (studySession == null) studySession = new StudySession();
+                context.UserData.SetValue<StudySession>("studySession", studySession);
+            }
+            catch (Exception ex)
+            {
+              
+            }
 
         }
 
         public void getDialogsVars(IDialogContext context)
         {
-            context.UserData.TryGetValue<StudySession>("studySession", out studySession);
-           
+            try
+            {
+                context.UserData.TryGetValue<StudySession>("studySession", out studySession);
 
-            User thisUser = User as User;
-            context.UserData.TryGetValue<User>("user", out thisUser);
-            user = thisUser;
+
+                User thisUser = User as User;
+                context.UserData.TryGetValue<User>("user", out thisUser);
+                user = thisUser;
+            }catch(Exception ex)
+            {
+                setDialogsVars(context);
+            }
         }
 
         public EducationController edc()
