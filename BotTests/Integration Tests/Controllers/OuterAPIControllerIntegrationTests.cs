@@ -40,11 +40,11 @@ namespace NLP.Controllers.Tests
             //good
             Assert.AreEqual(outerAPICtrl.getIntentApiAi("בגין אמר לבן גוריון שהערבים כבשו את העיר העתיקה", "QuestionDialog"), "historyAnswer");
             Assert.AreEqual(outerAPICtrl.getIntentApiAi("מה אתה אוהב לאכול", ""), "bot_questions");
-            Assert.AreEqual(outerAPICtrl.getIntentApiAi("מצטער אבל אינני מעוניין", "yesNoQuestionDialog"), "No");
+            Assert.AreEqual(outerAPICtrl.getIntentApiAi("מצטער אבל אינני מעוניין", "yesNoQuestionDialog"), "no");
             Assert.AreEqual(outerAPICtrl.getIntentApiAi("קללל ברור בטח", "yesNoQuestionDialog"), "yes");
             Assert.AreEqual(outerAPICtrl.getIntentApiAi("ממצב גבר?", "startConv"), "howAreYou");
-            Assert.AreEqual(outerAPICtrl.getIntentApiAi("אתה מכיר בדיחות טובות?", ""), "funny");
             Assert.AreEqual(outerAPICtrl.getIntentApiAi("תספר לי משהו מעניין", ""), "intresting");
+            Assert.AreEqual(outerAPICtrl.getIntentApiAi("אתה מכיר בדיחות טובות?", ""), "funny");
             Assert.AreEqual(outerAPICtrl.getIntentApiAi("תחזור לתפריט הראשי", ""), "menu");
             Assert.AreEqual(outerAPICtrl.getIntentApiAi("להתראות גבר, כל טוב", "farewell"), "goodbye");
             Assert.AreEqual(outerAPICtrl.getIntentApiAi("שלום לך, אני יוחאי", "startConv"), "hello");
@@ -107,7 +107,7 @@ namespace NLP.Controllers.Tests
             Assert.AreNotEqual(ControlerTranslate.Translate("יוחאי"), "yochai");
 
             //ugly
-            Assert.AreEqual(ControlerTranslate.Translate(null), "");
+            Assert.AreEqual(ControlerTranslate.Translate(""), "");
 
         }
     }

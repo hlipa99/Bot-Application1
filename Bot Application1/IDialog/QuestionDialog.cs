@@ -58,6 +58,7 @@ namespace Bot_Application1.IDialog
 
         public async Task askSubQuestion(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
+            if(result != null) await result;
             getDialogsVars(context);
             edc().getNextSubQuestion();
             setDialogsVars(context);
@@ -71,6 +72,7 @@ namespace Bot_Application1.IDialog
      
        public async Task continuAfterBreak(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
+            var r = await result;
             await writeMessageToUser(context, conv().getPhrase(Pkey.letsContinue));
             await intreduceQuestion(context);
         }
@@ -109,8 +111,10 @@ namespace Bot_Application1.IDialog
                
             }catch (sessionBreakException ex){
                 await writeMessageToUser(context, conv().getPhrase(Pkey.ok));
+                await writeMessageToUser(context, conv().getPhrase(Pkey.suggestBreak));
                 await writeMessageToUser(context, conv().getPhrase(Pkey.imWaiting));
-                await waitForUserInputToContinu(context, continuAfterBreak);
+                context.Wait(continuAfterBreak);
+                return;
             }
             catch (Exception ex)
             {
@@ -126,9 +130,6 @@ namespace Bot_Application1.IDialog
 
 
             //       await writeMessageToUser(context, new string[] { question.answerText.Trim() });
-
-
-
 
 
 

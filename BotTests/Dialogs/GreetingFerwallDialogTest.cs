@@ -19,7 +19,7 @@ namespace UnitTestProject1
         public void TestInitializeAttribute()
         {
             var task = sendMessage("/deleteprofile");
-            var response = task.Result;
+            var response = task;
             AssertNLP.contains(response, "User profile deleted!" );
         }
 
@@ -31,7 +31,7 @@ namespace UnitTestProject1
         }
 
         [TestMethod]
-        public void testcreateUserDialog()
+        public void testGreetingDialog()
         {
             var res = createUser("מיה", "בת", "יב");
             res = sendBot("טוב ביי");

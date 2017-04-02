@@ -39,7 +39,7 @@ namespace NLP.Controllers
                 RequestExtras exstra = new RequestExtras();
                 var contextAI = new AIContext();
                 contextAI.Name =context;
-                contextAI.Lifespan = 15;
+                contextAI.Lifespan = 10;
                 exstra.Contexts = new List<AIContext>();
                 exstra.Contexts.Add(contextAI);
                 var response = apiAi.TextRequest(str,exstra);
@@ -95,6 +95,9 @@ namespace NLP.Controllers
             try
             {
                 text = text.Trim();
+                text = text.Replace("%", "אחוז"); //java url escape char bug fix TODO - fix in the server
+                text = text.Replace(".", ""); //server fins the answer until the. we can save calls
+                text = text.Replace("|", ","); //server sentence azalizer dont know |
                 WebRequest request = WebRequest.Create("http://TextAPI2.azurewebsites.net/TextAPI/Api");
         
                 string responseFromServer = "";

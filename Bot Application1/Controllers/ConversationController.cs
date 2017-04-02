@@ -459,40 +459,42 @@ namespace Bot_Application1.Controllers
             try
             {
 
-                var keyInt = (int)key;
-
-
-                if (user.PreviusParses[keyInt] == null)
-                {
-                    user.PreviusParses[keyInt] = new int[] { };
-                }
-
                 if (flags == null) flags = new string[] { };
                 if (flagesNot == null) flagesNot = new string[] { };
 
                 var phrases = Db.getBotPhrase(key, flags, flagesNot);
+                var keyInt = (int)key;
+                List<int> lastParses = null;
 
-
-                var parses = new List<string>(phrases);
-
-
-
-                var lastParses = new List<int>(user.PreviusParses[keyInt]);
-
-                if (lastParses.Count == phrases.Length && lastParses.Count > 0)
+                if (user != null)
                 {
-                    lastParses.RemoveAt(0);
-                }
+                    if (user.PreviusParses[keyInt] == null)
+                    {
+                        user.PreviusParses[keyInt] = new int[] { };
+                    }
+                    var parses = new List<string>(phrases);
+                    lastParses = new List<int>(user.PreviusParses[keyInt]);
 
-               parses.RemoveAll(x => x!= null && lastParses.Contains(x.GetHashCode()));
+                    if (lastParses.Count == phrases.Length && lastParses.Count > 0)
+                    {
+                        lastParses.RemoveAt(0);
+                    }
+
+                    parses.RemoveAll(x => x != null && lastParses.Contains(x.GetHashCode()));
+                   
+                }
                 string phraseRes = null;
                 if (phrases.Length > 0)
                 {
 
                     var rundomInt = RandomNum.getNumber(phrases.Length);
                     phraseRes = phrases[rundomInt];
-                    lastParses.Add(phraseRes.GetHashCode());
-                    user.PreviusParses[keyInt] = lastParses.ToArray();
+                    if(user != null && lastParses != null)
+                    {
+                        lastParses.Add(phraseRes.GetHashCode());
+                        user.PreviusParses[keyInt] = lastParses.ToArray();
+                    }
+
                 }
                 else
                 {

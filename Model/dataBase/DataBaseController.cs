@@ -28,6 +28,8 @@ namespace Model.dataBase
         public DataBaseController()
         {
             DB = new Entities8();
+            DB.Configuration.AutoDetectChangesEnabled = false;
+        //    DB.Configuration.LazyLoadingEnabled = false;
         }
 
 
