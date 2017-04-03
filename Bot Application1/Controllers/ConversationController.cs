@@ -507,11 +507,10 @@ namespace Bot_Application1.Controllers
                 {
                     phraseRes = formateVars(phraseRes, textVar);
 
-                    if (user.Language == "en")
-                    {
-                        phraseRes = ControlerTranslate.TranslateToEng(phraseRes);
-
-                    }
+                    //if (user.Language == "en")
+                    //{
+                    //    phraseRes = ControlerTranslate.TranslateToEng(phraseRes);
+                    //}
 
                     return phraseRes.Split('|');
                 }
@@ -526,6 +525,13 @@ namespace Bot_Application1.Controllers
             }
    
         }
+
+        public void saveUserToDb(IUser user)
+        {
+            Db.addUpdateUser((User)user);
+        }
+
+
 
         private string formateVars(string phraseRes,string textVar)
         {
@@ -549,7 +555,8 @@ namespace Bot_Application1.Controllers
             phraseRes = phraseRes.Replace("<text>", textVar);
             phraseRes = phraseRes.Replace("<subject>", StudySession.Category);
             phraseRes = phraseRes.Replace("<numOfQuestions>", StudySession.SessionLength + "");
-            phraseRes = phraseRes.Replace("<questionNum>", (StudySession.QuestionAsked.Count + 1) +"");
+            phraseRes = phraseRes.Replace("<questionNum>", (StudySession.QuestionAsked.Count + 2) +"");
+            phraseRes = phraseRes.Replace("<questionDone>", (StudySession.QuestionAsked.Count + 1) + "");
             phraseRes = phraseRes.Replace("<userName>", User.UserName);
             phraseRes = phraseRes.Replace("<botName>", BOT_NAME);
             phraseRes = phraseRes.Replace("<botSubject>", BOT_SUBJECT);

@@ -114,6 +114,9 @@
     <Compile Include="dataBase\User.cs">
       <DependentUpon>botData.tt</DependentUpon>
     </Compile>
+    <Compile Include="dataBase\userScore.cs">
+      <DependentUpon>botData.tt</DependentUpon>
+    </Compile>
     <Compile Include="DBException.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Interfaces\Ientity.cs" />

@@ -46,7 +46,9 @@ namespace Bot_Application1.IDialog
                 }
                 else
                 {
+
                     context.Call(new NewUserDialog(), MainMenu);
+
                 }
             }
             catch (Exception ex)
@@ -74,23 +76,32 @@ namespace Bot_Application1.IDialog
         {
            
                 getDialogsVars(context);
-                if (User != null)
+
+            if (User != null)
                 {
+ 
                     options = conv().MainMenuOptions();
                     updateRequestTime(context);
                     await createMenuOptions(context, conv().getPhrase(Pkey.MainMenuText)[0], options, MainMenuResualt);
-                    
-                }
+                    User.UserTimesConnected ++;
+                    User.UserLastSession = DateTime.UtcNow;
+                    setDialogsVars(context);
+                    conv().saveUserToDb(User);
+            }
                 else
                 {
-                    context.Call(new NewUserDialog(), MainMenu);
+
+                context.Call(new NewUserDialog(), MainMenu);
                 }
-     
+
+
+
         }
 
         private async Task MainMenuResualt(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
             if (await checkOutdatedMessage<IMessageActivity>(context, MainMenuResualt, result)) return;
+            getDialogsVars(context);
 
             var text = await result;
             var option = "";

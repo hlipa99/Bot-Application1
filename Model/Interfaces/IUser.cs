@@ -9,14 +9,16 @@ namespace Model.Models
     public interface IUser
     {
 
-        
-             string Language { get; set; }
         string UserID { get; set; }
-       string UserName { get; set; }
-       string UserGender { get; set; }
-       string UserClass { get; set; }
-        DateTime? UserCreated { get; set; }
-        DateTime? UserLastSession { get; set; }
+        string UserName { get; set; }
+        string UserGender { get; set; }
+        string UserClass { get; set; }
+        Nullable<System.DateTime> UserCreated { get; set; }
+        Nullable<System.DateTime> UserLastSession { get; set; }
+        string UserAddress { get; set; }
+        int? UserTimesConnected { get; set; }
+        TimeSpan? UserOverallTime { get; set; }
+
         int[][] PreviusParses { get; set; }
     }
 }

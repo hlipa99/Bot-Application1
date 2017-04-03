@@ -109,29 +109,45 @@ namespace Model.dataBase
 
 
 
-        public async virtual void addNewUser(string channelId, string id, string name)
+        public async virtual void addUserScore(userScore userScore)
         {
             try
             {
-
-                var NewIUser = new User();
-                NewIUser.UserID = id;
-                NewIUser.UserName = name;
-                NewIUser.UserCreated = DateTime.UtcNow;
-
-                DB.User.Add(NewIUser);
+                DB.userScore.Add(userScore);
                 await DB.SaveChangesAsync();
-
             }
             catch (Exception e)
             {
-             //   Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
+                //   Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
+                throw new DBException();
+            }
+        }
+
+
+        public async virtual void addUpdateUser(User user)
+        {
+            try
+            {
+                var userUpdateDB = DB.User.Where(x => x.UserID == user.UserID);
+                if (userUpdateDB.Any())
+                {
+                    var userUpdate = userUpdateDB.Single();
+                    userUpdate = user;
+                }
+                else
+                {
+                    DB.User.Add(user);
+                }
+                await DB.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                //   Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
                 throw new DBException();
             }
 
-
-
         }
+
 
 
         public async virtual void addNewEntity(string value, string type)

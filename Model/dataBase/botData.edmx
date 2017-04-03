@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="mindcetModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="mindcetModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="answersLog">
           <Key>
             <PropertyRef Name="id" />
@@ -99,12 +99,26 @@ warning 6002: The table/view 'mindcet.dbo.intent' does not have a primary key de
           <Key>
             <PropertyRef Name="UserID" />
           </Key>
-          <Property Name="UserID" Type="nchar" MaxLength="30" Nullable="false" />
-          <Property Name="UserName" Type="nchar" MaxLength="100" />
-          <Property Name="UserGender" Type="nchar" MaxLength="10" />
-          <Property Name="UserClass" Type="nchar" MaxLength="10" />
+          <Property Name="UserID" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="100" />
+          <Property Name="UserGender" Type="nvarchar" MaxLength="50" />
+          <Property Name="UserClass" Type="nvarchar" MaxLength="50" />
           <Property Name="UserCreated" Type="datetime" />
           <Property Name="UserLastSession" Type="datetime" />
+          <Property Name="UserAddress" Type="nvarchar" MaxLength="100" />
+          <Property Name="UserTimesConnected" Type="int" />
+          <Property Name="UserOverallTime" Type="time" Precision="7" />
+        </EntityType>
+        <EntityType Name="userScore">
+          <Key>
+            <PropertyRef Name="userID" />
+            <PropertyRef Name="dateTime" />
+          </Key>
+          <Property Name="userID" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="dateTime" Type="datetime" Nullable="false" />
+          <Property Name="category" Type="nvarchar" MaxLength="50" />
+          <Property Name="subCategory" Type="nvarchar" MaxLength="50" />
+          <Property Name="Score" Type="int" />
         </EntityType>
         <Association Name="FK_SubQuestion_Question">
           <End Role="Question" Type="Self.Question" Multiplicity="1">
@@ -130,6 +144,7 @@ warning 6002: The table/view 'mindcet.dbo.intent' does not have a primary key de
           <EntitySet Name="Question" EntityType="Self.Question" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SubQuestion" EntityType="Self.SubQuestion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="userScore" EntityType="Self.userScore" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="intent" EntityType="Self.intent" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [intent].[id] AS [id], 
@@ -143,8 +158,7 @@ warning 6002: The table/view 'mindcet.dbo.intent' does not have a primary key de
             <End Role="SubQuestion" EntitySet="SubQuestion" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="mindcetModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -233,12 +247,15 @@ warning 6002: The table/view 'mindcet.dbo.intent' does not have a primary key de
           <Key>
             <PropertyRef Name="UserID" />
           </Key>
-          <Property Name="UserID" Type="String" MaxLength="30" FixedLength="true" Unicode="true" Nullable="false" />
-          <Property Name="UserName" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
-          <Property Name="UserGender" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="UserClass" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="UserID" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="UserName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="UserGender" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UserClass" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UserCreated" Type="DateTime" Precision="3" />
           <Property Name="UserLastSession" Type="DateTime" Precision="3" />
+          <Property Name="UserAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="UserTimesConnected" Type="Int32" />
+          <Property Name="UserOverallTime" Type="Time" Precision="7" />
         </EntityType>
         <EntityType Name="intent">
           <Key>
@@ -278,7 +295,18 @@ warning 6002: The table/view 'mindcet.dbo.intent' does not have a primary key de
             <End Role="Question" EntitySet="Question" />
             <End Role="SubQuestion" EntitySet="SubQuestion" />
           </AssociationSet>
+          <EntitySet Name="userScore" EntityType="mindcetModel.userScore" />
         </EntityContainer>
+        <EntityType Name="userScore">
+          <Key>
+            <PropertyRef Name="userID" />
+          </Key>
+          <Property Name="userID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="category" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="subCategory" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Score" Type="Int32" />
+          <Property Name="dateTime" Type="DateTime" Precision="3" Nullable="false" />
+          </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -374,6 +402,9 @@ warning 6002: The table/view 'mindcet.dbo.intent' does not have a primary key de
           <EntitySetMapping Name="User">
             <EntityTypeMapping TypeName="mindcetModel.User">
               <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="UserOverallTime" ColumnName="UserOverallTime" />
+                <ScalarProperty Name="UserTimesConnected" ColumnName="UserTimesConnected" />
+                <ScalarProperty Name="UserAddress" ColumnName="UserAddress" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
                 <ScalarProperty Name="UserGender" ColumnName="UserGender" />
@@ -390,6 +421,17 @@ warning 6002: The table/view 'mindcet.dbo.intent' does not have a primary key de
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="synonymus" ColumnName="synonymus" />
                 <ScalarProperty Name="context" ColumnName="context" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="userScore">
+            <EntityTypeMapping TypeName="mindcetModel.userScore">
+              <MappingFragment StoreEntitySet="userScore">
+                <ScalarProperty Name="dateTime" ColumnName="dateTime" />
+                <ScalarProperty Name="Score" ColumnName="Score" />
+                <ScalarProperty Name="subCategory" ColumnName="subCategory" />
+                <ScalarProperty Name="category" ColumnName="category" />
+                <ScalarProperty Name="userID" ColumnName="userID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -150,12 +150,12 @@ namespace Bot_Application1.Controllers
 
         private IQuestion ajustGender(IQuestion question)
         {
-            if (user.UserGender == "femenine")
+            if (user.UserGender == "feminine")
             {
                 question.QuestionText = ajustGender(question.QuestionText);
                 foreach(var s in question.SubQuestion)
                 {
-                    s.questionText = ajustGender(question.QuestionText);
+                    s.questionText = ajustGender(s.questionText);
                 }
                 return question;
             }
@@ -164,6 +164,37 @@ namespace Bot_Application1.Controllers
                 return question;
             }
         }
+
+        public void saveUserSession()
+        {
+            var userDB = (User)user;
+
+            user.UserOverallTime += DateTime.UtcNow.Subtract(studySession.startTime);
+            user.UserLastSession = DateTime.UtcNow;
+            Db.addUpdateUser(userDB);
+        }
+
+        public void updateUserScore()
+        {
+
+            foreach (var sq in studySession.CurrentQuestion.SubQuestion)
+            {
+                studySession.CurrentQuestion.AnswerScore += sq.AnswerScore / studySession.CurrentQuestion.SubQuestion.Count;
+            }
+
+            var score = new userScore();
+            var question = studySession.CurrentQuestion;
+
+            score.category = question.Category;
+            score.subCategory = question.SubCategory;
+            score.Score = question.AnswerScore;
+            score.userID = user.UserID;
+            score.dateTime = DateTime.UtcNow;
+
+            Db.addUserScore(score);
+        }
+
+
 
         private string ajustGender(string questionText)
         {
@@ -174,7 +205,8 @@ namespace Bot_Application1.Controllers
            questionText = questionText.Replace("כתוב", "כתבי");
            questionText = questionText.Replace("עיין", "עייני");
            questionText = questionText.Replace("הסתכל", "הסתכלי");
-           return questionText;
+            questionText = questionText.Replace("הגדר", "הגדירי");
+            return questionText;
         }
 
         public AnswerFeedback checkAnswer(string text)

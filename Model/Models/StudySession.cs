@@ -30,6 +30,7 @@ namespace Model.Models
         public StudySession(){
                 QuestionAsked = new List<IQuestion>();
                 sessionLength = 3;
+                 startTime = DateTime.Now;
             }
 
 
@@ -89,6 +90,7 @@ namespace Model.Models
             }
 
         }
-       
+
+        public DateTime startTime { get ; set ; }
     }
 }

@@ -20,5 +20,8 @@ namespace Model.dataBase
         public string UserClass { get; set; }
         public Nullable<System.DateTime> UserCreated { get; set; }
         public Nullable<System.DateTime> UserLastSession { get; set; }
+        public string UserAddress { get; set; }
+        public Nullable<int> UserTimesConnected { get; set; }
+        public Nullable<System.TimeSpan> UserOverallTime { get; set; }
     }
 }

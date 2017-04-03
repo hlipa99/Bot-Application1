@@ -215,7 +215,7 @@ namespace Bot_Application1.IDialog
                 return;
             }
 
-            if (StudySession.QuestionAsked.Count < StudySession.SessionLength)
+            if (StudySession.QuestionAsked.Count < StudySession.SessionLength - 1)
             {
                 await writeMessageToUser(context, conv().getPhrase(Pkey.moveToNextQuestion));
                 await writeMessageToUser(context, conv().getPhrase(Pkey.beforAskQuestion));
@@ -257,7 +257,10 @@ namespace Bot_Application1.IDialog
         {
             await writeMessageToUser(context, conv().endOfSession());
             await writeMessageToUser(context, conv().getPhrase(Pkey.endOfSession));
-            //TODO: save user sussion to DB
+
+            getDialogsVars(context);
+            edc().saveUserSession();
+
             context.Done("learningSession");
         }
 

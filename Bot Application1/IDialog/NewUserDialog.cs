@@ -32,12 +32,18 @@ namespace Bot_Application1.IDialog
         public override async Task StartAsync(IDialogContext context)
         {
 
+
             getDialogsVars(context);
-            if (User == null)
-            {
-                User = new User();
-                setDialogsVars(context);
-            }
+
+            User = new User();
+            User.UserID = context.Activity.Id;
+            User.UserAddress = context.Activity.From.Id;
+            User.UserCreated = DateTime.UtcNow;
+            User.UserOverallTime = new TimeSpan(0);
+            User.UserTimesConnected = 0;
+            User.UserLastSession = DateTime.UtcNow;
+
+            setDialogsVars(context);
 
             context.Wait(NewUser);
         }
@@ -48,10 +54,10 @@ namespace Bot_Application1.IDialog
         {
 
             var message = await result;
-            if (conv().isEnglish(message.Text))
-            {
-                await writeMessageToUser(context, conv().getPhrase(Pkey.replaceLanguge));
-            }
+            //if (conv().isEnglish(message.Text))
+            //{
+            //    await writeMessageToUser(context, conv().getPhrase(Pkey.replaceLanguge));
+            //}
 
             var newMessage = conv().getPhrase(Pkey.selfIntroduction);
             await writeMessageToUser(context, newMessage);
@@ -264,8 +270,11 @@ namespace Bot_Application1.IDialog
         public async virtual Task LetsStart(IDialogContext context)
         {
             //user class
-            
+
+            conv().saveUserToDb((User)User);
+
             await writeMessageToUser(context, conv().getPhrase(Pkey.LetsStart));
+            setDialogsVars(context);
             context.Done("");
         }
 

@@ -149,7 +149,8 @@ namespace Bot_Application1.IDialog
                 //await writeMessageToUser(context, conv().getPhrase(Pkey.giveYourFeedback));
                 //updateRequestTime(context);
                 //await giveFeedbackMessage(context);
-                setDialogsVars(context);
+                getDialogsVars(context); 
+                edc().updateUserScore(); 
                 context.Done("");
             }
         }

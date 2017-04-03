@@ -19,6 +19,6 @@ namespace Model.Models
 
       string SubCategory { get; set;}
       string Category { get; set;}
-       
+        DateTime startTime { get; set; }
     }
 }
