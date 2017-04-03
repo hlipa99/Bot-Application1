@@ -18,10 +18,11 @@ namespace UnitTestProject1
         [TestInitialize]
         public void TestInitializeAttribute()
         {
-            var task = sendMessage("deleteprofile");
-            var response = task.Result;
-            AssertNLP.contains(response, "User profile deleted!" );
+            var r= deleteProfile();
+            AssertNLP.contains(r, "User profile deleted!");
+
         }
+
 
         [TestCleanup]
         public void TestCleanup()
@@ -33,12 +34,13 @@ namespace UnitTestProject1
         [TestMethod]
         public void testcreateUserDialog()
         {
-            var res = sendBot("היי","מה קורה");
-            Assert.IsTrue(res.Count == 4);
+            var res = sendBot("היי");
+            Assert.IsTrue(res.Count == 3);
             res = sendBot("לא בא לי להגיד לך");
             AssertNLP.contains(res, DBbotPhrase(Pkey.MissingUserInfo));
             res = sendBot("יוחאי");
-            Assert.IsTrue(res.Contains("יוחאי"));
+            AssertNLP.contains(res, DBbotPhrase(Pkey.LetsStart));
+
             res = sendBot("מגדר זה רק אשלייה","אתה יודע");
             AssertNLP.contains(res, DBbotPhrase(Pkey.MissingUserInfo));
             res = sendBot("בן");
@@ -46,8 +48,8 @@ namespace UnitTestProject1
             res = sendBot("אני לומד באוניברסיטה של החיים","ברחוב");
             AssertNLP.contains(res, DBbotPhrase(Pkey.MissingUserInfo));
             res = sendBot("יא");
-            Assert.IsTrue(res.Contains("יא"));
-            AssertNLP.contains(res, DBbotPhrase(Pkey.areUReaddyToLearn));
+            AssertNLP.contains(res, DBbotPhrase(Pkey.ok));
+            AssertNLP.contains(res, DBbotPhrase(Pkey.letsLearn));
         }
 
         private List<string> endConversation()
@@ -75,7 +77,7 @@ namespace UnitTestProject1
             AssertNLP.contains(response, DBbotPhrase(Pkey.MenuLearn));
             AssertNLP.contains(response, DBbotPhrase(Pkey.MenuNotLearn));
 
-            var options = getOptions(response[2]);
+             var options = getOptions(response[2]);
             //bad - try not learn
             var res = sendBot(options[1]);
             AssertNLP.contains(res, DBbotPhrase(Pkey.NotImplamented));

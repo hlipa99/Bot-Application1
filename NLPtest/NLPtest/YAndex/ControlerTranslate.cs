@@ -34,7 +34,14 @@ namespace Bot_Application1.YAndex
                 //Logger.log("ControlerTranslate", MethodBase.GetCurrentMethod().Name, e.ToString());
             }
 
-            return tr.text[0];
+            if (tr.text != null)
+            {
+                return tr.text[0];
+            }
+            else
+            {
+                return "";
+            }
              
         }
 

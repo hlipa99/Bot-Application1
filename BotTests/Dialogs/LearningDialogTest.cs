@@ -9,6 +9,7 @@ using Bot_Application1.Controllers;
 using Model.dataBase;
 using BotTests;
 using Model.Models;
+using System.Diagnostics;
 
 namespace UnitTestProject1
 {
@@ -20,7 +21,7 @@ namespace UnitTestProject1
         public void TestInitializeAttribute()
         {
             var task = sendMessage("/deleteprofile");
-            var response = task.Result;
+            var response = task;
             AssertNLP.contains(response,  "User profile deleted!" );
         }
 
@@ -37,8 +38,9 @@ namespace UnitTestProject1
             res = sendBot("יוחאי");
             res = sendBot("בן");
             res = sendBot("יא");
+            
             var options = getOptions(res[2]);
-            res = sendBot(options[2]);
+            res = sendBot(options[1]);
             return res;
         }
 
@@ -47,18 +49,19 @@ namespace UnitTestProject1
         public void testLearningMenu() {
             var db = new DataBaseController();
 
-            var res = getToLearningMenu();
-            AssertNLP.contains(res, DBbotPhrase(Pkey.chooseStudyUnits));
-            var options = getOptions(res[1]);
+            var optionsRes = getToLearningMenu();
+            AssertNLP.contains(optionsRes, DBbotPhrase(Pkey.chooseStudyUnits));
+
 
 
             foreach (var category in db.getAllCategory()) {
 
                 //subject is avialabale
-                Assert.IsTrue(new List<string>(options).Contains(category));
+
+                AssertNLP.contains(optionsRes, category);
 
                 //bad - try somthing else
-                res = sendBot("ביולוגיה");
+                var res = sendBot("ביולוגיה");
                 AssertNLP.contains(res, DBbotPhrase(Pkey.NotAnOption));
 
                 //ugly
@@ -73,7 +76,10 @@ namespace UnitTestProject1
                 AssertNLP.contains(res, DBbotPhrase(Pkey.firstQuestion));
 
                     var questions = new DataBaseController().getQuestion(category);
-                    var questionOpt = new List<IQuestion>(questions).FindAll(x => res.Contains(x.QuestionText));
+                Debug.WriteLine(category);
+                Debug.WriteLine(questions.Length);
+
+                var questionOpt = new List<IQuestion>(questions).FindAll(x => res[2].Contains(x.QuestionText));
                     Assert.AreEqual(questionOpt.Count, 1);
                     var question = questionOpt[0];
                 
@@ -84,41 +90,20 @@ namespace UnitTestProject1
                     {
                         AssertNLP.contains(res, subQuestion.questionText);
 
-                        var rnd = r.Next(3);
+                        var rnd = r.Next(5);
                         switch (rnd){
+
                             case 0:
                                 res = sendBot("הפסקה");
                                 AssertNLP.contains(res, DBbotPhrase(Pkey.suggestBreak));
-                                res = sendBot("לא");
-                                AssertNLP.contains(res, DBbotPhrase(Pkey.keepLearning));
-                                AssertNLP.contains(res, subQuestion.questionText);
-                                break;
-                            case 1:
-                                res = sendBot("הפסקה");
-                                AssertNLP.contains(res, DBbotPhrase(Pkey.suggestBreak));
-                                res = sendBot("כן");
-                                AssertNLP.contains(res, DBbotPhrase(Pkey.imWaiting));
-                                res = sendBot("חזרתי");
-                                AssertNLP.contains(res, DBbotPhrase(Pkey.letsContinue));
-                                AssertNLP.contains(res, subQuestion.questionText);
-                                break;
-                  
-                            case 2:
-                                res = sendBot("הפסקה");
-                                AssertNLP.contains(res, DBbotPhrase(Pkey.suggestBreak));
-                                res = sendBot("לא");
-                                AssertNLP.contains(res, DBbotPhrase(Pkey.keepLearning));
-                                AssertNLP.contains(res, subQuestion.questionText);
-                                res = sendBot("הפסקה");
-                                AssertNLP.contains(res, DBbotPhrase(Pkey.suggestBreak));
-                                res = sendBot("כן");
-                                AssertNLP.contains(res, DBbotPhrase(Pkey.imWaiting));
-                                res = sendBot("חזרתי");
+                            AssertNLP.contains(res, DBbotPhrase(Pkey.ok));
+                            AssertNLP.contains(res, DBbotPhrase(Pkey.imWaiting));
+                            res = sendBot("חזרתי");
                                 AssertNLP.contains(res, DBbotPhrase(Pkey.letsContinue));
                                 AssertNLP.contains(res, subQuestion.questionText);
                                 break;
 
-                            case 4:
+                            case 1:
                                 res = sendBot("מספיק");
                                 AssertNLP.contains(res, DBbotPhrase(Pkey.earlyDiparture));
                                 AssertNLP.contains(res, DBbotPhrase(Pkey.areYouSure));
@@ -127,8 +112,7 @@ namespace UnitTestProject1
                                 AssertNLP.contains(res, subQuestion.questionText);
                                 break;
 
-                            case 5:
-                            default:
+                        default:
                                 break;
                         }
                       

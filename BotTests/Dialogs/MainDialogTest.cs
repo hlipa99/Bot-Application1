@@ -19,7 +19,7 @@ namespace UnitTestProject1
         public void TestInitializeAttribute()
         {
             var task = sendMessage("/deleteprofile");
-            var response = task.Result;
+            var response = task;
             AssertNLP.contains(response,  "User profile deleted!" );
         }
 
@@ -33,16 +33,26 @@ namespace UnitTestProject1
         [TestMethod]
         public void testDeleteProfileDialog()
         {
+
             createUser("יוחאי", "בן", "יא");
-            endConversation();
-            var respone = sendBot("היי");
-            AssertNLP.contains(respone,"יוחאי");
+
             var response = sendBot("/deleteprofile");
             AssertNLP.contains(response, "User profile deleted!");
-            response = sendBot("/deleteprofile");
+            response = sendBot("היי");
             AssertNLP.contains(response, DBbotPhrase(Pkey.selfIntroduction));
         }
 
+        private void startLearning(string v1, string v2, string v3)
+        {
+            var res = createUser("יוחאי", "בן", "יא");
+            var options = getOptions(res[2]);
+         
+            res = sendBot(options[1]);
+            res = sendBot("בונים מדינה");
+   
+
+
+        }
 
         [TestMethod]
         public void testMainDialogTest()
@@ -116,7 +126,7 @@ namespace UnitTestProject1
 
             var options = getOptions(response[2]);
             //bad - try not learn
-            var res = sendBot("בא לי ללכת לבריכה");
+            var res = sendBot(options[0]);
             AssertNLP.contains(res, DBbotPhrase(Pkey.NotImplamented));
 
             //ugly
@@ -124,7 +134,7 @@ namespace UnitTestProject1
             AssertNLP.contains(res, DBbotPhrase(Pkey.NotAnOption));
 
             //good - lets learn
-            res = sendBot("קדימה בוא נלמד");
+            res = sendBot(options[1]);
             AssertNLP.contains(res, DBbotPhrase(Pkey.letsLearn));
 
         }

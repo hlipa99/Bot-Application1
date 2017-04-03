@@ -93,19 +93,24 @@ namespace Bot_Application1.Controllers.Tests
                         eduCtrl = new EducationController(UserMus, SStudySession, ConvCtrl);
                         //good
                         var feedback = eduCtrl.checkAnswer(sq.answerText);
-                        if(feedback.score < 95)
+                        if (feedback.score < 95)
                         {
-                             feedback = eduCtrl.checkAnswer(sq.answerText);
-                            //debug
-                            feedback = eduCtrl.checkAnswer(sq.answerText);
+
+
+
+
 
                             feedback = eduCtrl.checkAnswer(sq.answerText);
                             feedback = eduCtrl.checkAnswer(sq.answerText);
+                            feedback = eduCtrl.checkAnswer(sq.answerText);
+                            //debug
+//                            feedback = eduCtrl.checkAnswer(sq.answerText);
+  //                          feedback = eduCtrl.checkAnswer(sq.answerText);
+
+
                      //       feedback = eduCtrl.checkAnswer(sq.answerText);
-                       //     feedback = eduCtrl.checkAnswer(sq.answerText);
-                         //   feedback = eduCtrl.checkAnswer(sq.answerText);
-                       //     feedback = eduCtrl.checkAnswer(sq.answerText);
-                        //    feedback = eduCtrl.checkAnswer(sq.answerText);
+                    //        feedback = eduCtrl.checkAnswer(sq.answerText);
+
                         }
                         Assert.IsTrue(feedback.score >= 95);
 

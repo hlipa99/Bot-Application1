@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Model;
 using Bot_Application1.Controllers;
 using Model.dataBase;
+using System.Threading;
 
 namespace UnitTestProject1
 {
@@ -39,9 +40,9 @@ namespace UnitTestProject1
         public DialogsTestsBase()
         {
             db = new DataBaseController();
-           // createNewClientConversation(out ConvID);
+            createNewClientConversation(out convID);
             Client = createNewClientConversation(out convID);
-        
+            ConvID = convID;
         }
 
 
@@ -94,20 +95,19 @@ namespace UnitTestProject1
         public List<string> sendBot(string test)
         {
             var task = sendMessage(test);
-            task.Wait();
-            var response = task.Result;
-            return response;
+
+            //  Console.WriteLine(response[0]);
+            Thread.Sleep(350);
+            return task;
         }
 
         public List<string> sendBot(string test1, string test2)
         {
             var task1 = sendMessage(test1);
             var task2 = sendMessage(test2);
-            task1.Wait();
-            var response1 = task1.Result;
-            var response2 = task1.Result;
-            response1.AddRange(response2);
-            return response1;
+
+            task1.AddRange(task2);
+            return task1;
         }
 
         public DirectLineClient createNewClientConversation(out string convID)
@@ -126,16 +126,16 @@ namespace UnitTestProject1
         }
 
 
-        public async Task<List<string>> sendMessage(string message)
+        public List<string> sendMessage(string message)
         {
            
             Activity userMessage = new Activity
             {
-                From = new ChannelAccount(),
+                From = new ChannelAccount(id: "testUser"),
                 Text = message,
                 Type = ActivityTypes.Message
             };
-            return await sendActivity(userMessage);
+            return sendActivity(userMessage);
 
         }
 
@@ -148,16 +148,22 @@ namespace UnitTestProject1
                 Action = action
 
             };
-            return await sendActivity(activity);
+            return sendActivity(activity);
        }
 
 
-        public async Task<List<string>> sendActivity(Activity activity)
+        public List<string> sendActivity(Activity activity)
         {
-            var i = client.Conversations.GetActivities(ConvID).Activities.Count;
-            var x = await client.Conversations.PostActivityAsync(ConvID, activity);
-         
-            var activities = client.Conversations.GetActivities(ConvID);
+            var iTask = client.Conversations.GetActivitiesAsync(convID);
+
+            iTask.Wait();
+            var i = iTask.Result.Activities.Count;
+            var z = client.Conversations.PostActivityAsync(ConvID, activity);
+            z.Wait();
+            var x = z.Result;
+            var activitiesTask = client.Conversations.GetActivitiesAsync(ConvID);
+            activitiesTask.Wait();
+            var activities = activitiesTask.Result;
             i++;
             List<string> resualtTest = new List<string>();
 
@@ -177,7 +183,10 @@ namespace UnitTestProject1
                 {
                     foreach (var a in activities.Activities[i].Attachments)
                     {
-                        resualtTest.Add(a.Content.ToString());
+                        if (a.Content != null)
+                        {
+                            resualtTest.Add(a.Content.ToString());
+                        }
                     }
                 }
 
@@ -187,17 +196,35 @@ namespace UnitTestProject1
 
         }
 
+        public List<string> deleteProfile()
+        {
+            var task = sendMessage("/deleteprofile");
+            var response = task;
+            return response;
+         }
+
+        public List<string> endLearning()
+        {
+            var res = sendBot("טוב מספיק");
+            res = sendBot("");
+            return res;
+        }
 
         public List<string> endConversation()
         {
             var res = sendBot("ביי");
-            res = sendBot("יום טוב");
+            res = sendBot("מספיק");
+            res = sendBot("כן");
+
+            res = sendBot("ביי");
+            res = sendBot("לילה טוב");
             return res;
         }
 
         public List<string> createUser(string v1, string v2, string v3)
         {
             var res = sendBot("היי");
+            
             res = sendBot("יוחאי");
             res = sendBot("בן");
             res = sendBot("יא");

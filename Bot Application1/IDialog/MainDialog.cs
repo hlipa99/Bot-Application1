@@ -33,11 +33,12 @@ namespace Bot_Application1.IDialog
 
         public override async Task StartAsync(IDialogContext context)
         {
-
+          
             try
            {
                 getDialogsVars(context);
-                if (User != null)
+
+                if (checkUser())
                 {
         
                     context.Call(new GreetingDialog(), MainMenu);
@@ -58,7 +59,16 @@ namespace Bot_Application1.IDialog
             }
         }
 
-            string[] options;
+        private bool checkUser()
+        {
+            if (User == null) return false;
+            if (User.UserGender == null) return false;
+            if (User.UserClass == null) return false;
+            if (User.UserLastSession == null) User.UserLastSession = DateTime.UtcNow;
+            return true;
+        }
+
+        string[] options;
 
         private async Task MainMenu(IDialogContext context, IAwaitable<object> result)
         {

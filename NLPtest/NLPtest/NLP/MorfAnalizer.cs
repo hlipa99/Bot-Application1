@@ -77,15 +77,14 @@ namespace NLP.NLP
 
         public List<WordObject> getWordsObjectFromParserServer(String str)
         {
-            List<WordObject> sentenceFromServer = null;
+            List<WordObject> sentenceFromServer = new List<WordObject>(); ;
             try
             {
 
 
                 string JsonRes = HttpCtrl.sendToHebrewMorphAnalizer(str);
 
-                sentenceFromServer = new List<WordObject>();
-                if (JsonRes != null)
+                if (JsonRes != null && JsonRes != "")
                 {
                     sentenceFromServer = JsonConvert.DeserializeObject<List<WordObject>>(JsonRes);
                 }
@@ -112,44 +111,46 @@ namespace NLP.NLP
         public virtual List<List<WordObject>> meniAnalize(String str,bool isUserInput)
         {
             List<List<WordObject>> allRes = new List<List<WordObject>>();
-            str = str.Trim();
-            if (str != null && str.Length > 0)
+            if (str != null)
             {
-
-                if (isUserInput)
+                str = str.Trim();
+                if (str != null && str.Length > 0)
                 {
-                    var correctSpelling = HttpCtrl.correctSpelling(str);
-                    if (correctSpelling != null)
+
+                    if (isUserInput)
                     {
-                        str = correctSpelling.Replace("\\", "");
+                        var correctSpelling = HttpCtrl.correctSpelling(str);
+                        if (correctSpelling != null)
+                        {
+                            str = correctSpelling.Replace("\\", "");
+                        }
                     }
-                }
-
-           
-                var strRes = removeParentheses(str, '(', ')');
-                strRes = removeParentheses(strRes, '[', ']');
-                var sentenceFromServer = getWordsObjectFromParserServer(strRes);
-                sentenceFromServer.RemoveAll(x => (x.Text.Length <= 1) && (x.Pos == "punctuation") && (x.Text != "|"));
 
 
-                if (sentenceFromServer != null && sentenceFromServer.Count >= 0)
-                {
+                    var strRes = removeParentheses(str, '(', ')');
+                    strRes = removeParentheses(strRes, '[', ']');
+                    var sentenceFromServer = getWordsObjectFromParserServer(strRes);
+                    sentenceFromServer.RemoveAll(x => (x.Text.Length <= 1) && (x.Pos == "punctuation") && (x.Text != "|"));
 
-                    var allText = splitByLine(sentenceFromServer);
-                    List<WordObject> res = new List<WordObject>();
-                    foreach (var sentence in allText)
+
+                    if (sentenceFromServer != null && sentenceFromServer.Count >= 0)
                     {
-                       
+
+                        var allText = splitByLine(sentenceFromServer);
+                        List<WordObject> res = null;
+                        foreach (var sentence in allText)
+                        {
+                            res = new List<WordObject>();
                             if (sentence != null && sentence.Count >= 0)
                             {
-                            //remove nikod etc.s
-                            var firstWord = true;
-                            // print tagged sentence by using AnalysisInterface, as follows:
-                            foreach (WordObject w in sentence)
+                                //remove nikod etc.s
+                                var firstWord = true;
+                                // print tagged sentence by using AnalysisInterface, as follows:
+                                foreach (WordObject w in sentence)
                                 {
-                           
 
-                                WordObject word = w;
+
+                                    WordObject word = w;
 
                                     //two NRI in a row
                                     //join word if ist part of a name
@@ -182,18 +183,19 @@ namespace NLP.NLP
                                     res.Add(word);
                                     firstWord = false;
                                 }
-                            res = tryMatchEntities(res, isUserInput);
+                                 res = tryMatchEntities(res, isUserInput);
 
-                         }
+                            }
 
                             // res = checkPhrases(res);
-                         
+
                             allRes.Add(res);
                         }
                     }
 
-             
-                
+
+
+                }
             }
             return allRes;
         }
