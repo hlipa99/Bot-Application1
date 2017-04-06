@@ -70,16 +70,29 @@ namespace UnitTestProject1
 
                 //good - lets learn
                 res = sendBot(category);
-                AssertNLP.contains(res, DBbotPhrase(Pkey.areUReaddyToLearn));
-
-
+                AssertNLP.contains(res, DBbotPhrase(Pkey.letsLearn));
                 AssertNLP.contains(res, DBbotPhrase(Pkey.firstQuestion));
+
+
 
                     var questions = new DataBaseController().getQuestion(category);
                 Debug.WriteLine(category);
                 Debug.WriteLine(questions.Length);
 
-                var questionOpt = new List<IQuestion>(questions).FindAll(x => res[2].Contains(x.QuestionText));
+
+
+                var questionIdx = 0;
+                for (; questionIdx<res.Count; questionIdx++)
+                {
+                   
+                   if(AssertNLP.contains(res[questionIdx], DBbotPhrase(Pkey.beforAskQuestion)[0]) || AssertNLP.contains(res[questionIdx], DBbotPhrase(Pkey.firstQuestion)[0]))
+                    {
+                        break;
+                    }
+
+                }
+
+                var questionOpt = new List<IQuestion>(questions).FindAll(x => res[questionIdx].Contains(x.QuestionText));
                     Assert.AreEqual(questionOpt.Count, 1);
                     var question = questionOpt[0];
                 

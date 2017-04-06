@@ -31,7 +31,7 @@ namespace BotTests
         }
 
 
-        static bool contains(string sorcse, string input)
+        public static bool contains(string sorcse, string input)
         {
             var counter = sorcse.Split(' ').Length;
             foreach (var o in input.Split(new char[] {' '}))

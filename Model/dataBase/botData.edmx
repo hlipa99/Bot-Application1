@@ -300,6 +300,7 @@ warning 6002: The table/view 'mindcet.dbo.intent' does not have a primary key de
         <EntityType Name="userScore">
           <Key>
             <PropertyRef Name="userID" />
+            <PropertyRef Name="dateTime" />
           </Key>
           <Property Name="userID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="category" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />

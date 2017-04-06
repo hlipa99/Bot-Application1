@@ -125,12 +125,12 @@
             this.input_TB2.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.input_TB2.Size = new System.Drawing.Size(812, 35);
             this.input_TB2.TabIndex = 5;
-            this.input_TB2.Text = "מתאים להחלתה של האום ומאפשר חוק גוס חובה לצהל";
+            this.input_TB2.Text = "מתאים להחלטה של האום ומאפשר גיוס לצהל";
             // 
             // text_TB2
             // 
             this.text_TB2.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.text_TB2.Location = new System.Drawing.Point(33, 602);
+            this.text_TB2.Location = new System.Drawing.Point(33, 603);
             this.text_TB2.Multiline = true;
             this.text_TB2.Name = "text_TB2";
             this.text_TB2.ReadOnly = true;
