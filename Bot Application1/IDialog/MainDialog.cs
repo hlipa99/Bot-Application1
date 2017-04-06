@@ -77,8 +77,7 @@ namespace Bot_Application1.IDialog
            
                 getDialogsVars(context);
 
-            if (User != null)
-                {
+            if (User != null){
  
                     options = conv().MainMenuOptions();
                     updateRequestTime(context);
@@ -87,9 +86,7 @@ namespace Bot_Application1.IDialog
                     User.UserLastSession = DateTime.UtcNow;
                     setDialogsVars(context);
                     conv().saveUserToDb(User);
-            }
-                else
-                {
+            }else{
 
                 context.Call(new NewUserDialog(), MainMenu);
                 }
@@ -124,7 +121,7 @@ namespace Bot_Application1.IDialog
                 switch (optionIdx)
                 {
                     case 0:  //start learning
-                        context.Call<string>(new LerningDialog(), EndSession);
+                        context.Call<string>(new LerningDialog(), MainMenu);
                         break;
                     case 1:  //not implamented
                         context.Call(new NotImplamentedDialog(), returnToMainMenu);

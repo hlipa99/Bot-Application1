@@ -22,6 +22,6 @@ namespace Model.dataBase
         public Nullable<System.DateTime> UserLastSession { get; set; }
         public string UserAddress { get; set; }
         public Nullable<int> UserTimesConnected { get; set; }
-        public Nullable<System.TimeSpan> UserOverallTime { get; set; }
+        public string UserOverallTime { get; set; }
     }
 }

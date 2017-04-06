@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Web;
 //using static Bot_Application1.Controllers.ConversationController;
 
@@ -109,7 +110,7 @@ namespace Model.dataBase
 
 
 
-        public async virtual void addUserScore(userScore userScore)
+        public async virtual Task addUserScore(userScore userScore)
         {
             try
             {
@@ -207,13 +208,11 @@ namespace Model.dataBase
 
         public virtual IUser getUser(string userId)
         {
-            IUser NewIUser = new User();
+   
             List<User> visitors = new List<User>();
 
             try
             {
-
-                NewIUser = new User();
 
 
                 visitors = (from t in DB.User
@@ -236,7 +235,7 @@ namespace Model.dataBase
         public async virtual void deleteUser(string userId)
         {
 
-            IUser NewIUser = new User();
+            IUser NewIUser = null;
             List<IUser> visitors = new List<IUser>();
 
             try
