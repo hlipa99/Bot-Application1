@@ -17,7 +17,7 @@ namespace Model.Models
         Nullable<System.DateTime> UserLastSession { get; set; }
         string UserAddress { get; set; }
         int? UserTimesConnected { get; set; }
-        TimeSpan? UserOverallTime { get; set; }
+        String UserOverallTime { get; set; }
 
         int[][] PreviusParses { get; set; }
     }

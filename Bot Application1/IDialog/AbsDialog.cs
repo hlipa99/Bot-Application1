@@ -50,8 +50,11 @@ namespace Bot_Application1.IDialog
         {
             try
             {
-      
-                if (user == null) user = new User();
+
+                if (user == null)
+                {
+                    user = new User();
+                }
                 User thisUser = user as User;
                 context.UserData.SetValue<User>("user", thisUser);
 

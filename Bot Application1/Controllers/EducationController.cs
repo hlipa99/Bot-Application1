@@ -168,30 +168,34 @@ namespace Bot_Application1.Controllers
         public void saveUserSession()
         {
             var userDB = (User)user;
-
-            user.UserOverallTime += DateTime.UtcNow.Subtract(studySession.startTime);
+            try
+            {
+                user.UserOverallTime = TimeSpan.Parse(user.UserOverallTime).Add(DateTime.UtcNow.Subtract(studySession.startTime)).ToString();
+            }catch(Exception ex)
+            {
+                user.UserOverallTime = new TimeSpan(0).ToString();
+            }
             user.UserLastSession = DateTime.UtcNow;
             Db.addUpdateUser(userDB);
         }
 
-        public void updateUserScore()
+        public async void updateUserScore()
         {
-
-            foreach (var sq in studySession.CurrentQuestion.SubQuestion)
-            {
-                studySession.CurrentQuestion.AnswerScore += sq.AnswerScore / studySession.CurrentQuestion.SubQuestion.Count;
-            }
-
             var score = new userScore();
             var question = studySession.CurrentQuestion;
 
             score.category = question.Category;
             score.subCategory = question.SubCategory;
-            score.Score = question.AnswerScore;
+            
             score.userID = user.UserID;
             score.dateTime = DateTime.UtcNow;
-
-            Db.addUserScore(score);
+            score.QuestionID = studySession.CurrentQuestion.QuestionID.Trim();
+            foreach (var sq in studySession.CurrentQuestion.SubQuestion)
+            {
+                score.SubquestionID = sq.subQuestionID.Trim();
+                score.Score = sq.AnswerScore;
+                await Db.addUserScore(score);
+            }
         }
 
 

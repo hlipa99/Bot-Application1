@@ -19,5 +19,7 @@ namespace Model.dataBase
         public string subCategory { get; set; }
         public Nullable<int> Score { get; set; }
         public System.DateTime dateTime { get; set; }
+        public string QuestionID { get; set; }
+        public string SubquestionID { get; set; }
     }
 }

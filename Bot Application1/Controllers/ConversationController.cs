@@ -197,11 +197,7 @@ namespace Bot_Application1.Controllers
             {
                 average += q.AnswerScore / StudySession.QuestionAsked.Count;
             }
-            if(StudySession.QuestionAsked.Count < StudySession.SessionLength)
-            {
-                return getPhrase(Pkey.earlyDiparture);
 
-            }
             if (average > 60)
             {
                 return getPhrase(Pkey.goodSessionEnd, textVar: average + "");
@@ -540,13 +536,6 @@ namespace Bot_Application1.Controllers
                 //studySession = new StudySession();
 
             StudySession = new StudySession();
-            }
-
-            if (User == null)
-            {
-                User = new User();
-                User.UserName = "";
-                User.UserGender = "masculine";
             }
 
             phraseRes = phraseRes.Replace("<genderGuf>", getGufSecond());

@@ -39,7 +39,7 @@ namespace Bot_Application1.IDialog
             User.UserID = context.Activity.From.Id;
             User.UserAddress = context.Activity.Id;
             User.UserCreated = DateTime.UtcNow;
-            User.UserOverallTime = new TimeSpan(0);
+            User.UserOverallTime = new TimeSpan(0).ToString();
             User.UserTimesConnected = 0;
             User.UserLastSession = DateTime.UtcNow;
 
