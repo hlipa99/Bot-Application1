@@ -121,15 +121,13 @@ namespace NLP.QnA
             if (userAnswer != null && systemAnswer != null)
             {
                 var feedback = new AnswerFeedback();
-                var systemEntitis = systemAnswer.Where(x => x is NounObject);
-                var userEntitis = userAnswer.Where(x => x is NounObject);
 
-                if (systemEntitis.Count() != 0)
+                if (systemAnswer.Count() != 0)
                 {
-                    foreach (var se in systemEntitis)
+                    foreach (var se in systemAnswer)
                     {
                         var found = false;
-                        foreach (var ue in userEntitis)
+                        foreach (var ue in userAnswer)
                         {
                             if (se.GetType() == ue.GetType())
                             {
@@ -139,7 +137,7 @@ namespace NLP.QnA
 
                                 if (se.Word.Equals(ue.Word) && se.Negat == ue.Negat)
                                 {
-                                    Double d = 100.0 / systemEntitis.Count();
+                                    Double d = 100.0 / systemAnswer.Count();
 
                                     feedback.score += (int)Math.Ceiling(d);
 

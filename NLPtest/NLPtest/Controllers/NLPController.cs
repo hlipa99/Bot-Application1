@@ -7,6 +7,8 @@ using NLP.NLP;
 using Model.dataBase;
 using static NLP.HebWords.WordObject;
 using NLP.HebWords;
+using System.Runtime.Caching;
+using System.Collections;
 
 namespace NLP.Controllers
 {
@@ -122,43 +124,55 @@ namespace NLP.Controllers
 
         public virtual List<WorldObject> Analize(string text, string systemAnswerText)
         {
-            // var context = new TextContext();
-            var textAnlz = Ma.meniAnalize(text, systemAnswerText != null);
-            List<WorldObject> input = new List<WorldObject>();
-            List<WorldObject> sentence = new List<WorldObject>();
-            List<WorldObject> last = new List<WorldObject>();
-            List<List<ITemplate>> sentences;
-            List<ITemplate> context = new List<ITemplate>();
-
-
-            if (systemAnswerText != null && textAnlz.FindAll(x => x.FindAll(y=>y.isA(WordType.gufWord)).Count > 0).Count > 0)
+            ObjectCache cache = MemoryCache.Default;
+            var cachedItem = cache.Get(text + systemAnswerText);
+            if (cachedItem == null)
             {
-                //add mising data to entity DB
-                var contextAnlz = Ma.meniAnalize(systemAnswerText,true);
 
 
-                //create context 
-                var contextSentences = sa.findGufContext(contextAnlz, context);
-                contextSentences.ForEach(x => context.AddRange(x));
-                sentences = sa.findGufContext(textAnlz, context);
+                // var context = new TextContext();
+                var textAnlz = Ma.meniAnalize(text, systemAnswerText != null);
+                List<WorldObject> input = new List<WorldObject>();
+                List<WorldObject> sentence = new List<WorldObject>();
+                List<WorldObject> last = new List<WorldObject>();
+                List<List<ITemplate>> sentences;
+                List<ITemplate> context = new List<ITemplate>();
+
+
+                if (systemAnswerText != null && textAnlz.FindAll(x => x.FindAll(y => y.isA(WordType.gufWord)).Count > 0).Count > 0)
+                {
+                    //add mising data to entity DB
+                    var contextAnlz = Ma.meniAnalize(systemAnswerText, true);
+
+
+                    //create context 
+                    var contextSentences = sa.findGufContext(contextAnlz, context);
+                    contextSentences.ForEach(x => context.AddRange(x));
+                    sentences = sa.findGufContext(textAnlz, context);
+                }
+                else
+                {
+                    sentences = sa.findGufContext(textAnlz, context);
+                }
+
+                string logTemp;
+
+                foreach (var s in sentences)
+                {
+                    sentence = sa.findTemplate(s.ToArray(), out logTemp);
+                    last = sentence;
+                    input.AddRange(sentence);
+                }
+                var exp = new CacheItemPolicy();
+                exp.SlidingExpiration = (new TimeSpan(1,0,0,0));
+                cache.Set(text + systemAnswerText, input, exp);
+                return input;
             }
             else
             {
-                sentences = sa.findGufContext(textAnlz, context);
+                return (List <WorldObject>)cachedItem;
             }
-
-            string logTemp;
-
-            foreach (var s in sentences)
-            {
-                sentence = sa.findTemplate(s.ToArray(), out logTemp);
-                last = sentence;
-                input.AddRange(sentence);
-            }
-
-            return input;
         }
-
         internal void updateEntityTable()
         {
             Ma.searchAllAnswerForentities();

@@ -95,22 +95,17 @@ namespace Bot_Application1.Controllers.Tests
                         var feedback = eduCtrl.checkAnswer(sq.answerText);
                         if (feedback.score < 95)
                         {
-
-
-
-
-
+                         
+                            feedback = eduCtrl.checkAnswer(sq.answerText);
                             feedback = eduCtrl.checkAnswer(sq.answerText);
                             feedback = eduCtrl.checkAnswer(sq.answerText);
                             feedback = eduCtrl.checkAnswer(sq.answerText);
                             //debug
-//                            feedback = eduCtrl.checkAnswer(sq.answerText);
-  //                          feedback = eduCtrl.checkAnswer(sq.answerText);
+                            feedback = eduCtrl.checkAnswer(sq.answerText);
+                            feedback = eduCtrl.checkAnswer(sq.answerText);
 
 
-                     //       feedback = eduCtrl.checkAnswer(sq.answerText);
-                    //        feedback = eduCtrl.checkAnswer(sq.answerText);
-
+                            feedback = eduCtrl.checkAnswer(sq.answerText);
                         }
                         Assert.IsTrue(feedback.score >= 95);
 
@@ -120,20 +115,18 @@ namespace Bot_Application1.Controllers.Tests
                   
                         if (feedback.score > 0)
                         {
-                            feedback = eduCtrl.checkAnswer(sq.answerText);
+                            feedback = eduCtrl.checkAnswer("תשובה לא נכונה ולא קשורה בשיט");
                             //debug
-                            feedback = eduCtrl.checkAnswer(sq.answerText);
+                            feedback = eduCtrl.checkAnswer("תשובה לא נכונה ולא קשורה בשיט");
 
-                            feedback = eduCtrl.checkAnswer(sq.answerText);
-                            feedback = eduCtrl.checkAnswer(sq.answerText);
-                            //       feedback = eduCtrl.checkAnswer(sq.answerText);
-                            //     feedback = eduCtrl.checkAnswer(sq.answerText);
-                            //   feedback = eduCtrl.checkAnswer(sq.answerText);
-                            //     feedback = eduCtrl.checkAnswer(sq.answerText);
-                            //    feedback = eduCtrl.checkAnswer(sq.answerText);
+                            feedback = eduCtrl.checkAnswer("תשובה לא נכונה ולא קשורה בשיט");
+                            feedback = eduCtrl.checkAnswer("תשובה לא נכונה ולא קשורה בשיט");
+                            feedback = eduCtrl.checkAnswer("תשובה לא נכונה ולא קשורה בשיט");
+                            feedback = eduCtrl.checkAnswer("תשובה לא נכונה ולא קשורה בשיט");
+
                         }
 
-                   //     Assert.AreEqual(feedback.score, 0);
+                        Assert.AreEqual(feedback.score, 0);
 
                     }
 

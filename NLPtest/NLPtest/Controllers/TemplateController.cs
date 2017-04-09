@@ -33,8 +33,8 @@ namespace NLP.Controllers
     
                 
                 //one object template
-                //new HebTemplate(new ITemplate[] { new WordObject("",nounWord) },new NounObject("0"),1),
-                //new HebTemplate(new ITemplate[] { new WordObject("",verbWord) },new VerbObject("0"),1),
+                new HebTemplate(new ITemplate[] { new WordObject("",nounWord) },new NounObject("0"),3),
+                new HebTemplate(new ITemplate[] { new WordObject("",verbWord) },new VerbObject("0"),2),
              //   new HebTemplate(new ITemplate[] { new WordObject("",gufWord) },new personObject("0"),1),
                 new HebTemplate(new ITemplate[] { new WordObject("",locationWord) },new LocationObject("0"),1),
                 new HebTemplate(new ITemplate[] { new WordObject("",personWord) },new PersonObject("0"),1),

@@ -273,10 +273,10 @@ namespace NLP.NLP
                 int j = i;
                 for (; j < sentence.Count; j++)
                 {
-                    var searchText2 = (searchText + " " +sentence[j].Lemma).Trim();
-                    var searchText1 = (searchText + " " +sentence[j].Text).Trim();
+                    var searchText1 = (searchText + " " +sentence[j].Lemma).Trim();
+                    var searchText2 = (searchText + " " +sentence[j].Text).Trim();
 
-                    var tryMatch2 = findMatch(entities, searchText2);
+                    var tryMatch2 = findMatch(entities, removePrefix(searchText2, sentence[i]));
                     if (tryMatch2 != null && tryMatch2.Any())
                     {
                         match = tryMatch2;
@@ -287,7 +287,7 @@ namespace NLP.NLP
                         break;
                     }
                     else {
-                        var tryMatch = findMatch(entities, searchText1);
+                        var tryMatch = findMatch(entities, removePrefix(searchText1, sentence[i]));
                         if (tryMatch != null && tryMatch.Any())
                         {
                             match = tryMatch;
@@ -304,7 +304,7 @@ namespace NLP.NLP
                 //finish the word
                 if (match != null && match.Any())
                 {
-                    match = findMatch(match, searchText + ";");
+                    match = findMatch(match, removePrefix(searchText + ";", sentence[i]));
                 }
 
                 if (match != null && match.Any())
@@ -360,11 +360,25 @@ namespace NLP.NLP
 
                 }else
                 {
-                    newSentence.Add(sentence[i]);
+                    if (!sentence[i].isEntity())
+                    {
+                        newSentence.Add(sentence[i]);
+                    }
                 }
  
             }
             return newSentence;
+        }
+
+        private string removePrefix(string searchText, WordObject wordObject)
+        {
+            foreach(var c in wordObject.Prefixes)
+            {
+                if(c != "ה")
+                searchText = searchText.Remove(0, 1);
+            }
+
+            return searchText;
         }
 
         private int entitySelector(Ientity x)

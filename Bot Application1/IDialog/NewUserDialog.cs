@@ -36,8 +36,8 @@ namespace Bot_Application1.IDialog
             getDialogsVars(context);
 
             User = new User();
-            User.UserID = context.Activity.Id;
-            User.UserAddress = context.Activity.From.Id;
+            User.UserID = context.Activity.From.Id;
+            User.UserAddress = context.Activity.Id;
             User.UserCreated = DateTime.UtcNow;
             User.UserOverallTime = new TimeSpan(0);
             User.UserTimesConnected = 0;

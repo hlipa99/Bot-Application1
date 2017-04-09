@@ -131,12 +131,12 @@ namespace Bot_Application1.IDialog
                         break;
                     default:
                         break;
-                        await writeMessageToUser(context, conv().getPhrase(Pkey.NotAnOption));
+                        await writeMessageToUser(context, conv().getPhrase(Pkey.NotAnOption, textVar: option));
                         await MainMenu(context,result);
                 }
             }else
             {
-                await writeMessageToUser(context, conv().getPhrase(Pkey.NotAnOption));
+                await writeMessageToUser(context, conv().getPhrase(Pkey.NotAnOption,textVar: option));
                 await MainMenu(context, result);
             }
 

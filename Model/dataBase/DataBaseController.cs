@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Caching;
 using System.Web;
 //using static Bot_Application1.Controllers.ConversationController;
 
@@ -342,12 +343,22 @@ namespace Model.dataBase
 
         public virtual IEnumerable<Ientity> getEntitys()
         {
-            //var entityList = new List<Ientity>();
-            //foreach(var e in DB.entity)
-            //{
-            //    entityList.Add((Ientity)e);
-            //}
-            return DB.entity;
+            ObjectCache cache = MemoryCache.Default;
+            var cachedItem = cache.Get("getEntitys");
+            if (cachedItem == null)
+            {
+                var item = DB.entity;
+                var exp = new CacheItemPolicy();
+                exp.SlidingExpiration = (new TimeSpan(1, 0, 0, 0));
+                cache.Set("getEntitys", item, exp);
+                return item;
+            }
+            else
+            {
+                return (IEnumerable <Ientity> )cachedItem;
+            }
+
+                
         }
 
         public virtual string[] getAllSubCategory(string catgoty)
@@ -422,9 +433,21 @@ namespace Model.dataBase
                                select t.Text).ToArray();
                 }else
                 {
-                    phrases = (from t in DB.botphrase
-                               where t.Pkey.ToLower() == key && (t.Flags == null || !t.Flags.Contains("text"))
-                               select t.Text).ToArray();
+                    ObjectCache cache = MemoryCache.Default;
+                    var cachedItem = cache.Get("getBotPhrase");
+                    if (cachedItem == null)
+                    {
+                        phrases = (from t in DB.botphrase
+                                         where t.Pkey.ToLower() == key && (t.Flags == null || !t.Flags.Contains("text"))
+                                         select t.Text).ToArray();
+                        var exp = new CacheItemPolicy();
+                        exp.SlidingExpiration = (new TimeSpan(1, 0, 0, 0));
+                        cache.Set("getBotPhrase", phrases, exp);
+                    }
+                    else
+                    {
+                        phrases = (string[])cachedItem;
+                    }
                 }
  
             }
