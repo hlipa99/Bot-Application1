@@ -436,16 +436,21 @@ namespace Model.dataBase
                     var cachedItem = cache.Get("getBotPhrase");
                     if (cachedItem == null)
                     {
-                        phrases = (from t in DB.botphrase
-                                         where t.Pkey.ToLower() == key && (t.Flags == null || !t.Flags.Contains("text"))
-                                         select t.Text).ToArray();
+                        //phrases = (from t in DB.botphrase
+                        //           where t.Pkey.ToLower() == key && (t.Flags == null || !t.Flags.Contains("text"));
+                        //                 select t.Text).ToArray();
                         var exp = new CacheItemPolicy();
                         exp.SlidingExpiration = (new TimeSpan(1, 0, 0, 0));
-                        cache.Set("getBotPhrase", phrases, exp);
+                        var dbParses = DB.botphrase.GroupBy(x => x.Pkey.ToLower()).ToDictionary(group => group.Key, group => group.Select(p=>p.Text).ToArray());
+                        cache.Set("getBotPhrase", dbParses, exp);
                     }
                     else
                     {
-                        phrases = (string[])cachedItem;
+                        phrases = ((Dictionary<string, string[]>) cachedItem)[key];
+                        if(phrases == null || phrases.Length == 0)
+                        {
+                            throw new Exception("empty phrase");
+                        }
                     }
                 }
  
