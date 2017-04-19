@@ -36,5 +36,6 @@ namespace Model.dataBase
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<intent> intent { get; set; }
         public virtual DbSet<userScore> userScore { get; set; }
+        public virtual DbSet<multyEntity> multyEntity { get; set; }
     }
 }

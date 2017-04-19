@@ -6,15 +6,15 @@ namespace Model.Models
         using System;
         using System.Collections.Generic;
 
-        public interface Ientity
-        {
-             int entityID { get; set; }
-             string entityValue { get; set; }
-             string entityType { get; set; }
+        public interface Ientity : IentityBase
+    {
+
              string entitySynonimus { get; set; }
 
               bool Equals(Object obj);
-        }
+             
+
+    }
     
 
 }

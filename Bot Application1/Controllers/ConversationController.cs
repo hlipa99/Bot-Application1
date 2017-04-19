@@ -132,7 +132,7 @@ namespace Bot_Application1.Controllers
         {
             this.User = user;
             this.StudySession = studySession;
-            this.db = db;
+            //this.db = db;
             ec = new EducationController(user, studySession, this);
         }
 

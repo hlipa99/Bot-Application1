@@ -91,6 +91,7 @@ namespace Bot_Application1.Controllers.Tests
                     {
                         SStudySession.CurrentSubQuestion = sq;
                         eduCtrl = new EducationController(UserMus, SStudySession, ConvCtrl);
+                  
                         //good
                         var feedback = eduCtrl.checkAnswer(sq.answerText);
                         if (feedback.score < 95)
@@ -101,7 +102,9 @@ namespace Bot_Application1.Controllers.Tests
                             feedback = eduCtrl.checkAnswer(sq.answerText);
                             feedback = eduCtrl.checkAnswer(sq.answerText);
                             //debug
+
                             feedback = eduCtrl.checkAnswer(sq.answerText);
+                            
                             feedback = eduCtrl.checkAnswer(sq.answerText);
 
 

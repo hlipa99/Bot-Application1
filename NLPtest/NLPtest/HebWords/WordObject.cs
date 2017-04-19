@@ -289,8 +289,10 @@ namespace NLP.HebWords
         internal WordObject clone()
         {
             var newWord = new WordObject(ner, text, "unspecified", "unspecified", "unspecified", polarity, pos, posType, prefixes, tense, suffixFunction, "unspecified", "unspecified", "unspecified", isDefinite, lemma);
-                newWord.amount = amount;
+
+            newWord.amount = amount;
             newWord.gender = gender;
+        
             newWord.person = person;
             newWord.lemma = getLemma(lemma,text);
             return newWord;
@@ -758,9 +760,9 @@ namespace NLP.HebWords
             if (objres == null) return false;
             if (!(this.Text == objres.Text &&
             this.WordT == objres.WordT &&
-             this.gender == objres.gender &&
-              this.amount == objres.amount &&
-                this.person == objres.person &&
+             this.Gender == objres.Gender &&
+              this.Amount == objres.Amount &&
+                this.Person == objres.Person &&
                        this.Time == objres.Time )) return false;
 
 

@@ -27,7 +27,7 @@ namespace NLP.Tests
 
 
         [TestMethod()]
-        public void meniAnalizeTest()
+        public void meniAnalizeIntegrationTest()
         {
          //   ma.HttpCtrl =  OuterAPICtrl ;
          //   ma.DBctrl1 =  DB;

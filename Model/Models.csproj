@@ -93,6 +93,7 @@
     <Compile Include="dataBase\entity.cs">
       <DependentUpon>botData.tt</DependentUpon>
     </Compile>
+    <Compile Include="dataBase\multyEntityS.cs" />
     <Compile Include="dataBase\entityS.cs" />
     <Compile Include="dataBase\ErrorLog.cs">
       <DependentUpon>botData.tt</DependentUpon>
@@ -101,6 +102,9 @@
       <DependentUpon>botData.tt</DependentUpon>
     </Compile>
     <Compile Include="dataBase\media.cs">
+      <DependentUpon>botData.tt</DependentUpon>
+    </Compile>
+    <Compile Include="dataBase\multyEntity.cs">
       <DependentUpon>botData.tt</DependentUpon>
     </Compile>
     <Compile Include="dataBase\OtherLog.cs">
@@ -119,6 +123,8 @@
       <DependentUpon>botData.tt</DependentUpon>
     </Compile>
     <Compile Include="DBException.cs" />
+    <Compile Include="Interfaces\IMultyEntity.cs" />
+    <Compile Include="Interfaces\IentityBase.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Interfaces\Ientity.cs" />
     <Compile Include="Models\AnswerFeedback.cs" />

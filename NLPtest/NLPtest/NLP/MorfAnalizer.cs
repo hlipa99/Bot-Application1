@@ -22,18 +22,19 @@ using static NLP.HebWords.WordObject;
 using NLP.HebWords;
 using Model.Models;
 using System.Data.Entity;
+using static NLP.WorldObj.personObject;
 
 namespace NLP.NLP
 {
-      public class MorfAnalizer
+    public class MorfAnalizer
     {
-     //   SimpleTagger3 tagger;
-      //  NERTagger nerTagger;
-      //  MeniTaggeedSentenceFactory sentenceFactory;
-      //  TaggerBasedHebrewChunker chunker;
-        private   HebDictionary hebDictionary;
+        //   SimpleTagger3 tagger;
+        //  NERTagger nerTagger;
+        //  MeniTaggeedSentenceFactory sentenceFactory;
+        //  TaggerBasedHebrewChunker chunker;
+        private HebDictionary hebDictionary;
         OuterAPIController httpCtrl = new OuterAPIController();
-       // private IEnumerable<Word> wordList;
+        // private IEnumerable<Word> wordList;
         DataBaseController DBctrl = new DataBaseController();
 
         public OuterAPIController HttpCtrl
@@ -62,15 +63,17 @@ namespace NLP.NLP
             }
         }
 
+
+
         public MorfAnalizer()
         {
-         //   var path = "C:/Program Files (x86)/IIS Express/botServer/hebdata/";
-         //   tagger = new SimpleTagger3(path);
-         //   nerTagger = new NERTagger(path, tagger);
+            //   var path = "C:/Program Files (x86)/IIS Express/botServer/hebdata/";
+            //   tagger = new SimpleTagger3(path);
+            //   nerTagger = new NERTagger(path, tagger);
             //   create the noun-phrase chunker
-       //     sentenceFactory = new MeniTaggeedSentenceFactory(null, MeniTokenExpander.expander);
-        //    String chunkModelPrefix = path + vohmm.util.Dir.CHUNK_MODEL_PREF;
-     //       chunker = new TaggerBasedHebrewChunker(sentenceFactory, chunkModelPrefix);
+            //     sentenceFactory = new MeniTaggeedSentenceFactory(null, MeniTokenExpander.expander);
+            //    String chunkModelPrefix = path + vohmm.util.Dir.CHUNK_MODEL_PREF;
+            //       chunker = new TaggerBasedHebrewChunker(sentenceFactory, chunkModelPrefix);
             hebDictionary = new HebDictionary();
         }
 
@@ -90,12 +93,12 @@ namespace NLP.NLP
                 }
 
                 //may be mispelling for the first time
-           
+
             }
             catch (Exception ex) //if parser server is down
             {
-                var words = str.Split(' '); 
-                foreach(var w in words)
+                var words = str.Split(' ');
+                foreach (var w in words)
                 {
                     var word = new WordObject(w, nounWord);
                     sentenceFromServer.Add(word);
@@ -103,12 +106,12 @@ namespace NLP.NLP
             }
             return sentenceFromServer;
         }
-        
 
 
 
 
-        public virtual List<List<WordObject>> meniAnalize(String str,bool isUserInput)
+
+        public virtual List<List<WordObject>> meniAnalize(String str, bool isUserInput)
         {
             List<List<WordObject>> allRes = new List<List<WordObject>>();
             if (str != null)
@@ -130,8 +133,7 @@ namespace NLP.NLP
                     var strRes = removeParentheses(str, '(', ')');
                     strRes = removeParentheses(strRes, '[', ']');
                     var sentenceFromServer = getWordsObjectFromParserServer(strRes);
-                    sentenceFromServer.RemoveAll(x => (x.Text.Length <= 1) && (x.Pos == "punctuation") && (x.Text != "|"));
-
+                    
 
                     if (sentenceFromServer != null && sentenceFromServer.Count >= 0)
                     {
@@ -154,22 +156,24 @@ namespace NLP.NLP
 
                                     //two NRI in a row
                                     //join word if ist part of a name
+                                    if (hebDictionary.contains(w.Text))
+                                    {
+                                        word = hebDictionary.get(word.Text);
+                                    }
 
                                     if (res.Count > 0)
                                     {
-                                        if (res.LastOrDefault().Ner == w.Ner && res.LastOrDefault().Ner != "O" &&
-                                            !res.LastOrDefault().Prefixes.Contains("ו") && !firstWord)
+                                        var last = res.LastOrDefault();
+                                        if (((last.Ner == word.Ner && last.Ner != "O") || (last.isA(properNameWord) && word.isA(properNameWord)))  &&
+                                            !word.Prefixes.Contains("ו") && !firstWord)
                                         {
                                             res.LastOrDefault().Text += " " + word.Text;
-                                            res.LastOrDefault().Lemma = res.LastOrDefault().getLemma(null, res.LastOrDefault().Text);
+                                            res.LastOrDefault().Lemma = res.LastOrDefault().Text;
                                             continue;
                                         }
                                     }
 
-                                    if (hebDictionary.contains(word.Text))
-                                    {
-                                        word = hebDictionary.get(word.Text);
-                                    }
+                             
                                     //joinwords
                                     //if (res.LastOrDefault() != null && word.isA(nounWord) && res.LastOrDefault().isA(nounWord))
                                     //{
@@ -183,7 +187,8 @@ namespace NLP.NLP
                                     res.Add(word);
                                     firstWord = false;
                                 }
-                                 res = tryMatchEntities(res, isUserInput);
+                                res.RemoveAll(x => (x.Text.Length <= 1) && (x.Pos == "punctuation") && (x.Text != "|"));
+                                res = tryMatchEntities(res, isUserInput);
 
                             }
 
@@ -200,13 +205,112 @@ namespace NLP.NLP
             return allRes;
         }
 
+        internal void updateEntities()
+        {
+            var db = DBctrl1.updateDBmanual();
+            var list = new List<IMultyEntity>();
+            foreach (var e in db.entity)
+            {
+                if (e.entityValue.Split(' ').Count() > 1)
+                {
+                    var val = e.entityValue.Trim().Replace(' ', '#');
+                    var newmulty = new multyEntity();
+                    newmulty.entityValue = e.entityValue;
+                    newmulty.parts = ";" + val + ";";
+                    newmulty.entityType = e.entityType;
+                    list.Add(newmulty);
+
+                    foreach (var w in e.entityValue.Split(' '))
+                    {
+                        if (db.entity.Where(x => x.entitySynonimus.Contains(";" + w + ";")).Count() == 0)
+                        {
+                            var ent = new entity();
+                            ent.entityValue = w;
+                            ent.entityType = e.entityType;
+                            var word = getWordsObjectFromParserServer(w).Single();
+                            if (word.Lemma != w)
+                            {
+                                ent.entitySynonimus = (";" + w + ";" + word.Lemma + ";");
+                            }
+                            else
+                            {
+                                ent.entitySynonimus = (";" + w + ";");
+                            }
+                            db.entity.Add(ent);
+
+                        }
+                    }
+                }
+
+                foreach (var s in e.entitySynonimus.Split(';'))
+                {
+                    if (s != "")
+                    {
+                        if (s.Split(' ').Count() > 1)
+                        {
+                            var val = e.entityValue.Trim().Replace(' ', '#');
+                            var newmulty = new multyEntity();
+                            newmulty.entityValue = s;
+                            newmulty.parts = ";" + val + ";";
+                            newmulty.singleValue = e.entityValue;
+                            newmulty.entityType = e.entityType;
+                            list.Add(newmulty);
+
+                            foreach (var w in e.entityValue.Split(' '))
+                            {
+                                if (db.entity.Where(x => x.entitySynonimus.Contains(";" + w + ";")).Count() == 0)
+                                {
+                                    var ent = new entity();
+                                    ent.entityValue = w;
+                                    ent.entityType = e.entityType;
+                                    var word = getWordsObjectFromParserServer(w).Single();
+                                    if (word.Lemma != w)
+                                    {
+                                        ent.entitySynonimus = (";" + w + ";" + word.Lemma + ";");
+                                    }
+                                    else
+                                    {
+                                        ent.entitySynonimus = (";" + w + ";");
+                                    }
+                                    db.entity.Add(ent);
+
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+
+            }
+
+            foreach (var m in list)
+            {
+                var curr = db.multyEntity.Where(x => x.entityValue == m.entityValue);
+                if (curr.Count() != 0)
+                {
+                    var c = curr.Single();
+                    c.parts = (c.parts + m.parts).Replace(";;", ";");
+                }
+                else
+                {
+                    db.multyEntity.Add(m as multyEntity);
+                }
+
+            }
+            db.SaveChanges();
+
+
+
+        }
+
         private List<List<WordObject>> splitByLine(List<WordObject> wordObjectList)
         {
             List<List<WordObject>> result = new List<List<WordObject>>();
             var currentSentence = new List<WordObject>();
             foreach (var w in wordObjectList)
             {
-                if(w.Text == "|")
+                if (w.Text == "|")
                 {
                     if (currentSentence.Any())
                     {
@@ -254,134 +358,208 @@ namespace NLP.NLP
         }
 
         IEnumerable<Ientity> entities;
-        private List<WordObject> tryMatchEntities(List<WordObject> sentence,bool isUserInput)
+        IEnumerable<IMultyEntity> multyEntities;
+      
+
+
+
+        private List<WordObject> tryMatchEntities(List<WordObject> sentence, bool isUserInput)
         {
             //increase the match found to implement maximal munch
-            if (entities == null)
-            {
-                //force to EF to execute
-                entities = DBctrl1.getEntitys().ToList();
-               // entities.;
-            }
+            if (entities == null) { entities = DBctrl1.getEntitys().ToList(); }
+            if (multyEntities == null) { multyEntities = DBctrl1.getMultyEntitys().ToList(); }
             var newSentence = new List<WordObject>();
 
+            var matchedEntity = new List<IEnumerable<IentityBase>>();
             for (int i = 0; i < sentence.Count; i++)
             {
-                WordObject word = sentence[i];
-                var searchText = "";
-                IEnumerable<Ientity> match = null;
-                int j = i;
-                for (; j < sentence.Count; j++)
+                var tryMatch = findMatch(entities, sentence[i].Lemma.Trim());
+                if (tryMatch != null && tryMatch.Any())
                 {
-                    var searchText1 = (searchText + " " +sentence[j].Lemma).Trim();
-                    var searchText2 = (searchText + " " +sentence[j].Text).Trim();
+                   tryMatch.ToList().ForEach(x => x.entityID = i);
+                    matchedEntity.Add(new List<IentityBase>(tryMatch.Select(x => x.clone())));
+                 //   addMatch(sentence[i], isUserInput, newSentence, match);
+                }
+            }
 
-                    var tryMatch2 = findMatch(entities, removePrefix(searchText2, sentence[i]));
-                    if (tryMatch2 != null && tryMatch2.Any())
+            for (int i = 0; i < matchedEntity.Count; i++)
+            {
+                var ent = matchedEntity[i];
+                var resEntityPart = new List<string>();
+                var res = findMultyMatch(multyEntities,matchedEntity, i, resEntityPart);
+                var max = -1;
+                var newRes = new List<IentityBase>();
+                foreach (var me in res)
+                {
+                    var val = matchMultyEntity(me as IMultyEntity, matchedEntity, i);
+                    max = Math.Max(max, val);
+                    if (val > 0) { newRes.Add(me); }
+                }
+              
+
+                if (max > 0)
+                {
+                    //TODO fix ugly patch with idx
+                    var idx = matchedEntity[i].Where(x => resEntityPart.Contains(x.entityValue)).FirstOrDefault().entityID ;
+                    matchedEntity.RemoveRange(i, max);
+
+                    foreach (IMultyEntity me  in newRes)
                     {
-                        match = tryMatch2;
-                        searchText = searchText2;
-                    }
-                    else if (searchText1 == searchText2)
-                    {
-                        break;
-                    }
-                    else {
-                        var tryMatch = findMatch(entities, removePrefix(searchText1, sentence[i]));
-                        if (tryMatch != null && tryMatch.Any())
-                        {
-                            match = tryMatch;
-                            searchText = searchText2;
+                        if((me.singleValue != null  && me.singleValue != "")){
+                            var singleValue = entities.Where(x => x.entityValue == me.singleValue);
+                            if (singleValue != null && singleValue.Any())
+                            {
+                                singleValue.Single().entityID = idx;
+                                matchedEntity.Insert(i, new List<IentityBase>(singleValue.Select(x => x.clone())));
+                            }
                         }
                         else
                         {
-                            break;
+                            res.ToList().ForEach(x=>x.entityID = idx);
+                            res.ToList().ForEach(x => x.clone());
+                            matchedEntity.Insert(i, new List<IentityBase>(res.Select(x => x.clone())));
                         }
+                  
                     }
+                   
                     
                 }
 
-                //finish the word
-                if (match != null && match.Any())
-                {
-                    match = findMatch(match, removePrefix(searchText + ";", sentence[i]));
-                }
-
-                if (match != null && match.Any())
-                {
-                    //TODO implament selector or create multiple answer
-                    Ientity entity = null;
-                    if (match.Count() > 1)
-                    {
-                        var list = match.ToList();
-                        list.Sort((x, y) => entitySelector(x) - entitySelector(y));
-                        entity = list.FirstOrDefault();
-                    }
-                    else
-                    {
-                        entity = match.FirstOrDefault();
-                    }
-              
-                   
-                     //for (int k = i ; k < j; k++)
-                     //   {
-                     //       sentence.RemoveAt(i);
-                     //   }
-
-                    if (!isUserInput)
-                    {
-                        var newWord = sentence[i].clone(); ;
-                        newWord.Text = entity.entityValue;
-                        if (i != j)
-                        {
-                            newWord.Lemma = entity.entityValue;
-                        }
-                        newWord.WordT = WordObject.typeFromString(entity.entityType);
-                        newSentence.Add(newWord);
-
-                    }
-                    else
-                    {
-                        foreach (var w in match)
-                        {
-                            var newWord = sentence[i].clone(); ;
-                            newWord.Text = w.entityValue;
-                            if (i != j)
-                            {
-                                newWord.Lemma = w.entityValue;
-                            }
-                            newWord.WordT = WordObject.typeFromString(w.entityType);
-                            newSentence.Add(newWord);
-
-                        }
-                    }
-
-                  
-
-                }else
-                {
-                    if (!sentence[i].isEntity())
-                    {
-                        newSentence.Add(sentence[i]);
-                    }
-                }
- 
             }
+
+
+            //turn entitys for words objects
+            foreach (var e in matchedEntity)
+            {
+                if (!isUserInput)
+                {
+                    var list = e.ToList();
+                    list.Sort((x, y) => entitySelector(x) - entitySelector(y));
+                    var ent = list.FirstOrDefault();
+                    WordObjectFromEntity(sentence, newSentence, ent);
+
+                }
+                else //in user input, we save all the possibileties
+                {
+                    
+                    foreach (var w in e)
+                    {
+                        WordObjectFromEntity(sentence, newSentence, w);
+                    }
+                }
+            }
+
+
             return newSentence;
+        }
+
+        private int matchMultyEntity(IMultyEntity multyEnt, List<IEnumerable<IentityBase>> matchedEntity, int i)
+        {
+          
+                foreach (var posMatch in multyEnt.parts.Split(';').Where(x=>x!=""))
+                {
+                     var j = i;
+                 //   var HOOP = 3;
+                    var options = posMatch.Split('#').ToList();
+                    options.ForEach(e => e.Trim());
+                    foreach (var ent in matchedEntity[j])
+                    {
+                        if (options.Contains(ent.entityValue))
+                        {
+                            options.Remove(ent.entityValue);
+                            if (!options.Any())
+                            {
+                                return posMatch.Split('#').Count();
+                            }
+                            j++;
+                        if (j < matchedEntity.Count){continue;}
+                        else break;
+                        
+                    }
+                }
+            }
+            return -1;
+        }
+
+        private void WordObjectFromEntity(List<WordObject> sentence, List<WordObject> newSentence, IentityBase ent)
+        {
+
+
+            var newWord = sentence[ent.entityID].clone();
+
+            if (ent.entityType == "organizationWord")
+            {
+                newWord.Amount = amountType.plural;
+                newWord.Gender = genderType.masculine;
+            }
+
+            IMultyEntity mEnt;
+            if (ent.entityValue.Split(' ').Count() > 0) {
+                newWord.Text = ent.entityValue;
+                if ((mEnt = ent as IMultyEntity) != null){
+                    newWord.Lemma = mEnt.parts.Split(';')[0];
+                }else{
+                    newWord.Lemma = newWord.Text;
+                }
+            }
+            else
+            {
+                newWord.Lemma = ent.entityValue;
+            }
+
+            newWord.WordT = WordObject.typeFromString(ent.entityType);
+            newSentence.Add(newWord);
+        }
+
+
+        private IEnumerable<IentityBase> findMultyMatch(IEnumerable<IMultyEntity> matchedMultyEntity, List<IEnumerable<IentityBase>> matchedEntity, int i, List<string> selected)
+        {
+            List<IentityBase> match = new List<IentityBase>();
+
+            if (matchedMultyEntity != null && matchedMultyEntity.Any())
+            {
+                IEnumerable<IMultyEntity> multyMatch = new List<IMultyEntity>();
+                foreach (var e in matchedEntity[i])
+                {
+                    if ((multyMatch = findMultyMatch(matchedMultyEntity, e.entityValue)).Count() > 0)
+                    {
+                        selected.Add(e.entityValue);
+                        if (matchedEntity.Count > i + 1)
+                        {
+                            var res = findMultyMatch(multyMatch, matchedEntity, i + 1, selected);
+                            if (res.Count() > 0)
+                            {
+                                match.AddRange(res);
+                            }
+                        }
+                    }
+
+                }
+            }
+
+
+            if (match.Any()){ return match;}
+            else {  return matchedMultyEntity; }
+           
+        }
+
+        private IEnumerable<IMultyEntity> findMultyMatch(IEnumerable<IMultyEntity> matchedEntity,string ent)
+        {
+            return matchedEntity.Where(x => x.parts.Split('#', ';').Any(e => e.Trim() == ent));
         }
 
         private string removePrefix(string searchText, WordObject wordObject)
         {
-            foreach(var c in wordObject.Prefixes)
+            foreach (var c in wordObject.Prefixes)
             {
-                if(c != "ה")
+                //   if(c != "ה" && searchText.Length > 0)
                 searchText = searchText.Remove(0, 1);
             }
 
             return searchText;
         }
 
-        private int entitySelector(Ientity x)
+        private int entitySelector(IentityBase x)
         {
             switch (x.entityType)
             {
@@ -398,7 +576,7 @@ namespace NLP.NLP
 
         private IEnumerable<Ientity> findMatch(IEnumerable<Ientity> quarible, string text)
         {
-            quarible = quarible.Where(x=>x.entitySynonimus.Contains(";" +text));
+            quarible = quarible.Where(x => x.entitySynonimus.Contains(";" + text + ";"));
             return quarible;
         }
 
@@ -409,18 +587,18 @@ namespace NLP.NLP
             var entities = DBctrl1.getEntitys().AsQueryable();
             foreach (var s in DBctrl1.getAllSubQuestions())
             {
-                var sentenses = meniAnalize(s.answerText,false);
-                foreach(var sen in sentenses)
+                var sentenses = meniAnalize(s.answerText, false);
+                foreach (var sen in sentenses)
                 {
                     var relevant = sen.Where(x => x.isEntity());
-                    foreach(var w in relevant)
+                    foreach (var w in relevant)
                     {
                         var wText = w.Lemma == null || w.Lemma.Length == 1 ? w.Text : w.Lemma;
                         if (!findMatch(entities, wText).Any())
                         {
                             var ent = new entity();
                             ent.entitySynonimus = ";" + wText + ";";
-                           ent.entityType = Enum.GetName(typeof(WordType), w.WordT);
+                            ent.entityType = Enum.GetName(typeof(WordType), w.WordT);
                             ent.entityValue = wText;
                             entList.Add(ent);
                         }
@@ -432,122 +610,7 @@ namespace NLP.NLP
 
 
 
-        //public    string getClass(string text)
-        //{
-        //    //    var a = ma.createSentence(inputText);
-        //    var context = new TextContext();
-        //    var sen = meniAnalize(text);
-        //    string res = null;
-        //    ContentList input = new ContentList();
-        //    foreach (var s in sen)
-        //    {
-        //        foreach (var w in s.Words)
-        //        {
-                    
-        //            switch (w.Text)
-        //            {
-        //                case "א":
-        //                case "'א":
-        //                case "אלף":
-
-        //                    res = "א";
-        //                    break;
-        //                case "ב":
-        //                case "'ב":
-        //                case "בית":
-
-        //                    res = "ב";
-        //                    break;
-        //                case "ג":
-        //                case "'ג":
-        //                case "גימל":
-        //                    res = "ג";
-
-        //                    break;
-        //                case "ד":
-        //                case "'ד":
-        //                case "דלת":
-        //                    res = "ד";
-
-        //                    break;
-        //                case "ה":
-        //                case "'ה":
-        //                case "הי":
-        //                    res = "ה";
-
-        //                    break;
-        //                case "ו":
-        //                case "'ו":
-        //                case "וו":
-
-        //                    res = "ו";
-        //                    break;
-
-        //                case "ז":
-        //                case "'ז":
-        //                case "זוד":
-        //                case "שזשזת":
-        //                    res = "ז";
-        //                    break;
-
-        //                case "ח":
-        //                case "'ח":
-        //                case "חית":
-        //                    res = "ח";
-        //                    break;
-
-        //                case "ט":
-        //                case "'ט":
-        //                case "טוד":
-        //                case "חמישית":
-        //                case "חמשוש":
-        //                case "חמשושית":
-        //                    res = "ט";
-        //                    break;
-
-
-
-
-        //                case "י":
-        //                case "'י":
-        //                case "יוד":
-        //                case "שישית":
-        //                case "שישיסט":
-        //                case "שישיסטית":
-        //                    res = "י";
-        //                    break;
-
-        //                case "יא":
-        //                case "י\"א":
-        //                case "יא'":
-        //                case "'יא":
-        //                case "שביעית":
-        //                case "שביעיסט":
-        //                case "שביעיסטית":
-        //                    res = "יא";
-        //                    break;
-
-        //                case "יב":
-        //                case "י\"ב":
-        //                case "יב'":
-        //                case "'יב":
-        //                case "שמינית":
-        //                    res = "יב";
-        //                    break;
-
-
-        //            }
-        //        }
-        //    }
-
-        //    return res;
-        //}
-
-
-
-
-
-        private   string removeParentheses(string input, char start, char end)
+        private string removeParentheses(string input, char start, char end)
         {
             string res = input;
             while (res.Contains(start) && res.Contains(end))
@@ -560,287 +623,45 @@ namespace NLP.NLP
             return res;
         }
 
-
-
-        //public Sentence createSentence(string inputText)
-        //{
-
-        //    var sentence = new Sentence(inputText);
-
-        //    m_lemmatizer.SetStream(new System.IO.StringReader(inputText));
-
-        //    string word = string.Empty;
-        //    List<HebMorph.Token> tokens = new List<HebMorph.Token>();
-        //    while (m_lemmatizer.LemmatizeNextToken(out word, tokens) > 0)
-        //    {
-        //        if (tokens.Count == 0)
-        //        {
-        //            throw new Exception("{0}: Unrecognized word" + word);
-        //        }
-
-
-
-        //        string curWord = string.Empty;
-        //        //   foreach (Token r in tokens)
-        //        //    {
-
-
-
-        //        //  HebrewToken ht = tokens[0] as HebrewToken;
-
-
-
-        //        HebrewToken ht = findBestToken(tokens);
-
-
-        //        var a = radix.Lookup(ht.Text);
-
-        //        if (ht == null)
-        //            continue;
-
-        //        var dictWord = HebDictionary.get(ht.Lemma);
-
-        //        if (ht.Mask.HasFlag(DMask.D_VERB))
-        //        {
-        //            sentence.Add(new GufWord(ht));
-        //            sentence.Add(new VerbWord(ht));
-        //        }
-        //        else if (ht.Mask.HasFlag(DMask.D_NOUN))
-        //        {
-        //            sentence.Add(new NounWord(ht));
-        //            sentence.Add(new GufWord(ht));
-        //        }
-        //        else if (dictWord is PrepWord)
-        //        {
-        //            createPrep(ht);
-        //            sentence.Add(new unknownWord(ht));
-        //            sentence.Add(new GufWord(ht));
-        //        }
-        //        else if (dictWord != null)
-        //        {
-        //            sentence.Add(dictWord);
-        //        }
-        //        else
-        //        {
-        //            sentence.Add(new unknownWord(ht));
-        //        }
-
-        //        //    }
-
-
-
-        //    }
-
-        //    if (inputText.EndsWith("?"))
-        //    {
-        //        sentence.Add(new MarkWord("?"));
-        //    }
-        //    else if (inputText.EndsWith("!"))
-        //    {
-        //        sentence.Add(new MarkWord("!"));
-        //    }
-        //    return sentence;
-        //}
-
-        //private HebrewToken findBestToken(List<HebMorph.Token> tokens)
-        //{
-
-        //    //reduce verb score (strange verbs..)
-        //    foreach (HebrewToken ht in tokens)
-        //    {
-        //        if (ht.Mask.HasFlag(DMask.D_VERB))
-        //        {
-        //            ht.Score *= 0.9f;
-        //        }
-        //    }
-
-
-
-
-
-        //    var hebComp = new HebComp();
-        //    tokens.Sort(hebComp);
-        //    return tokens[0] as HebrewToken;
-        //}
-
-
-
-        //class HebComp : IComparer<HebMorph.Token>
-        //{
-        //    public int Compare(HebMorph.Token x, HebMorph.Token y)
-        //    {
-
-        //        var xt = x as HebrewToken;
-        //        var yt = y as HebrewToken;
-
-        //        var diff = (int)((yt.Score - xt.Score) * 100);
-        //        return diff;
-        //    }
-        //}
-
-        //PrepositionObject createPrep(HebrewToken ht)
-        //{
-
-
-        //    ht.Mask = DMask.D_ADJ;
-        //    if (ht.Lemma != ht.Text)
-        //    {
-        //        var diff = ht.Text.Remove(0, ht.Lemma.Length);
-        //        if (diff == "ך" | diff == "יך")
-        //        {
-        //            ht.Mask = ht.Mask | DMask.D_SECOND | DMask.D_SINGULAR | DMask.D_ADJ;
-        //        }
-        //        else if (diff == "י" | diff == "יי")
-        //        {
-        //            ht.Mask = ht.Mask | DMask.D_FIRST | DMask.D_SINGULAR | DMask.D_MASCULINE;
-        //        }
-        //        else if (diff == "ו" | diff == "יו")
-        //        {
-        //            ht.Mask = ht.Mask | DMask.D_SECOND | DMask.D_SINGULAR | DMask.D_MASCULINE;
-        //        }
-        //        else if (diff == "ה" | diff == "יה")
-        //        {
-        //            ht.Mask = ht.Mask | DMask.D_SECOND | DMask.D_SINGULAR | DMask.D_FEMININE;
-        //        }
-        //        else if (diff == "כם" | diff == "יכם")
-        //        {
-        //            ht.Mask = ht.Mask | DMask.D_SECOND | DMask.D_NUMMASK | DMask.D_MASCULINE;
-        //        }
-        //        else if (diff == "כן" | diff == "יכן")
-        //        {
-        //            ht.Mask = ht.Mask | DMask.D_SECOND | DMask.D_NUMMASK | DMask.D_FEMININE;
-        //        }
-        //        else if (diff == "נו" | diff == "ינו")
-        //        {
-        //            ht.Mask = ht.Mask | DMask.D_FIRST | DMask.D_NUMMASK;
-        //        }
-        //        else if (diff == "הם" | diff == "יהם")
-        //        {
-        //            ht.Mask = ht.Mask | DMask.D_THIRD | DMask.D_NUMMASK | DMask.D_MASCULINE; ;
-        //        }
-        //        else if (diff == "הן" | diff == "יהן")
-        //        {
-        //            ht.Mask = ht.Mask | DMask.D_THIRD | DMask.D_NUMMASK | DMask.D_FEMININE;
-        //        }
-
-        //    }
-
-
-
-        //    return null;
-        //}
-
-
-
-        //ceack if part of the sentence is a prase
-        //private List<WordObject> checkPhrases(List<WordObject> sentence)
-        //{
-
-        //    var words = sentence;
-
-
-        //    //length
-        //    for (int i = words.Count; i > 1; i--)
-        //    {
-
-        //        //start
-        //        for (int k = 0; k + i <= words.Count; k++)
-        //        {
-        //            var str = "";
-        //            //accemulate
-        //            for (int j = 0; j < i && k + j < words.Count; j++)
-        //            {
-        //                str += words[k + j].Text + " ";
-        //            }
-
-
-        //            if (hebDictionary.contains(str.Trim()))
-        //            {
-        //                sentence.RemoveRange(k, i);
-        //                sentence.Insert(k, hebDictionary.get(str.Trim()));
-        //            }
-
-
-        //        }
-
-        //    }
-
-
-        //    return sentence;
-        //}
-
-
-
-        //public   String getName(string inputText)
-        //{
-
-        //    //    var a = MorfAnalizer.createSentence(inputText);
-        //    var context = new TextContext();
-        //    var sen = meniAnalize(inputText);
-        //    var sa = new SemanticAnalizer();
-
-        //    if (sen.Count == 1 && sen[0].Count == 1 && sen[0][0].isA(nounWord))
-        //    {
-        //        return sen[0][0].Text;
-        //    }
-
-        //    ContentList input = new ContentList();
-        //    foreach (var s in sen)
-        //    {
-        //        foreach (var w in s)
-        //        {
-        //            if (sa.isAName(w))
-        //            {
-        //                return w.Text;
-        //            }
-        //        }
-        //    }
-
-        //    return null;
-
-        //}
-
-        //public   string GetGender(string text)
-        //{
-        //    //    var a = MorfAnalizer.createSentence(inputText);
-        //    var context = new TextContext();
-        //    var sen = meniAnalize(text);
-
-        //    ContentList input = new ContentList();
-        //    foreach (var s in sen)
-        //    {
-        //        foreach (var w in s)
-        //        {
-        //            if (w.Text == "בן")
-        //            {
-        //                return "masculine";
-        //            }
-        //            if (w.Gender != personObject.genderType.unspecified)
-        //            {
-        //                return w.Gender.ToString();
-        //            }
-        //        }
-        //    }
-
-        //    return null;
-        //}
-
-        //public   string GetGeneralFeeling(string text)
-        //{
-        //    //    var a = MorfAnalizer.createSentence(inputText);
-        //    if (text.Contains("לא טוב") || text.Contains("רע") || text.Contains("גרוע") || text.Contains("על הפנים"))
-        //    {
-        //        return "good";
-        //    }
-        //    else if (text.Contains("טוב") || text.Contains("סבבה") || text.Contains("מצויין") || text.Contains("אחלה"))
-        //    {
-        //        return "bad";
-        //    }
-        //    else
-        //    {
-        //        return "netural";
-        //    }
-        //}
-
+        
+
+
+        private void addMatch(WordObject word, bool isUserInput, List<WordObject> newSentence, IEnumerable<Ientity> match)
+        {
+            Ientity entity = null;
+            if (match.Count() > 1)
+            {
+                var list = match.ToList();
+                list.Sort((x, y) => entitySelector(x) - entitySelector(y));
+                entity = list.FirstOrDefault();
+            }
+            else
+            {
+                entity = match.FirstOrDefault();
+            }
+
+            if (!isUserInput)
+            {
+                var newWord = word.clone(); ;
+                newWord.Text = entity.entityValue;
+                newWord.Lemma = entity.entityValue;
+                newWord.WordT = WordObject.typeFromString(entity.entityType);
+                newSentence.Add(newWord);
+
+            }
+            else
+            {
+                foreach (var w in match)
+                {
+                    var newWord = word.clone(); ;
+                    newWord.Text = w.entityValue;
+                    newWord.Lemma = w.entityValue;
+                    newWord.WordT = WordObject.typeFromString(w.entityType);
+                    newSentence.Add(newWord);
+
+                }
+            }
+
+        }
     }
     }

@@ -27,10 +27,10 @@
         </EntityType>
         <EntityType Name="entity">
           <Key>
-            <PropertyRef Name="entityID" />
+            <PropertyRef Name="entityValue" />
           </Key>
           <Property Name="entityID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="entityValue" Type="nvarchar" MaxLength="100" />
+          <Property Name="entityValue" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="entityType" Type="nvarchar" MaxLength="100" />
           <Property Name="entitySynonimus" Type="nvarchar(max)" />
         </EntityType>
@@ -63,6 +63,16 @@ warning 6002: The table/view 'mindcet.dbo.intent' does not have a primary key de
           <Property Name="mediaKey" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="value" Type="nvarchar" MaxLength="200" />
           <Property Name="flags" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="multyEntity">
+          <Key>
+            <PropertyRef Name="entityValue" />
+          </Key>
+          <Property Name="entityID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="entityValue" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="parts" Type="nvarchar(max)" />
+          <Property Name="singleValue" Type="nvarchar" MaxLength="50" />
+          <Property Name="entityType" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="OtherLog">
           <Key>
@@ -144,6 +154,7 @@ warning 6002: The table/view 'mindcet.dbo.intent' does not have a primary key de
           <EntitySet Name="entity" EntityType="Self.entity" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ErrorLog" EntityType="Self.ErrorLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="media" EntityType="Self.media" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="multyEntity" EntityType="Self.multyEntity" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OtherLog" EntityType="Self.OtherLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Question" EntityType="Self.Question" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SubQuestion" EntityType="Self.SubQuestion" Schema="dbo" store:Type="Tables" />
@@ -188,10 +199,10 @@ warning 6002: The table/view 'mindcet.dbo.intent' does not have a primary key de
         </EntityType>
         <EntityType Name="entity">
           <Key>
-            <PropertyRef Name="entityID" />
+            <PropertyRef Name="entityValue" />
           </Key>
           <Property Name="entityID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="entityValue" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="entityValue" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="entityType" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="entitySynonimus" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
@@ -300,6 +311,7 @@ warning 6002: The table/view 'mindcet.dbo.intent' does not have a primary key de
             <End Role="SubQuestion" EntitySet="SubQuestion" />
           </AssociationSet>
           <EntitySet Name="userScore" EntityType="mindcetModel.userScore" />
+          <EntitySet Name="multyEntity" EntityType="mindcetModel.multyEntity" />
         </EntityContainer>
         <EntityType Name="userScore">
           <Key>
@@ -316,6 +328,16 @@ warning 6002: The table/view 'mindcet.dbo.intent' does not have a primary key de
           <Property Name="QuestionID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="SubquestionID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
           </EntityType>
+        <EntityType Name="multyEntity">
+          <Key>
+            <PropertyRef Name="entityValue" />
+          </Key>
+          <Property Name="parts" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="singleValue" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="entityType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="entityValue" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="entityID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -444,6 +466,17 @@ warning 6002: The table/view 'mindcet.dbo.intent' does not have a primary key de
                 <ScalarProperty Name="category" ColumnName="category" />
                 <ScalarProperty Name="userID" ColumnName="userID" />
               </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="multyEntity">
+            <EntityTypeMapping TypeName="mindcetModel.multyEntity">
+              <MappingFragment StoreEntitySet="multyEntity">
+                <ScalarProperty Name="entityID" ColumnName="entityID" />
+                <ScalarProperty Name="entityValue" ColumnName="entityValue" />
+                <ScalarProperty Name="entityType" ColumnName="entityType" />
+                <ScalarProperty Name="singleValue" ColumnName="singleValue" />
+                <ScalarProperty Name="parts" ColumnName="parts" />
+                </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
         </EntityContainerMapping>

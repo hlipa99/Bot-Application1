@@ -39,7 +39,7 @@ namespace NLP.Tests
         {
             ma.HttpCtrl = mockOuterAPICtrl.Object;
             ma.DBctrl1 = mockDB.Object;
-           var res = ma.meniAnalize("בן גוריון והנהגת ארגון ההגנה היו אחראים במידה רבה להכרזת המדינה ולניסוח מגילת העצמאות",false);
+           var res = ma.meniAnalize("ראש הממשלה הראשון והנהגת ארגון ההגנה היו אחראים במידה רבה להכרזת המדינה ולניסוח מגילת העצמאות", false);
 
             //good
             Assert.IsTrue(res.FirstOrDefault().Contains(moqWordObject1.Object));

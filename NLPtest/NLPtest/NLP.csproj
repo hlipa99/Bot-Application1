@@ -256,6 +256,7 @@
     <Compile Include="Exceptions\DictionaryException.cs" />
     <Compile Include="HebWords\HebTemplate.cs" />
     <Compile Include="Exceptions\TemplateException.cs" />
+    <Compile Include="IentityBase.cs" />
     <Compile Include="MorfObjects\ExtTokenWithBuilder.cs" />
     <Compile Include="QnA\DBDataException.cs" />
     <Compile Include="QnA\QAEngin.cs" />

@@ -44,8 +44,17 @@ namespace UnitTestProject1
         public Mock<Ientity> mockEntity3 = new Mock<Ientity>();
         public Mock<Ientity> mockEntity4 = new Mock<Ientity>();
         public Mock<Ientity> mockEntity5 = new Mock<Ientity>();
+        public Mock<Ientity> mockEntity51 = new Mock<Ientity>();
+        public Mock<Ientity> mockEntity52 = new Mock<Ientity>();
         public Mock<Ientity> mockEntity6 = new Mock<Ientity>();
         public Mock<Ientity> mockEntity7 = new Mock<Ientity>();
+        public Mock<Ientity> mockEntity8 = new Mock<Ientity>();
+        public Mock<Ientity> mockEntity81 = new Mock<Ientity>();
+        public Mock<Ientity> mockEntity82 = new Mock<Ientity>();
+        public Mock<IMultyEntity> mockMultyEntity1 = new Mock<IMultyEntity>();
+        public Mock<IMultyEntity> mockMultyEntity2 = new Mock<IMultyEntity>();
+        public Mock<IMultyEntity> mockMultyEntity3 = new Mock<IMultyEntity>();
+
 
         public Mock<WordObject> moqWordObject1 = new Mock<WordObject>();
         public Mock<WordObject> moqWordObject2 = new Mock<WordObject>();
@@ -79,6 +88,7 @@ namespace UnitTestProject1
             mockConvCtrl.Setup(x => x.Db).Returns(mockDB.Object);
             mockConvCtrl.Setup(x => x.User).Returns(mockUserMus.Object);
 
+           
             mockUserMus.Setup(x => x.UserName).Returns("יוחאי");
             mockUserMus.Setup(x => x.UserClass).Returns("יא");
             mockUserMus.Setup(x => x.UserGender).Returns("musculine");
@@ -97,34 +107,96 @@ namespace UnitTestProject1
             mockSubQqestion1.Setup(x => x.AnswerScore).Returns(100);
             mockSubQqestion1.Setup(x => x.answerText).Returns("תשובה טובה לתת שאלה 1");
 
+            mockEntity1.SetupAllProperties();
             mockEntity1.Setup(x => x.entityValue).Returns("טובה");
             mockEntity1.Setup(x => x.entitySynonimus).Returns(";טובה;");
             mockEntity1.Setup(x => x.entityType).Returns("personWord");
+            mockEntity1.Setup(x => x.clone()).Returns(mockEntity1.Object);
 
-
+            mockEntity2.SetupAllProperties();
             mockEntity2.Setup(x => x.entityValue).Returns("הדברים");
             mockEntity2.Setup(x => x.entitySynonimus).Returns(";הדברים;");
             mockEntity2.Setup(x => x.entityType).Returns("conceptWord");
+            mockEntity2.Setup(x => x.clone()).Returns(mockEntity2.Object);
 
+            mockEntity3.SetupAllProperties();
             mockEntity3.Setup(x => x.entityValue).Returns("מקום");
             mockEntity3.Setup(x => x.entitySynonimus).Returns(";מקום;");
             mockEntity3.Setup(x => x.entityType).Returns("locationWord");
+            mockEntity3.Setup(x => x.clone()).Returns(mockEntity3.Object);
 
-            mockEntity4.Setup(x => x.entityValue).Returns("הכרזת העצמאות");
-            mockEntity4.Setup(x => x.entitySynonimus).Returns(";הכרזת העצמאות;");
+            mockEntity4.SetupAllProperties();
+            mockEntity4.Setup(x => x.entityValue).Returns("הכרזה");
+            mockEntity4.Setup(x => x.entitySynonimus).Returns("הכריז;כרז;הכרזה;");
             mockEntity4.Setup(x => x.entityType).Returns("eventWord");
+            mockEntity4.Setup(x => x.clone()).Returns(mockEntity4.Object);
 
-            mockEntity5.Setup(x => x.entityValue).Returns("מגילת העצמאות");
-            mockEntity5.Setup(x => x.entitySynonimus).Returns(";מגילת העצמאות;");
+            mockEntity5.SetupAllProperties();
+            mockEntity5.Setup(x => x.entityValue).Returns("מגילה");
+            mockEntity5.Setup(x => x.entitySynonimus).Returns(";מגילה;");
             mockEntity5.Setup(x => x.entityType).Returns("conceptWord");
+            mockEntity5.Setup(x => x.clone()).Returns(mockEntity5.Object);
 
+            mockEntity51.SetupAllProperties();
+            mockEntity51.Setup(x => x.entityValue).Returns("עצמאות");
+            mockEntity51.Setup(x => x.entitySynonimus).Returns("עצמאי;עצמאות;");
+            mockEntity51.Setup(x => x.entityType).Returns("conceptWord");
+            mockEntity51.Setup(x => x.clone()).Returns(mockEntity51.Object);
+
+            mockEntity52.SetupAllProperties();
+            mockEntity52.Setup(x => x.entityValue).Returns("מדינה");
+            mockEntity52.Setup(x => x.entitySynonimus).Returns("ארץ;מדינה;");
+            mockEntity52.Setup(x => x.entityType).Returns("locationWord");
+            mockEntity52.Setup(x => x.clone()).Returns(mockEntity52.Object);
+
+            mockMultyEntity1.SetupAllProperties();
+            mockMultyEntity1.Setup(x => x.entityValue).Returns("מגילת העצמאות");
+            mockMultyEntity1.Setup(x => x.parts).Returns(";מגילה#עצמאות;");
+            mockMultyEntity1.Setup(x => x.entityType).Returns("conceptWord");
+            mockMultyEntity1.Setup(x => x.clone()).Returns(mockMultyEntity1.Object);
+
+            mockMultyEntity2.SetupAllProperties();
+            mockMultyEntity2.Setup(x => x.entityValue).Returns("הכרזת העצמאות");
+            mockMultyEntity2.Setup(x => x.parts).Returns(";הכרזה#מדינה;הכרזה#עצמאות;");
+            mockMultyEntity2.Setup(x => x.entityType).Returns("eventWord");
+            mockMultyEntity2.Setup(x => x.clone()).Returns(mockMultyEntity2.Object);
+
+            mockMultyEntity3.SetupAllProperties();
+            mockMultyEntity3.Setup(x => x.entityValue).Returns("ראש הממשלה הראשון");
+            mockMultyEntity3.Setup(x => x.parts).Returns(";מנהיג#ממשלה# 1;");
+            mockMultyEntity3.Setup(x => x.entityType).Returns("conceptWord");
+            mockMultyEntity3.Setup(x => x.singleValue).Returns("דוד בן גוריון");
+            mockMultyEntity3.Setup(x => x.clone()).Returns(mockMultyEntity3.Object);
+
+            mockEntity6.SetupAllProperties();
             mockEntity6.Setup(x => x.entityValue).Returns("ההגנה");
-            mockEntity6.Setup(x => x.entitySynonimus).Returns(";ההגנה;");
+            mockEntity6.Setup(x => x.entitySynonimus).Returns(";ההגנה;הגנה;");
             mockEntity6.Setup(x => x.entityType).Returns("organizationWord");
+            mockEntity6.Setup(x => x.clone()).Returns(mockEntity6.Object);
 
+            mockEntity7.SetupAllProperties();
             mockEntity7.Setup(x => x.entityValue).Returns("דוד בן גוריון");
             mockEntity7.Setup(x => x.entitySynonimus).Returns(";דוד בן גוריון;");
             mockEntity7.Setup(x => x.entityType).Returns("personWord");
+            mockEntity7.Setup(x => x.clone()).Returns(mockEntity7.Object);
+
+            mockEntity8.SetupAllProperties();
+            mockEntity8.Setup(x => x.entityValue).Returns("מנהיג");
+            mockEntity8.Setup(x => x.entitySynonimus).Returns(";מנהיג;ראש;");
+            mockEntity8.Setup(x => x.entityType).Returns("nounWord");
+            mockEntity8.Setup(x => x.clone()).Returns(mockEntity8.Object);
+
+            mockEntity81.SetupAllProperties();
+            mockEntity81.Setup(x => x.entityValue).Returns("ממשלה");
+            mockEntity81.Setup(x => x.entitySynonimus).Returns(";ממשלה;");
+            mockEntity81.Setup(x => x.entityType).Returns("conceptWord");
+            mockEntity81.Setup(x => x.clone()).Returns(mockEntity81.Object);
+
+            mockEntity82.SetupAllProperties();
+            mockEntity82.Setup(x => x.entityValue).Returns("1");
+            mockEntity82.Setup(x => x.entitySynonimus).Returns(";ראשון;1;");
+            mockEntity82.Setup(x => x.entityType).Returns("numeralWord");
+            mockEntity82.Setup(x => x.clone()).Returns(mockEntity82.Object);
 
             mockStudySession.Setup(x => x.Category).Returns("לאומיות");
             mockStudySession.Setup(x => x.SessionLength).Returns(3);
@@ -162,8 +234,8 @@ namespace UnitTestProject1
             mockDB.Setup(x => x.getAllCategory()).Returns(new string[] { "לאומיות" });
             mockDB.Setup(x => x.getQuestion("לאומיות")).Returns(new IQuestion[] { mockQuestion1.Object });
             mockDB.Setup(x => x.getBotPhrase(It.IsAny<Pkey>(), new string[] { }, new string[] { })).Returns((Pkey key, string[] a, string[] b) => new string[] { Enum.GetName(typeof(Pkey), key) });
-            mockDB.Setup(x => x.getEntitys()).Returns(new HashSet<Ientity>(new Ientity[] { mockEntity1.Object,mockEntity2.Object, mockEntity4.Object, mockEntity5.Object, mockEntity6.Object, mockEntity7.Object}));
-
+            mockDB.Setup(x => x.getEntitys()).Returns(new HashSet<Ientity>(new Ientity[] { mockEntity1.Object,mockEntity2.Object, mockEntity4.Object, mockEntity5.Object, mockEntity51.Object, mockEntity6.Object, mockEntity7.Object, mockEntity8.Object , mockEntity82.Object , mockEntity81.Object , mockEntity52.Object }));
+            mockDB.Setup(x => x.getMultyEntitys()).Returns(new IMultyEntity[] { mockMultyEntity1.Object, mockMultyEntity2.Object, mockMultyEntity3.Object });
 
 
 
@@ -196,18 +268,14 @@ namespace UnitTestProject1
             moqWordObject4.Setup(x => x.WordT).Returns(WordObject.WordType.eventWord);
             moqWordObject4.Setup(x => x.Text).Returns("הכרזת העצמאות");
             moqWordObject4.Setup(x => x.haveTypeOf(It.Is<WordObject>(z => z.WordT == WordObject.WordType.eventWord))).Returns(true);
-            moqWordObject4.Setup(x => x.Gender).Returns(genderType.unspecified);
-            moqWordObject4.Setup(x => x.Amount).Returns(amountType.unspecified);
+            moqWordObject4.Setup(x => x.Gender).Returns(genderType.feminine);
+            moqWordObject4.Setup(x => x.Amount).Returns(amountType.singular);
 
 
             mockOuterAPICtrl.Setup(x => x.correctSpelling(It.IsAny<String>())).Returns((String y)=> y);
             mockOuterAPICtrl.Setup(x => x.getIntentApiAi(It.IsAny<String>(), It.IsAny<String>())).Returns((String text,String context) => "historyAnswer");
             mockOuterAPICtrl.Setup(x => x.sendToHebrewMorphAnalizer(It.IsAny<String>())).Returns((String text) =>
-            "[{\"lemma\":\"מגילת העצמאות\",\"ner\":\"O\",\"text\":\"מגילת העצמאות\",\"gender\":\"unspecified\",\"number\":\"unspecified\",\"person\":\"unspecified\",\"polarity\":\"unspecified\",\"pos\":\"foreign\",\"posType\":\"unspecified\",\"prefixes\":[],\"tense\":\"unspecified\",\"isDefinite\":false}," +
-            "{\"lemma\":\"הכרזת העצמאות\",\"ner\":\"O\",\"text\":\"הכרזת העצמאות\",\"gender\":\"unspecified\",\"number\":\"unspecified\",\"person\":\"unspecified\",\"polarity\":\"unspecified\",\"pos\":\"foreign\",\"posType\":\"unspecified\",\"prefixes\":[],\"tense\":\"unspecified\",\"isDefinite\":false}," +
-             "{\"lemma\":\"דוד בן גוריון\",\"ner\":\"O\",\"text\":\"דוד בן גוריון\",\"gender\":\"unspecified\",\"number\":\"unspecified\",\"person\":\"unspecified\",\"polarity\":\"unspecified\",\"pos\":\"foreign\",\"posType\":\"unspecified\",\"prefixes\":[],\"tense\":\"unspecified\",\"isDefinite\":false}," +
-            "{\"lemma\":\"ההגנה\",\"ner\":\"O\",\"text\":\"ההגנה\",\"gender\":\"unspecified\",\"number\":\"unspecified\",\"person\":\"unspecified\",\"polarity\":\"unspecified\",\"pos\":\"foreign\",\"posType\":\"unspecified\",\"prefixes\":[],\"tense\":\"unspecified\",\"isDefinite\":false}]");
-
+            "[{ \"lemma\":\"ראש\",\"ner\":\"O\",\"text\":\"ראש\",\"gender\":\"masculine\",\"number\":\"singular\",\"person\":\"unspecified\",\"polarity\":\"unspecified\",\"pos\":\"noun\",\"posType\":\"unspecified\",\"prefixes\":[],\"tense\":\"unspecified\",\"isDefinite\":false},{\"lemma\":\"ממשלה\",\"ner\":\"O\",\"text\":\"הממשלה\",\"gender\":\"feminine\",\"number\":\"singular\",\"person\":\"unspecified\",\"polarity\":\"unspecified\",\"pos\":\"noun\",\"posType\":\"unspecified\",\"prefixes\":[],\"tense\":\"unspecified\",\"isDefinite\":true},{\"lemma\":\"ORD1\",\"ner\":\"O\",\"text\":\"הראשון\",\"gender\":\"masculine\",\"number\":\"singular\",\"person\":\"unspecified\",\"polarity\":\"unspecified\",\"pos\":\"numeral\",\"posType\":\"numeral ordinal\",\"prefixes\":[],\"tense\":\"unspecified\",\"isDefinite\":true},{\"lemma\":\"הנהגה\",\"ner\":\"O\",\"text\":\"והנהגת\",\"gender\":\"feminine\",\"number\":\"singular\",\"person\":\"unspecified\",\"polarity\":\"unspecified\",\"pos\":\"noun\",\"posType\":\"unspecified\",\"prefixes\":[\"ו\"],\"tense\":\"unspecified\",\"isDefinite\":false},{\"lemma\":\"ארגון\",\"ner\":\"O\",\"text\":\"ארגון\",\"gender\":\"masculine\",\"number\":\"singular\",\"person\":\"unspecified\",\"polarity\":\"unspecified\",\"pos\":\"noun\",\"posType\":\"unspecified\",\"prefixes\":[],\"tense\":\"unspecified\",\"isDefinite\":false},{\"lemma\":\"הגנה\",\"ner\":\"O\",\"text\":\"ההגנה\",\"gender\":\"feminine\",\"number\":\"singular\",\"person\":\"unspecified\",\"polarity\":\"unspecified\",\"pos\":\"noun\",\"posType\":\"unspecified\",\"prefixes\":[],\"tense\":\"unspecified\",\"isDefinite\":true},{\"lemma\":\"הוא\",\"ner\":\"O\",\"text\":\"היו\",\"gender\":\"masculine\",\"number\":\"plural\",\"person\":\"2\",\"polarity\":\"positive\",\"pos\":\"copula\",\"posType\":\"unspecified\",\"prefixes\":[],\"tense\":\"imperative\",\"isDefinite\":false},{\"lemma\":\"אחראי\",\"ner\":\"O\",\"text\":\"אחראים\",\"gender\":\"masculine\",\"number\":\"plural\",\"person\":\"unspecified\",\"polarity\":\"unspecified\",\"pos\":\"adjective\",\"posType\":\"unspecified\",\"prefixes\":[],\"tense\":\"unspecified\",\"isDefinite\":false},{\"lemma\":\"מידה\",\"ner\":\"O\",\"text\":\"במידה\",\"gender\":\"feminine\",\"number\":\"singular\",\"person\":\"unspecified\",\"polarity\":\"unspecified\",\"pos\":\"noun\",\"posType\":\"unspecified\",\"prefixes\":[\"ב\"],\"tense\":\"unspecified\",\"isDefinite\":false},{\"lemma\":\"רב\",\"ner\":\"O\",\"text\":\"רבה\",\"gender\":\"feminine\",\"number\":\"singular\",\"person\":\"unspecified\",\"polarity\":\"unspecified\",\"pos\":\"adjective\",\"posType\":\"unspecified\",\"prefixes\":[],\"tense\":\"unspecified\",\"isDefinite\":false},{\"lemma\":\"הכרזה\",\"ner\":\"O\",\"text\":\"להכרזת\",\"gender\":\"feminine\",\"number\":\"singular\",\"person\":\"unspecified\",\"polarity\":\"unspecified\",\"pos\":\"noun\",\"posType\":\"unspecified\",\"prefixes\":[\"ל\"],\"tense\":\"unspecified\",\"isDefinite\":false},{\"lemma\":\"מדינה\",\"ner\":\"O\",\"text\":\"המדינה\",\"gender\":\"feminine\",\"number\":\"singular\",\"person\":\"unspecified\",\"polarity\":\"unspecified\",\"pos\":\"noun\",\"posType\":\"unspecified\",\"prefixes\":[],\"tense\":\"unspecified\",\"isDefinite\":true},{\"lemma\":\"ניסוח\",\"ner\":\"O\",\"text\":\"ולניסוח\",\"gender\":\"masculine\",\"number\":\"singular\",\"person\":\"unspecified\",\"polarity\":\"unspecified\",\"pos\":\"noun\",\"posType\":\"unspecified\",\"prefixes\":[\"ו\",\"ל\"],\"tense\":\"unspecified\",\"isDefinite\":false},{\"lemma\":\"מגילה\",\"ner\":\"O\",\"text\":\"מגילת\",\"gender\":\"feminine\",\"number\":\"singular\",\"person\":\"unspecified\",\"polarity\":\"unspecified\",\"pos\":\"noun\",\"posType\":\"unspecified\",\"prefixes\":[],\"tense\":\"unspecified\",\"isDefinite\":false},{\"lemma\":\"עצמאות\",\"ner\":\"O\",\"text\":\"העצמאות\",\"gender\":\"feminine\",\"number\":\"singular\",\"person\":\"unspecified\",\"polarity\":\"unspecified\",\"pos\":\"noun\",\"posType\":\"unspecified\",\"prefixes\":[],\"tense\":\"unspecified\",\"isDefinite\":true}]");
 
             wordObjectsListList = new List<List<WordObject>>();
             wordObjectsList = new WordObject[] {

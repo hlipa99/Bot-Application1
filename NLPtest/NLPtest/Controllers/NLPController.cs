@@ -126,7 +126,7 @@ namespace NLP.Controllers
         {
             ObjectCache cache = MemoryCache.Default;
             var cachedItem = cache.Get(text + systemAnswerText);
-            if (cachedItem == null)
+            if (cachedItem == null || true)
             {
 
 
@@ -175,7 +175,8 @@ namespace NLP.Controllers
         }
         internal void updateEntityTable()
         {
-            Ma.searchAllAnswerForentities();
+            //Ma.searchAllAnswerForentities();
+            Ma.updateEntities();
         }
     }
 }

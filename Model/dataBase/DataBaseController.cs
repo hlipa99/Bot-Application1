@@ -316,6 +316,10 @@ namespace Model.dataBase
 
         }
 
+        public Entities8 updateDBmanual()
+        {
+            return DB;
+        }
 
         public virtual string[] getAllCategory()
         {
@@ -358,6 +362,26 @@ namespace Model.dataBase
             }
 
                 
+        }
+
+        public virtual IEnumerable<IMultyEntity> getMultyEntitys()
+        {
+            ObjectCache cache = MemoryCache.Default;
+            var cachedItem = cache.Get("getMultyEntitys");
+            if (cachedItem == null)
+            {
+                var item = DB.multyEntity;
+                var exp = new CacheItemPolicy();
+                exp.SlidingExpiration = (new TimeSpan(1, 0, 0, 0));
+                cache.Set("getMultyEntitys", item, exp);
+                return item;
+            }
+            else
+            {
+                return (IEnumerable<IMultyEntity>)cachedItem;
+            }
+
+
         }
 
         public virtual string[] getAllSubCategory(string catgoty)

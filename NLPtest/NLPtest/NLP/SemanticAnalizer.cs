@@ -336,9 +336,11 @@ namespace NLP.NLP
                 }
                 else
                 {
-                    throw new GufException(gufObject.Text);
+                    gufObject.Person = personType.Third;
                 }
-            }else if(context != null)
+            }
+
+            if (context != null)
             {
                 foreach (var o in context)
                 {

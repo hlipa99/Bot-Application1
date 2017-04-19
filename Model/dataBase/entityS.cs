@@ -20,5 +20,18 @@ namespace Model.dataBase
 
             return true;
         }
+
+        public IentityBase clone()
+        {
+            var newMulEnt = new entity();
+            newMulEnt.entityID = entityID;
+            newMulEnt.entityValue = entityValue;
+            newMulEnt.entityType = entityType;
+            newMulEnt.entitySynonimus = entitySynonimus;
+
+            return newMulEnt;
+        }
+
+
     }
 }

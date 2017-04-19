@@ -29,7 +29,6 @@ namespace NLP
         {
             InitializeComponent();
             heb = new HebDictionary();
-            heb.loadWords();
             
 
         }

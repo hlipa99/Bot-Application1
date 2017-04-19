@@ -210,6 +210,7 @@ namespace Bot_Application1.Controllers
            questionText = questionText.Replace("עיין", "עייני");
            questionText = questionText.Replace("הסתכל", "הסתכלי");
             questionText = questionText.Replace("הגדר", "הגדירי");
+            questionText = questionText.Replace("קרא", "קראי");
             return questionText;
         }
 

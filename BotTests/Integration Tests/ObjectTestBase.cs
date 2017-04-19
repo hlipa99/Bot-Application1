@@ -82,7 +82,7 @@ namespace UnitTestProject1
 
             userAnswerSubQuestion1 = "ירושלים נותרה מחולקת, והרבה ערבים נותרו כפליטים במדינות השכנות";
 
-            WordObject1.Text = "ערבי";
+            WordObject1.Text = "ערבים";
             WordObject1.Lemma = "ערבי";
             WordObject1.WordT = WordObject.WordType.organizationWord;
             WordObject1.Gender = genderType.masculine;
@@ -104,7 +104,7 @@ namespace UnitTestProject1
             Entity2.entityValue = "ירושלים";
             Entity2.entityType = "locationWord";
 
-            WordObject3.Text = "פליט";
+            WordObject3.Text = "פליטים";
             WordObject3.WordT = WordObject.WordType.personWord;
             WordObject3.Gender = genderType.masculine;
             WordObject3.Amount = amountType.plural;

@@ -17,6 +17,7 @@
         <EntityTypeShape EntityType="mindcetModel.intent" Width="1.5" PointX="10.375" PointY="0.5" IsExpanded="true" />
         <AssociationConnector Association="mindcetModel.FK_SubQuestion_Question" ManuallyRouted="false" />
         <EntityTypeShape EntityType="mindcetModel.userScore" Width="1.5" PointX="9.75" PointY="3.5" />
+        <EntityTypeShape EntityType="mindcetModel.multyEntity" Width="1.5" PointX="0.75" PointY="7.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
