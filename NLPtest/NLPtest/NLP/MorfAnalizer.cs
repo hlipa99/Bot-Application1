@@ -385,7 +385,7 @@ namespace NLP.NLP
             for (int i = 0; i < matchedEntity.Count; i++)
             {
                 var ent = matchedEntity[i];
-                var resEntityPart = new List<string>();
+                var resEntityPart = new List<IentityBase>();
                 var res = findMultyMatch(multyEntities,matchedEntity, i, resEntityPart);
                 var max = -1;
                 var newRes = new List<IentityBase>();
@@ -400,7 +400,7 @@ namespace NLP.NLP
                 if (max > 0)
                 {
                     //TODO fix ugly patch with idx
-                    var idx = matchedEntity[i].Where(x => resEntityPart.Contains(x.entityValue)).FirstOrDefault().entityID ;
+                    var idx = 0;// matchedEntity[i].Where(x => resEntityPart.Contains(x.entityValue)).FirstOrDefault().entityID ;
                     matchedEntity.RemoveRange(i, max);
 
                     foreach (IMultyEntity me  in newRes)
@@ -512,7 +512,7 @@ namespace NLP.NLP
         }
 
 
-        private IEnumerable<IentityBase> findMultyMatch(IEnumerable<IMultyEntity> matchedMultyEntity, List<IEnumerable<IentityBase>> matchedEntity, int i, List<string> selected)
+        private IEnumerable<IentityBase> findMultyMatch(IEnumerable<IMultyEntity> matchedMultyEntity, List<IEnumerable<IentityBase>> matchedEntity, int i, List<IentityBase> selected)
         {
             List<IentityBase> match = new List<IentityBase>();
 
@@ -523,14 +523,26 @@ namespace NLP.NLP
                 {
                     if ((multyMatch = findMultyMatch(matchedMultyEntity, e.entityValue)).Count() > 0)
                     {
-                        selected.Add(e.entityValue);
+                        var listSelected = new List<IentityBase>(selected);
+                      
                         if (matchedEntity.Count > i + 1)
                         {
                             var res = findMultyMatch(multyMatch, matchedEntity, i + 1, selected);
                             if (res.Count() > 0)
                             {
+                                selected.Add(e);
                                 match.AddRange(res);
                             }
+                            else
+                            {
+                                //  selected = new List<IentityBase>(selected).Remove(e);
+                                var cheach = 0;
+                                continue;
+                            }
+                        }
+                        else
+                        {
+                            return multyMatch;
                         }
                     }
 
@@ -539,7 +551,7 @@ namespace NLP.NLP
 
 
             if (match.Any()){ return match;}
-            else {  return matchedMultyEntity; }
+            else {  return match; }
            
         }
 
