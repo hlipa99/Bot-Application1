@@ -375,7 +375,7 @@ namespace NLP.NLP
             {
                 var ent = matchedEntity[i];
                 var resEntityPart = new List<IentityBase>();
-                var res = findMultyMatch(multyEntities,matchedEntity, i, resEntityPart);
+                var res = findMultyMatch(multyEntities,matchedEntity, i, resEntityPart).Distinct();
                 var max = -1;
                 if (res.Any()) max = res.Max(x => x.entityID);
 
@@ -383,10 +383,10 @@ namespace NLP.NLP
 
                 if (max > 0)
                 {
-                    //TODO fix ugly patch with idx
-                    var idx = 0;// matchedEntity[i].Where(x => resEntityPart.Contains(x.entityValue)).FirstOrDefault().entityID ;
-                    matchedEntity.RemoveRange(i, max);
-
+                    //original index of the first word entity
+                    var idx = matchedEntity[i].First().entityID;
+                      matchedEntity.RemoveRange(i, max);
+                    var multyRes = new List<IentityBase>();
                     foreach (IMultyEntity me  in res)
                     {
                         if((me.singleValue != null  && me.singleValue != "")){
@@ -394,19 +394,20 @@ namespace NLP.NLP
                             if (singleValue != null && singleValue.Any())
                             {
                                 singleValue.Single().entityID = idx;
-                                matchedEntity.Insert(i, new List<IentityBase>(singleValue.Select(x => x.clone())));
+                                multyRes.Add(singleValue.Single().clone());
+                              
                             }
                         }
                         else
                         {
-                            res.ToList().ForEach(x=>x.entityID = idx);
-                            res.ToList().ForEach(x => x.clone());
-                            matchedEntity.Insert(i, new List<IentityBase>(res.Select(x => x.clone())));
+                            me.entityID = idx;
+                            multyRes.Add(me.clone());
                         }
                   
                     }
-                   
-                    
+                    matchedEntity.Insert(i, multyRes);
+
+
                 }
 
             }
@@ -443,6 +444,7 @@ namespace NLP.NLP
         {
 
             var newWord = sentence[ent.entityID].clone();
+            newWord.WordT = WordObject.typeFromString(ent.entityType);
 
             if (ent.entityType == "organizationWord")
             {
@@ -458,6 +460,7 @@ namespace NLP.NLP
                 }else{
                     newWord.Lemma = newWord.Text;
                 }
+              
             }
             else
             {
@@ -483,7 +486,6 @@ namespace NLP.NLP
                     if (((multyMatch = findMultyMatch(matchedMultyEntity, e.entityValue)).Count() > 0))
                     {
 
-                       //   multyMatch.ToList().ForEach(x => x.entityID += 1);
                          
                           var res = findMultyMatch(multyMatch, matchedEntity, i + 1, selected);
                             if (res.Count() > 0)
@@ -514,9 +516,9 @@ namespace NLP.NLP
             {
                 foreach (var multyEntity in match.parts.Split(';').Where(x => x != ""))
                 {
-                    var entitySet = multyEntity.Split('#').ToList();
-                    entitySet.ForEach(s => s.Trim());
-                    if((entitySet.Count() == selectedSet.Count()) && !entitySet.Except(entitySet).Any())
+                    IEnumerable<string> entitySet = multyEntity.Split('#');
+                    entitySet = entitySet.Select(x => x.Trim());
+                    if ((entitySet.Count() == selectedSet.Count()) && !entitySet.Except(selectedSet).Any())
                     {
                         match.entityID = entitySet.Count();
                         res.Add(match);

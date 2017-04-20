@@ -104,7 +104,7 @@ namespace UnitTestProject1
             Entity2.entityValue = "ירושלים";
             Entity2.entityType = "locationWord";
 
-            WordObject3.Text = "פליטים";
+            WordObject3.Text = "פליט";
             WordObject3.WordT = WordObject.WordType.personWord;
             WordObject3.Gender = genderType.masculine;
             WordObject3.Amount = amountType.plural;
