@@ -240,7 +240,7 @@ namespace UnitTestProject1
 
 
             //mockNLPCtrl.Setup(x => x.Analize(It.IsAny<string>())).Returns(y => new WorldObject[] { new WordObject(y)});
-            eventO.Entity = mockEntity4.Object;
+            eventO.Entity = mockMultyEntity2.Object;
              list1.AddRange(new WorldObject[] { eventO, orgO, persO });
             list2.AddRange(new WorldObject[] {  orgO, persO ,concO});
 

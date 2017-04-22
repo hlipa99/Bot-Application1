@@ -110,7 +110,7 @@ namespace Bot_Application1.Controllers.Tests
             ConvCtrl = new ConversationController(new User(), ss);//sad
 
 
-            AssertNLP.contains(ConvCtrl.endOfSession(), DBbotPhrase(Pkey.goodSessionEnd));
+            AssertNLP.contains(ConvCtrl.endOfSession(), DBbotPhrase(Pkey.badSessionEnd));
 
         }
 

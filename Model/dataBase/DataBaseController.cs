@@ -505,8 +505,9 @@ namespace Model.dataBase
                     phrases = (from t in DB.botphrase
                                where t.Pkey.ToLower() == key && flags.All(x => t.Flags.Contains(x)) && flagsNot.All(x => !t.Flags.Contains(x))
                                select t.Text).ToArray();
-                }else
-                {
+                }
+
+                if(phrases == null) { 
                     ObjectCache cache = MemoryCache.Default;
                     var cachedItem = cache.Get("getBotPhrase");
                     if (cachedItem == null)
@@ -518,6 +519,7 @@ namespace Model.dataBase
                         exp.SlidingExpiration = (new TimeSpan(1, 0, 0, 0));
                         var dbParses = DB.botphrase.GroupBy(x => x.Pkey.ToLower()).ToDictionary(group => group.Key, group => group.Select(p=>p.Text).ToArray());
                         cache.Set("getBotPhrase", dbParses, exp);
+                        phrases = dbParses[key];
                     }
                     else
                     {

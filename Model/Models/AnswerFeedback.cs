@@ -6,8 +6,8 @@ namespace Model.Models
 {
     public class AnswerFeedback
     {
-        public List<Ientity> missingEntitis = new List<Ientity>();
-        public List<Ientity> foundEntitis = new List<Ientity>();
+        public List<IentityBase> missingEntitis = new List<IentityBase>();
+        public List<IentityBase> foundEntitis = new List<IentityBase>();
         public List<string> missingAnswers = new List<string>();
         public List<string> foundAnswers = new List<string>();
 

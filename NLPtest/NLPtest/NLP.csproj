@@ -262,6 +262,7 @@
     <Compile Include="QnA\QAEngin.cs" />
     <Compile Include="ServerException.cs" />
     <Compile Include="TemplateObject.cs" />
+    <Compile Include="WorldObj\entities\NumberObject.cs" />
     <Compile Include="WorldObj\entities\EntityObject.cs" />
     <Compile Include="WorldObj\ParticipleObject.cs" />
     <Compile Include="WorldObj\InfinitiveObject.cs" />

@@ -42,45 +42,45 @@ namespace NLP.QnA
              
                     var feedbacks = new List<AnswerFeedback>();
 
-                    foreach (var ans in subquestion.answerText.Split('|'))
-                    {
-                        if (ans.Trim() != "")
+                        foreach (var ans in subquestion.answerText.Split('|'))
                         {
-                            var systemAnswerWords = Nlp.Analize(ans);
-                            var f = matchAnswers(userAnswer, systemAnswerWords, ans);
-                            feedbacks.Add(f);
+                            if (ans.Trim() != "")
+                            {
+                                var systemAnswerWords = Nlp.Analize(ans);
+                                var f = matchAnswers(userAnswer, systemAnswerWords, ans);
+                                feedbacks.Add(f);
+                            }
                         }
-                    }
 
-                    if(feedbacks.Count == 0)
-                    {
-                        throw new Exception(subquestion.answerText);
-                    }
-                    var flags = subquestion.flags.Trim();
-                    if (flags == "needAll" || flags == "" || flags == null)
-                    {
-                        foreach (var f in feedbacks)
+                        if(feedbacks.Count == 0)
                         {
-                            f.merge(feedback);
-                            feedback = f;
+                            throw new Exception(subquestion.answerText);
                         }
-                    }
-                    else
-                    {
-                        int numberInt;
-
-                        var numberStr = flags.Replace("need", "");
-                        int.TryParse(numberStr, out numberInt);
-                        numberInt = numberInt == 0 ? feedbacks.Count : numberInt;
-
-                        feedbacks.Sort((x, y) => y.score - x.score);
-                        feedbacks = feedbacks.GetRange(0, numberInt);
-                        foreach (var f in feedbacks)
+                        var flags = subquestion.flags.Trim();
+                        if (flags == "needAll" || flags == "" || flags == null)
                         {
-                            f.merge(feedback);
-                            feedback = f;
+                            foreach (var f in feedbacks)
+                            {
+                                f.merge(feedback);
+                                feedback = f;
+                            }
                         }
-                    }
+                        else
+                        {
+                            int numberInt;
+
+                            var numberStr = flags.Replace("need", "");
+                            int.TryParse(numberStr, out numberInt);
+                            numberInt = numberInt == 0 ? feedbacks.Count : numberInt;
+
+                            feedbacks.Sort((x, y) => y.score - x.score);
+                            feedbacks = feedbacks.GetRange(0, numberInt);
+                            foreach (var f in feedbacks)
+                            {
+                                f.merge(feedback);
+                                feedback = f;
+                            }
+                        }
 
                     } else {
                     var systemAnswer = Nlp.Analize(subquestion.answerText);
@@ -89,11 +89,16 @@ namespace NLP.QnA
                     {
                         feedback.missingAnswers.Add(subquestion.answerText);
                     }
+                    else
+                    {
+                        feedback.foundAnswers.Add(subquestion.answerText);
+                    }
                 }
 
                 Logger.addAnswerOutput(subquestion.answerText, answer, feedback);
                 
                 feedback.answer = answer;
+                
                 return feedback;
             }else
             {
@@ -118,26 +123,38 @@ namespace NLP.QnA
 
         public AnswerFeedback matchAnswers(List<WorldObject> userAnswer, List<WorldObject> systemAnswer)
         {
+         
+
             if (userAnswer != null && systemAnswer != null)
             {
+                var userEntities = userAnswer.Distinct();
+                var systemEntities = systemAnswer.Distinct();
+                var systemEntitisFiltered = systemAnswer.Where(o => o is EntityObject);
+                if (systemEntitisFiltered.Count() > 1)
+                {
+                    systemEntities = systemEntitisFiltered;
+                }
                 var feedback = new AnswerFeedback();
-
+              
                 if (systemAnswer.Count() != 0)
                 {
-                    foreach (var se in systemAnswer)
+                    foreach (var se in systemEntities)
                     {
                         var found = false;
-                        foreach (var ue in userAnswer)
+
+
+                        foreach (var ue in userEntities)
                         {
                             if (se.GetType() == ue.GetType())
                             {
+
                                 var a = se.Word.Equals(ue.Word);
                                 var b = se.Negat == ue.Negat;
 
 
                                 if (se.Word.Equals(ue.Word) && se.Negat == ue.Negat)
                                 {
-                                    Double d = 100.0 / systemAnswer.Count();
+                                    Double d = 100.0 / systemEntities.Count();
 
                                     feedback.score += (int)Math.Ceiling(d);
 

@@ -46,7 +46,7 @@ namespace NLP.QnA.Tests
             Assert.IsFalse(feedback.missingEntitis.Contains(Entity2));
             Assert.IsFalse(feedback.missingEntitis.Contains(Entity3));
 
-            Assert.AreEqual(feedback.score, 75);
+            Assert.AreEqual(feedback.score, 45);
 
             //bad
            feedback = qae.matchAnswers(SubQqestion1, "");

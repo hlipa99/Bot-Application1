@@ -84,7 +84,7 @@ namespace NLP.WorldObj
             }
         }
 
-        public Ientity Entity { get;  set; }
+        public IentityBase Entity { get;  set; }
 
         public void addRelation(RelationObject relation)
         {if (relation != null)

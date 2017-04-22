@@ -25,7 +25,7 @@ namespace BotTests
             if (!flag)
             {
                 res += "]";
-                res = str + " Not in Array " + res;
+                res = str + " Not in Array " + listOptions;
                 throw new AssertFailedException(res);
             }
         }
@@ -34,7 +34,7 @@ namespace BotTests
         public static bool contains(string sorcse, string input)
         {
             var counter = sorcse.Split(' ').Length;
-            foreach (var o in input.Split(new char[] {' '}))
+            foreach (var o in input.Split(' '))
             {
                 if (!sorcse.Contains(o)){
                     counter--;
@@ -68,7 +68,7 @@ namespace BotTests
                 if (!flage)
                 {
                     res += "]";
-                    res = str[0] + " Not in Array " + res;
+                    res = str[0] + " Not in Array " + listOptions;
                     throw new AssertFailedException(res);
                 }
             

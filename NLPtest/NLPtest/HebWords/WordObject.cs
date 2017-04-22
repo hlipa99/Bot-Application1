@@ -356,7 +356,10 @@ namespace NLP.HebWords
                     {
                         worldObject = getEventFromWord();
                     }
-
+                    else if (isA(numeralWord))
+                    {
+                        worldObject = getNumberFromWord();
+                    }
                     else if (isA(adverbWord))
                     {
                         worldObject = getadverbFromWord();
@@ -439,6 +442,13 @@ namespace NLP.HebWords
             {
                 worldObject = value;
             }
+        }
+
+        private WorldObject getNumberFromWord()
+        {
+     
+            return new NumberObject(Text);
+
         }
 
         public bool isEntity()
@@ -614,16 +624,16 @@ namespace NLP.HebWords
             return res;
         }
 
-        private WorldObject getMoneyFromWord( )
-        {
-            throw new NotImplementedException();
-        }
+        //private WorldObject getMoneyFromWord( )
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        private WorldObject getLocationWord( )
-        {
-            var res = new LocationObject(Text);
-            return res;
-        }
+        //private WorldObject getLocationWord( )
+        //{
+        //    var res = new LocationObject(Text);
+        //    return res;
+        //}
 
         private WorldObject getHelloFromWord( )
         {
@@ -708,35 +718,35 @@ namespace NLP.HebWords
      
         }
 
-        internal void setGender(string gen)
-        {
-            if (gen == "masculine") Gender =  genderType.masculine;
-            else if(gen == "feminine") Gender = genderType.feminine;
-            else Gender = genderType.unspecified;
-        }
+        //internal void setGender(string gen)
+        //{
+        //    if (gen == "masculine") Gender =  genderType.masculine;
+        //    else if(gen == "feminine") Gender = genderType.feminine;
+        //    else Gender = genderType.unspecified;
+        //}
 
-        internal void setAmount(string am)
-        {
-            if (am == "singular") Amount = amountType.singular;
-            else if (am == "plural") Amount = amountType.plural;
-            else Amount = amountType.unspecified;
-        }
+        //internal void setAmount(string am)
+        //{
+        //    if (am == "singular") Amount = amountType.singular;
+        //    else if (am == "plural") Amount = amountType.plural;
+        //    else Amount = amountType.unspecified;
+        //}
 
-        internal void setTime(string time)
-        {
-            if (time == "future") this.Time = timeType.future;
-            else if (time == "past") this.Time = timeType.past;
-            else if (time == "present") this.Time = timeType.present;
-            else this.Time = timeType.unspecified;
-        }
+        //internal void setTime(string time)
+        //{
+        //    if (time == "future") this.Time = timeType.future;
+        //    else if (time == "past") this.Time = timeType.past;
+        //    else if (time == "present") this.Time = timeType.present;
+        //    else this.Time = timeType.unspecified;
+        //}
 
-        internal void setGuf(string guf)
-        {
-            if (guf == "1") this.Person = personType.First;
-            else if (guf == "2") this.Person = personType.Second;
-            else if (guf == "3") this.Person = personType.Third;
-            else this.Person = personType.unspecified;
-        }
+        //internal void setGuf(string guf)
+        //{
+        //    if (guf == "1") this.Person = personType.First;
+        //    else if (guf == "2") this.Person = personType.Second;
+        //    else if (guf == "3") this.Person = personType.Third;
+        //    else this.Person = personType.unspecified;
+        //}
 
 
         public int ObjectType()
