@@ -8,6 +8,7 @@ using NLP.Exceptions;
 using System.Collections.Generic;
 using Model.dataBase;
 using static NLP.WorldObj.personObject;
+using Model.Models;
 
 namespace NLP.HebWords
 {
@@ -23,7 +24,6 @@ namespace NLP.HebWords
         private timeType time = timeType.unspecified;
         private amountType amount = amountType.unspecified;
         private genderType gender = genderType.unspecified;
-
         internal string TypefromEnum(WordType wordT) {
             string ret = "";
             try { 

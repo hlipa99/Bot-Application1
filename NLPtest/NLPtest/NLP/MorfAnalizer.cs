@@ -28,13 +28,9 @@ namespace NLP.NLP
 {
     public class MorfAnalizer
     {
-        //   SimpleTagger3 tagger;
-        //  NERTagger nerTagger;
-        //  MeniTaggeedSentenceFactory sentenceFactory;
-        //  TaggerBasedHebrewChunker chunker;
+
         private HebDictionary hebDictionary;
         OuterAPIController httpCtrl = new OuterAPIController();
-        // private IEnumerable<Word> wordList;
         DataBaseController DBctrl = new DataBaseController();
 
         public OuterAPIController HttpCtrl
@@ -67,13 +63,6 @@ namespace NLP.NLP
 
         public MorfAnalizer()
         {
-            //   var path = "C:/Program Files (x86)/IIS Express/botServer/hebdata/";
-            //   tagger = new SimpleTagger3(path);
-            //   nerTagger = new NERTagger(path, tagger);
-            //   create the noun-phrase chunker
-            //     sentenceFactory = new MeniTaggeedSentenceFactory(null, MeniTokenExpander.expander);
-            //    String chunkModelPrefix = path + vohmm.util.Dir.CHUNK_MODEL_PREF;
-            //       chunker = new TaggerBasedHebrewChunker(sentenceFactory, chunkModelPrefix);
             hebDictionary = new HebDictionary();
         }
 
@@ -327,35 +316,35 @@ namespace NLP.NLP
             return result;
         }
 
-        private List<WordObject> fixFunctuation(List<WordObject> sentenceFromServer)
-        {
-            List<WordObject> newList = new List<WordObject>();
+        //private List<WordObject> fixFunctuation(List<WordObject> sentenceFromServer)
+        //{
+        //    List<WordObject> newList = new List<WordObject>();
 
-            for (int i = 0; i < sentenceFromServer.Count; i++)
-            {
-                var word = sentenceFromServer[i];
-                if (word.Text == "\\")
-                {
-                    if (i + 2 < sentenceFromServer.Count && newList.Any())
-                    {
-                        if (sentenceFromServer[i + 1].Text == "'")
-                        {
-                            newList.LastOrDefault().Lemma += "'" + sentenceFromServer[i + 1];
-                            newList.LastOrDefault().Text = newList.LastOrDefault().Lemma;
-                            i = i + 2;
-                        }
-                    }
-                }
-                else
-                {
-                    newList.Add(sentenceFromServer[i]);
-                }
+        //    for (int i = 0; i < sentenceFromServer.Count; i++)
+        //    {
+        //        var word = sentenceFromServer[i];
+        //        if (word.Text == "\\")
+        //        {
+        //            if (i + 2 < sentenceFromServer.Count && newList.Any())
+        //            {
+        //                if (sentenceFromServer[i + 1].Text == "'")
+        //                {
+        //                    newList.LastOrDefault().Lemma += "'" + sentenceFromServer[i + 1];
+        //                    newList.LastOrDefault().Text = newList.LastOrDefault().Lemma;
+        //                    i = i + 2;
+        //                }
+        //            }
+        //        }
+        //        else
+        //        {
+        //            newList.Add(sentenceFromServer[i]);
+        //        }
 
-            }
+        //    }
 
-            return newList;
+        //    return newList;
 
-        }
+        //}
 
         IEnumerable<Ientity> entities;
         IEnumerable<IMultyEntity> multyEntities;
@@ -386,43 +375,39 @@ namespace NLP.NLP
             {
                 var ent = matchedEntity[i];
                 var resEntityPart = new List<IentityBase>();
-                var res = findMultyMatch(multyEntities,matchedEntity, i, resEntityPart);
+                var res = findMultyMatch(multyEntities,matchedEntity, i, resEntityPart).Distinct();
                 var max = -1;
-                var newRes = new List<IentityBase>();
-                foreach (var me in res)
-                {
-                    var val = matchMultyEntity(me as IMultyEntity, matchedEntity, i);
-                    max = Math.Max(max, val);
-                    if (val > 0) { newRes.Add(me); }
-                }
-              
+                if (res.Any()) max = res.Max(x => x.entityID);
+
+
 
                 if (max > 0)
                 {
-                    //TODO fix ugly patch with idx
-                    var idx = 0;// matchedEntity[i].Where(x => resEntityPart.Contains(x.entityValue)).FirstOrDefault().entityID ;
-                    matchedEntity.RemoveRange(i, max);
-
-                    foreach (IMultyEntity me  in newRes)
+                    //original index of the first word entity
+                    var idx = matchedEntity[i].First().entityID;
+                      matchedEntity.RemoveRange(i, max);
+                    var multyRes = new List<IentityBase>();
+                    foreach (IMultyEntity me  in res)
                     {
                         if((me.singleValue != null  && me.singleValue != "")){
                             var singleValue = entities.Where(x => x.entityValue == me.singleValue);
                             if (singleValue != null && singleValue.Any())
                             {
                                 singleValue.Single().entityID = idx;
-                                matchedEntity.Insert(i, new List<IentityBase>(singleValue.Select(x => x.clone())));
+                                multyRes.Add(singleValue.Single().clone());
+                              
                             }
                         }
                         else
                         {
-                            res.ToList().ForEach(x=>x.entityID = idx);
-                            res.ToList().ForEach(x => x.clone());
-                            matchedEntity.Insert(i, new List<IentityBase>(res.Select(x => x.clone())));
+                            me.entityID = idx;
+                            multyRes.Add(me.clone());
                         }
                   
                     }
-                   
-                    
+                    matchedEntity.Insert(i, multyRes);
+
+
                 }
 
             }
@@ -453,39 +438,13 @@ namespace NLP.NLP
             return newSentence;
         }
 
-        private int matchMultyEntity(IMultyEntity multyEnt, List<IEnumerable<IentityBase>> matchedEntity, int i)
-        {
-          
-                foreach (var posMatch in multyEnt.parts.Split(';').Where(x=>x!=""))
-                {
-                     var j = i;
-                 //   var HOOP = 3;
-                    var options = posMatch.Split('#').ToList();
-                    options.ForEach(e => e.Trim());
-                    foreach (var ent in matchedEntity[j])
-                    {
-                        if (options.Contains(ent.entityValue))
-                        {
-                            options.Remove(ent.entityValue);
-                            if (!options.Any())
-                            {
-                                return posMatch.Split('#').Count();
-                            }
-                            j++;
-                        if (j < matchedEntity.Count){continue;}
-                        else break;
-                        
-                    }
-                }
-            }
-            return -1;
-        }
+        
 
         private void WordObjectFromEntity(List<WordObject> sentence, List<WordObject> newSentence, IentityBase ent)
         {
 
-
             var newWord = sentence[ent.entityID].clone();
+            newWord.WordT = WordObject.typeFromString(ent.entityType);
 
             if (ent.entityType == "organizationWord")
             {
@@ -501,6 +460,7 @@ namespace NLP.NLP
                 }else{
                     newWord.Lemma = newWord.Text;
                 }
+              
             }
             else
             {
@@ -512,46 +472,60 @@ namespace NLP.NLP
         }
 
 
+        //finds multyEntity match with maximal munch using recursive calls
         private IEnumerable<IentityBase> findMultyMatch(IEnumerable<IMultyEntity> matchedMultyEntity, List<IEnumerable<IentityBase>> matchedEntity, int i, List<IentityBase> selected)
         {
             List<IentityBase> match = new List<IentityBase>();
 
-            if (matchedMultyEntity != null && matchedMultyEntity.Any())
+            if (matchedMultyEntity != null && matchedMultyEntity.Any() && matchedEntity.Count > i)
             {
                 IEnumerable<IMultyEntity> multyMatch = new List<IMultyEntity>();
                 foreach (var e in matchedEntity[i])
                 {
-                    if ((multyMatch = findMultyMatch(matchedMultyEntity, e.entityValue)).Count() > 0)
+                    selected.Add(e);
+                    if (((multyMatch = findMultyMatch(matchedMultyEntity, e.entityValue)).Count() > 0))
                     {
-                        var listSelected = new List<IentityBase>(selected);
-                      
-                        if (matchedEntity.Count > i + 1)
-                        {
-                            var res = findMultyMatch(multyMatch, matchedEntity, i + 1, selected);
+
+                         
+                          var res = findMultyMatch(multyMatch, matchedEntity, i + 1, selected);
                             if (res.Count() > 0)
                             {
-                                selected.Add(e);
                                 match.AddRange(res);
-                            }
-                            else
-                            {
-                                //  selected = new List<IentityBase>(selected).Remove(e);
-                                continue;
-                            }
-                        }
-                        else
-                        {
-                            return multyMatch;
-                        }
+                        } else
+                         {
+                              match.AddRange(containAllEntities(multyMatch, selected).ToList());
+                              
+                         }
                     }
-
+                    selected.Remove(selected.Last());
                 }
             }
 
-
+            
             if (match.Any()){ return match;}
             else {  return match; }
            
+        }
+
+        //helper function, filtering  multyMatch only where all the selected entities are present
+        private IEnumerable<IentityBase> containAllEntities(IEnumerable<IMultyEntity> multyMatch, List<IentityBase> selected)
+        {
+            var res = new List<IMultyEntity>();
+            var selectedSet = selected.Select(x => x.entityValue);
+            foreach (var match in multyMatch)
+            {
+                foreach (var multyEntity in match.parts.Split(';').Where(x => x != ""))
+                {
+                    IEnumerable<string> entitySet = multyEntity.Split('#');
+                    entitySet = entitySet.Select(x => x.Trim());
+                    if ((entitySet.Count() == selectedSet.Count()) && !entitySet.Except(selectedSet).Any())
+                    {
+                        match.entityID = entitySet.Count();
+                        res.Add(match);
+                    }
+                }
+            }
+            return res;
         }
 
         private IEnumerable<IMultyEntity> findMultyMatch(IEnumerable<IMultyEntity> matchedEntity,string ent)
