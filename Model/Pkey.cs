@@ -74,6 +74,11 @@ namespace Model
         replaceLanguge,
         yesNoOptions,
         letsStartOver,
-        letsContinueWitoutBreak
+        letsContinueWitoutBreak,
+        swearSuspention,
+        duringSwearSuspention,
+        swearResponse,
+        mightHaveSomthing,
+        uselessLink
     }
 }

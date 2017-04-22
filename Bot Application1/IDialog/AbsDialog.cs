@@ -89,8 +89,13 @@ namespace Bot_Application1.IDialog
             return new EducationController(User, StudySession, null);
         }
 
+        public async Task generalExceptionError(IDialogContext context, Exception ex)
+        {
+            await writeMessageToUser(context, conv().getPhrase(Pkey.innerException));
+            Logger.addErrorLog(getDialogContext().dialog, ex.Message + Environment.NewLine + ex.StackTrace + ex.InnerException);
+            return;
+        }
 
-     
 
 
 
@@ -141,7 +146,25 @@ namespace Bot_Application1.IDialog
             }
         }
 
-        internal async Task writeMessageToUser(IDialogContext context, string[] newMessage)
+
+
+        internal async Task writeMessageToUser(IDialogContext context, IMessageActivity newMessage)
+        {
+            if(newMessage.Text != null && newMessage.Text != "")
+            {
+                await writeMessageToUser(context, newMessage.Text.Split('|'));
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+
+        }
+
+
+
+
+            internal async Task writeMessageToUser(IDialogContext context, string[] newMessage)
         {
             var typingReplay = context.MakeMessage();
             typingReplay.Type = ActivityTypes.Typing;
@@ -194,17 +217,12 @@ namespace Bot_Application1.IDialog
         }
 
 
-        public static async Task postImageToUser(IDialogContext context, string mediaKey)
+        public async Task postImageToUser(IDialogContext context, string mediaKey)
         {
-            MediaController mc = new MediaController();
-            var url = mc.getFileUrl(mediaKey);
-            var cardImg = new CardImage(url: url);
-            var img = new Attachment();
-            img.ContentType = "image/png";
-            img.ContentUrl = url;
-            img.Name = mediaKey;
+
             var message = context.MakeMessage();
-            message.Attachments.Add(img);
+
+            conv().createImgMessage(message, mediaKey);
             await context.PostAsync(message);
         }
 
@@ -288,9 +306,34 @@ namespace Bot_Application1.IDialog
             return new ConversationController(User, StudySession);
         }
 
+        public void updateUserSession(IDialogContext context)
+        {
+            getDialogsVars(context);
+            var userDB = (User)user;
+            if (!user.LastSeen.HasValue) user.LastSeen = DateTime.UtcNow;
+            if (user.LastSeen.Value.AddMinutes(30) > DateTime.UtcNow)
+            {
+                user.UserOverallTime = TimeSpan.Parse(user.UserOverallTime).Add(DateTime.UtcNow.Subtract(user.LastSeen.Value)).ToString();
+                user.LastSeen = DateTime.UtcNow;
+            }
+            else
+            {
+                user.UserTimesConnected++;
+                user.UserLastSession = DateTime.UtcNow;
+                user.LastSeen = DateTime.UtcNow;
+            }
+            setDialogsVars(context);
+            new DataBaseController().addUpdateUser(userDB);
+        }
 
         public async Task<bool> checkOutdatedMessage<R>(IDialogContext context,ResumeAfter<R> resume, IAwaitable<IMessageActivity> message)
         {
+            updateUserSession(context);
+
+
+
+         
+
             var mes = await message;
             if (mes.Timestamp <= Request)
             {
@@ -300,6 +343,7 @@ namespace Bot_Application1.IDialog
                 return true;
             }else if(context.Activity.Timestamp >= Request.AddHours(1))
             {
+                
                 await writeMessageToUser(context, conv().getPhrase(Pkey.whereDidYouGone));
                 context.ConversationData.SetValue<ResumeAfter<R>>("resume", resume);
              //   await context.Forward<bool,string[]>(new YesNoQuestionDialog(), continuFromLastPlace, conv().getPhrase(Pkey.youWantToContinue),new CancellationToken());
@@ -333,10 +377,9 @@ namespace Bot_Application1.IDialog
 
 
         }
-        public virtual UserContext getDialogContext(IDialogContext context)
+        public virtual UserContext getDialogContext()
         {
             if (UserContext == null) UserContext = new UserContext("absDialog");
-            UserContext.lastSeen = context.Activity.Timestamp;
             return UserContext;
         }
 

@@ -21,9 +21,9 @@ namespace Bot_Application1.IDialog
     [Serializable]
     public class SideDialog : AbsDialog<IMessageActivity>
     {
-        public override UserContext getDialogContext(IDialogContext context)
+        public override UserContext getDialogContext()
         {
-            base.getDialogContext(context);
+            base.getDialogContext();
             UserContext.dialog = "SideDialog";
             return UserContext;
         }

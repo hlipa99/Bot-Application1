@@ -178,6 +178,31 @@ namespace Bot_Application1.Controllers
            };
         }
 
+        internal void sendMediaMessage(IMessageActivity msg, StudySession studySession, IUser user, string type)
+        {
+            var question = studySession.CurrentQuestion.QuestionText;
+            var possibleFlags = new List<string>();
+            if (type != "useless")
+            {
+                var objects = nlpControler.Analize(question);
+
+                foreach (var o in objects)
+                {
+                    possibleFlags.Add(o.Word);
+                }
+            }
+            var mediaRes = db.getRandomMedia(type, possibleFlags.ToArray());
+            if(mediaRes.type == "text")
+            {
+                msg.Text = mediaRes.value;
+            }else if(mediaRes.type == "img")
+            {
+                createImgMessage(msg, mediaRes.mediaKey);
+            }
+        }
+
+       
+        
         public string[] getClassOptions()
         {
             return new string[]
@@ -188,7 +213,7 @@ namespace Bot_Application1.Controllers
            };
         }
 
-
+       
         public string[] endOfSession()
         {
 
@@ -214,6 +239,26 @@ namespace Bot_Application1.Controllers
         
         }
 
+        internal void createImgMessage(IMessageActivity message, string mediaKey)
+        {
+            createImgMessage(message, mediaKey, null);
+        }
+
+        //url null for using mediaKey
+        internal void createImgMessage(IMessageActivity message, string mediaKey, string url)
+        {
+            MediaController mc = new MediaController();
+            if (url == null)
+            {
+                 url = mc.getFileUrl(mediaKey);
+            }
+            var cardImg = new CardImage(url: url);
+            var img = new Attachment();
+            img.ContentType = "image/png";
+            img.ContentUrl = url;
+            img.Name = mediaKey;
+            message.Attachments.Add(img);
+        }
 
         public int getNum(string conv)
         {
@@ -291,6 +336,13 @@ namespace Bot_Application1.Controllers
                 }
             }
             // return nlpControler.GetGender(text);
+        }
+
+        internal string[] answerUserQuestion(string text)
+        {
+
+            //defualt
+            return getPhrase(Pkey.unknownQuestion);
         }
 
         public string getGenderOpositeName(string text)
@@ -407,7 +459,7 @@ namespace Bot_Application1.Controllers
                     case UserIntent.hello:
                     case UserIntent.DefaultFallbackIntent:
                     default:
-                        if (context.lastSeen.Value.AddHours(1) < DateTime.UtcNow)
+                        if (user.LastSeen.GetValueOrDefault().AddHours(1) < DateTime.UtcNow)
                         {
                             return getPhrase(Pkey.greetings);
                         }else
@@ -522,10 +574,6 @@ namespace Bot_Application1.Controllers
    
         }
 
-        public void saveUserToDb(IUser user)
-        {
-            Db.addUpdateUser((User)user);
-        }
 
 
 

@@ -20,7 +20,7 @@ namespace Model.Models
    
         private IQuestion currentQuestion;
         private int sessionLength = 3;
-
+        private int swearCounter = 0;
    
         private ISubQuestion currentSubQuestion;
 
@@ -30,7 +30,7 @@ namespace Model.Models
         public StudySession(){
                 QuestionAsked = new List<IQuestion>();
                 sessionLength = 3;
-                 startTime = DateTime.Now;
+                 startTime = DateTime.UtcNow;
             }
 
 
@@ -92,5 +92,6 @@ namespace Model.Models
         }
 
         public DateTime startTime { get ; set ; }
+        public int SwearCounter { get => swearCounter; set => swearCounter = value; }
     }
 }

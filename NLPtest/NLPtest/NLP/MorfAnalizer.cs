@@ -536,7 +536,6 @@ namespace NLP.NLP
                             else
                             {
                                 //  selected = new List<IentityBase>(selected).Remove(e);
-                                var cheach = 0;
                                 continue;
                             }
                         }

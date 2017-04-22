@@ -25,9 +25,9 @@ namespace Bot_Application1.IDialog
     {
 
 
-        public override UserContext getDialogContext(IDialogContext context)
+        public override UserContext getDialogContext()
         {
-            base.getDialogContext(context);
+            base.getDialogContext();
             UserContext.dialog = "GreetingDialog";
 
             return UserContext;
@@ -44,7 +44,7 @@ namespace Bot_Application1.IDialog
         private async Task HelloRes(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
             var message = await result;
-            var respond = conv().createReplayToUser(message.Text, getDialogContext(context));
+            var respond = conv().createReplayToUser(message.Text, getDialogContext());
             await writeMessageToUser(context, respond);
 
             if (User.UserLastSession == null || User.UserLastSession.Value.AddHours(1) > context.Activity.Timestamp)

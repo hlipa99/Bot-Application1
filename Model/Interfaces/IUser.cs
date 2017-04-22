@@ -18,7 +18,8 @@ namespace Model.Models
         string UserAddress { get; set; }
         int? UserTimesConnected { get; set; }
         String UserOverallTime { get; set; }
-
+        Nullable<System.DateTime> LastSeen { get; set; }
+        string TimeConnected { get; set; }
         int[][] PreviusParses { get; set; }
     }
 }

@@ -24,9 +24,9 @@ namespace Bot_Application1.IDialog
     public class MainDialog : AbsDialog<IMessageActivity>
     {
 
-        public override UserContext getDialogContext(IDialogContext context)
+        public override UserContext getDialogContext()
         {
-            base.getDialogContext(context);
+            base.getDialogContext();
             UserContext.dialog = "SideDialog";
             return UserContext;
         }
@@ -54,7 +54,7 @@ namespace Bot_Application1.IDialog
             catch (Exception ex)
             {
                 await writeMessageToUser(context, new string[] { "אוקיי זה מביך " + "\U0001F633", "קרתה לי תקלה בשרת ואני לא יודע מה לעשות", "אני אתחיל עכשיו מהתחלה ונעמיד פנים שלא קרה כלום, " + "\U0001F648", "טוב" + "?" });
-                Logger.addErrorLog(getDialogContext(context).dialog, ex.Message + Environment.NewLine + ex.StackTrace + ex.InnerException);
+                Logger.addErrorLog(getDialogContext().dialog, ex.Message + Environment.NewLine + ex.StackTrace + ex.InnerException);
                 //    await writeMessageToUser(context, new string[] { ex.Data.ToString(), ex.InnerException.ToString(), ex.StackTrace.ToString(), ex.TargetSite.ToString(), ex.ToString() });
                 //     Logger.log("MainDialog", "MainMenu", ex.ToString());
                 await StartAsync(context);
@@ -74,23 +74,31 @@ namespace Bot_Application1.IDialog
 
         private async Task MainMenu(IDialogContext context, IAwaitable<object> result)
         {
-           
+            try
+            {
                 getDialogsVars(context);
 
-            if (User != null){
- 
+                if (User != null)
+                {
+
                     options = conv().MainMenuOptions();
+                    setDialogsVars(context);
                     updateRequestTime(context);
                     await createMenuOptions(context, conv().getPhrase(Pkey.MainMenuText)[0], options, MainMenuResualt);
-                    User.UserTimesConnected ++;
-                    User.UserLastSession = DateTime.UtcNow;
-                    setDialogsVars(context);
-                    conv().saveUserToDb(User);
-            }else{
 
-                context.Call(new NewUserDialog(), MainMenu);
+                }
+                else
+                {
+
+                    context.Call(new NewUserDialog(), MainMenu);
                 }
 
+            }catch(Exception ex)
+            {
+                await generalExceptionError(context, ex);
+                await StartAsync(context);
+                return;
+            }
 
 
         }
@@ -140,7 +148,9 @@ namespace Bot_Application1.IDialog
 
             }catch(Exception ex)
             {
-
+                await generalExceptionError(context, ex);
+                await StartAsync(context);
+                return;
             }
         }
 
@@ -164,7 +174,7 @@ namespace Bot_Application1.IDialog
                 try
                 {
                     await writeMessageToUser(context, conv().getPhrase(Pkey.innerException));
-                    Logger.addErrorLog(getDialogContext(context).dialog, ex.Message + Environment.NewLine + ex.StackTrace + ex.InnerException);
+                    Logger.addErrorLog(getDialogContext().dialog, ex.Message + Environment.NewLine + ex.StackTrace + ex.InnerException);
                     await MainMenu(context, null);
                     return;
                 }

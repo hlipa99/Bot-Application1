@@ -21,9 +21,9 @@ namespace Bot_Application1.IDialog
     [Serializable]
     public class FarewellDialog : AbsDialog<IMessageActivity>
     {
-        public override UserContext getDialogContext(IDialogContext context)
+        public override UserContext getDialogContext()
         {
-            base.getDialogContext(context);
+            base.getDialogContext();
             UserContext.dialog = "FarewellDialog";
             return UserContext;
         }

@@ -11,6 +11,7 @@ using Bot_Application1.Controllers;
 using Bot_Application1.Exceptions;
 using System.Threading;
 using Bot_Application1.YAndex;
+using NLP.NLP;
 
 namespace Bot_Application1.IDialog
 {
@@ -19,9 +20,9 @@ namespace Bot_Application1.IDialog
     {
 
 
-        public override UserContext getDialogContext(IDialogContext context)
+        public override UserContext getDialogContext()
         {
-            base.getDialogContext(context);
+            base.getDialogContext();
             UserContext.dialog = "QuestionDialog";
             return UserContext;
         }
@@ -49,14 +50,14 @@ namespace Bot_Application1.IDialog
                     await writeMessageToUser(context, new string[] { '"' + question.QuestionText + '"' });
                     await writeMessageToUser(context, conv().getPhrase(Pkey.takeQuestionApart));
                 }
-                await askSubQuestion(context, null);
+                await askNextSubQuestion(context, null);
             
 
         }
 
       
 
-        public async Task askSubQuestion(IDialogContext context, IAwaitable<IMessageActivity> result)
+        public async Task askNextSubQuestion(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
             if(result != null) await result;
             getDialogsVars(context);
@@ -66,22 +67,33 @@ namespace Bot_Application1.IDialog
             var question = StudySession.CurrentSubQuestion;
             if (question != null)
             {
+                await askSubQuestion(context, null);
+            }
+            else
+            {
+                getDialogsVars(context);
+                edc().updateUserScore();
+                context.Done("");
+            }
+        }
+
+        public async Task askSubQuestion(IDialogContext context, IAwaitable<IMessageActivity> result)
+        {
+
+            var question = StudySession.CurrentSubQuestion;
+            if (question != null)
+            {
                 await writeMessageToUser(context, new string[] { '"' + question.questionText.Trim() + '"' });
 
                 updateRequestTime(context);
                 context.Wait(answerQuestion);
-            }else
+            }
+            else
             {
                 await StartAsync(context);
             }
         }
-     
-       public async Task continuAfterBreak(IDialogContext context, IAwaitable<IMessageActivity> result)
-        {
-            var r = await result;
-            await writeMessageToUser(context, conv().getPhrase(Pkey.letsContinue));
-            await intreduceQuestion(context);
-        }
+
 
         public async Task answerQuestion(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
@@ -99,7 +111,7 @@ namespace Bot_Application1.IDialog
             try
             {
                 typingTime(context);
-                var replay = conv().createReplayToUser(message.Text, getDialogContext(context));
+                var replay = conv().createReplayToUser(message.Text, getDialogContext());
                 setDialogsVars(context);
                 await writeMessageToUser(context, replay);
             }
@@ -116,20 +128,54 @@ namespace Bot_Application1.IDialog
                 return;
                
             }catch (sessionBreakException ex){
-                await writeMessageToUser(context, conv().getPhrase(Pkey.ok));
-                await writeMessageToUser(context, conv().getPhrase(Pkey.suggestBreak));
-                await writeMessageToUser(context, conv().getPhrase(Pkey.imWaiting));
-                context.Wait(continuAfterBreak);
+                throw new sessionBreakException();
+                return;
+            }
+            catch (insertFunnybreakException ex)
+            {
+                var msg = context.MakeMessage();
+                conv().sendMediaMessage(msg, StudySession, User, "funny");
+                await writeMessageToUser(context, msg);
+                await writeMessageToUser(context, conv().getPhrase(Pkey.letsContinue));
+                await askSubQuestion(context, null);
+                return;
+            }
+            catch (insertIntrestingException ex)
+            {
+                var msg = context.MakeMessage();
+                await writeMessageToUser(context, conv().getPhrase(Pkey.mightHaveSomthing));
+
+                conv().sendMediaMessage(msg, StudySession, User, "intresting");
+                await writeMessageToUser(context, msg);
+                await writeMessageToUser(context, conv().getPhrase(Pkey.letsContinue));
+                await askSubQuestion(context, null);
+                return;
+            }
+            catch (swearWordException ex)
+            {
+                await writeMessageToUser(context, conv().getPhrase(Pkey.swearResponse));
+                if (StudySession.SwearCounter > 2)
+                {
+                    await writeMessageToUser(context, conv().getPhrase(Pkey.swearSuspention));
+                    updateRequestTime();
+                    context.Wait(swearSuspention);
+                }
+                else
+                {
+                    StudySession.SwearCounter++;
+                    setDialogsVars(context);
+                    await askSubQuestion(context, null);
+                   
+                }
+               
                 return;
             }
             catch (Exception ex)
             {
-                await writeMessageToUser(context, conv().getPhrase(Pkey.innerException));
-                Logger.addErrorLog(getDialogContext(context).dialog, ex.Message + Environment.NewLine + ex.StackTrace + ex.InnerException);
-                await askSubQuestion(context, null);
+                await generalExceptionError(context, ex);
+                await askNextSubQuestion(context, null);
                 return;
             }
-
 
 
             //     await writeMessageToUser(context, conv().getPhrase(Pkey.MyAnswerToQuestion));
@@ -139,10 +185,10 @@ namespace Bot_Application1.IDialog
 
 
 
-             if (StudySession.CurrentQuestion.Enumerator < StudySession.CurrentQuestion.SubQuestion.Count)
+            if (StudySession.CurrentQuestion.Enumerator < StudySession.CurrentQuestion.SubQuestion.Count)
             {
                 await writeMessageToUser(context, conv().getPhrase(Pkey.moveToNextSubQuestion));
-                await askSubQuestion(context, null);
+                await askNextSubQuestion(context, null);
             }
             else
             {
@@ -155,9 +201,32 @@ namespace Bot_Application1.IDialog
             }
         }
 
-
-
-
+        private async Task swearSuspention(IDialogContext context, IAwaitable<IMessageActivity> result)
+        {
+            if (Request.AddMinutes(10) > DateTime.UtcNow)
+            {
+                var res = await result;
+                if (conv().getUserIntente(res.Text, getDialogContext()) == UserIntent.sorry)
+                {
+                    await writeMessageToUser(context, conv().getPhrase(Pkey.ok));
+                    await writeMessageToUser(context, conv().getPhrase(Pkey.letsContinue));
+                    StudySession.SwearCounter = 0;
+                    setDialogsVars(context);
+                    await askSubQuestion(context, null);
+                }
+                else
+                {
+                    await writeMessageToUser(context, conv().getPhrase(Pkey.duringSwearSuspention));
+                    context.Wait(swearSuspention);
+                }
+            }
+            else
+            {
+                StudySession.SwearCounter = 0;
+                setDialogsVars(context);
+                await askSubQuestion(context, null);
+            }
+        }
 
         private async Task stopSession(IDialogContext context, IAwaitable<bool> result)
         {
@@ -176,47 +245,7 @@ namespace Bot_Application1.IDialog
 
         }
 
-        //public async Task giveFeedbackMessage(IDialogContext context)
-        //{
-        //    await writeMessageToUser(context, conv().getPhrase(Pkey.giveYourFeedback));
-        //    updateRequestTime(context);
-        //    context.Wait(giveFeedback);
-        //}
-
-
-        //public async Task giveFeedback(IDialogContext context, IAwaitable<IMessageActivity> result)
-        //{
-        //    if (await checkOutdatedMessage(context, askSubQuestion, result)) return;
-
-        //    var message = await result;
-
-        //    int number;
-        //    if ((number = conv().getNum(message.Text)) >= 0)
-        //    {
-        //        if (number < 45)
-        //        {
-        //            await writeMessageToUser(context, conv().getPhrase(Pkey.neverMind));
-        //        }
-        //        else if (number < 75)
-        //        {
-        //            await writeMessageToUser(context, conv().getPhrase(Pkey.GeneralAck, textVar: (number + "")));
-        //        }
-        //        else
-        //        {
-        //            await writeMessageToUser(context, conv().getPhrase(Pkey.veryGood));
-        //        }
-
-        //        StudySession.CurrentQuestion.AnswerScore = number;
-        //        setDialogsVars(context);
-        //        context.Done("");
-        //    }
-        //    else
-        //    {
-        //        await writeMessageToUser(context, conv().getPhrase(Pkey.notNumber));
-        //        updateRequestTime(context);
-        //        context.Wait(giveFeedback);
-        //    }
-        //}
+     
 
 
     }

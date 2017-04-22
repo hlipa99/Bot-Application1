@@ -42,6 +42,9 @@ namespace Model.dataBase
             }
         }
 
+        public DateTime? LastSeen { get ; set ; }
+        public string TimeConnected { get ; set ; }
+
         public bool Equals(User other)
         {
 

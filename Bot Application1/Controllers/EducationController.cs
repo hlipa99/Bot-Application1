@@ -165,19 +165,6 @@ namespace Bot_Application1.Controllers
             }
         }
 
-        public void saveUserSession()
-        {
-            var userDB = (User)user;
-            try
-            {
-                user.UserOverallTime = TimeSpan.Parse(user.UserOverallTime).Add(DateTime.UtcNow.Subtract(studySession.startTime)).ToString();
-            }catch(Exception ex)
-            {
-                user.UserOverallTime = new TimeSpan(0).ToString();
-            }
-            user.UserLastSession = DateTime.UtcNow;
-            Db.addUpdateUser(userDB);
-        }
 
         public async void updateUserScore()
         {
@@ -236,6 +223,10 @@ namespace Bot_Application1.Controllers
         {
             studySession.CurrentQuestion.Enumerator++;
             studySession.CurrentSubQuestion = getSubQuestion(studySession.CurrentQuestion.Enumerator);
+            if(studySession.CurrentSubQuestion == null)
+            {
+                getNextQuestion();
+            }
         }
 
 
@@ -272,6 +263,14 @@ namespace Bot_Application1.Controllers
 
                 case UserIntent.sessionBreak:
                     throw new sessionBreakException();
+                case UserIntent.bot_questions:
+                    return conversationController.answerUserQuestion(text);
+                case UserIntent.funny:
+                    throw new insertFunnybreakException();
+                case UserIntent.intresting:
+                    throw new insertIntrestingException();
+                case UserIntent.swearword:
+                    throw new swearWordException();
 
                 default:
                     return createFeedBack(checkAnswer(text));
@@ -279,6 +278,8 @@ namespace Bot_Application1.Controllers
             }
            return null;
         }
+
+
 
         public string[] createFeedBack(AnswerFeedback answerFeedback)
         {

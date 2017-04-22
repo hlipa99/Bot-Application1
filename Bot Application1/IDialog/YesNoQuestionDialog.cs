@@ -22,9 +22,9 @@ namespace Bot_Application1.IDialog
     [Serializable]
     public class YesNoQuestionDialog : AbsDialog<Boolean>
     {
-        public override UserContext getDialogContext(IDialogContext context)
+        public override UserContext getDialogContext()
         {
-            base.getDialogContext(context);
+            base.getDialogContext();
             UserContext.dialog = "YesNoQuestionDialog";
             return UserContext;
         }
@@ -59,7 +59,7 @@ namespace Bot_Application1.IDialog
             UserIntent intent;
             if (text != null)
             {
-                intent = conv().getUserIntente(text, getDialogContext(context));
+                intent = conv().getUserIntente(text, getDialogContext());
 
             }
             else //facebook like

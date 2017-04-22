@@ -125,8 +125,9 @@ namespace NLP.Controllers
         public virtual List<WorldObject> Analize(string text, string systemAnswerText)
         {
             ObjectCache cache = MemoryCache.Default;
-            var cachedItem = cache.Get(text + systemAnswerText);
-            if (cachedItem == null || true)
+            var cachedItem = cache.Get(text + systemAnswerText) as WorldObject[];
+
+            if (cachedItem == null || cachedItem.Length == 0)
             {
 
 
@@ -164,13 +165,13 @@ namespace NLP.Controllers
                     input.AddRange(sentence);
                 }
                 var exp = new CacheItemPolicy();
-                exp.SlidingExpiration = (new TimeSpan(1,0,0,0));
-                cache.Set(text + systemAnswerText, input, exp);
+                exp.SlidingExpiration = (new TimeSpan(1,0,0,1));
+                cache.Set(text + systemAnswerText, input.ToArray(), exp);
                 return input;
             }
             else
             {
-                return (List <WorldObject>)cachedItem;
+                return new List<WorldObject>(cachedItem);
             }
         }
         internal void updateEntityTable()

@@ -618,7 +618,10 @@ namespace NLP.NLP
         no,
         hello,
         sessionBreak,
-        //intresting
+        swearword,
+        intresting,
+        funny,
+        sorry
     }
 }
 

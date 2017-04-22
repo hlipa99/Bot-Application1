@@ -32,9 +32,9 @@ namespace Bot_Application1.IDialog
             this.retry = retry;
         }
 
-        public override UserContext getDialogContext(IDialogContext context)
+        public override UserContext getDialogContext()
         {
-            base.getDialogContext(context);
+            base.getDialogContext();
             UserContext.dialog = "MenuOptionDialog";
             return UserContext;
         }

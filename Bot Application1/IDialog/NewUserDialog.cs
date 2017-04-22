@@ -22,9 +22,9 @@ namespace Bot_Application1.IDialog
     [Serializable]
     public class NewUserDialog : AbsDialog<IMessageActivity>
     {
-        public override UserContext getDialogContext(IDialogContext context)
+        public override UserContext getDialogContext()
         {
-            base.getDialogContext(context);
+            base.getDialogContext();
             UserContext.dialog = "NewUserDialog";
             return UserContext;
         }
@@ -271,7 +271,6 @@ namespace Bot_Application1.IDialog
         {
             //user class
 
-            conv().saveUserToDb((User)User);
 
             await writeMessageToUser(context, conv().getPhrase(Pkey.LetsStart));
             setDialogsVars(context);

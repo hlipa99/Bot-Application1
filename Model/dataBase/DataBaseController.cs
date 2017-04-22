@@ -15,6 +15,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Runtime.Caching;
 using System.Web;
+using Bot_Application1;
 //using static Bot_Application1.Controllers.ConversationController;
 
 namespace Model.dataBase
@@ -130,22 +131,32 @@ namespace Model.dataBase
         {
             try
             {
-                var userUpdateDB = DB.User.Where(x => x.UserID == user.UserID);
-                if (userUpdateDB.Any())
+                var userUpdateDB = DB.User.Find(user.UserID);
+              if (userUpdateDB != null)
                 {
-                    var userUpdate = userUpdateDB.Single();
-                    userUpdate = user;
+
+                    userUpdateDB.PreviusParses = user.PreviusParses;
+                    userUpdateDB.TimeConnected = user.TimeConnected;
+                    userUpdateDB.UserAddress = user.UserAddress;
+                    userUpdateDB.UserClass = user.UserClass;
+                    userUpdateDB.UserID = user.UserID;
+                    userUpdateDB.UserLastSession = user.UserLastSession;
+                    userUpdateDB.UserName = user.UserName;
+                    userUpdateDB.UserOverallTime = user.UserOverallTime;
+                    userUpdateDB.UserTimesConnected = user.UserTimesConnected;
+                    DB.Entry(userUpdateDB).State = EntityState.Modified;
                 }
                 else
                 {
                     DB.User.Add(user);
                 }
-                await DB.SaveChangesAsync();
+                 DB.SaveChanges();
+             
             }
             catch (Exception e)
             {
                 //   Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
-                throw new DBException();
+              //  throw new DBException();
             }
 
         }
@@ -182,7 +193,47 @@ namespace Model.dataBase
 
         }
 
+        public media getRandomMedia(string type, string[] possibleFlags)
+        {
+            media media = new media();
 
+
+            try
+            {
+
+                var mediaRes = DB.media.Where(x=>x.mediaKey == type);
+                List<media> match = new List<media>();
+                foreach (var f in possibleFlags)
+                {
+                    var tryMatch = mediaRes.Where(m => m.flags.Contains(f));
+                    if (tryMatch.Any())
+                    {
+                        match.AddRange(tryMatch);
+                    }
+                }
+
+                if (!match.Any())
+                {
+                    match.AddRange(mediaRes);
+                }
+
+                var rnd = RandomNum.getNumber(match.Count);
+
+                return match[rnd];
+
+
+            }
+            catch (Exception e)
+            {
+                //   Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
+                throw new DBException();
+            }
+
+            
+
+
+            return media;
+        }
 
         public async virtual void addNewUser(IUser user)
         {
