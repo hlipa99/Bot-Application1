@@ -86,6 +86,7 @@ namespace Bot_Application1.IDialog
                 await writeMessageToUser(context, new string[] { '"' + question.questionText.Trim() + '"' });
 
                 updateRequestTime(context);
+                setDialogsVars(context);
                 context.Wait(answerQuestion);
             }
             else
