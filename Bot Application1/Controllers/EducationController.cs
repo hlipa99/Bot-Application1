@@ -257,14 +257,14 @@ namespace Bot_Application1.Controllers
                     feedback = ConversationController.mergeText(feedback,ConversationController.getPhrase(Pkey.MyAnswerToQuestion));
                     feedback = answerArrayToString(new List<string>(studySession.CurrentSubQuestion.answerText.Split('|')),feedback);
                     return feedback;
-
+                case UserIntent.menu:
                 case UserIntent.stopSession:
                     throw new StopSessionException();
 
                 case UserIntent.sessionBreak:
                     throw new sessionBreakException();
                 case UserIntent.bot_questions:
-                    return conversationController.answerUserQuestion(text);
+                    throw new botQuestionRespondException();
                 case UserIntent.funny:
                     throw new insertFunnybreakException();
                 case UserIntent.intresting:

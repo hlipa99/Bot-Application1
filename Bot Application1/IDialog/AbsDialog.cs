@@ -310,7 +310,13 @@ namespace Bot_Application1.IDialog
         {
             getDialogsVars(context);
             var userDB = (User)user;
+
+            //support for privies version users
+            if (user.LastSeen == null) user.LastSeen = new DateTime?();
             if (!user.LastSeen.HasValue) user.LastSeen = DateTime.UtcNow;
+            if (user.UserOverallTime == null) user.UserOverallTime = new TimeSpan?().ToString();
+           
+
             if (user.LastSeen.Value.AddMinutes(30) > DateTime.UtcNow)
             {
                 user.UserOverallTime = TimeSpan.Parse(user.UserOverallTime).Add(DateTime.UtcNow.Subtract(user.LastSeen.Value)).ToString();

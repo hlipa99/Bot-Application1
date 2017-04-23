@@ -35,7 +35,7 @@ namespace Bot_Application1.IDialog
 
         public async Task intreduceQuestion(IDialogContext context)
         {
-
+            getDialogsVars(context);
             var question = StudySession.CurrentQuestion;
 
 
@@ -51,20 +51,18 @@ namespace Bot_Application1.IDialog
                     await writeMessageToUser(context, conv().getPhrase(Pkey.takeQuestionApart));
                 }
                 await askNextSubQuestion(context, null);
-            
-
+            setDialogsVars(context);
         }
 
       
 
         public async Task askNextSubQuestion(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            if(result != null) await result;
             getDialogsVars(context);
+            if (result != null) await result;
             edc().getNextSubQuestion();
-            setDialogsVars(context);
-
             var question = StudySession.CurrentSubQuestion;
+            setDialogsVars(context);
             if (question != null)
             {
                 await askSubQuestion(context, null);
@@ -79,7 +77,7 @@ namespace Bot_Application1.IDialog
 
         public async Task askSubQuestion(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-
+            getDialogsVars(context);
             var question = StudySession.CurrentSubQuestion;
             if (question != null)
             {
@@ -98,9 +96,12 @@ namespace Bot_Application1.IDialog
 
         public async Task answerQuestion(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            if (await checkOutdatedMessage<IMessageActivity>(context, answerQuestion, result)) return;
-
             var message = await result;
+            try
+            {
+                if (await checkOutdatedMessage<IMessageActivity>(context, answerQuestion, result)) return;
+
+          
 
         //    if(User.Language == "en") {
         //        message.Text = ControlerTranslate.TranslateToEng(message.Text);
@@ -109,8 +110,7 @@ namespace Bot_Application1.IDialog
             //      context.UserData.TryGetValue<StudySession>("studySession", out studySession);
             var question = StudySession.CurrentSubQuestion;
 
-            try
-            {
+          
                 typingTime(context);
                 var replay = conv().createReplayToUser(message.Text, getDialogContext());
                 setDialogsVars(context);
@@ -130,6 +130,11 @@ namespace Bot_Application1.IDialog
                
             }catch (sessionBreakException ex){
                 throw new sessionBreakException();
+                return;
+            }
+            catch (botQuestionRespondException ex)
+            {
+                await writeMessageToUser(context, conv().answerUserQuestion(message.Text));
                 return;
             }
             catch (insertFunnybreakException ex)

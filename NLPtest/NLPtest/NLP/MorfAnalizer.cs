@@ -598,11 +598,13 @@ namespace NLP.NLP
         private string removeParentheses(string input, char start, char end)
         {
             string res = input;
-            while (res.Contains(start) && res.Contains(end))
+            var counter = 0;
+            while (res.Contains(start) && res.Contains(end) && counter < 5)
             {
                 string s = input.Substring(0, input.IndexOf(start) - 1);
                 string e = input.Substring(input.IndexOf(end) + 1);
                 res = s + e;
+                counter++;
             }
 
             return res;
