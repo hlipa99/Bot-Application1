@@ -73,8 +73,10 @@ namespace Bot_Application1.Controllers
 
         public string FindMatchFromOptions(string[] options, string matchString)
         {
+            if (new List<string>(options).Contains(matchString)) { return matchString; }
             var best = "";
             var bestInt = -1;
+            
             foreach (var o in options)
             {
                 int precent = NlpControler.matchStrings(o, matchString);
@@ -93,6 +95,27 @@ namespace Bot_Application1.Controllers
                 return null;
             }
 
+        }
+
+        internal string[] getUserConvResponse(string text, UserContext userContext)
+        {
+            var answerIntent = nlpControler.getUserIntent(text, userContext.dialog);
+
+            switch (answerIntent)
+            {
+                case UserIntent.bot_questions:
+                    return answerUserQuestion(text);
+                case UserIntent.funny:
+                    return mergeText(getPhrase(Pkey.mightHaveSomthing), getMediaMessage("funny").value.Split('|'));
+                case UserIntent.intresting:
+                    return mergeText(getPhrase(Pkey.mightHaveSomthing), getMediaMessage("intresting").value.Split('|'));
+                case UserIntent.swearword:
+                    StudySession.SwearCounter++;
+                    return getPhrase(Pkey.swearResponse);
+                default:
+                    return null;
+
+            }
         }
 
         public virtual IStudySession StudySession
@@ -178,11 +201,17 @@ namespace Bot_Application1.Controllers
            };
         }
 
-        internal void sendMediaMessage(IMessageActivity msg, StudySession studySession, IUser user, string type)
+
+
+        internal media getMediaMessage(string type)
         {
-            var question = studySession.CurrentQuestion.QuestionText;
+            string question = null;
+            if (question != null)
+            {
+                question = studySession.CurrentQuestion.QuestionText;
+            }
             var possibleFlags = new List<string>();
-            if (type != "useless")
+            if (type != "useless" && question!= null)
             {
                 var objects = nlpControler.Analize(question);
 
@@ -191,19 +220,14 @@ namespace Bot_Application1.Controllers
                     possibleFlags.Add(o.Word);
                 }
             }
+
             var mediaRes = db.getRandomMedia(type, possibleFlags.ToArray());
-            if(mediaRes.type == "text")
-            {
-                msg.Text = mediaRes.value;
-            }else if(mediaRes.type == "img")
-            {
-                createImgMessage(msg, mediaRes.mediaKey);
-            }
+            return mediaRes;
         }
 
-       
-        
-        public string[] getClassOptions()
+
+
+public string[] getClassOptions()
         {
             return new string[]
            {
@@ -415,14 +439,14 @@ namespace Bot_Application1.Controllers
             }
         }        
 
-        internal string[] mergeText(string v1, string[] v2)
-        {
-            if (v2.Length == 0) return new string[] { v1 };
+        //internal string[] mergeText(string v1, string[] v2)
+        //{
+        //    if (v2.Length == 0) return new string[] { v1 };
 
-            var space = v1.Length == 1 ? "" : " ";
-            v2[0] = v1 + space + v2[0];
-            return v2;
-        }
+        //    var space = v1.Length == 1 ? "" : " ";
+        //    v2[0] = v1 + space + v2[0];
+        //    return v2;
+        //}
 
         //public string getGeneralFeeling(string text)   //TODO: real feeling
         //{
@@ -441,20 +465,28 @@ namespace Bot_Application1.Controllers
         //}
         public string[] createReplayToUser(string text, UserContext context)
         {
-            NLPControler nlp = new NLPControler();
+          
             //  var answer = nlp.Analize(text);
-            var answerIntent = nlp.getUserIntent(text, context.dialog);
-            if (context.dialog == "LerningDialog" || context.dialog == "QuestionDialog")
-            {
-                return ec.createReplayToUser(text, answerIntent);
-            }
+            var answerIntent = nlpControler.getUserIntent(text, context.dialog);
+            if (context.dialog == "QuestionDialog") {
+                switch (answerIntent)
+                {
+                    case UserIntent.stopSession:
+                        throw new StopSessionException();
+                    case UserIntent.sessionBreak:
+                        throw new sessionBreakException();
+                    case UserIntent.historyAnswer:
+                    default:
+                            return ec.createReplayToUser(text, answerIntent);
 
-            else if (context.dialog == "GreetingDialog")
+                }
+            }
+            else
             {
 
                 switch (answerIntent)
                 {
-                   
+
                     case UserIntent.howAreYou:
                         return mergeText(getPhrase(Pkey.greetings), getPhrase(Pkey.IAmFine));
                         break;
@@ -469,43 +501,41 @@ namespace Bot_Application1.Controllers
                         if (user.LastSeen.GetValueOrDefault().AddHours(1) < DateTime.UtcNow)
                         {
                             return getPhrase(Pkey.greetings);
-                        }else
+                        }
+                        else
                         {
                             return getPhrase(Pkey.shortHello);
                         }
                         break;
                 }
             }
-            else
-            {
-                throw new ContextException();
-            }
             return null;
         }
 
-        public bool isEnglish(string text)
-        {
-            foreach (var c in text)
-                {
-                    if((c <= 90 && c >= 65) || (c <= 122 && c >= 97))
-                    {
-                         return true;
-                    }
-                }
-            return false;
-        }
 
-        public bool isHebrew(string text)
-        {
-            foreach (var c in text)
-            {
-                if (c <= 0x0005EA && c >= 0x0005D0)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
+        //public bool isEnglish(string text)
+        //{
+        //    foreach (var c in text)
+        //        {
+        //            if((c <= 90 && c >= 65) || (c <= 122 && c >= 97))
+        //            {
+        //                 return true;
+        //            }
+        //        }
+        //    return false;
+        //}
+
+        //public bool isHebrew(string text)
+        //{
+        //    foreach (var c in text)
+        //    {
+        //        if (c <= 0x0005EA && c >= 0x0005D0)
+        //        {
+        //            return true;
+        //        }
+        //    }
+        //    return false;
+        //}
 
 
 
@@ -663,15 +693,6 @@ namespace Bot_Application1.Controllers
 
             }
 
-        internal IEnumerable<string> getYesNoOptions()
-        {
-            throw new NotImplementedException();
-        }
-
-        private char getGenderName(string userGender, string v)
-        {
-            throw new NotImplementedException();
-        }
 
         private string ifGufFemenin(string v)
         {

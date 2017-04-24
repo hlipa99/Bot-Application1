@@ -16,8 +16,8 @@ namespace Model.Models
         IQuestion CurrentQuestion { get; set; }
         ISubQuestion CurrentSubQuestion { get; set; }
         int SessionLength { get; set;}
-
-      string SubCategory { get; set;}
+        int SwearCounter { get; set; }
+        string SubCategory { get; set;}
       string Category { get; set;}
         DateTime startTime { get; set; }
     }

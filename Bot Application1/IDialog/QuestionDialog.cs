@@ -112,9 +112,32 @@ namespace Bot_Application1.IDialog
 
           
                 typingTime(context);
-                var replay = conv().createReplayToUser(message.Text, getDialogContext());
-                setDialogsVars(context);
-                await writeMessageToUser(context, replay);
+
+                var response = conv().getUserConvResponse(message.Text,getDialogContext());
+                if (response != null)
+                {
+                    await writeMessageToUser(context, response);
+                    await writeMessageToUser(context, conv().getPhrase(Pkey.letsContinue));
+                    setDialogsVars(context);
+                    if (StudySession.SwearCounter > 2)
+                    {
+                        await writeMessageToUser(context, conv().getPhrase(Pkey.swearSuspention));
+                        updateRequestTime();
+                        context.Wait(swearSuspention);
+                    }
+                    else
+                    {
+                        await askSubQuestion(context, null);
+                    }
+                    return;
+                }
+                else
+                {
+                    typingTime(context);
+                    var replay = conv().createReplayToUser(message.Text, getDialogContext());
+                    await writeMessageToUser(context, replay);
+                    setDialogsVars(context);
+                }
             }
             catch(UnrelatedSubjectException ex) {
       
@@ -130,50 +153,6 @@ namespace Bot_Application1.IDialog
                
             }catch (sessionBreakException ex){
                 throw new sessionBreakException();
-                return;
-            }
-            catch (botQuestionRespondException ex)
-            {
-                await writeMessageToUser(context, conv().answerUserQuestion(message.Text));
-                return;
-            }
-            catch (insertFunnybreakException ex)
-            {
-                var msg = context.MakeMessage();
-                conv().sendMediaMessage(msg, StudySession, User, "funny");
-                await writeMessageToUser(context, msg);
-                await writeMessageToUser(context, conv().getPhrase(Pkey.letsContinue));
-                await askSubQuestion(context, null);
-                return;
-            }
-            catch (insertIntrestingException ex)
-            {
-                var msg = context.MakeMessage();
-                await writeMessageToUser(context, conv().getPhrase(Pkey.mightHaveSomthing));
-
-                conv().sendMediaMessage(msg, StudySession, User, "intresting");
-                await writeMessageToUser(context, msg);
-                await writeMessageToUser(context, conv().getPhrase(Pkey.letsContinue));
-                await askSubQuestion(context, null);
-                return;
-            }
-            catch (swearWordException ex)
-            {
-                await writeMessageToUser(context, conv().getPhrase(Pkey.swearResponse));
-                if (StudySession.SwearCounter > 2)
-                {
-                    await writeMessageToUser(context, conv().getPhrase(Pkey.swearSuspention));
-                    updateRequestTime();
-                    context.Wait(swearSuspention);
-                }
-                else
-                {
-                    StudySession.SwearCounter++;
-                    setDialogsVars(context);
-                    await askSubQuestion(context, null);
-                   
-                }
-               
                 return;
             }
             catch (Exception ex)

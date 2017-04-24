@@ -17,6 +17,7 @@ using Model;
 using Model.Models;
 using Bot_Application1.Exceptions;
 using Bot_Application1.Models;
+using Bot_Application1.Controllers;
 
 namespace Bot_Application1.IDialog
 {
@@ -27,7 +28,7 @@ namespace Bot_Application1.IDialog
         public override UserContext getDialogContext()
         {
             base.getDialogContext();
-            UserContext.dialog = "SideDialog";
+            UserContext.dialog = "MainDialog";
             return UserContext;
         }
 
@@ -105,46 +106,34 @@ namespace Bot_Application1.IDialog
 
         private async Task MainMenuResualt(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            if (await checkOutdatedMessage<IMessageActivity>(context, MainMenuResualt, result)) return;
-            getDialogsVars(context);
-
-            var text = await result;
-            var option = "";
             try
             {
-
-                if (text is string)
-            {
-          //      option = (string)text;
-            }
-            else
-            {
-                option = ((IMessageActivity)text).Text;
-            }
-
-
-            if (options.Contains(option))
-            {
-                var optionIdx = options.ToList().IndexOf(option);
-                switch (optionIdx)
+                if (await checkOutdatedMessage<IMessageActivity>(context, MainMenuResualt, result)) return;
+                getDialogsVars(context);
+                var text = await result;
+                string option = text.Text;
+                if (options.Contains(option))
                 {
-                    case 0:  //start learning
-                        context.Call<string>(new LerningDialog(), MainMenu);
-                        break;
-                    case 1:  //not implamented
-                        context.Call(new NotImplamentedDialog(), returnToMainMenu);
-                        break;
-                    default:
-                        break;
-                        await writeMessageToUser(context, conv().getPhrase(Pkey.NotAnOption, textVar: option));
-                        await MainMenu(context,result);
+                    var optionIdx = options.ToList().IndexOf(option);
+                    switch (optionIdx)
+                    {
+                        case 0:  //start learning
+                            context.Call<string>(new LerningDialog(), MainMenu);
+                            break;
+                        case 1:  //not implamented
+                            context.Call(new NotImplamentedDialog(), returnToMainMenu);
+                            break;
+                        default:
+                            break;
+                            await writeMessageToUser(context, conv().getPhrase(Pkey.NotAnOption, textVar: option));
+                            await MainMenu(context, result);
+                    }
                 }
-            }else
-            {
-                await writeMessageToUser(context, conv().getPhrase(Pkey.NotAnOption,textVar: option));
-                await MainMenu(context, result);
-            }
-
+                else
+                {
+                    await writeMessageToUser(context, conv().getPhrase(Pkey.NotAnOption, textVar: option));
+                    await MainMenu(context, result);
+                }
 
             }catch(Exception ex)
             {
