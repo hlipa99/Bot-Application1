@@ -258,8 +258,10 @@
     <Compile Include="Exceptions\TemplateException.cs" />
     <Compile Include="IentityBase.cs" />
     <Compile Include="MorfObjects\ExtTokenWithBuilder.cs" />
-    <Compile Include="QnA\DBDataException.cs" />
+    <Compile Include="Exceptions\DBDataException.cs" />
     <Compile Include="QnA\QAEngin.cs" />
+    <Compile Include="QnA\StatisticAgent.cs" />
+    <Compile Include="QnA\UserStatistics.cs" />
     <Compile Include="ServerException.cs" />
     <Compile Include="TemplateObject.cs" />
     <Compile Include="WorldObj\entities\NumberObject.cs" />

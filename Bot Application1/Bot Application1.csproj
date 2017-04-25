@@ -261,6 +261,7 @@
     <Compile Include="Controllers\botQuestionRespondException.cs" />
     <Compile Include="Controllers\insertFunnybreakException.cs" />
     <Compile Include="Controllers\insertIntrestingException.cs" />
+    <Compile Include="Controllers\menuException.cs" />
     <Compile Include="Controllers\sessionBreakException.cs" />
     <Compile Include="Controllers\swearWordException.cs" />
     <Compile Include="Controllers\UnrelatedSubjectException.cs" />

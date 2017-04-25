@@ -79,6 +79,8 @@ namespace Bot_Application1.IDialog
             {
                 getDialogsVars(context);
 
+              
+
                 if (User != null)
                 {
 
@@ -118,7 +120,7 @@ namespace Bot_Application1.IDialog
                     switch (optionIdx)
                     {
                         case 0:  //start learning
-                            context.Call<string>(new LerningDialog(), MainMenu);
+                            context.Call<string>(new LerningDialog(), EndSession);
                             break;
                         case 1:  //not implamented
                             context.Call(new NotImplamentedDialog(), returnToMainMenu);
@@ -157,8 +159,19 @@ namespace Bot_Application1.IDialog
             //   context.Wait(MainMenu);
             try
             {
-                await result;
-            }catch(Exception ex)
+                var resStr = await result;
+                 if (resStr == "menu")
+                {
+                    await MainMenu(context, null);
+                    return;
+                }
+                else
+                {
+                    context.Call(new FarewellDialog(), MainMenu);
+                    return;
+                }
+            }
+            catch (Exception ex)
             {
                 try
                 {
@@ -175,7 +188,7 @@ namespace Bot_Application1.IDialog
             }
 
          //   setDialogsVars(context);
-            context.Call(new FarewellDialog(), MainMenu);
+
         }
 
 

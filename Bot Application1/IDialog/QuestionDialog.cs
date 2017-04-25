@@ -112,7 +112,9 @@ namespace Bot_Application1.IDialog
 
           
                 typingTime(context);
+                
 
+                //jokes,info,swear, etc.
                 var response = conv().getUserConvResponse(message.Text,getDialogContext());
                 if (response != null)
                 {
@@ -144,9 +146,12 @@ namespace Bot_Application1.IDialog
                 await context.Forward<IMessageActivity, IMessageActivity>(new SideDialog(), askSubQuestion, message, CancellationToken.None);
                 return;
             }
+            catch(menuException ex){
+                throw ex;
+            }
             catch (StopSessionException ex)
             {
-                await writeMessageToUser(context, conv().getPhrase(Pkey.earlyDiparture));
+                await writeMessageToUser(context, conv().endOfSession());
                 var msg = conv().getPhrase(Pkey.areYouSure);
                 await context.Forward<bool, string[]>(new YesNoQuestionDialog(), stopSession, msg, CancellationToken.None);
                 return;

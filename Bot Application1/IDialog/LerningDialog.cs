@@ -181,13 +181,19 @@ namespace Bot_Application1.IDialog
                 }
                catch (StopSessionException ex)
                 {
-   
+                    context.Done("EndSession");
+                }
+                catch (menuException Exception)
+                {
+                    context.Done("menu");
+
                 }
                 catch (Exception ex)
                 {
                     await writeMessageToUser(context, conv().getPhrase(Pkey.innerException));
                     Logger.addErrorLog(getDialogContext().dialog, ex.Message + Environment.NewLine + ex.StackTrace + ex.InnerException);
-                    await intreduceQuestion(context);
+                    context.Done("menu");
+                    return;
                 }
             }
             else
@@ -204,7 +210,7 @@ namespace Bot_Application1.IDialog
             }
             catch (EndOfLearningSessionException ex)
             {
-                context.Done("learningSession");
+                context.Done("menu");
                 return;
             }
             catch (StopSessionException ex) 
@@ -292,7 +298,7 @@ namespace Bot_Application1.IDialog
             getDialogsVars(context);
         //    edc().saveUserSession();
 
-            context.Done("learningSession");
+            context.Done("menu");
         }
 
 

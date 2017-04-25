@@ -475,6 +475,8 @@ public string[] getClassOptions()
                         throw new StopSessionException();
                     case UserIntent.sessionBreak:
                         throw new sessionBreakException();
+                    case UserIntent.menu:
+                        throw new menuException();
                     case UserIntent.historyAnswer:
                     default:
                             return ec.createReplayToUser(text, answerIntent);

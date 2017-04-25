@@ -256,6 +256,7 @@ namespace Bot_Application1.Controllers
                     feedback = answerArrayToString(new List<string>(studySession.CurrentSubQuestion.answerText.Split('|')),feedback);
                     return feedback;
                 case UserIntent.menu:
+                    throw new menuException();
                 case UserIntent.stopSession:
                     throw new StopSessionException();
                 case UserIntent.sessionBreak:
