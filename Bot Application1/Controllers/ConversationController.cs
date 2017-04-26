@@ -567,7 +567,7 @@ namespace Bot_Application1.Controllers
                     //    phraseRes = ControlerTranslate.TranslateToEng(phraseRes);
                     //}
 
-                    return phraseRes.Split('|');
+                   return phraseRes.Split('|');
                 }
                 else
                 {
