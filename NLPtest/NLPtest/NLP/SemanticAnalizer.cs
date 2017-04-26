@@ -592,7 +592,14 @@ namespace NLP.NLP
             try
             {
                 var intentStr = ac.getIntentApiAi(input, context);
-                intent = (UserIntent) Enum.Parse(typeof(UserIntent), intentStr.Replace(" ",""));
+                if (intentStr != null)
+                {
+                    intent = (UserIntent)Enum.Parse(typeof(UserIntent), intentStr.Replace(" ", ""));
+                }
+                else
+                {
+                    return UserIntent.unknown;
+                }
             }catch(Exception ex)
             {
                 return UserIntent.unknown;
@@ -621,7 +628,8 @@ namespace NLP.NLP
         swearword,
         intresting,
         funny,
-        sorry
+        sorry,
+        menu
     }
 }
 

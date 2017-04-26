@@ -181,13 +181,19 @@ namespace Bot_Application1.IDialog
                 }
                catch (StopSessionException ex)
                 {
-   
+                    context.Done("EndSession");
+                }
+                catch (menuException Exception)
+                {
+                    context.Done("menu");
+
                 }
                 catch (Exception ex)
                 {
                     await writeMessageToUser(context, conv().getPhrase(Pkey.innerException));
                     Logger.addErrorLog(getDialogContext().dialog, ex.Message + Environment.NewLine + ex.StackTrace + ex.InnerException);
-                    await intreduceQuestion(context);
+                    context.Done("menu");
+                    return;
                 }
             }
             else
@@ -204,7 +210,7 @@ namespace Bot_Application1.IDialog
             }
             catch (EndOfLearningSessionException ex)
             {
-                context.Done("learningSession");
+                context.Done("menu");
                 return;
             }
             catch (StopSessionException ex) 
@@ -253,9 +259,8 @@ namespace Bot_Application1.IDialog
                 await writeMessageToUser(context, conv().getPhrase(Pkey.takeAbreak));
                 await writeMessageToUser(context, conv().getPhrase(Pkey.uselessLink));
                 var msg = context.MakeMessage();
-                conv().sendMediaMessage(msg, StudySession, User, "useless");
-                await writeMessageToUser(context, msg);
-
+                var media = conv().getMediaMessage("useless");
+                await writeMessageToUser(context, media.value.Split('|'));
                 await writeMessageToUser(context, conv().getPhrase(Pkey.imWaiting));
                 updateRequestTime(context);
                 context.Wait(continuAfterBreak);
@@ -293,7 +298,7 @@ namespace Bot_Application1.IDialog
             getDialogsVars(context);
         //    edc().saveUserSession();
 
-            context.Done("learningSession");
+            context.Done("menu");
         }
 
 

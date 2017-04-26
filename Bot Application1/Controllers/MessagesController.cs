@@ -47,7 +47,7 @@ namespace Bot_Application1.Controllers
 
                             var builder = new ContainerBuilder();
                             builder
-                                .Register(c => new CachingBotDataStore(c.Resolve<ConnectorStore>(), CachingBotDataStoreConsistencyPolicy.LastWriteWins))
+                                .Register(c => new CachingBotDataStore(c.ResolveKeyed<IBotDataStore<BotData>>(typeof(ConnectorStore)), CachingBotDataStoreConsistencyPolicy.LastWriteWins))
                                 .As<IBotDataStore<BotData>>()
                                 .AsSelf()
                                 .InstancePerLifetimeScope();
@@ -89,7 +89,9 @@ namespace Bot_Application1.Controllers
             }
             catch(Exception ex)
             {
-                var response = Request.CreateResponse(ex.ToString());
+                //  var response = Request.CreateResponse(ex.ToString());
+                //   return response;
+                var response = Request.CreateResponse(HttpStatusCode.OK);
                 return response;
             }
       

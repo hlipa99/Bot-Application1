@@ -96,7 +96,8 @@ namespace NLP.QnA
                 }
 
                 Logger.addAnswerOutput(subquestion.answerText, answer, feedback);
-                
+                if (feedback == null) feedback = new AnswerFeedback();
+
                 feedback.answer = answer;
                 
                 return feedback;

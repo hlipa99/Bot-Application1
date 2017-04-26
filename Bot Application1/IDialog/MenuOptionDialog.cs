@@ -56,20 +56,33 @@ namespace Bot_Application1.IDialog
         protected async Task optionsRes(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
             if (await checkOutdatedMessage<IMessageActivity>(context, checkOutdatedMessage, result)) return;
-
+            getDialogsVars(context);
             //    var message = await result;
 
             var message = await result;
-
-            var coise = conv().FindMatchFromOptions(options,message.Text);
-            if(coise != null)
+            var choise = conv().FindMatchFromOptions(options, message.Text);
+            if (choise != null)
             {
-                message.Text = coise;
+                message.Text = choise;
                 context.Done(message);
-            }else
+            }
+            else
             {
-                await writeMessageToUser(context, new string[] { retry });
-                await StartAsync(context);
+                var response = conv().getUserConvResponse(message.Text, getDialogContext());
+                if (response != null)
+                {
+                    await writeMessageToUser(context, response);
+                    await writeMessageToUser(context, conv().getPhrase(Pkey.letsContinue));
+                    await StartAsync(context);
+                    return;
+                }
+                else
+                {
+                    await writeMessageToUser(context, new string[] { retry });
+                    await StartAsync(context);
+                    return;
+                }
+   
             }
 
 

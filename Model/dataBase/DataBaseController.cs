@@ -556,5 +556,11 @@ namespace Model.dataBase
 
             }
         }
+
+        public List<userScore> getUserAnswersStat(string userID)
+        {
+            var scorse = DB.userScore.Where(x => x.userID == userID);
+            return scorse.ToList(); ;
+        }
     }
 }

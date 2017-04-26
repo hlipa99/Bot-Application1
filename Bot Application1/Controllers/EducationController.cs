@@ -245,33 +245,23 @@ namespace Bot_Application1.Controllers
         public string[] createReplayToUser(string text, UserIntent answerIntent)
         {
             switch (answerIntent)
-            {
+            {                         
                 case UserIntent.DefaultFallbackIntent:
                 case UserIntent.unknown:
                 case UserIntent.historyAnswer:
                     return createFeedBack(checkAnswer(text));
-
                 case UserIntent.dontKnow:
-                    
-                        var feedback = ConversationController.getPhrase(Pkey.neverMind);
+                    var feedback = ConversationController.getPhrase(Pkey.neverMind);
                     feedback = ConversationController.mergeText(feedback,ConversationController.getPhrase(Pkey.MyAnswerToQuestion));
                     feedback = answerArrayToString(new List<string>(studySession.CurrentSubQuestion.answerText.Split('|')),feedback);
                     return feedback;
-
+                case UserIntent.menu:
+                    throw new menuException();
                 case UserIntent.stopSession:
                     throw new StopSessionException();
-
                 case UserIntent.sessionBreak:
                     throw new sessionBreakException();
                 case UserIntent.bot_questions:
-                    return conversationController.answerUserQuestion(text);
-                case UserIntent.funny:
-                    throw new insertFunnybreakException();
-                case UserIntent.intresting:
-                    throw new insertIntrestingException();
-                case UserIntent.swearword:
-                    throw new swearWordException();
-
                 default:
                     return createFeedBack(checkAnswer(text));
 

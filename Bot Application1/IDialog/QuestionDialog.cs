@@ -35,7 +35,7 @@ namespace Bot_Application1.IDialog
 
         public async Task intreduceQuestion(IDialogContext context)
         {
-
+            getDialogsVars(context);
             var question = StudySession.CurrentQuestion;
 
 
@@ -51,20 +51,18 @@ namespace Bot_Application1.IDialog
                     await writeMessageToUser(context, conv().getPhrase(Pkey.takeQuestionApart));
                 }
                 await askNextSubQuestion(context, null);
-            
-
+            setDialogsVars(context);
         }
 
       
 
         public async Task askNextSubQuestion(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            if(result != null) await result;
             getDialogsVars(context);
+            if (result != null) await result;
             edc().getNextSubQuestion();
-            setDialogsVars(context);
-
             var question = StudySession.CurrentSubQuestion;
+            setDialogsVars(context);
             if (question != null)
             {
                 await askSubQuestion(context, null);
@@ -79,7 +77,7 @@ namespace Bot_Application1.IDialog
 
         public async Task askSubQuestion(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-
+            getDialogsVars(context);
             var question = StudySession.CurrentSubQuestion;
             if (question != null)
             {
@@ -98,9 +96,12 @@ namespace Bot_Application1.IDialog
 
         public async Task answerQuestion(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            if (await checkOutdatedMessage<IMessageActivity>(context, answerQuestion, result)) return;
-
             var message = await result;
+            try
+            {
+                if (await checkOutdatedMessage<IMessageActivity>(context, answerQuestion, result)) return;
+
+          
 
         //    if(User.Language == "en") {
         //        message.Text = ControlerTranslate.TranslateToEng(message.Text);
@@ -109,66 +110,54 @@ namespace Bot_Application1.IDialog
             //      context.UserData.TryGetValue<StudySession>("studySession", out studySession);
             var question = StudySession.CurrentSubQuestion;
 
-            try
-            {
+          
                 typingTime(context);
-                var replay = conv().createReplayToUser(message.Text, getDialogContext());
-                setDialogsVars(context);
-                await writeMessageToUser(context, replay);
+                
+
+                //jokes,info,swear, etc.
+                var response = conv().getUserConvResponse(message.Text,getDialogContext());
+                if (response != null)
+                {
+                    await writeMessageToUser(context, response);
+                    await writeMessageToUser(context, conv().getPhrase(Pkey.letsContinue));
+                    setDialogsVars(context);
+                    if (StudySession.SwearCounter > 2)
+                    {
+                        await writeMessageToUser(context, conv().getPhrase(Pkey.swearSuspention));
+                        updateRequestTime();
+                        context.Wait(swearSuspention);
+                    }
+                    else
+                    {
+                        await askSubQuestion(context, null);
+                    }
+                    return;
+                }
+                else
+                {
+                    typingTime(context);
+                    var replay = conv().createReplayToUser(message.Text, getDialogContext());
+                    await writeMessageToUser(context, replay);
+                    setDialogsVars(context);
+                }
             }
             catch(UnrelatedSubjectException ex) {
       
                 await context.Forward<IMessageActivity, IMessageActivity>(new SideDialog(), askSubQuestion, message, CancellationToken.None);
                 return;
             }
+            catch(menuException ex){
+                throw ex;
+            }
             catch (StopSessionException ex)
             {
-                await writeMessageToUser(context, conv().getPhrase(Pkey.earlyDiparture));
+                await writeMessageToUser(context, conv().endOfSession());
                 var msg = conv().getPhrase(Pkey.areYouSure);
                 await context.Forward<bool, string[]>(new YesNoQuestionDialog(), stopSession, msg, CancellationToken.None);
                 return;
                
             }catch (sessionBreakException ex){
                 throw new sessionBreakException();
-                return;
-            }
-            catch (insertFunnybreakException ex)
-            {
-                var msg = context.MakeMessage();
-                conv().sendMediaMessage(msg, StudySession, User, "funny");
-                await writeMessageToUser(context, msg);
-                await writeMessageToUser(context, conv().getPhrase(Pkey.letsContinue));
-                await askSubQuestion(context, null);
-                return;
-            }
-            catch (insertIntrestingException ex)
-            {
-                var msg = context.MakeMessage();
-                await writeMessageToUser(context, conv().getPhrase(Pkey.mightHaveSomthing));
-
-                conv().sendMediaMessage(msg, StudySession, User, "intresting");
-                await writeMessageToUser(context, msg);
-                await writeMessageToUser(context, conv().getPhrase(Pkey.letsContinue));
-                await askSubQuestion(context, null);
-                return;
-            }
-            catch (swearWordException ex)
-            {
-                await writeMessageToUser(context, conv().getPhrase(Pkey.swearResponse));
-                if (StudySession.SwearCounter > 2)
-                {
-                    await writeMessageToUser(context, conv().getPhrase(Pkey.swearSuspention));
-                    updateRequestTime();
-                    context.Wait(swearSuspention);
-                }
-                else
-                {
-                    StudySession.SwearCounter++;
-                    setDialogsVars(context);
-                    await askSubQuestion(context, null);
-                   
-                }
-               
                 return;
             }
             catch (Exception ex)
