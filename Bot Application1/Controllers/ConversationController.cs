@@ -73,7 +73,8 @@ namespace Bot_Application1.Controllers
 
         public string FindMatchFromOptions(string[] options, string matchString)
         {
-            if (new List<string>(options).Contains(matchString)) { return matchString; }
+            var list = new List<string>(options).ConvertAll(x=>x.Trim(' ','\'','`'));
+            if (list.Contains(matchString.Trim())) { return matchString; }
             var best = "";
             var bestInt = -1;
             
@@ -226,8 +227,7 @@ namespace Bot_Application1.Controllers
         }
 
 
-
-public string[] getClassOptions()
+        public string[] getClassOptions()
         {
             return new string[]
            {
@@ -369,6 +369,15 @@ public string[] getClassOptions()
             // return nlpControler.GetGender(text);
         }
 
+        internal string formatPhrases(string s)
+        {
+            if (s.Contains("<p:"))
+            {
+                s = formatParse(s);
+            }
+            return s;
+        }
+
         internal string[] answerUserQuestion(string text)
         {
 
@@ -406,10 +415,8 @@ public string[] getClassOptions()
 
         public  string getClass(string text)
         {
-            text = text.Replace("'", "");
-            if (text == "יב" || text == "יא" || text == "י")
-                return text;
-            else return null;
+            return NlpControler.getClass(text);
+
           //  return nlpControler.getClass(text);
         }
 
@@ -655,6 +662,7 @@ public string[] getClassOptions()
             }
 
 
+
             //example <יודע#יודעת>
             while (phraseRes.Contains("<") && phraseRes.Contains(">"))
             {
@@ -675,6 +683,37 @@ public string[] getClassOptions()
 
             return phraseRes;
 
+        }
+
+        private string formatParse(string phraseRes)
+        {
+            try
+            {
+                while (phraseRes.Contains("<p:"))
+                {
+                    int startIdx = phraseRes.IndexOf("<p:");
+                    int endIdx = phraseRes.IndexOf(">", startIdx);
+                    var phraseFormat = phraseRes.Substring(startIdx, endIdx - startIdx + 1);
+                    var phrase = phraseFormat.Substring(3, phraseFormat.Length - 4);
+                    var phraseValue = getPhrase((Pkey)Enum.Parse(typeof(Pkey),phrase));
+                    var phraseValueMerged = mergeText(phraseValue);
+                    phraseRes = phraseRes.Replace(phraseFormat, phraseValueMerged);
+                }
+                return phraseRes;
+            }catch(Exception ex)
+            {
+                return phraseRes;
+            }
+        }
+
+        private string mergeText(string[] phraseValue)
+        {
+            var res = "";
+            foreach(var s in phraseValue)
+            {
+                res += s;
+            }
+            return res;
         }
 
         private string getTimeOfDay()

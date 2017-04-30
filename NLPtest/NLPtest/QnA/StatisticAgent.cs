@@ -45,12 +45,13 @@ namespace NLPtest.QnA
                     perSubject.Add(new Tuple<string, int>(s.subCategory, s.Score.Value));
                 }
 
-                stat.scorByTime[0] = userScore.OrderBy(x => x.dateTime).Select(x => x.Score).ToArray();
-                stat.scorByTime[0] = userScore.OrderBy(x => x.dateTime).Select(x => x.Score).ToArray();
+            //    stat.scorByTime[0] = userScore.OrderBy(x => x.dateTime).Select(x => x.Score).ToArray();
+            //    stat.scorByTime[0] = userScore.OrderBy(x => x.dateTime).Select(x => x.Score).ToArray();
 
 
                 return null;
         }
+       }
 
 
         class questionIDscoreDistinct : IEqualityComparer<userScore>

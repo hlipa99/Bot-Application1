@@ -77,8 +77,8 @@ namespace Bot_Application1.IDialog
             await context.PostAsync(message);
             updateRequestTime(context);
             context.Wait(StartLearning);
-
-             }
+            return;
+        }
 
 
         private async Task shouldWeContinue(IDialogContext context, IAwaitable<Boolean> result)
@@ -147,18 +147,14 @@ namespace Bot_Application1.IDialog
                 }
                 catch(CategoryOutOfQuestionException ex)
                 {
-                    await writeMessageToUser(context, conv().getPhrase(Pkey.SubjectNotAvialable));
-                    await StartAsync(context);
-                    return;
+                    await CategoryOutOfQuestion(context);
                 }
               
       
                 await writeMessageToUser(context, conv().getPhrase(Pkey.areUReaddyToLearn));
                 await writeMessageToUser(context, conv().getPhrase(Pkey.firstQuestion));
-
-
-
                 await intreduceQuestion(context);
+                return;
             }else
             {
                 await writeMessageToUser(context, conv().getPhrase(Pkey.NotAnOption, textVar: message));
@@ -166,11 +162,51 @@ namespace Bot_Application1.IDialog
             }
         }
 
+        private async Task CategoryOutOfQuestion(IDialogContext context)
+        {
+            if(StudySession.QuestionAsked.Count > 0)
+            {
+
+                await context.Forward(new YesNoQuestionDialog(), CategoryOutOfQuestionRes, conv().getPhrase(Pkey.restartSession), new CancellationToken());
+
+            }
+            else
+            {
+                await writeMessageToUser(context, conv().getPhrase(Pkey.SubjectNotAvialable));
+                await StartAsync(context);
+                return;
+            }
+        }
+
+        private async Task CategoryOutOfQuestionRes(IDialogContext context, IAwaitable<bool> result)
+        {
+            var res = await result;
+            if (res)
+            {
+                StudySession.QuestionAsked = new System.Collections.Generic.List<IQuestion>();
+            }
+            else
+            {
+                await writeMessageToUser(context, conv().getPhrase(Pkey.SubjectNotAvialable));
+                await StartAsync(context);
+                return;
+            }
+
+        }
+
         private async Task intreduceQuestion(IDialogContext context)
         {
-            getDialogsVars(context);
-            edc().getNextQuestion();
-            setDialogsVars(context);
+            try
+            {
+                getDialogsVars(context);
+                edc().getNextQuestion();
+                setDialogsVars(context);
+            }
+            catch (CategoryOutOfQuestionException ex)
+            {
+                await CategoryOutOfQuestion(context);
+                return;
+            }
 
             if (StudySession.CurrentQuestion != null)
             {
@@ -178,14 +214,17 @@ namespace Bot_Application1.IDialog
                 try
                 {
                     context.Call(new QuestionDialog(), questionSummery);
+                    return;
                 }
                catch (StopSessionException ex)
                 {
                     context.Done("EndSession");
+                    return;
                 }
                 catch (menuException Exception)
                 {
                     context.Done("menu");
+                    return;
 
                 }
                 catch (Exception ex)
@@ -199,6 +238,7 @@ namespace Bot_Application1.IDialog
             else
             {
                 await EndOfLearningSession(context);
+                return;
             }
         }
 
@@ -211,6 +251,11 @@ namespace Bot_Application1.IDialog
             catch (EndOfLearningSessionException ex)
             {
                 context.Done("menu");
+                return;
+            }
+            catch (menuException ex)
+            {
+                await chooseSubject(context);
                 return;
             }
             catch (StopSessionException ex) 
@@ -253,6 +298,8 @@ namespace Bot_Application1.IDialog
         public async Task takeAbreak(IDialogContext context, IAwaitable<bool> result)
         {
             getDialogsVars(context);
+            StudySession.SessionLength = StudySession.QuestionAsked.Count + 3;
+            setDialogsVars(context);
             var cont = await result;
             if (cont)
             {
@@ -264,15 +311,16 @@ namespace Bot_Application1.IDialog
                 await writeMessageToUser(context, conv().getPhrase(Pkey.imWaiting));
                 updateRequestTime(context);
                 context.Wait(continuAfterBreak);
+                return;
             }
             else
             {
                 await writeMessageToUser(context, conv().getPhrase(Pkey.ok));
                 await writeMessageToUser(context, conv().getPhrase(Pkey.letsContinueWitoutBreak));
                 await intreduceQuestion(context);
+                return;
             }
-            StudySession.SessionLength += 3;
-            setDialogsVars(context);
+    
 
         }
 
@@ -286,6 +334,7 @@ namespace Bot_Application1.IDialog
             }
             else{
                 context.Wait(continuAfterBreak);
+                return;
             }
         }
 

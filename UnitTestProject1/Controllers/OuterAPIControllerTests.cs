@@ -87,8 +87,8 @@ namespace NLP.Controllers.Tests
             Assert.AreEqual(outerAPICtrl.correctSpelling("איגון ההגנ לחם באלף מלחמות"), "ארגון ההגנה לחם באלף מלחמות");
 
             //bad
-            Assert.AreEqual(outerAPICtrl.correctSpelling("hello its me"), "hello it's me");
-        
+            Assert.AreEqual(outerAPICtrl.correctSpelling("חגדליגדכ לחגכד לחגד"), "חגדליגדכ לחגכד לחגד");
+
 
             //ugly
             Assert.AreEqual(outerAPICtrl.correctSpelling(""), null);

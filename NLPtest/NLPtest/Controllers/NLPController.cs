@@ -15,8 +15,8 @@ namespace NLP.Controllers
     public class NLPControler
     {
 
-      //  static NLPControler instance;
-       // static object syncLock = new object();
+        //  static NLPControler instance;
+        // static object syncLock = new object();
         MorfAnalizer ma = null;
         SemanticAnalizer sa = new SemanticAnalizer();
 
@@ -70,12 +70,13 @@ namespace NLP.Controllers
 
         public virtual int matchStrings(string target, string matchString)
         {
-           if(target == matchString) return 100;
-            else{
+            if (target == matchString) return 100;
+            else
+            {
                 var targetAnlz = Ma.meniAnalize(target, false);
                 var matchStringAnlz = Ma.meniAnalize(matchString, true);
                 var score = 0;
-                var points = 100/(target.Split(' ').Length);
+                var points = 100 / (target.Split(' ').Length);
                 foreach (var s in targetAnlz[0])
                 {
                     if (matchStringAnlz.FindAll(x => x.FindAll(w => w.Lemma == s.Lemma).Count > 0).Count > 0)
@@ -87,7 +88,7 @@ namespace NLP.Controllers
             }
         }
 
-        public UserIntent getUserIntent(string str,string context)
+        public UserIntent getUserIntent(string str, string context)
         {
             return sa.getUserIntent(str, context);
         }
@@ -127,7 +128,7 @@ namespace NLP.Controllers
             ObjectCache cache = MemoryCache.Default;
             var cachedItem = cache.Get(text + systemAnswerText) as WorldObject[];
 
-            if (cachedItem == null || cachedItem.Length == 0)
+            if (cachedItem == null || cachedItem.Length == 0 || true)
             {
 
 
@@ -165,7 +166,7 @@ namespace NLP.Controllers
                     input.AddRange(sentence);
                 }
                 var exp = new CacheItemPolicy();
-                exp.SlidingExpiration = (new TimeSpan(1,0,0,1));
+                exp.SlidingExpiration = (new TimeSpan(1, 0, 0, 1));
                 cache.Set(text + systemAnswerText, input.ToArray(), exp);
                 return input;
             }
@@ -178,6 +179,11 @@ namespace NLP.Controllers
         {
             //Ma.searchAllAnswerForentities();
             Ma.updateEntities();
+        }
+
+        public string getClass(string text)
+        {
+            return ma.getClass(text);
         }
     }
 }

@@ -8,6 +8,8 @@ using Model;
 using Bot_Application1.Controllers;
 using Model.dataBase;
 using System.Threading;
+using BotTests;
+using System.Diagnostics;
 
 namespace UnitTestProject1
 {
@@ -48,7 +50,7 @@ namespace UnitTestProject1
 
         public string[] DBbotPhrase(Pkey key)
         {
-            return db.getBotPhrase(Pkey.letsLearn, new string[] { }, new string[] { });
+            return db.getBotPhrase(key, new string[] { }, new string[] { });
         }
 
 
@@ -94,20 +96,54 @@ namespace UnitTestProject1
 
         public List<string> sendBot(string test)
         {
+            Debug.WriteLine("sendBotStart:" + test);
             var task = sendMessage(test);
-
             //  Console.WriteLine(response[0]);
-            Thread.Sleep(350);
-            return task;
+            task.Wait();
+            Debug.WriteLine("sendBotEnd:");
+
+            printRes(task.Result);
+            return task.Result;
         }
+
+        public void printRes(List<string> res)
+        {
+            foreach (var s in res)
+            {
+                Debug.WriteLine(s);
+
+            }
+        }
+
+        public List<string> getToLearningMenu()
+        {
+            var res = sendBot("היי");
+            res = sendBot("יוחאי");
+            res = sendBot("בן");
+            res = sendBot("יא'");
+            var options = getOptions(res[2]);
+            res = sendBot(options[1]);
+            return res;
+        }
+
+        public void deleteProfile()
+        {
+            var task = sendMessage("/deleteprofile");
+            var response = task;
+            response.Wait();
+            AssertNLP.contains(response.Result, "User profile deleted!");
+        }
+
 
         public List<string> sendBot(string test1, string test2)
         {
             var task1 = sendMessage(test1);
             var task2 = sendMessage(test2);
-
-            task1.AddRange(task2);
-            return task1;
+            task1.Wait();
+            task2.Wait();
+            var res = task1.Result;
+            res.AddRange(task2.Result);
+            return res;
         }
 
         public DirectLineClient createNewClientConversation(out string convID)
@@ -126,7 +162,7 @@ namespace UnitTestProject1
         }
 
 
-        public List<string> sendMessage(string message)
+        public async Task<List<string>> sendMessage(string message)
         {
            
             Activity userMessage = new Activity
@@ -135,7 +171,7 @@ namespace UnitTestProject1
                 Text = message,
                 Type = ActivityTypes.Message
             };
-            return sendActivity(userMessage);
+            return await sendActivity(userMessage);
 
         }
 
@@ -148,40 +184,40 @@ namespace UnitTestProject1
                 Action = action
 
             };
-            return sendActivity(activity);
+            return await sendActivity(activity);
        }
 
 
-        public List<string> sendActivity(Activity activity)
+        public async Task<List<string>> sendActivity(Activity activity)
         {
-            var iTask = client.Conversations.GetActivitiesAsync(convID);
+            var iTask = client.Conversations.GetActivities(convID);
 
-            iTask.Wait();
-            var i = iTask.Result.Activities.Count;
-            var z = client.Conversations.PostActivityAsync(ConvID, activity);
-            z.Wait();
-            var x = z.Result;
-            var activitiesTask = client.Conversations.GetActivitiesAsync(ConvID);
-            activitiesTask.Wait();
-            var activities = activitiesTask.Result;
+
+            var i = iTask.Activities.Count;
+            await client.Conversations.PostActivityAsync(ConvID, activity);
+            //Thread.Sleep(500);
+            var activities = await client.Conversations.GetActivitiesAsync(ConvID);
+
+            var activitiesRes = activities;
+
             i++;
             List<string> resualtTest = new List<string>();
 
           
 
-            for (; i < activities.Activities.Count; i++)
+            for (; i < activitiesRes.Activities.Count; i++)
             {
-                if(activities.Activities[i].Text != null)
+                if(activitiesRes.Activities[i].Text != null)
                 {
-                    if (activities.Activities[i].Text.Trim() != ""){
-                             resualtTest.Add(activities.Activities[i].Text);
+                    if (activitiesRes.Activities[i].Text.Trim() != ""){
+                             resualtTest.Add(activitiesRes.Activities[i].Text);
 
                    }
                 }
 
-                if(activities.Activities[i].Attachments != null)
+                if(activitiesRes.Activities[i].Attachments != null)
                 {
-                    foreach (var a in activities.Activities[i].Attachments)
+                    foreach (var a in activitiesRes.Activities[i].Attachments)
                     {
                         if (a.Content != null)
                         {
@@ -195,13 +231,6 @@ namespace UnitTestProject1
             return resualtTest;
 
         }
-
-        public List<string> deleteProfile()
-        {
-            var task = sendMessage("/deleteprofile");
-            var response = task;
-            return response;
-         }
 
         public List<string> endLearning()
         {
@@ -221,13 +250,13 @@ namespace UnitTestProject1
             return res;
         }
 
-        public List<string> createUser(string v1, string v2, string v3)
+        public List<string> createUser(string name, string gender, string classVal)
         {
             var res = sendBot("היי");
             
-            res = sendBot("יוחאי");
-            res = sendBot("בן");
-            res = sendBot("יא");
+            res = sendBot(name);
+            res = sendBot(gender);
+            res = sendBot(classVal);
             return res;
         }
 

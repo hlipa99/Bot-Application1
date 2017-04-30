@@ -8,6 +8,7 @@ using Model;
 using Bot_Application1.Controllers;
 using Model.dataBase;
 using BotTests;
+using System.Threading;
 
 namespace UnitTestProject1
 {
@@ -18,10 +19,10 @@ namespace UnitTestProject1
         [TestInitialize]
         public void TestInitializeAttribute()
         {
-            var task = sendMessage("/deleteprofile");
-            var response = task;
-            AssertNLP.contains(response, "User profile deleted!" );
+            deleteProfile();
         }
+
+       
 
         [TestCleanup]
         public void TestCleanup()
@@ -33,26 +34,18 @@ namespace UnitTestProject1
         [TestMethod]
         public void testGreetingDialog()
         {
-            var res = createUser("מיה", "בת", "יב");
+            var res = getToLearningMenu();
+           res = sendBot("לאומיות");
             res = sendBot("טוב ביי");
+            res = sendBot("כן");
             AssertNLP.contains(res, DBbotPhrase(Pkey.goodbye));
             res = sendBot("להתראות");
             Assert.IsTrue(res.Count == 0);
+            res = sendBot("ארוואר");
+
             res = sendBot("היי");
             AssertNLP.contains(res, DBbotPhrase(Pkey.shortHello));
-            res = sendBot("מה קורה?");
-            AssertNLP.contains(res, DBbotPhrase(Pkey.IAmFine));
-            AssertNLP.contains(res, DBbotPhrase(Pkey.howAreYou));
-            res = sendBot("אני בסדר");
-            AssertNLP.contains(res, DBbotPhrase(Pkey.ok));
-            res = sendBot("להתראות");
-            AssertNLP.contains(res, DBbotPhrase(Pkey.goodbye));
-            res = sendBot("לילה טוב");
-            Assert.IsTrue(res.Count == 0);
-            res = sendBot( "היי","מה קורה?" );
-            AssertNLP.contains(res, DBbotPhrase(Pkey.shortHello));
-            AssertNLP.contains(res, DBbotPhrase(Pkey.IAmFine));
-            AssertNLP.contains(res, DBbotPhrase(Pkey.howAreYou));
+
         }
         
     }

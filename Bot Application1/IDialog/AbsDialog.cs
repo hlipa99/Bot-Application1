@@ -229,68 +229,13 @@ namespace Bot_Application1.IDialog
 
         public virtual async Task createMenuOptions(IDialogContext context, string title, string[] options, ResumeAfter<IMessageActivity> resume)
         {
-            if(context.Activity.ChannelId == "facebook")
-            {
-                await createQuickReplay(context, title, options, resume);
-            }
-            else
-            {
-                await createRMenuOptions(context, title, options, resume);
-            }
-        }
-
-        public async virtual Task createQuickReplay(IDialogContext context,string title, string[] options, ResumeAfter<IMessageActivity> resume)
-        {
-
-            //     await writeMessageToUser(context, new string[] { title });
-           
-            var reply = context.MakeMessage();
-            var channelData = new JObject();
-            var quickReplies = new JArray();
-
-            
-            var qrList = new List<FacebookQuickReply>();
-            foreach (var s in options)
-            {
-                var r = new FacebookQuickReply("text", s, s);
-                qrList.Add(r);
-            }
-
-          
-            var message = new FacebookMessage(title, qrList);
-            reply.ChannelData = message;
-
-
-
-            await context.PostAsync(reply);
-
-            updateRequestTime(context);
-            context.Wait(resume);
-
-        }
-
-   
-        public async virtual Task createRMenuOptions(IDialogContext context, string title, string[] options, ResumeAfter<IMessageActivity> resume)
-        {
-
-        //    await writeMessageToUser(context, new string[] { title });
-
-         
-
-            //var menu = new PromptDialog.PromptChoice<string>(
-            //  options,
-            // title,
-            // conv().getPhrase(Pkey.wrongOption)[0],
-            // 1);
-
             var menu = new MenuOptionDialog(
             options,
            title,
            conv().getPhrase(Pkey.wrongOption)[0]);
-
-            context.Call(menu, resume);
-
+           context.Call(menu, resume);
         }
+
 
         internal void typingTime(IDialogContext context)
         {
@@ -310,23 +255,30 @@ namespace Bot_Application1.IDialog
         {
             getDialogsVars(context);
             var userDB = (User)user;
-
-            //support for privies version users
-            if (user.LastSeen == null) user.LastSeen = new DateTime?();
-            if (!user.LastSeen.HasValue) user.LastSeen = DateTime.UtcNow;
-            if (user.UserOverallTime == null) user.UserOverallTime = new TimeSpan?().ToString();
-           
-
-            if (user.LastSeen.Value.AddMinutes(30) > DateTime.UtcNow)
+            try
             {
-                user.UserOverallTime = TimeSpan.Parse(user.UserOverallTime).Add(DateTime.UtcNow.Subtract(user.LastSeen.Value)).ToString();
-                user.LastSeen = DateTime.UtcNow;
+                //support for privies version users
+                if (user.LastSeen == null) user.LastSeen = new DateTime?();
+                if (!user.LastSeen.HasValue) user.LastSeen = DateTime.UtcNow;
+                if (user.UserOverallTime == null) user.UserOverallTime = new TimeSpan().ToString();
+
+
+                if (user.LastSeen.Value.AddMinutes(30) > DateTime.UtcNow)
+                {
+                    user.UserOverallTime = TimeSpan.Parse(user.UserOverallTime).Add(DateTime.UtcNow.Subtract(user.LastSeen.Value)).ToString();
+                    user.LastSeen = DateTime.UtcNow;
+                }
+                else
+                {
+                    user.UserTimesConnected++;
+                    user.UserLastSession = DateTime.UtcNow;
+                    user.LastSeen = DateTime.UtcNow;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                user.UserTimesConnected++;
-                user.UserLastSession = DateTime.UtcNow;
-                user.LastSeen = DateTime.UtcNow;
+               user.LastSeen = DateTime.UtcNow;
+               user.UserOverallTime = new TimeSpan().ToString();
             }
             setDialogsVars(context);
             new DataBaseController().addUpdateUser(userDB);
@@ -341,6 +293,7 @@ namespace Bot_Application1.IDialog
          
 
             var mes = await message;
+            if (mes.Text.Length == 0) return false;
             if (mes.Timestamp <= Request)
             {
              //   mes.Summary = getDialogContext();
@@ -370,6 +323,7 @@ namespace Bot_Application1.IDialog
                 if (resume != null)
                 {
                     context.Wait(resume);
+                    return;
                 }
                 else
                 {

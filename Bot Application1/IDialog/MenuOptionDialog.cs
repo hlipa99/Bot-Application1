@@ -15,6 +15,8 @@ using NLP.Models;
 using Model.Models;
 using Bot_Application1.Models;
 using Model;
+using Newtonsoft.Json.Linq;
+using Microsoft.Bot.Builder.ConnectorEx;
 
 namespace Bot_Application1.IDialog
 {
@@ -41,11 +43,49 @@ namespace Bot_Application1.IDialog
 
         public override async Task StartAsync(IDialogContext context)
         {
-            getDialogsVars(context);
-            await checkOutdatedMessage(context, null);
+            await choosePlatform(context, null);
+            
         }
 
-        private async Task checkOutdatedMessage(IDialogContext context, IAwaitable<IMessageActivity> result)
+
+        public async virtual Task choosePlatform(IDialogContext context, IAwaitable<IMessageActivity> result)
+        {
+            getDialogsVars(context);
+            if (context.Activity.ChannelId == "facebook")
+            {
+                await createQuickReplay(context);
+            }
+            else
+            {
+                await displayHeroCardWithOptions(context);
+            }
+
+
+        }
+        public async virtual Task createQuickReplay(IDialogContext context)
+        {
+
+            //     await writeMessageToUser(context, new string[] { title });
+
+            var reply = context.MakeMessage();
+            var channelData = new JObject();
+            var quickReplies = new JArray();
+            var qrList = new List<FacebookQuickReply>();
+            foreach (var s in options)
+            {
+                var r = new FacebookQuickReply("text", s, s);
+                qrList.Add(r);
+            }
+            var message = new FacebookMessage(prompt, qrList);
+            reply.ChannelData = message;
+            await context.PostAsync(reply);
+
+            updateRequestTime(context);
+            context.Wait(optionsRes);
+        }
+
+
+        private async Task displayHeroCardWithOptions(IDialogContext context)
         {
             var message = context.MakeMessage();
             message.AddHeroCard(prompt, options);
@@ -55,7 +95,7 @@ namespace Bot_Application1.IDialog
 
         protected async Task optionsRes(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            if (await checkOutdatedMessage<IMessageActivity>(context, checkOutdatedMessage, result)) return;
+            if (await checkOutdatedMessage<IMessageActivity>(context, choosePlatform, result)) return;
             getDialogsVars(context);
             //    var message = await result;
 

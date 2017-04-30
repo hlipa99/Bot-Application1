@@ -34,16 +34,24 @@ namespace Bot_Application1.IDialog
 
         public override async Task StartAsync(IDialogContext context)
         {
-          
+            await greeting(context, null);
+
+
+        }
+
+
+
+        private async Task greeting(IDialogContext context, IAwaitable<IMessageActivity> result)
+        {
             try
-           {
+            {
                 getDialogsVars(context);
 
                 if (checkUser())
                 {
-        
+
                     context.Call(new GreetingDialog(), MainMenu);
-                    
+
                 }
                 else
                 {
@@ -61,6 +69,8 @@ namespace Bot_Application1.IDialog
                 await StartAsync(context);
             }
         }
+
+
 
         private bool checkUser()
         {
@@ -167,7 +177,7 @@ namespace Bot_Application1.IDialog
                 }
                 else
                 {
-                    context.Call(new FarewellDialog(), MainMenu);
+                    context.Call(new FarewellDialog(), greeting);
                     return;
                 }
             }
@@ -191,7 +201,6 @@ namespace Bot_Application1.IDialog
 
         }
 
-
-
+      
     }
 }

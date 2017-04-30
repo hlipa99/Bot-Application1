@@ -138,6 +138,7 @@ namespace Model.dataBase
                     userUpdateDB.PreviusParses = user.PreviusParses;
                     userUpdateDB.TimeConnected = user.TimeConnected;
                     userUpdateDB.UserAddress = user.UserAddress;
+                    userUpdateDB.UserGender = user.UserGender;
                     userUpdateDB.UserClass = user.UserClass;
                     userUpdateDB.UserID = user.UserID;
                     userUpdateDB.UserLastSession = user.UserLastSession;

@@ -157,14 +157,17 @@ namespace NLP
               
             }
 
-            foreach (var ans in match.missingAnswers)
+            foreach (var ans in match.answersFeedbacks.Where(x=>x.score<75))
             {
                 answerText += "Missing Answer:" + ans + Environment.NewLine;
 
             }
 
-            var res = createFeedBack(match);
-            answerText += res + Environment.NewLine;
+            var res = qna.createFeedBack(match);
+            foreach(var s in res)
+            {
+                answerText += s + Environment.NewLine;
+            }
 
             text_TB3.Text = answerText;
         }
@@ -200,12 +203,12 @@ namespace NLP
 
             answerFeedback.missingEntitis.RemoveAll(x => x.entityType == "conceptWord");
 
-            if (answerFeedback.missingAnswers.Count > 0)
+            if (answerFeedback.answersFeedbacks.Count > 0)
             {
                 verbalFeedback = verbalFeedback+" " + getPhrase(Pkey.missingAnswrPart);
-                verbalFeedback = verbalFeedback+" "+answerFeedback.missingAnswers[0];
-                answerFeedback.missingAnswers.RemoveAt(0);
-                foreach (var a in answerFeedback.missingAnswers)
+                verbalFeedback = verbalFeedback+" "+answerFeedback.answersFeedbacks[0];
+                answerFeedback.answersFeedbacks.RemoveAt(0);
+                foreach (var a in answerFeedback.answersFeedbacks)
                 {
                     verbalFeedback = verbalFeedback + " " + getPhrase(Pkey.and) + " " + a;
                 }

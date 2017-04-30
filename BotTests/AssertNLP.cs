@@ -9,6 +9,18 @@ namespace BotTests
 {
     static class AssertNLP
     {
+        public static bool contains(string[] listOptions, string str) {
+            try
+            {
+                contains(new List<string>(listOptions), str);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+            }
         public static void contains(List<string> listOptions, string str)
         {
             var flag = false;
@@ -41,7 +53,7 @@ namespace BotTests
                 }
             }
 
-            if (counter < sorcse.Split(' ').Length * 0.5) return false;
+            if (counter < sorcse.Split(' ').Length * 0.2) return false;
             else return true;
         }
 
@@ -68,7 +80,7 @@ namespace BotTests
                 if (!flage)
                 {
                     res += "]";
-                    res = str[0] + " Not in Array " + listOptions;
+                    res = res + " Not in Array " + listOptions.FirstOrDefault();
                     throw new AssertFailedException(res);
                 }
             

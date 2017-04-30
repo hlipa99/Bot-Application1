@@ -79,6 +79,12 @@ namespace Model
         duringSwearSuspention,
         swearResponse,
         mightHaveSomthing,
-        uselessLink
+        uselessLink,
+        restartSession,
+        possibleAnswer,
+        goodPartialAnswer,
+        shouldWrite,
+        goodButNotAllAnswerParts,
+        areYouSureMenu
     }
 }

@@ -34,7 +34,7 @@ namespace Bot_Application1.Controllers
                 if (activity.Conversation.IsGroup == null || !activity.Conversation.IsGroup.GetValueOrDefault())
                 {
                   
-                    if (activity.Type == ActivityTypes.Message)
+                    if (activity.Type == ActivityTypes.Message && activity.Text.Length > 0)
                     {
                         try
                         {

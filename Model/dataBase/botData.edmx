@@ -15,6 +15,8 @@
           <Property Name="entities" Type="nvarchar(max)" />
           <Property Name="missingEntities" Type="nvarchar(max)" />
           <Property Name="time" Type="datetime" />
+          <Property Name="userID" Type="nvarchar" MaxLength="100" />
+          <Property Name="questionID" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="botphrase">
           <Key>
@@ -187,6 +189,8 @@ warning 6002: The table/view 'mindcet.dbo.intent' does not have a primary key de
           <Property Name="entities" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="missingEntities" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="time" Type="DateTime" Precision="3" />
+          <Property Name="userID" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="questionID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="botphrase">
           <Key>
@@ -347,6 +351,8 @@ warning 6002: The table/view 'mindcet.dbo.intent' does not have a primary key de
           <EntitySetMapping Name="answersLog">
             <EntityTypeMapping TypeName="mindcetModel.answersLog">
               <MappingFragment StoreEntitySet="answersLog">
+                <ScalarProperty Name="questionID" ColumnName="questionID" />
+                <ScalarProperty Name="userID" ColumnName="userID" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="question" ColumnName="question" />
                 <ScalarProperty Name="userAnswer" ColumnName="userAnswer" />
