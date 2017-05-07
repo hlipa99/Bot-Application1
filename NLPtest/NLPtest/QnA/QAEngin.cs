@@ -182,7 +182,7 @@ namespace NLP.QnA
                 verbalFeedback = mergeText(verbalFeedback, getPhrase(Pkey.MyAnswerToQuestion));
 
 
-                if (answerFeedback.answersFeedbacks.Count > 1)
+                if (answerFeedback.answersFeedbacks.Count > 0)
                 {
                     var feedbackEnumerator = answerFeedback.answersFeedbacks.GetEnumerator();
                     feedbackEnumerator.MoveNext();

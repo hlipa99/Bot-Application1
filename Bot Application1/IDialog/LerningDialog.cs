@@ -181,16 +181,15 @@ namespace Bot_Application1.IDialog
         private async Task CategoryOutOfQuestionRes(IDialogContext context, IAwaitable<bool> result)
         {
             var res = await result;
+            await writeMessageToUser(context, conv().getPhrase(Pkey.ok));
             if (res)
             {
                 StudySession.QuestionAsked = new System.Collections.Generic.List<IQuestion>();
+                setDialogsVars(context);
             }
-            else
-            {
-                await writeMessageToUser(context, conv().getPhrase(Pkey.SubjectNotAvialable));
-                await StartAsync(context);
-                return;
-            }
+
+            await StartAsync(context);
+            return;
 
         }
 
