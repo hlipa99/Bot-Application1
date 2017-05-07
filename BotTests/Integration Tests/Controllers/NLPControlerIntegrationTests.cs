@@ -46,7 +46,7 @@ namespace NLP.Controllers.Tests
             Assert.IsFalse(res.Contains(null));
         }
 
-
+           
 
         [TestMethod()]
         public void AnalizeTestWithGufContextIntegration()

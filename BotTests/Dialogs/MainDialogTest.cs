@@ -18,9 +18,7 @@ namespace UnitTestProject1
         [TestInitialize]
         public void TestInitializeAttribute()
         {
-            var task = sendMessage("/deleteprofile");
-            var response = task;
-            AssertNLP.contains(response,  "User profile deleted!" );
+            deleteProfile();
         }
 
         [TestCleanup]
@@ -57,7 +55,7 @@ namespace UnitTestProject1
         [TestMethod]
         public void testMainDialogTest()
         {
-            var response = createUser("יוחאי", "בן", "יא");
+            var response = createUser("יוחאי", "בן", "יא'");
             AssertNLP.contains(response, DBbotPhrase(Pkey.MainMenuText));
             AssertNLP.contains(response, DBbotPhrase(Pkey.MenuLearn));
             AssertNLP.contains(response, DBbotPhrase(Pkey.MenuNotLearn));
@@ -119,7 +117,7 @@ namespace UnitTestProject1
         [TestMethod]
         public void testDialogMenuFreeText()
         {
-            var response = createUser("יוחאי", "בן", "יא");
+            var response = createUser("יוחאי", "בן", "יא'");
             AssertNLP.contains(response, DBbotPhrase(Pkey.MainMenuText));
             AssertNLP.contains(response, DBbotPhrase(Pkey.MenuLearn));
             AssertNLP.contains(response, DBbotPhrase(Pkey.MenuNotLearn));

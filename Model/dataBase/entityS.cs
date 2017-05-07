@@ -14,11 +14,11 @@ namespace Model.dataBase
 
             var ent = obj as Ientity;
             if (ent == null) return false;
-            if (!(entitySynonimus.Contains(ent.entityValue) && entityType == ent.entityType))
-                return false;
 
+            if ((entitySynonimus.Contains(ent.entityValue) || ent.entityValue == entityValue))
+                return true;
 
-            return true;
+            return false;
         }
 
         public IentityBase clone()

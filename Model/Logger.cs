@@ -42,7 +42,7 @@ namespace Model
             }
 }
 
-        public static void addAnswerOutput(string answerText, string userAnswer, AnswerFeedback feedback)
+        public static void addAnswerOutput(string answerText, string userAnswer, AnswerFeedback feedback,string userID,string QuestionID)
         {
             try
             {
@@ -52,6 +52,8 @@ namespace Model
                 log.question = answerText;
                 log.missingEntities = "";
                 log.entities = feedback.score.ToString();
+                log.userID = userID;
+                log.questionID = QuestionID;
                 foreach (var e in feedback.missingEntitis)
                 {
                     log.missingEntities += ";" + e.entityType + "#" + e.entityValue + ";";

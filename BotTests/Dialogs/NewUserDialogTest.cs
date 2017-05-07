@@ -18,8 +18,7 @@ namespace UnitTestProject1
         [TestInitialize]
         public void TestInitializeAttribute()
         {
-            var r= deleteProfile();
-            AssertNLP.contains(r, "User profile deleted!");
+            deleteProfile();
 
         }
 
@@ -59,20 +58,10 @@ namespace UnitTestProject1
             return res;
         }
 
-        private List<string> createUser(string v1, string v2, string v3)
-        {
-            var res = sendBot("היי");
-            res = sendBot("יוחאי");
-            res = sendBot("בן");
-            res = sendBot("יא");
-            return res;
-        }
-
-
         [TestMethod]
         public void testNewUserDialogMenu()
         {
-            var response = createUser("יוחאי", "בן", "יא");
+            var response = createUser("יוחאי", "בן", "יא'");
             AssertNLP.contains(response, DBbotPhrase(Pkey.MainMenuText));
             AssertNLP.contains(response, DBbotPhrase(Pkey.MenuLearn));
             AssertNLP.contains(response, DBbotPhrase(Pkey.MenuNotLearn));
@@ -134,7 +123,7 @@ namespace UnitTestProject1
         [TestMethod]
         public void testMenuFreeText()
         {
-            var response = createUser("יוחאי", "בן", "יא");
+            var response = createUser("יוחאי", "בן", "יא'");
             AssertNLP.contains(response, DBbotPhrase(Pkey.MainMenuText));
             AssertNLP.contains(response, DBbotPhrase(Pkey.MenuLearn));
             AssertNLP.contains(response, DBbotPhrase(Pkey.MenuNotLearn));

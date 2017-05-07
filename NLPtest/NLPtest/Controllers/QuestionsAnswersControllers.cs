@@ -15,5 +15,10 @@ namespace NLP.Controllers
         {
             return qna.matchAnswers(subquestion, answer);
         }
+
+        public string[] createFeedBack(AnswerFeedback answerFeedback)
+        {
+            return qna.createFeedBack(answerFeedback);
+        }
     }
 }

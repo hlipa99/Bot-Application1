@@ -97,10 +97,7 @@ namespace Bot_Application1.Controllers.Tests
                         if (feedback.score < 95)
                         {
                          
-                            feedback = eduCtrl.checkAnswer(sq.answerText);
-                            feedback = eduCtrl.checkAnswer(sq.answerText);
-                            feedback = eduCtrl.checkAnswer(sq.answerText);
-                            feedback = eduCtrl.checkAnswer(sq.answerText);
+
                             //debug
 
                             feedback = eduCtrl.checkAnswer(sq.answerText);
@@ -109,23 +106,27 @@ namespace Bot_Application1.Controllers.Tests
 
 
                             feedback = eduCtrl.checkAnswer(sq.answerText);
+                            feedback = eduCtrl.checkAnswer(sq.answerText);
+                            feedback = eduCtrl.checkAnswer(sq.answerText);
+                            feedback = eduCtrl.checkAnswer(sq.answerText);
+                            feedback = eduCtrl.checkAnswer(sq.answerText);
                         }
                         Assert.IsTrue(feedback.score >= 95);
 
 
                         //bad
-                        feedback = eduCtrl.checkAnswer("תשובה לא נכונה ולא קשורה בשיט");
+                        feedback = eduCtrl.checkAnswer("תשובה לא נכונה ולא נכונה בשיט");
                   
                         if (feedback.score > 0)
                         {
-                            feedback = eduCtrl.checkAnswer("תשובה לא נכונה ולא קשורה בשיט");
+                            feedback = eduCtrl.checkAnswer("תשובה לא נכונה ולא נכונה בשיט");
                             //debug
-                            feedback = eduCtrl.checkAnswer("תשובה לא נכונה ולא קשורה בשיט");
+                            feedback = eduCtrl.checkAnswer("תשובה לא נכונה ולא נכונה בשיט");
 
-                            feedback = eduCtrl.checkAnswer("תשובה לא נכונה ולא קשורה בשיט");
-                            feedback = eduCtrl.checkAnswer("תשובה לא נכונה ולא קשורה בשיט");
-                            feedback = eduCtrl.checkAnswer("תשובה לא נכונה ולא קשורה בשיט");
-                            feedback = eduCtrl.checkAnswer("תשובה לא נכונה ולא קשורה בשיט");
+                            feedback = eduCtrl.checkAnswer("תשובה לא נכונה ולא נכונה בשיט");
+                            feedback = eduCtrl.checkAnswer("תשובה לא נכונה ולא נכונה בשיט");
+                            feedback = eduCtrl.checkAnswer("תשובה לא נכונה ולא נכונה בשיט");
+                            feedback = eduCtrl.checkAnswer("תשובה לא נכונה ולא נכונה בשיט");
 
                         }
 

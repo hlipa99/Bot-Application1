@@ -561,7 +561,7 @@ namespace NLP.NLP
 
         private IEnumerable<Ientity> findMatch(IEnumerable<Ientity> quarible, string text)
         {
-            quarible = quarible.Where(x => x.entitySynonimus.Contains(";" + text + ";"));
+            quarible = quarible.Where(x => x.entitySynonimus != null && x.entitySynonimus.Contains(";" + text + ";"));
             return quarible;
         }
 
@@ -650,5 +650,57 @@ namespace NLP.NLP
             }
 
         }
+
+
+
+        public string getClass(string text)
+        {
+            //    var a = ma.createSentence(inputText);
+            var context = new TextContext();
+            text = text.Replace("\"", "");
+            text = text.Replace("'", "");
+            text = text.Replace("`", "");
+            text = text.Replace("'", "");
+            string res = null;
+
+            foreach (var s in text.Split(' '))
+            {
+
+                    switch (s)
+                    {
+                    
+                        case "י":
+                        case "'י":
+                        case "יוד":
+                        case "שישית":
+                        case "שישיסט":
+                        case "שישיסטית":
+                            res = "י";
+                            break;
+
+                        case "יא":
+                        case "י\"א":
+                        case "יא'":
+                        case "'יא":
+                        case "שביעית":
+                        case "שביעיסט":
+                        case "שביעיסטית":
+                            res = "יא";
+                            break;
+
+                        case "יב":
+                        case "י\"ב":
+                        case "יב'":
+                        case "'יב":
+                        case "שמינית":
+                            res = "יב";
+                            break;
+
+                }
+                
+            }
+
+            return res;
+        }
     }
-    }
+}

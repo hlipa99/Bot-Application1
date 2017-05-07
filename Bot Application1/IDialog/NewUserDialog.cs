@@ -102,8 +102,9 @@ namespace Bot_Application1.IDialog
                 {
                 await writeMessageToUser(context, conv().getPhrase(Pkey.NewUserGetName));
 
-                    context.Wait(CheckName);
                     updateRequestTime(context);
+                    context.Wait(CheckName);
+                    return;
                 } 
                    
             }

@@ -10,6 +10,7 @@ using Model.dataBase;
 using BotTests;
 using Model.Models;
 using System.Diagnostics;
+using System.Threading;
 
 namespace UnitTestProject1
 {
@@ -20,9 +21,7 @@ namespace UnitTestProject1
         [TestInitialize]
         public void TestInitializeAttribute()
         {
-            var task = sendMessage("/deleteprofile");
-            var response = task;
-            AssertNLP.contains(response,  "User profile deleted!" );
+            deleteProfile();
         }
 
         [TestCleanup]
@@ -32,17 +31,9 @@ namespace UnitTestProject1
             // client = null;
         }
 
-        private List<string> getToLearningMenu()
-        {
-            var res = sendBot("היי");
-            res = sendBot("יוחאי");
-            res = sendBot("בן");
-            res = sendBot("יא");
-            
-            var options = getOptions(res[2]);
-            res = sendBot(options[1]);
-            return res;
-        }
+
+
+      
 
         Random r = new Random();
         [TestMethod]
@@ -65,8 +56,8 @@ namespace UnitTestProject1
                 AssertNLP.contains(res, DBbotPhrase(Pkey.NotAnOption));
 
                 //ugly
-                res = sendBot("");
-                AssertNLP.contains(res, DBbotPhrase(Pkey.NotAnOption));
+              //  res = sendBot("");
+              //  Assert.AreEqual(res.Count,0);
 
                 //good - lets learn
                 res = sendBot(category);
@@ -81,18 +72,14 @@ namespace UnitTestProject1
 
 
 
-                var questionIdx = 0;
-                for (; questionIdx<res.Count; questionIdx++)
+                List<IQuestion> questionOpt = null;
+                foreach (var r in res)
                 {
-                   
-                   if(AssertNLP.contains(res[questionIdx], DBbotPhrase(Pkey.beforAskQuestion)[0]) || AssertNLP.contains(res[questionIdx], DBbotPhrase(Pkey.firstQuestion)[0]))
-                    {
-                        break;
-                    }
-
+                    questionOpt = new List<IQuestion>(questions).FindAll(x => r.Contains(x.QuestionText.Trim()));
+                    if (questionOpt.Count > 0) break;
                 }
-
-                var questionOpt = new List<IQuestion>(questions).FindAll(x => res[questionIdx].Contains(x.QuestionText));
+                
+              //  var questionOpt = new List<IQuestion>(questions).FindAll(x => AssertNLP.contains(res.ToArray(), x.QuestionText));
                     Assert.AreEqual(questionOpt.Count, 1);
                     var question = questionOpt[0];
                 
@@ -103,51 +90,47 @@ namespace UnitTestProject1
                     {
                         AssertNLP.contains(res, subQuestion.questionText);
 
-                        var rnd = r.Next(5);
-                        switch (rnd){
+                    var rnd = r.Next(5);
+                    switch (rnd)
+                    {
 
-                            case 0:
-                                res = sendBot("הפסקה");
-                                AssertNLP.contains(res, DBbotPhrase(Pkey.suggestBreak));
-                            AssertNLP.contains(res, DBbotPhrase(Pkey.ok));
+                        case 0:
+                            res = sendBot("הפסקה");
+                            AssertNLP.contains(res, DBbotPhrase(Pkey.suggestBreak));
+                            res = sendBot("כן");
+                            //AssertNLP.contains(res, DBbotPhrase(Pkey.ok));
                             AssertNLP.contains(res, DBbotPhrase(Pkey.imWaiting));
+                            Thread.Sleep(10000);
                             res = sendBot("חזרתי");
-                                AssertNLP.contains(res, DBbotPhrase(Pkey.letsContinue));
-                                AssertNLP.contains(res, subQuestion.questionText);
-                                break;
+                            AssertNLP.contains(res, DBbotPhrase(Pkey.letsContinue));
+                            AssertNLP.contains(res, subQuestion.questionText);
+                            break;
 
-                            case 1:
-                                res = sendBot("מספיק");
-                                AssertNLP.contains(res, DBbotPhrase(Pkey.earlyDiparture));
-                                AssertNLP.contains(res, DBbotPhrase(Pkey.areYouSure));
-                                res = sendBot("לא");
-                                AssertNLP.contains(res, DBbotPhrase(Pkey.keepLearning));
-                                AssertNLP.contains(res, subQuestion.questionText);
-                                break;
+                        case 1:
+                            res = sendBot("מספיק");
+                            AssertNLP.contains(res, DBbotPhrase(Pkey.earlyDiparture));
+                            AssertNLP.contains(res, DBbotPhrase(Pkey.areYouSure));
+                            res = sendBot("לא");
+                            AssertNLP.contains(res, DBbotPhrase(Pkey.keepLearning));
+                            AssertNLP.contains(res, subQuestion.questionText);
+                            break;
 
                         default:
-                                break;
-                        }
-                      
-                        res = sendBot(subQuestion.answerText);
-
-                        AssertNLP.contains(res, DBbotPhrase(Pkey.veryGood));
-
-                        if (counter < 3)
-                        {
-                            AssertNLP.contains(res, DBbotPhrase(Pkey.moveToNextSubQuestion));
-                        }
-                        else
-                        {
-                            AssertNLP.contains(res, DBbotPhrase(Pkey.suggestBreak));
-                            res = sendBot("לא");
-                            AssertNLP.contains(res, DBbotPhrase(Pkey.ok));
-                            AssertNLP.contains(res, DBbotPhrase(Pkey.moveToNextSubQuestion));
-                        }
+                            break;
                     }
 
-                    AssertNLP.contains(res, DBbotPhrase(Pkey.SubjectNotAvialable));
-                    res = sendBot("כן");
+                    res = sendBot(subQuestion.answerText);
+
+                    AssertNLP.contains(res, DBbotPhrase(Pkey.veryGood));
+
+                    AssertNLP.contains(res, DBbotPhrase(Pkey.moveToNextSubQuestion));
+
+                    }
+
+                    res = sendBot("תפריט");
+                 //   res = sendBot("כן");
+
+                  
                 
             }
         }

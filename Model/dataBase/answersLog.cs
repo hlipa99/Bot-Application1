@@ -20,5 +20,7 @@ namespace Model.dataBase
         public string entities { get; set; }
         public string missingEntities { get; set; }
         public Nullable<System.DateTime> time { get; set; }
+        public string userID { get; set; }
+        public string questionID { get; set; }
     }
 }

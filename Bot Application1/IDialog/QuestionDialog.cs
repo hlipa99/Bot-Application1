@@ -30,12 +30,19 @@ namespace Bot_Application1.IDialog
         public override async Task StartAsync(IDialogContext context)
         {
             getDialogsVars(context);
-            await intreduceQuestion(context);
+            if (StudySession.CurrentSubQuestion == null)
+            {
+                await intreduceQuestion(context);
+            }
+            else
+            {
+                await askSubQuestion(context, null);
+            }
         }
 
         public async Task intreduceQuestion(IDialogContext context)
         {
-            getDialogsVars(context);
+            
             var question = StudySession.CurrentQuestion;
 
 
@@ -50,8 +57,9 @@ namespace Bot_Application1.IDialog
                     await writeMessageToUser(context, new string[] { '"' + question.QuestionText + '"' });
                     await writeMessageToUser(context, conv().getPhrase(Pkey.takeQuestionApart));
                 }
-                await askNextSubQuestion(context, null);
             setDialogsVars(context);
+            await askNextSubQuestion(context, null);
+       
         }
 
       
@@ -59,18 +67,20 @@ namespace Bot_Application1.IDialog
         public async Task askNextSubQuestion(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
             getDialogsVars(context);
-            if (result != null) await result;
+            //if (result != null) await result;
             edc().getNextSubQuestion();
             var question = StudySession.CurrentSubQuestion;
-            setDialogsVars(context);
+         
             if (question != null)
             {
+                setDialogsVars(context);
                 await askSubQuestion(context, null);
             }
             else
             {
                 getDialogsVars(context);
                 edc().updateUserScore();
+                setDialogsVars(context);
                 context.Done("");
             }
         }
@@ -81,11 +91,12 @@ namespace Bot_Application1.IDialog
             var question = StudySession.CurrentSubQuestion;
             if (question != null)
             {
-                await writeMessageToUser(context, new string[] { '"' + question.questionText.Trim() + '"' });
+                await writeMessageToUser(context, new string[] { Emoji.get("questionMark") + '"' + question.questionText.Trim() + '"' });
 
                 updateRequestTime(context);
                 setDialogsVars(context);
                 context.Wait(answerQuestion);
+                return;
             }
             else
             {
@@ -126,6 +137,7 @@ namespace Bot_Application1.IDialog
                         await writeMessageToUser(context, conv().getPhrase(Pkey.swearSuspention));
                         updateRequestTime();
                         context.Wait(swearSuspention);
+                        return;
                     }
                     else
                     {
@@ -147,7 +159,10 @@ namespace Bot_Application1.IDialog
                 return;
             }
             catch(menuException ex){
-                throw ex;
+
+                var msg = conv().getPhrase(Pkey.areYouSureMenu);
+                await context.Forward<bool, string[]>(new YesNoQuestionDialog(), stopSessionMenu, msg, CancellationToken.None);
+                return;
             }
             catch (StopSessionException ex)
             {
@@ -208,6 +223,7 @@ namespace Bot_Application1.IDialog
                 {
                     await writeMessageToUser(context, conv().getPhrase(Pkey.duringSwearSuspention));
                     context.Wait(swearSuspention);
+                    return;
                 }
             }
             else
@@ -230,12 +246,29 @@ namespace Bot_Application1.IDialog
             else
             {
                 await writeMessageToUser(context, conv().getPhrase(Pkey.letsContinue));
-                await intreduceQuestion(context);
+                await askSubQuestion(context,null);
             }
 
         }
 
-     
+        private async Task stopSessionMenu(IDialogContext context, IAwaitable<bool> result)
+        {
+            var sure = await result;
+            if (sure)
+            {
+                //   await writeMessageToUser(context, conv().getPhrase(Pkey.goodbye));
+                throw new menuException();
+                return;
+            }
+            else
+            {
+                await writeMessageToUser(context, conv().getPhrase(Pkey.letsContinue));
+                await askSubQuestion(context, null);
+            }
+
+        }
+
+
 
 
     }

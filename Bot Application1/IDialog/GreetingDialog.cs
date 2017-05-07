@@ -54,6 +54,7 @@ namespace Bot_Application1.IDialog
             else
             {
                 context.Wait(HowAreYouQuestion);
+                return;
             }
         }
 
@@ -71,7 +72,7 @@ namespace Bot_Application1.IDialog
 
             await writeMessageToUser(context, conv().getPhrase(Pkey.howAreYou));
             context.Wait(HowAreYouRes);
-
+            return;
 
         }
 

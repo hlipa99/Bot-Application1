@@ -9,6 +9,7 @@ using NLP.NLP;
 using NLP.view;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Bot_Application1.Controllers
 {
@@ -20,7 +21,7 @@ namespace Bot_Application1.Controllers
         private IStudySession studySession;
         ConversationController conversationController;
         NLPControler nlp = new NLPControler();
-        QuestionsAnswersControllers qac;
+        QuestionsAnswersControllers qac ;
         DataBaseController db;
         public virtual DataBaseController Db
         {
@@ -207,6 +208,11 @@ namespace Bot_Application1.Controllers
             ISubQuestion question = studySession.CurrentSubQuestion;
 
             var answerFeedback = Qac.matchAnswers(question, text);
+            try
+            {
+                Logger.addAnswerOutput(question.answerText, text, answerFeedback,user.UserID,question.questionID + "." + question.subQuestionID);
+            }
+            catch (Exception ex) { }
 
             return answerFeedback;
         }
@@ -217,13 +223,23 @@ namespace Bot_Application1.Controllers
 
                 studySession.CurrentQuestion = getQuestion();
                 studySession.CurrentQuestion.Enumerator = 0;
+            studySession.CurrentSubQuestion = null;
         }
 
         public void getNextSubQuestion()
         {
-            studySession.CurrentQuestion.Enumerator++;
+            if(studySession.CurrentQuestion == null)
+            {
+                getNextQuestion();
+            }
+            else
+            {
+                studySession.CurrentQuestion.Enumerator++;
+
+            }
             studySession.CurrentSubQuestion = getSubQuestion(studySession.CurrentQuestion.Enumerator);
-            if(studySession.CurrentSubQuestion == null)
+            studySession.CurrentSubQuestion.questionText = studySession.CurrentSubQuestion.questionText;
+            if (studySession.CurrentSubQuestion == null)
             {
                 getNextQuestion();
             }
@@ -246,10 +262,6 @@ namespace Bot_Application1.Controllers
         {
             switch (answerIntent)
             {                         
-                case UserIntent.DefaultFallbackIntent:
-                case UserIntent.unknown:
-                case UserIntent.historyAnswer:
-                    return createFeedBack(checkAnswer(text));
                 case UserIntent.dontKnow:
                     var feedback = ConversationController.getPhrase(Pkey.neverMind);
                     feedback = ConversationController.mergeText(feedback,ConversationController.getPhrase(Pkey.MyAnswerToQuestion));
@@ -262,56 +274,25 @@ namespace Bot_Application1.Controllers
                 case UserIntent.sessionBreak:
                     throw new sessionBreakException();
                 case UserIntent.bot_questions:
+                case UserIntent.DefaultFallbackIntent:
+                case UserIntent.unknown:
+                case UserIntent.historyAnswer:
                 default:
-                    return createFeedBack(checkAnswer(text));
-
+                    return formatFeedbackPhrases(qac.createFeedBack(checkAnswer(text)));
+                    
             }
+
            return null;
         }
 
-
-
-        public string[] createFeedBack(AnswerFeedback answerFeedback)
+        private string[] formatFeedbackPhrases(string[] val)
         {
-            string[] verbalFeedback = null;
-            //check sub question
-            studySession.CurrentSubQuestion.AnswerScore = answerFeedback.score;
-            if (answerFeedback.score >= 60)
+            var res = new List<string>();
+            foreach(var s in val)
             {
-                verbalFeedback =  ConversationController.getPhrase(Pkey.goodAnswer);
+                res.Add(conversationController.formatPhrases(s));
             }
-            else if (answerFeedback.score >= 20)
-            {
-                verbalFeedback =  ConversationController.getPhrase(Pkey.partialAnswer);
-            }
-            else if (answerFeedback.answer != null && answerFeedback.answer.Split(' ').Length > 2)
-            {
-                verbalFeedback = ConversationController.getPhrase(Pkey.wrongAnswer);
-            }else
-            {
-                verbalFeedback =  ConversationController.getPhrase(Pkey.notAnAnswer);
-            }
-
-          //  answerFeedback.missingEntitis.RemoveAll(x => x.entityType == "conceptWord");
-
-            if (answerFeedback.missingAnswers.Count > 0)
-            {
-                verbalFeedback = ConversationController.mergeText(verbalFeedback, ConversationController.getPhrase(Pkey.missingAnswrPart));
-                verbalFeedback = answerArrayToString(answerFeedback.missingAnswers, verbalFeedback);
-            }
-            else if (answerFeedback.score < 75)
-            {
-                verbalFeedback = ConversationController.mergeText(verbalFeedback, ConversationController.getPhrase(Pkey.MyAnswerToQuestion));
-                if (answerFeedback.missingAnswers.Count > 0)
-                {
-                    verbalFeedback = answerArrayToString(answerFeedback.missingAnswers, verbalFeedback);
-                }else
-                {
-                    verbalFeedback = ConversationController.mergeText(verbalFeedback, studySession.CurrentSubQuestion.answerText);
-                }
-            }
-
-            return verbalFeedback;
+            return res.ToArray();
         }
 
         private string[] answerArrayToString(List<string> answers, string[] verbalFeedback)

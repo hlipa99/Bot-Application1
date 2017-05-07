@@ -42,13 +42,10 @@ namespace Bot_Application1.IDialog
 
         private async Task waitForNextInteraction(IDialogContext context, IAwaitable<object> result)
         {
-            context.Wait(waitForNextInteraction2);
-        }
-
-        private async Task waitForNextInteraction2(IDialogContext context, IAwaitable<object> result)
-        {
             context.Done("");
         }
+
+
 
 
 
