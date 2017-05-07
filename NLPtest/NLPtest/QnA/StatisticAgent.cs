@@ -28,28 +28,29 @@ namespace NLPtest.QnA
         {
             var stat = new UserStatistics();
             var userScore = db.getUserAnswersStat(user.UserID);
-            if(userScore.Count < 4)
+            if (userScore.Count < 4)
             {
                 return null;
             }
             else
             {
                 List<int> total = new List<int>();
-                List<Tuple<string,int>> perSubject = new List<Tuple<string, int>>();
+                List<Tuple<string, int>> perSubject = new List<Tuple<string, int>>();
                 userScore.OrderByDescending(x => x.dateTime);
                 userScore.Distinct(new questionIDscoreDistinct());
-            
+
                 foreach (var s in userScore)
                 {
                     total.Add(s.Score.Value);
                     perSubject.Add(new Tuple<string, int>(s.subCategory, s.Score.Value));
                 }
 
-                stat.scorByTime[0] = userScore.OrderBy(x => x.dateTime).Select(x => x.Score).ToArray();
-                stat.scorByTime[0] = userScore.OrderBy(x => x.dateTime).Select(x => x.Score).ToArray();
+                // stat.scorByTime[0] = userScore.OrderBy(x => x.dateTime).Select(x => x.Score).ToArray();
+                //   stat.scorByTime[0] = userScore.OrderBy(x => x.dateTime).Select(x => x.Score).ToArray();
 
 
                 return null;
+            }
         }
 
 
