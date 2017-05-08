@@ -351,7 +351,7 @@ namespace NLP.NLP
       
 
 
-
+        //find entities and multyEntities in the words list
         private List<WordObject> tryMatchEntities(List<WordObject> sentence, bool isUserInput)
         {
             //increase the match found to implement maximal munch
@@ -439,7 +439,7 @@ namespace NLP.NLP
         }
 
         
-
+        
         private void WordObjectFromEntity(List<WordObject> sentence, List<WordObject> newSentence, IentityBase ent)
         {
 
@@ -572,23 +572,22 @@ namespace NLP.NLP
             var entities = DBctrl1.getEntitys().AsQueryable();
             foreach (var s in DBctrl1.getAllSubQuestions())
             {
-                var sentenses = meniAnalize(s.answerText, false);
-                foreach (var sen in sentenses)
-                {
-                    var relevant = sen.Where(x => x.isEntity());
+                var sentenses = getWordsObjectFromParserServer(s.answerText);
+
+                    var relevant = sentenses.Where(x => x.isEntity());
                     foreach (var w in relevant)
                     {
-                        var wText = w.Lemma == null || w.Lemma.Length == 1 ? w.Text : w.Lemma;
-                        if (!findMatch(entities, wText).Any())
+                       
+                        if (!findMatch(entities, w.Text).Any() && !findMatch(entities, w.Lemma).Any())
                         {
                             var ent = new entity();
-                            ent.entitySynonimus = ";" + wText + ";";
+                            ent.entitySynonimus = ";" + w.Lemma + ";";
                             ent.entityType = Enum.GetName(typeof(WordType), w.WordT);
-                            ent.entityValue = wText;
+                            ent.entityValue = w.Text;
                             entList.Add(ent);
                         }
                     }
-                }
+                
             }
             DBctrl1.saveEntitiesFromQuestions(entList);
         }

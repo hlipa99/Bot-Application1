@@ -177,8 +177,8 @@ namespace NLP.Controllers
         }
         internal void updateEntityTable()
         {
-            //Ma.searchAllAnswerForentities();
-            Ma.updateEntities();
+            Ma.searchAllAnswerForentities();
+            //Ma.updateEntities();
         }
 
         public string getClass(string text)

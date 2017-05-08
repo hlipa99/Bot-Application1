@@ -99,15 +99,17 @@ namespace Model.dataBase
             {
                 if(e!= null && e.entityValue.Length < 50)
                 DB.entity.Add(e);
-            }
-            try
-            {
-                await DB.SaveChangesAsync();
-            }
-            catch(Exception ex)
-            {
+                try
 
+                {
+                    await DB.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+
+                }
             }
+            
         }
 
 
