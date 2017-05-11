@@ -257,7 +257,6 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Carda_factory\ManagerCard.cs" />
     <Compile Include="Controllers\botQuestionRespondException.cs" />
     <Compile Include="Controllers\insertFunnybreakException.cs" />
     <Compile Include="Controllers\insertIntrestingException.cs" />
@@ -267,6 +266,8 @@
     <Compile Include="Controllers\UnrelatedSubjectException.cs" />
     <Compile Include="Exceptions\ContextException.cs" />
     <Compile Include="Controllers\MediaController.cs" />
+    <Compile Include="Exceptions\DefaultExceptionMessageOverrideModule .cs" />
+    <Compile Include="Exceptions\PostUnhandledExceptionToUser.cs" />
     <Compile Include="Exceptions\StopSessionException.cs" />
     <Compile Include="IDialog\GreetingDialog.cs" />
     <Compile Include="IDialog\SideDialog.cs" />

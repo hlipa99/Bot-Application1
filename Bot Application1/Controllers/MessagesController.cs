@@ -43,16 +43,9 @@ namespace Bot_Application1.Controllers
                             //         Logger.addLog("User: " + text);
 
 
-                            var dialog = new MainDialog();
+                          //  var dialog = new MainDialog();
 
-                            var builder = new ContainerBuilder();
-                            builder
-                                .Register(c => new CachingBotDataStore(c.ResolveKeyed<IBotDataStore<BotData>>(typeof(ConnectorStore)), CachingBotDataStoreConsistencyPolicy.LastWriteWins))
-                                .As<IBotDataStore<BotData>>()
-                                .AsSelf()
-                                .InstancePerLifetimeScope();
 
-                            builder.Update(Conversation.Container);
                             await Conversation.SendAsync(activity, () => new MainDialog());
 
                             

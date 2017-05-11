@@ -6,7 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Threading.Tasks;
 using System.Web.UI.WebControls;
-using Bot_Application1.Cardatt_achment;
+
 
 using NLP;
 using Bot_Application1.YAndex;

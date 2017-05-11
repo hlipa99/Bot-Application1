@@ -505,6 +505,7 @@ namespace Bot_Application1.Controllers
                         break;
 
                     case UserIntent.hello:
+                        return getPhrase(Pkey.niceToSeeYou);
                     case UserIntent.DefaultFallbackIntent:
                     default:
                         if (user.LastSeen.GetValueOrDefault().AddHours(1) < DateTime.UtcNow)

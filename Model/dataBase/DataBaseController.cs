@@ -98,15 +98,30 @@ namespace Model.dataBase
             foreach(var e in Entities)
             {
                 if(e!= null && e.entityValue.Length < 50)
-                DB.entity.Add(e);
+                {
+                    DB.entity.Add(e);
+
+                }
+                else
+                {
+
+                }
                 try
 
                 {
-                    await DB.SaveChangesAsync();
+                     DB.SaveChanges();
                 }
                 catch (Exception ex)
                 {
+                  //  var exStr = ex.InnerException.ToString();
+                 //   var idx = exStr.IndexOf("The duplicate key value is (") + "The duplicate key value is (".Length);
+                  //  var str2 = exStr.Remove(0, idx);
+                  //  idx =  str2.IndexOf(")");
+                 //   var val = str2.Remove(idx);
+                 //   DB.entity.
 
+
+                    DB.entity.Remove(e);
                 }
             }
             

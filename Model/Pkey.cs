@@ -85,6 +85,7 @@ namespace Model
         goodPartialAnswer,
         shouldWrite,
         goodButNotAllAnswerParts,
-        areYouSureMenu
+        areYouSureMenu,
+        niceToSeeYou
     }
 }

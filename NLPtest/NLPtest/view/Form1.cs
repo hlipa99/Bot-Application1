@@ -147,7 +147,7 @@ namespace NLP
             string str;
             var subQuestion = new SubQuestion();
             subQuestion.answerText = input_TB.Text;
-            subQuestion.flags = "needAll";
+            subQuestion.flags = "need1";
             var match = qna.matchAnswers(subQuestion,
                 input_TB2.Text);
             var answerText = "Score:" + match.score + Environment.NewLine;

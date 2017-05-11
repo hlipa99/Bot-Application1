@@ -78,9 +78,9 @@ namespace NLP.QnA
                             feedbacks = feedbacks.GetRange(0, numberInt);
                             foreach (var f in feedbacks)
                             {
-                            feedback.score = (int)feedback.answersFeedbacks.Average(x => x.score);
+                            feedback.score = (int)feedbacks.Average(x => x.score);
                             }
-                            feedback.answersFeedbacks = feedbacks;
+                            //feedback.answersFeedbacks = feedbacks;
                         }
 
                     } else {
@@ -131,6 +131,7 @@ namespace NLP.QnA
 
                         while (EntityIter.MoveNext())
                         {
+
                             verbalFeedback = mergeText(verbalFeedback, ", " + EntityIter.Current.entityValue);
                         }
                         verbalFeedback = mergeText(verbalFeedback, ".");
@@ -149,8 +150,14 @@ namespace NLP.QnA
                 if (partial.Count() > 0)
                 {
                     verbalFeedback = mergeText(verbalFeedback, getPhrase(Pkey.MyAnswerToQuestion));
+                    var first = true;
                     foreach (var f in partial)
                     {
+                        if (!first)
+                        {
+                            verbalFeedback = mergeText(verbalFeedback, getPhrase(Pkey.and));
+                        }
+                        first = false;
                         verbalFeedback = mergeText(verbalFeedback, f.answer.Trim());
                     }
                     verbalFeedback = mergeText(verbalFeedback, ".");
@@ -160,8 +167,14 @@ namespace NLP.QnA
                 if (empty.Count() > 0)
                 {
                     verbalFeedback = mergeText(verbalFeedback, getPhrase(Pkey.shouldWrite));
+                    var first = true;
                     foreach (var f in empty)
                     {
+                        if (!first)
+                        {
+                            verbalFeedback = mergeText(verbalFeedback, getPhrase(Pkey.and));
+                        }
+                        first = false;
                         verbalFeedback = mergeText(verbalFeedback, f.answer.Trim());
                     }
                     verbalFeedback = mergeText(verbalFeedback, ".");
@@ -201,9 +214,15 @@ namespace NLP.QnA
             if (optionalAnswers.Any())
             {
                 verbalFeedback = mergeText(verbalFeedback, getPhrase(Pkey.possibleAnswer));
+                var first = true;
                 foreach (var f in optionalAnswers)
                 {
+                    if (!first)
+                    {
+                        verbalFeedback = mergeText(verbalFeedback, getPhrase(Pkey.and));
+                    }
                     verbalFeedback = mergeText(verbalFeedback, f.answer.Trim());
+                    first = false;
                 }
                 verbalFeedback = mergeText(verbalFeedback, ".");
             }

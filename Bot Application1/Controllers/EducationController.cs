@@ -132,7 +132,7 @@ namespace Bot_Application1.Controllers
             }
             else
             {
-                return null;
+                throw new CategoryOutOfQuestionException();
             }
 
             res.RemoveAll(x => studySession.QuestionAsked.Contains(x));
@@ -219,11 +219,14 @@ namespace Bot_Application1.Controllers
 
         public void getNextQuestion()
         {
-            if (studySession.CurrentQuestion != null) studySession.QuestionAsked.Add(studySession.CurrentQuestion);
+            if (studySession.CurrentQuestion != null)
+            {
+                studySession.QuestionAsked.Add(studySession.CurrentQuestion);
+            }
 
                 studySession.CurrentQuestion = getQuestion();
                 studySession.CurrentQuestion.Enumerator = 0;
-            studySession.CurrentSubQuestion = null;
+                studySession.CurrentSubQuestion = null;
         }
 
         public void getNextSubQuestion()
@@ -237,11 +240,14 @@ namespace Bot_Application1.Controllers
                 studySession.CurrentQuestion.Enumerator++;
 
             }
-            studySession.CurrentSubQuestion = getSubQuestion(studySession.CurrentQuestion.Enumerator);
-            studySession.CurrentSubQuestion.questionText = studySession.CurrentSubQuestion.questionText;
-            if (studySession.CurrentSubQuestion == null)
+            if (studySession.CurrentQuestion != null)
             {
-                getNextQuestion();
+                studySession.CurrentSubQuestion = getSubQuestion(studySession.CurrentQuestion.Enumerator);
+                studySession.CurrentSubQuestion.questionText = studySession.CurrentSubQuestion.questionText;
+            }
+            else 
+            {
+                getNextSubQuestion();
             }
         }
 
