@@ -139,7 +139,7 @@ namespace NLP.Controllers
                 {
                     WebRequest request = WebRequest.Create("http://xspell.ga/?token=57d1b5fd8f45189c136d0b99c628d4e1&check=" + text);
                     //             WebRequest request = WebRequest.Create("http://xspell.ga/?token=c9acedeff1e873a46bef7a6c38e5d82d&check=\"" + text + "\"");
-                    request.Timeout = 1000;
+                    request.Timeout = 2000;
                     string responseFromServer = "";
                     request.Method = "GET";
                     request.ContentType = "application/x-www-form-urlencoded";

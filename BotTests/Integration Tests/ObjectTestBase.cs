@@ -45,6 +45,7 @@ namespace UnitTestProject1
         public Ientity  Entity2 = new entity ();
         public Ientity  Entity3 = new entity ();
         public Ientity  Entity4 = new entity ();
+        public Ientity multyEntity = new entity();
         //public Ientity  Entity5 = new entity ();
         //public Ientity  Entity6 = new entity ();
         //public Ientity  Entity7 = new entity ();
@@ -104,12 +105,12 @@ namespace UnitTestProject1
             Entity2.entityValue = "ירושלים";
             Entity2.entityType = "locationWord";
 
-            WordObject3.Text = "פליט";
-            WordObject3.WordT = WordObject.WordType.personWord;
+            WordObject3.Text = "פליטים";
+            WordObject3.WordT = WordObject.WordType.conceptWord;
             WordObject3.Gender = genderType.masculine;
             WordObject3.Amount = amountType.plural;
 
-            Entity3.entityValue = "פליט";
+            Entity3.entityValue = "פליטים";
             Entity3.entityType = "personWord";
 
             WordObject4.Text = "ירדן";
@@ -119,6 +120,8 @@ namespace UnitTestProject1
             Entity4.entityValue = "ירדן";
             Entity4.entityType = "locationWord";
 
+            multyEntity.entityValue = "בעיית הפליטים";
+            multyEntity.entityType = "conceptWord";
 
 
             Question1.QuestionID = "1";

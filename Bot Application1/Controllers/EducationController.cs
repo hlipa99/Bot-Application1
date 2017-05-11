@@ -132,7 +132,7 @@ namespace Bot_Application1.Controllers
             }
             else
             {
-                throw new CategoryOutOfQuestionException();
+                return null;
             }
 
             res.RemoveAll(x => studySession.QuestionAsked.Contains(x));

@@ -265,7 +265,6 @@
     <Compile Include="Controllers\swearWordException.cs" />
     <Compile Include="Controllers\UnrelatedSubjectException.cs" />
     <Compile Include="Exceptions\ContextException.cs" />
-    <Compile Include="Controllers\MediaController.cs" />
     <Compile Include="Exceptions\DefaultExceptionMessageOverrideModule .cs" />
     <Compile Include="Exceptions\PostUnhandledExceptionToUser.cs" />
     <Compile Include="Exceptions\StopSessionException.cs" />

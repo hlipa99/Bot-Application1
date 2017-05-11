@@ -11,7 +11,6 @@ namespace Model.dataBase
 
         public override bool Equals(Object obj)
         {
-
             var ent = obj as Ientity;
             if (ent == null) return false;
 
@@ -20,7 +19,6 @@ namespace Model.dataBase
 
             return false;
         }
-
         public IentityBase clone()
         {
             var newMulEnt = new entity();
@@ -32,6 +30,6 @@ namespace Model.dataBase
             return newMulEnt;
         }
 
-
+    
     }
 }

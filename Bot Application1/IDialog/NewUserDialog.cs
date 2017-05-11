@@ -122,9 +122,19 @@ namespace Bot_Application1.IDialog
             var message = await result;
             var userText = await result;
 
+            if (conv().getUserIntente(userText.Text, getDialogContext()) == NLP.NLP.UserIntent.swearword)
+            {
+                await writeMessageToUser(context, conv().getPhrase(Pkey.swearResponse));
+                await writeMessageToUser(context, conv().getPhrase(Pkey.MissingUserInfo, textVar: "שם"));
+                updateRequestTime(context);
+                await NewUserGetName(context);
+                return;
+            }
+
             if ((User.UserName = conv().getName(userText.Text)) != null)
             {
                 setDialogsVars(context);
+              
                 var newMessage = conv().getPhrase(Pkey.NewUserGreeting);
 
 

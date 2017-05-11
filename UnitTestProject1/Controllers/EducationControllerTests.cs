@@ -40,6 +40,7 @@ namespace Bot_Application1.Controllers.Tests
 
             //bad
             mockStudySession.Setup(x => x.Category).Returns("נושא שלא קיים");
+           
             Assert.AreEqual(eduCtrl.getQuestion(), null);
           
             //ugly

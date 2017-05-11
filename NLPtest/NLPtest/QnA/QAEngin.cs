@@ -213,6 +213,7 @@ namespace NLP.QnA
             var optionalAnswers = answerFeedback.answersFeedbacks.Except(neededFeedback);
             if (optionalAnswers.Any())
             {
+                verbalFeedback = mergeText(verbalFeedback, "|");
                 verbalFeedback = mergeText(verbalFeedback, getPhrase(Pkey.possibleAnswer));
                 var first = true;
                 foreach (var f in optionalAnswers)
