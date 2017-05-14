@@ -35,17 +35,7 @@ namespace Bot_Application1.Exceptions
             }
             catch (Exception error)
             {
-                try
-                {
-                        Logger.addErrorLog("PostUnhandledExceptionToUser", error.Message + error.Data + error.Source + error.TargetSite +  Environment.NewLine + error.StackTrace + error.InnerException);
-                    
-                }
-                catch (Exception inner)
-                {
-                    this.trace.WriteLine(inner);
-                }
-
-                throw;
+                 Logger.addErrorLog("PostUnhandledExceptionToUser", error.Message + error.Data + error.Source + error.TargetSite +  Environment.NewLine + error.StackTrace + error.InnerException);
             }
         }
     }

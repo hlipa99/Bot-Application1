@@ -6,6 +6,7 @@ using Microsoft.Bot.Builder.History;
 using Microsoft.Bot.Builder.Internals.Fibers;
 using Microsoft.Bot.Builder.Scorables.Internals;
 using Microsoft.Bot.Connector;
+using Model;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -22,16 +23,22 @@ namespace Bot_Application1.Exceptions
         {
             builder.RegisterType<PostUnhandledExceptionToUser>().Keyed<IPostToBot>(typeof(PostUnhandledExceptionToUser)).InstancePerLifetimeScope();
 
-
-            RegisterAdapterChain<IPostToBot>(builder,
-                typeof(PersistentDialogTask),
-                typeof(ExceptionTranslationDialogTask),
-                typeof(SerializeByConversation),
-                typeof(SetAmbientThreadCulture),
-                typeof(PostUnhandledExceptionToUser),
-                typeof(LogPostToBot)
-            )
-            .InstancePerLifetimeScope();
+            try
+            {
+                RegisterAdapterChain<IPostToBot>(builder,
+                    typeof(PersistentDialogTask),
+                    typeof(ExceptionTranslationDialogTask),
+                    typeof(SerializeByConversation),
+                    typeof(SetAmbientThreadCulture),
+                    typeof(PostUnhandledExceptionToUser),
+                    typeof(LogPostToBot)
+                )
+                .InstancePerLifetimeScope();
+            }
+            catch (Exception error)
+            {
+                Logger.addErrorLog("DefaultExceptionMessageOverrideModule", error.Message + error.Data + error.Source + error.TargetSite + Environment.NewLine + error.StackTrace + error.InnerException);
+            }
         }
 
         public static IRegistrationBuilder<TLimit, SimpleActivatorData, SingleRegistrationStyle> RegisterAdapterChain<TLimit>(ContainerBuilder builder, params Type[] types)

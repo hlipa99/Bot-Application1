@@ -497,7 +497,7 @@ namespace Bot_Application1.Controllers
                 {
 
                     case UserIntent.howAreYou:
-                        return mergeText(getPhrase(Pkey.greetings), getPhrase(Pkey.IAmFine));
+                        return getPhrase(Pkey.IAmFine);
                         break;
 
                     case UserIntent.bot_questions:

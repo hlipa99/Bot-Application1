@@ -86,6 +86,17 @@ namespace Model
         shouldWrite,
         goodButNotAllAnswerParts,
         areYouSureMenu,
-        niceToSeeYou
+        niceToSeeYou,
+        userStatistics,
+        goodSubCategorysStat,
+        badSubCategorysStat,
+        misingSubjectsStat,
+        numOfQuestions,
+        inSubjectOf,
+        midiumSubCategorysStat,
+        goodCategoryStat,
+        badCategoryStat,
+        keepTraning,
+        missingSubCategory
     }
 }

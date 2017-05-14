@@ -259,6 +259,7 @@
     <Compile Include="IentityBase.cs" />
     <Compile Include="MorfObjects\ExtTokenWithBuilder.cs" />
     <Compile Include="Exceptions\DBDataException.cs" />
+    <Compile Include="QnA\MessageComposer.cs" />
     <Compile Include="QnA\QAEngin.cs" />
     <Compile Include="QnA\StatisticAgent.cs" />
     <Compile Include="QnA\UserStatistics.cs" />
