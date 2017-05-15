@@ -97,6 +97,8 @@ namespace Model
         goodCategoryStat,
         badCategoryStat,
         keepTraning,
-        missingSubCategory
+        missingSubCategory,
+        userStatisticsOption,
+        notEnoughAnswersForStat
     }
 }

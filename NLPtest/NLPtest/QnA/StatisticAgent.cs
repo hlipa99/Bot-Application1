@@ -22,10 +22,10 @@ namespace NLPtest.QnA
 
 
 
-        public UserStatistics createUserLerningStatistics(User user)
+        public UserStatistics createUserLerningStatistics(String userID)
         {
             var stat = new UserStatistics();
-            var userScore = db.getUserAnswersStat(user.UserID);
+            var userScore = db.getUserAnswersStat(userID);
             if (userScore.Count < 4)
             {
                 return null;

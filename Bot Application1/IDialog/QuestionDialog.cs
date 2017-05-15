@@ -91,7 +91,7 @@ namespace Bot_Application1.IDialog
             var question = StudySession.CurrentSubQuestion;
             if (question != null)
             {
-                await writeMessageToUser(context, new string[] { Emoji.get("questionMark") + '"' + question.questionText.Trim() + '"' });
+                await writeMessageToUser(context, new string[] { '"' + question.questionText.Trim() + '"' + Emoji.get("questionMark")  });
 
                 updateRequestTime(context);
                 setDialogsVars(context);

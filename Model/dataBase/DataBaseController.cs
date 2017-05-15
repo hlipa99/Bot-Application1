@@ -392,24 +392,36 @@ namespace Model.dataBase
 
         public virtual string[] getAllCategory()
         {
-
-            Question question = new Question();
-            string[] catagories = null;
-
-            try
+            ObjectCache cache = MemoryCache.Default;
+            var cachedItem = cache.Get("getAllCategory()");
+            if (cachedItem == null)
             {
+                Question question = new Question();
+                string[] catagories = null;
 
-                catagories = (from t in DB.Question
-                            select t.Category).Distinct().ToArray();
+                try
+                {
 
+                    catagories = (from t in DB.Question
+                                  select t.Category).Distinct().ToArray();
+
+                }
+                catch (Exception e)
+                {
+                    //    Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
+                    throw new DBException();
+                }
+
+                var exp = new CacheItemPolicy();
+                exp.SlidingExpiration = (new TimeSpan(1, 0, 0, 0));
+                cache.Set("getAllCategory", catagories, exp);
+                return catagories;
             }
-            catch (Exception e)
+            else
             {
-            //    Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
-                throw new DBException();
+                return (string[])cachedItem;
             }
-
-            return catagories;
+          
 
         }
 

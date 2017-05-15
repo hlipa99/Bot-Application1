@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace NLPtest.QnA
 {
-    class MessageComposer
+    public class MessageComposer
     {
 
         DataBaseController db = new DataBaseController();
@@ -19,72 +19,123 @@ namespace NLPtest.QnA
 
         public string[] CreateUserStatMessage(UserStatistics stat)
         {
-            var verbalStat = getPhrase(Pkey.userStatistics);
-            verbalStat = mergeText(verbalStat, getPhrase(Pkey.numOfQuestions));
-            verbalStat = mergeText(verbalStat, stat.scorByTime.Length.ToString());
-            verbalStat = mergeText(verbalStat, "|");
-
-
-            var missingSubjects = db.getAllCategory().Where(s => !stat.perSubjectScore.ContainsKey(s));
-
-            foreach (var s in db.getAllCategory().Except(missingSubjects))
+            if (stat != null)
             {
-                verbalStat = mergeText(verbalStat, getPhrase(Pkey.inSubjectOf));
-                verbalStat = mergeText(verbalStat, s + "|");
+                var verbalStat = getPhrase(Pkey.userStatistics);
+                verbalStat = mergeText(verbalStat, getPhrase(Pkey.numOfQuestions));
+                verbalStat = mergeText(verbalStat, stat.scorByTime.Length.ToString());
+                verbalStat = mergeText(verbalStat, "|");
+                var categoreis = db.getAllCategory();
+
+                var missingSubjects = categoreis.Where(s => !stat.perSubjectScore.ContainsKey(s));
+
+                var scored = categoreis.Except(missingSubjects);
+
+                var goodSubjects = scored.Where(s => stat.perSubjectScore[s] > 70);
+                var badSubjects = scored.Where(s => stat.perSubjectScore[s] <= 30);
+                var mediumSubjects = scored.Where(s => stat.perSubjectScore[s] > 30 && stat.perSubjectScore[s] <= 70);
 
 
-                var subCategories = db.getAllSubCategory(s);
-                var missingSubCategory = subCategories.Where(c => !stat.perSubjectScore.ContainsKey(s));
-
-                if (stat.perSubjectScore[s] > 70)
+                if (goodSubjects.Any())
                 {
                     verbalStat = mergeText(verbalStat, getPhrase(Pkey.goodCategoryStat));
-
+                    verbalStat = mergeText(verbalStat, getPhrase(Pkey.inSubjectOf));
+                    verbalStat = mergeText(verbalStat, mergeTextWithOr(goodSubjects.ToArray()));
+                    verbalStat = mergeText(verbalStat, "|");
                 }
-                else if (stat.perSubjectScore[s] < 33)
+                if (badSubjects.Any())
                 {
                     verbalStat = mergeText(verbalStat, getPhrase(Pkey.badCategoryStat));
+                    verbalStat = mergeText(verbalStat, getPhrase(Pkey.inSubjectOf));
+                    verbalStat = mergeText(verbalStat, mergeTextWithOr(badSubjects.ToArray()));
+                    verbalStat = mergeText(verbalStat, "|");
                 }
-                else
+
+
+                foreach (var s in mediumSubjects)
                 {
+                    var subCategories = db.getAllSubCategory(s);
+                    var missingSubCategory = subCategories.Where(c => !stat.perSubjectScore.ContainsKey(s));
+
+                    verbalStat = mergeText(verbalStat, getPhrase(Pkey.inSubjectOf));
+                    verbalStat = mergeText(verbalStat, s + ":");
+
+
                     var good = stat.perSubjectScore.Where(d => subCategories.Contains(d.Key) && d.Value > 70);
                     var medium = stat.perSubjectScore.Where(d => subCategories.Contains(d.Key) && d.Value <= 70 && d.Value > 33);
                     var bad = stat.perSubjectScore.Where(d => subCategories.Contains(d.Key) && d.Value <= 66);
-                    verbalStat = mergeText(verbalStat, getPhrase(Pkey.goodSubCategorysStat));
-                    verbalStat = mergeText(verbalStat, mergeText(good.Select(x => x.Key).ToArray()));
-                    verbalStat = mergeText(verbalStat, "|");
-                    verbalStat = mergeText(verbalStat, getPhrase(Pkey.midiumSubCategorysStat));
-                    verbalStat = mergeText(verbalStat, mergeText(good.Select(x => x.Key).ToArray()));
-                    verbalStat = mergeText(verbalStat, "|");
-                    verbalStat = mergeText(verbalStat, getPhrase(Pkey.badSubCategorysStat));
-                    verbalStat = mergeText(verbalStat, mergeText(good.Select(x => x.Key).ToArray()));
+                    if (good.Any())
+                    {
+                        verbalStat = mergeText(verbalStat, "|");
+                        verbalStat = mergeText(verbalStat, getPhrase(Pkey.goodSubCategorysStat));
+                        verbalStat = mergeText(verbalStat, mergeText(mergeTextWithOr(good.Select(x => x.Key).ToArray())));
+                    }
+                    if (medium.Any())
+                    {
+                        verbalStat = mergeText(verbalStat, "|");
+                        verbalStat = mergeText(verbalStat, getPhrase(Pkey.midiumSubCategorysStat));
+                        verbalStat = mergeText(verbalStat, mergeText(mergeTextWithOr(medium.Select(x => x.Key).ToArray())));
+
+                    }
+                    if (bad.Any())
+                    {
+                        verbalStat = mergeText(verbalStat, "|");
+                        verbalStat = mergeText(verbalStat, getPhrase(Pkey.badSubCategorysStat));
+                        verbalStat = mergeText(verbalStat, mergeText(mergeTextWithOr(bad.Select(x => x.Key).ToArray())));
+                    }
+
+                    if (missingSubCategory.Count() > 0)
+                    {
+                        verbalStat = mergeText(verbalStat, getPhrase(Pkey.missingSubCategory));
+                        verbalStat = mergeText(verbalStat, mergeText(mergeTextWithOr(missingSubCategory.ToArray())));
+                    }
+
                 }
                 verbalStat = mergeText(verbalStat, "|");
 
 
-                if (missingSubCategory.Count() > 0)
+
+
+                if (missingSubjects.Count() > 0)
                 {
-                    verbalStat = mergeText(verbalStat, getPhrase(Pkey.missingSubCategory));
-                    verbalStat = mergeText(verbalStat, mergeText(missingSubCategory.ToArray()));
+                    verbalStat = mergeText(verbalStat, getPhrase(Pkey.misingSubjectsStat));
+                    verbalStat = mergeText(verbalStat, mergeText(missingSubjects.ToArray()));
                 }
 
+                verbalStat = mergeText(verbalStat, "|");
+                verbalStat = mergeText(verbalStat, getPhrase(Pkey.keepTraning));
+                return verbalStat;
             }
-
-            if (missingSubjects.Count() > 0)
+            else
             {
-                verbalStat = mergeText(verbalStat, getPhrase(Pkey.misingSubjectsStat));
-                verbalStat = mergeText(verbalStat, mergeText(missingSubjects.ToArray()));
+                return getPhrase(Pkey.notEnoughAnswersForStat);
             }
-
-            verbalStat = mergeText(verbalStat, "|");
-            verbalStat = mergeText(verbalStat, getPhrase(Pkey.keepTraning));
-            return verbalStat;
-    }
             
+        }
 
-            
-        
+        private string[] mergeTextWithOr(string[] list)
+        {
 
+            var verbalFeedback = new string[] { };
+            for(int i=0;i< list.Length;i++)
+            {
+                if (i!=0)
+                {
+                    if (i == list.Length - 1)
+                    {
+                        verbalFeedback = mergeText(verbalFeedback, getPhrase(Pkey.and));
+                    }
+                    else
+                    {
+                        verbalFeedback = mergeText(verbalFeedback, ",");
+                    }
+                }
+
+                verbalFeedback = mergeText(verbalFeedback, list[i]);
+            }
+            verbalFeedback = mergeText(verbalFeedback, ".");
+            return verbalFeedback;
+        }
 
         private bool isSpecialEntity(string entityType)
         {
@@ -115,16 +166,8 @@ namespace NLPtest.QnA
                     {
                         verbalFeedback = getPhrase(Pkey.goodPartialAnswer);
                         verbalFeedback = mergeText(verbalFeedback, getPhrase(Pkey.missingAnswerEntity));
-                        var EntityIter = entities.Distinct().OrderBy(x => x.entityType).GetEnumerator();
-                        EntityIter.MoveNext();
-                        verbalFeedback = mergeText(verbalFeedback, EntityIter.Current.entityValue);
-
-                        while (EntityIter.MoveNext())
-                        {
-
-                            verbalFeedback = mergeText(verbalFeedback, ", " + EntityIter.Current.entityValue);
-                        }
-                        verbalFeedback = mergeText(verbalFeedback, ".");
+                        var EntityIter = entities.Distinct().OrderBy(x => x.entityType);
+                        verbalFeedback = mergeText(verbalFeedback, mergeTextWithOr(EntityIter.Select(x => x.entityValue).ToArray()));
                     }
                     else
                     {
@@ -140,62 +183,32 @@ namespace NLPtest.QnA
                 if (partial.Count() > 0)
                 {
                     verbalFeedback = mergeText(verbalFeedback, getPhrase(Pkey.MyAnswerToQuestion));
-                    var first = true;
-                    foreach (var f in partial)
-                    {
-                        if (!first)
-                        {
-                            verbalFeedback = mergeText(verbalFeedback, getPhrase(Pkey.and));
-                        }
-                        first = false;
-                        verbalFeedback = mergeText(verbalFeedback, f.answer.Trim());
-                    }
-                    verbalFeedback = mergeText(verbalFeedback, ".");
+                    verbalFeedback = mergeText(verbalFeedback, mergeTextWithOr(partial.Select(x=>x.answer.Trim()).ToArray()));
                 }
 
                 var empty = neededFeedback.Where(x => x.score < 20);
                 if (empty.Count() > 0)
                 {
                     verbalFeedback = mergeText(verbalFeedback, getPhrase(Pkey.shouldWrite));
-                    var first = true;
-                    foreach (var f in empty)
-                    {
-                        if (!first)
-                        {
-                            verbalFeedback = mergeText(verbalFeedback, getPhrase(Pkey.and));
-                        }
-                        first = false;
-                        verbalFeedback = mergeText(verbalFeedback, f.answer.Trim());
-                    }
-                    verbalFeedback = mergeText(verbalFeedback, ".");
+                    verbalFeedback =  mergeText(verbalFeedback, mergeTextWithOr(empty.Select(x => x.answer.Trim()).ToArray()));
                 }
 
             }
 
             else
             {
-                if (answerFeedback.answer != null && answerFeedback.answer.Split(' ').Length > 2)
+                if (neededFeedback.Count() > 0)
                 {
-                    verbalFeedback = getPhrase(Pkey.wrongAnswer);
-                }
-                else
-                {
-                    verbalFeedback = getPhrase(Pkey.notAnAnswer);
-                }
-                verbalFeedback = mergeText(verbalFeedback, getPhrase(Pkey.MyAnswerToQuestion));
-
-
-                if (answerFeedback.answersFeedbacks.Count > 0)
-                {
-                    var feedbackEnumerator = answerFeedback.answersFeedbacks.GetEnumerator();
-                    feedbackEnumerator.MoveNext();
-                    verbalFeedback = mergeText(verbalFeedback, feedbackEnumerator.Current.answer);
-                    while (feedbackEnumerator.MoveNext())
+                        if (answerFeedback.answer != null && answerFeedback.answer.Split(' ').Length > 2)
                     {
-                        verbalFeedback = mergeText(verbalFeedback, getPhrase(Pkey.and));
-                        verbalFeedback = mergeText(verbalFeedback, feedbackEnumerator.Current.answer.Trim());
+                        verbalFeedback = getPhrase(Pkey.wrongAnswer);
                     }
-                    verbalFeedback = mergeText(verbalFeedback, ".");
+                    else
+                    {
+                        verbalFeedback = getPhrase(Pkey.notAnAnswer);
+                    }
+                    verbalFeedback = mergeText(verbalFeedback, getPhrase(Pkey.MyAnswerToQuestion));
+                     verbalFeedback = mergeText(verbalFeedback, mergeTextWithOr(neededFeedback.Select(x => x.answer.Trim()).ToArray()));
                 }
 
             }
@@ -205,17 +218,7 @@ namespace NLPtest.QnA
             {
                 verbalFeedback = mergeText(verbalFeedback, "|");
                 verbalFeedback = mergeText(verbalFeedback, getPhrase(Pkey.possibleAnswer));
-                var first = true;
-                foreach (var f in optionalAnswers)
-                {
-                    if (!first)
-                    {
-                        verbalFeedback = mergeText(verbalFeedback, getPhrase(Pkey.and));
-                    }
-                    verbalFeedback = mergeText(verbalFeedback, f.answer.Trim());
-                    first = false;
-                }
-                verbalFeedback = mergeText(verbalFeedback, ".");
+                verbalFeedback = mergeText(verbalFeedback, mergeTextWithOr(optionalAnswers.Select(x => x.answer.Trim()).ToArray()));
             }
 
             return verbalFeedback;

@@ -259,12 +259,14 @@
     <Compile Include="Controllers\sessionBreakException.cs" />
     <Compile Include="Controllers\swearWordException.cs" />
     <Compile Include="Controllers\UnrelatedSubjectException.cs" />
+    <Compile Include="ec\getUserStatistics.cs" />
     <Compile Include="Exceptions\ContextException.cs" />
     <Compile Include="Exceptions\DefaultExceptionMessageOverrideModule .cs" />
     <Compile Include="Exceptions\PostUnhandledExceptionToUser.cs" />
     <Compile Include="Exceptions\StopSessionException.cs" />
     <Compile Include="IDialog\GreetingDialog.cs" />
     <Compile Include="IDialog\SideDialog.cs" />
+    <Compile Include="IDialog\StatisticsDialog.cs" />
     <Compile Include="IDialog\YesNoQuestionDialog.cs" />
     <Compile Include="Models\UserContext.cs" />
     <Compile Include="Exceptions\DBException.cs" />

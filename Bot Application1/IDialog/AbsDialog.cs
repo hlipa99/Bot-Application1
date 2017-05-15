@@ -86,7 +86,7 @@ namespace Bot_Application1.IDialog
 
         public EducationController edc()
         {
-            return new EducationController(User, StudySession, null);
+            return new EducationController(User, StudySession, conv());
         }
 
         public async Task generalExceptionError(IDialogContext context, Exception error)

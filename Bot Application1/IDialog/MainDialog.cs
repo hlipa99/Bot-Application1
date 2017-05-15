@@ -135,6 +135,9 @@ namespace Bot_Application1.IDialog
                         case 1:  //not implamented
                             context.Call(new NotImplamentedDialog(), returnToMainMenu);
                             break;
+                        case 2:  //statistics
+                            context.Call(new StatisticsDialog(), returnToMainMenu);
+                            break;
                         default:
                             break;
                             await writeMessageToUser(context, conv().getPhrase(Pkey.NotAnOption, textVar: option));
