@@ -564,8 +564,8 @@ namespace Model.dataBase
             }
             catch (Exception e)
             {
-             //   Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
-                throw e;
+                //   Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
+                throw new NotImplementedException("key:" + key + " not in dictionary");
             }
 
             return phrases;
@@ -591,6 +591,11 @@ namespace Model.dataBase
         {
             var scorse = DB.userScore.Where(x => x.userID == userID);
             return scorse.ToList(); ;
+        }
+
+        public List<answersLog> getSampleQuestions()
+        {
+            return DB.answersLog.Where(a=>a.userID == "testCase").ToList();
         }
     }
 }

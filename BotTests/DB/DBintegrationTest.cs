@@ -16,15 +16,17 @@ namespace BotTests.Integration_Tests
         public void TestEntityDB()
         {
             var entities = db.getEntitys();
-            Assert.IsTrue(entities.All(
-                e => e.entitySynonimus != null &&
-               !e.entitySynonimus.Contains(";;") &&
-               e.entitySynonimus.StartsWith(";") &&
-               e.entitySynonimus.EndsWith(";") &&
-               e.entitySynonimus.Contains(";" + e.entityValue + ";") &&
-               Enum.Parse(typeof(WordObject.WordType), e.entityType) != null &&
-               e.entityValue != null
-            ));
+            foreach (var e in entities) {
+                Assert.IsTrue(e.entitySynonimus != null &&
+                               !e.entitySynonimus.Contains(";;") &&
+                               e.entitySynonimus.StartsWith(";") &&
+                               e.entitySynonimus.EndsWith(";") &&
+                               Enum.Parse(typeof(WordObject.WordType), e.entityType) != null &&
+                               e.entityValue != null
+                            ,e.entityValue + "," + e.entitySynonimus);
+            }
+
+            
 
         }
 
@@ -33,16 +35,26 @@ namespace BotTests.Integration_Tests
         {
             var entities = db.getEntitys();
             var multyEntities = db.getMultyEntitys();
+            foreach (var e in multyEntities)
+            {
+                Assert.IsTrue(
+                    e.parts != null &&
+                   e.entityValue != null &&
+                  e.parts.StartsWith(";") &&
+                  e.parts.EndsWith(";") &&
+                  Enum.Parse(typeof(WordObject.WordType), e.entityType) != null &&
+                  e.entityValue != null
+               ,e.entityValue);
 
-            Assert.IsTrue(multyEntities.All(
-               e => e.parts != null &&
-               e.entityValue != null &&
-               e.parts.Split(';').All(me => me == "" || me.Split('#').All(p => entities.Count(ent => ent.entityValue == p) > 0)) &&
-              e.parts.StartsWith(";") &&
-              e.parts.EndsWith(";") &&
-              Enum.Parse(typeof(WordObject.WordType), e.entityType) != null &&
-              e.entityValue != null
-           ));
+                foreach(var me in e.parts.Split(';'))
+                {
+                    foreach (var p in me.Split('#'))
+                    {
+                        Assert.IsTrue(p == "" || entities.Count(x=>x.entityValue == p.Trim()) > 0,e.entityValue + ":" + p);
+                    }
+                }
+
+            }
 
 
         }
@@ -89,10 +101,10 @@ namespace BotTests.Integration_Tests
         public void TestBotPrasesDB()
         {
 
-            foreach (var k in Enum.GetValues(typeof(Model.Pkey)))
+            foreach (Model.Pkey k in Enum.GetValues(typeof(Model.Pkey)))
             {
-                var p = db.getBotPhrase((Model.Pkey)k, new string[] { }, new string[] { });
-                Assert.IsTrue(p.Any());
+                var p = db.getBotPhrase(k, new string[] { }, new string[] { });
+                Assert.IsTrue(p.Any(), Enum.GetName(typeof(Model.Pkey), k));
             }
         }
 

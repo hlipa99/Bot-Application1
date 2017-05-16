@@ -43,7 +43,7 @@ namespace Model
         earlyDiparture,
         goodSessionEnd,
         badSessionEnd,
-        letsNotLearn,
+        //letsNotLearn,
         MenuLearn,
         MenuNotLearn,
         firstQuestion,

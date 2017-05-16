@@ -1,13 +1,15 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnitTestProject1;
 
 namespace BotTests
 {
-    static class AssertNLP
+     class AssertNLP
     {
         public static bool contains(string[] listOptions, string str) {
             try
@@ -66,6 +68,11 @@ namespace BotTests
             {
                 try
                 {
+                    if(listOptions.Contains(new DialogsTestsBase().DBbotPhrase(Pkey.innerException)[0]))
+                    {
+                        throw new Exception("ExceptionInBot");
+                    }
+
                     res += o + ",";
                     contains(listOptions, o);
                     flage = true;

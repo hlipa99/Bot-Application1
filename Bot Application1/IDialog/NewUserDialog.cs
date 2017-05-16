@@ -125,7 +125,7 @@ namespace Bot_Application1.IDialog
             if (conv().getUserIntente(userText.Text, getDialogContext()) == NLP.NLP.UserIntent.swearword)
             {
                 await writeMessageToUser(context, conv().getPhrase(Pkey.swearResponse));
-                await writeMessageToUser(context, conv().getPhrase(Pkey.MissingUserInfo, textVar: "שם"));
+                await writeMessageToUser(context, conv().getPhrase(Pkey.MissingUserInfo, textVar: "שם הפרטי"));
                 updateRequestTime(context);
                 await NewUserGetName(context);
                 return;
@@ -145,7 +145,7 @@ namespace Bot_Application1.IDialog
             }
             else
             {
-                var newMessage = conv().getPhrase(Pkey.MissingUserInfo, textVar: "שם");
+                var newMessage = conv().getPhrase(Pkey.MissingUserInfo, textVar: "שם הפרטי");
                 await writeMessageToUser(context, newMessage);
                 updateRequestTime(context);
                 context.Wait(CheckName);
