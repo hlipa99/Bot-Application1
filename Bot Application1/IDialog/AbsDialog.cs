@@ -86,13 +86,13 @@ namespace Bot_Application1.IDialog
 
         public EducationController edc()
         {
-            return new EducationController(User, StudySession, null);
+            return new EducationController(User, StudySession, conv());
         }
 
-        public async Task generalExceptionError(IDialogContext context, Exception ex)
+        public async Task generalExceptionError(IDialogContext context, Exception error)
         {
             await writeMessageToUser(context, conv().getPhrase(Pkey.innerException));
-            Logger.addErrorLog(getDialogContext().dialog, ex.Message + Environment.NewLine + ex.StackTrace + ex.InnerException);
+            Logger.addErrorLog("PostUnhandledExceptionToUser", error.Message + error.Data + error.Source + error.TargetSite + Environment.NewLine + error.StackTrace + error.InnerException);
             return;
         }
 

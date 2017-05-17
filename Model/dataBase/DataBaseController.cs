@@ -98,15 +98,30 @@ namespace Model.dataBase
             foreach(var e in Entities)
             {
                 if(e!= null && e.entityValue.Length < 50)
-                DB.entity.Add(e);
+                {
+                    DB.entity.Add(e);
+
+                }
+                else
+                {
+
+                }
                 try
 
                 {
-                    await DB.SaveChangesAsync();
+                     DB.SaveChanges();
                 }
                 catch (Exception ex)
                 {
+                  //  var exStr = ex.InnerException.ToString();
+                 //   var idx = exStr.IndexOf("The duplicate key value is (") + "The duplicate key value is (".Length);
+                  //  var str2 = exStr.Remove(0, idx);
+                  //  idx =  str2.IndexOf(")");
+                 //   var val = str2.Remove(idx);
+                 //   DB.entity.
 
+
+                    DB.entity.Remove(e);
                 }
             }
             
@@ -377,24 +392,36 @@ namespace Model.dataBase
 
         public virtual string[] getAllCategory()
         {
-
-            Question question = new Question();
-            string[] catagories = null;
-
-            try
+            ObjectCache cache = MemoryCache.Default;
+            var cachedItem = cache.Get("getAllCategory()");
+            if (cachedItem == null)
             {
+                Question question = new Question();
+                string[] catagories = null;
 
-                catagories = (from t in DB.Question
-                            select t.Category).Distinct().ToArray();
+                try
+                {
 
+                    catagories = (from t in DB.Question
+                                  select t.Category).Distinct().ToArray();
+
+                }
+                catch (Exception e)
+                {
+                    //    Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
+                    throw new DBException();
+                }
+
+                var exp = new CacheItemPolicy();
+                exp.SlidingExpiration = (new TimeSpan(1, 0, 0, 0));
+                cache.Set("getAllCategory", catagories, exp);
+                return catagories;
             }
-            catch (Exception e)
+            else
             {
-            //    Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
-                throw new DBException();
+                return (string[])cachedItem;
             }
-
-            return catagories;
+          
 
         }
 
@@ -537,8 +564,8 @@ namespace Model.dataBase
             }
             catch (Exception e)
             {
-             //   Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
-                throw e;
+                //   Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
+                throw new NotImplementedException("key:" + key + " not in dictionary");
             }
 
             return phrases;
@@ -564,6 +591,11 @@ namespace Model.dataBase
         {
             var scorse = DB.userScore.Where(x => x.userID == userID);
             return scorse.ToList(); ;
+        }
+
+        public List<answersLog> getSampleQuestions()
+        {
+            return DB.answersLog.Where(a=>a.userID == "testCase").ToList();
         }
     }
 }

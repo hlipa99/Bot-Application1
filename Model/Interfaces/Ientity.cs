@@ -11,7 +11,6 @@ namespace Model.Models
 
              string entitySynonimus { get; set; }
 
-              bool Equals(Object obj);
              
 
     }

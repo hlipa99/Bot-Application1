@@ -599,6 +599,8 @@ namespace NLP.NLP
                     }
                 
             }
+
+
             DBctrl1.saveEntitiesFromQuestions(entList);
         }
 

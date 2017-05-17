@@ -19,6 +19,7 @@ using NLP.Controllers;
 using Microsoft.Bot.Connector;
 using System.IO;
 using Bot_Application1.YAndex;
+using NUnit.Framework;
 
 namespace Bot_Application1.Controllers
 {
@@ -27,8 +28,6 @@ namespace Bot_Application1.Controllers
     public class ConversationController
     {
 
-
-        MessageComposer composer;
         // Dictionary<string, string[]> PraseDictionary;
         DataBaseController db = new DataBaseController();
         EducationController ec;
@@ -185,10 +184,12 @@ namespace Bot_Application1.Controllers
 
         internal string[] MainMenuOptions()
         {
-            return new string[]
-            {
-                getPhrase(Pkey.MenuLearn)[0],getPhrase(Pkey.MenuNotLearn)[0]
-            };
+            var options = new List<string>();
+            
+            options.Add(getPhrase(Pkey.MenuLearn)[0]);
+            options.Add(getPhrase(Pkey.MenuNotLearn)[0]);
+            options.Add(getPhrase(Pkey.userStatisticsOption)[0]);
+            return options.ToArray();
         }
 
 
@@ -497,7 +498,7 @@ namespace Bot_Application1.Controllers
                 {
 
                     case UserIntent.howAreYou:
-                        return mergeText(getPhrase(Pkey.greetings), getPhrase(Pkey.IAmFine));
+                        return getPhrase(Pkey.IAmFine);
                         break;
 
                     case UserIntent.bot_questions:
@@ -505,6 +506,7 @@ namespace Bot_Application1.Controllers
                         break;
 
                     case UserIntent.hello:
+                        return getPhrase(Pkey.niceToSeeYou);
                     case UserIntent.DefaultFallbackIntent:
                     default:
                         if (user.LastSeen.GetValueOrDefault().AddHours(1) < DateTime.UtcNow)
@@ -649,12 +651,14 @@ namespace Bot_Application1.Controllers
             phraseRes = phraseRes.Replace("<timeOfday>", getTimeOfDay());
             phraseRes = phraseRes.Replace("<questionsLeft>", (StudySession.SessionLength - StudySession.QuestionAsked.Count).ToString());
 
-
-            phraseRes = phraseRes.Replace("נ ", "ן ");
-            phraseRes = phraseRes.Replace("מ ", "מ ");
-            phraseRes = phraseRes.Replace("צ ", "צ ");
-            phraseRes = phraseRes.Replace("כ ", "ך ");
-            phraseRes = phraseRes.Replace("פ ", "ף ");
+            if (!phraseRes.Contains("\""))
+            {
+                phraseRes = phraseRes.Replace("נ ", "ן ");
+                phraseRes = phraseRes.Replace("מ ", "מ ");
+                phraseRes = phraseRes.Replace("צ ", "צ ");
+                phraseRes = phraseRes.Replace("כ ", "ך ");
+                phraseRes = phraseRes.Replace("פ ", "ף ");
+            }
 
             //formatEmuji emoji
             if (phraseRes.Contains("<e:")){

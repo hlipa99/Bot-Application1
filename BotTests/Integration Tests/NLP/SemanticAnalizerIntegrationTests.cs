@@ -36,7 +36,7 @@ namespace NLP.NLP.Tests
             //good
             Assert.IsTrue(res.Contains(new OrganizationObject("ערבי")));
             Assert.IsTrue(res.Contains(new LocationObject("ירושלים")));
-            Assert.IsTrue(res.Contains(new PersonObject("פליט")));
+            Assert.IsTrue(res.Contains(new ConceptObject("פליטים")));
             Assert.IsTrue(res.Contains(new OrganizationObject("ירדן")));
             Assert.IsTrue(res.Count() == 4);
 

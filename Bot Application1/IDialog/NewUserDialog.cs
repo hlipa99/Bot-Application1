@@ -6,7 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Threading.Tasks;
 using System.Web.UI.WebControls;
-using Bot_Application1.Cardatt_achment;
+
 
 using NLP;
 using Bot_Application1.YAndex;
@@ -122,9 +122,19 @@ namespace Bot_Application1.IDialog
             var message = await result;
             var userText = await result;
 
+            if (conv().getUserIntente(userText.Text, getDialogContext()) == NLP.NLP.UserIntent.swearword)
+            {
+                await writeMessageToUser(context, conv().getPhrase(Pkey.swearResponse));
+                await writeMessageToUser(context, conv().getPhrase(Pkey.MissingUserInfo, textVar: "שם הפרטי"));
+                updateRequestTime(context);
+                await NewUserGetName(context);
+                return;
+            }
+
             if ((User.UserName = conv().getName(userText.Text)) != null)
             {
                 setDialogsVars(context);
+              
                 var newMessage = conv().getPhrase(Pkey.NewUserGreeting);
 
 
@@ -135,7 +145,7 @@ namespace Bot_Application1.IDialog
             }
             else
             {
-                var newMessage = conv().getPhrase(Pkey.MissingUserInfo, textVar: "שם");
+                var newMessage = conv().getPhrase(Pkey.MissingUserInfo, textVar: "שם הפרטי");
                 await writeMessageToUser(context, newMessage);
                 updateRequestTime(context);
                 context.Wait(CheckName);

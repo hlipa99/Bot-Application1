@@ -22,12 +22,10 @@ namespace NLPtest.QnA
 
 
 
-
-
-        public UserStatistics createUserLerningStatistics(User user)
+        public UserStatistics createUserLerningStatistics(String userID)
         {
             var stat = new UserStatistics();
-            var userScore = db.getUserAnswersStat(user.UserID);
+            var userScore = db.getUserAnswersStat(userID);
             if (userScore.Count < 4)
             {
                 return null;
@@ -35,21 +33,45 @@ namespace NLPtest.QnA
             else
             {
                 List<int> total = new List<int>();
-                List<Tuple<string, int>> perSubject = new List<Tuple<string, int>>();
+                Dictionary<string,int> perSubject = new Dictionary<string, int>();
+                Dictionary<string, int> perSubjectScore = new Dictionary<string, int>();
                 userScore.OrderByDescending(x => x.dateTime);
                 userScore.Distinct(new questionIDscoreDistinct());
 
                 foreach (var s in userScore)
                 {
                     total.Add(s.Score.Value);
-                    perSubject.Add(new Tuple<string, int>(s.subCategory, s.Score.Value));
+                    int val;
+                    if(perSubject.TryGetValue(s.subCategory,out val))
+                    {
+                        perSubjectScore[s.subCategory] += 1;
+                        perSubject[s.subCategory] = (val * perSubject[s.subCategory] + s.Score.Value)/(val+1);
+                    }
+                    else
+                    {
+                        perSubjectScore[s.subCategory] = 1;
+                        perSubject[s.subCategory] = s.Score.Value;
+                    }
+
+                    if (perSubject.TryGetValue(s.category, out val))
+                    {
+                        perSubjectScore[s.category] += 1;
+                        perSubject[s.category] = (val * perSubject[s.category] + s.Score.Value) / (val + 1);
+                    }
+                    else
+                    {
+                        perSubjectScore[s.category] = 1;
+                        perSubject[s.category] = s.Score.Value;
+                    }
                 }
 
-                // stat.scorByTime[0] = userScore.OrderBy(x => x.dateTime).Select(x => x.Score).ToArray();
+
+                stat.perSubjectScore = perSubjectScore;
+                stat.scorByTime = userScore.OrderBy(x => x.dateTime).Select(x => x.Score).ToArray();
                 //   stat.scorByTime[0] = userScore.OrderBy(x => x.dateTime).Select(x => x.Score).ToArray();
 
 
-                return null;
+                return stat;
             }
         }
 
@@ -66,6 +88,46 @@ namespace NLPtest.QnA
             {
                 return obj.GetHashCode();
             }
+        }
+
+
+        internal string[] mergeText(string[] v1, string v2)
+        {
+            var space = v2.Length > 1 ? " " : "";
+            return new string[] { mergeText(v1).Trim() + space + v2.Trim() };
+        }
+
+        internal string[] mergeText(string[] v1, string[] v2)
+        {
+            return new string[] { mergeText(v1) + " " + mergeText(v2) };
+        }
+
+        private string mergeText(string[] phraseValue)
+        {
+            if (phraseValue.Count() > 0)
+            {
+                var res = phraseValue[0];
+                var left = phraseValue.ToList();
+                left.RemoveAt(0);
+                foreach (var s in left)
+                {
+                    if (s.Length > 1)
+                    {
+                        res += " " + s;
+                    }
+                    else
+                    {
+                        res += s;
+
+                    }
+                }
+                return res;
+            }
+            else
+            {
+                return "";
+            }
+
         }
 
     }

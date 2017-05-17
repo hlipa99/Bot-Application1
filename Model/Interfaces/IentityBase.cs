@@ -1,4 +1,6 @@
-﻿namespace Model.Models
+﻿using System;
+
+namespace Model.Models
 {
     public interface IentityBase
     {
@@ -8,5 +10,8 @@
         string entityType { get; set; }
 
         IentityBase clone();
+
+        bool Equals(Object obj);
+
     }
 }

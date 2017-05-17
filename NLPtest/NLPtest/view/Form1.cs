@@ -6,6 +6,7 @@ using NLP.Controllers;
 using NLP.HebWords;
 using NLP.QnA;
 using NLP.WorldObj;
+using NLPtest.QnA;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -24,6 +25,8 @@ namespace NLP
         //   DataBaseControler
         List<WorldObject> answer1 = new List<WorldObject>();
         List<WorldObject> answer2 = new List<WorldObject>();
+        NLPControler nlp = new NLPControler();
+        QuestionsAnswersControllers qnaCont = new QuestionsAnswersControllers();
 
         public Form1()
         {
@@ -148,7 +151,7 @@ namespace NLP
             var subQuestion = new SubQuestion();
             subQuestion.questionText = questionBox.Text;
             subQuestion.answerText = input_TB.Text;
-            subQuestion.flags = "needAll";
+            subQuestion.flags = "need1";
             var match = qna.matchAnswers(subQuestion,
                 input_TB2.Text);
             var answerText = "Score:" + match.score + Environment.NewLine;
@@ -164,7 +167,9 @@ namespace NLP
 
             }
 
-            var res = qna.createFeedBack(match);
+
+           
+            var res = qnaCont.createFeedBack(match);
             foreach(var s in res)
             {
                 answerText += s + Environment.NewLine;

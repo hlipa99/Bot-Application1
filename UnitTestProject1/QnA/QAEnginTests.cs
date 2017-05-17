@@ -69,11 +69,11 @@ namespace NLP.QnA.Tests
 
             mockSubQqestion1.Setup(x => x.answerText).Returns("system דוד בן גוריון הודיע שהאו\"ם הכריז על סיום המנדט");
             var feedback = qae.matchAnswers(mockSubQqestion1.Object, "user דוד בן גוריון הקריא את הכרזת העצמאות לאחר האישור באו\"ם");
-            Assert.AreEqual(feedback.score, 68);
+            Assert.AreEqual(feedback.answersFeedbacks[0].score, 68);
 
             //good
             Assert.IsTrue(feedback.missingEntitis.Where(x=>x.entityValue == eventO.Word && x.entityType == "eventWord").Count() == 1);
-            Assert.AreEqual(feedback.score, 68);
+            Assert.AreEqual(feedback.answersFeedbacks[0].score, 68);
 
             //bad
             Assert.AreEqual(feedback.missingEntitis.Count, 1);

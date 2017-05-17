@@ -80,9 +80,9 @@ namespace NLP.QnA
                             feedbacks = feedbacks.GetRange(0, numberInt);
                             foreach (var f in feedbacks)
                             {
-                            feedback.score = (int)feedback.answersFeedbacks.Average(x => x.score);
+                            feedback.score = (int)feedbacks.Average(x => x.score);
                             }
-                            feedback.answersFeedbacks = feedbacks;
+                            //feedback.answersFeedbacks = feedbacks;
                         }
 
                     } else {
@@ -244,46 +244,9 @@ namespace NLP.QnA
             return new string[] { mergeText(v1).Trim() + space + v2.Trim() };
         }
 
-        internal string[] mergeText(string[] v1, string[] v2)
-        {
-            return new string[] { mergeText(v1) + " " +  mergeText(v2) };
-        }
 
-        private string mergeText(string[] phraseValue)
-        {
-            if(phraseValue.Count() > 0)
-            {
-                var res = phraseValue[0];
-                var left = phraseValue.ToList();
-                left.RemoveAt(0);
-                foreach (var s in left)
-                {
-                    if (s.Length > 1)
-                    {
-                        res += " " + s;
-                    }
-                    else
-                    {
-                        res +=  s;
 
-                    }
-                }
-                return res;
-            }
-            else
-            {
-                return "";
-            }
-           
-        }
-        private bool isSpecialEntity(string entityType)
-        {
-            return entityType == "personWord" ||
-               entityType == "organizationWord" ||
-                entityType == "locationWord" ||
-                entityType == "conceptWord" ||
-                 entityType == "eventWord";
-        }
+       
 
 
         private AnswerFeedback matchAnswers(List<WorldObject> userAnswer, List<WorldObject> systemAnswerWords, string ans)

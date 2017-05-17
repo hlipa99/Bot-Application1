@@ -42,9 +42,9 @@ namespace NLP.QnA.Tests
 
             //good
             Assert.IsTrue(feedback.missingEntitis.Contains(Entity4));
+            Assert.IsTrue(feedback.missingEntitis.Contains(multyEntity));
             Assert.IsFalse(feedback.missingEntitis.Contains(Entity1));
             Assert.IsFalse(feedback.missingEntitis.Contains(Entity2));
-            Assert.IsFalse(feedback.missingEntitis.Contains(Entity3));
 
             Assert.AreEqual(feedback.score, 45);
 
@@ -53,7 +53,7 @@ namespace NLP.QnA.Tests
             Assert.IsTrue(feedback.missingEntitis.Contains(Entity4));
             Assert.IsTrue(feedback.missingEntitis.Contains(Entity1));
             Assert.IsTrue(feedback.missingEntitis.Contains(Entity2));
-            Assert.IsTrue(feedback.missingEntitis.Contains(Entity3));
+            Assert.IsTrue(feedback.missingEntitis.Contains(multyEntity));
             Assert.AreEqual(feedback.score, 0);
 
 

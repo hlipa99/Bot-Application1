@@ -166,6 +166,10 @@ namespace Bot_Application1.Controllers
             }
         }
 
+        public string[] getUserStatistics()
+        {
+            return formatPhrases(Qac.getUserStatistics(user.UserID));
+        }
 
         public async void updateUserScore()
         {
@@ -219,11 +223,14 @@ namespace Bot_Application1.Controllers
 
         public void getNextQuestion()
         {
-            if (studySession.CurrentQuestion != null) studySession.QuestionAsked.Add(studySession.CurrentQuestion);
+            if (studySession.CurrentQuestion != null)
+            {
+                studySession.QuestionAsked.Add(studySession.CurrentQuestion);
+            }
 
                 studySession.CurrentQuestion = getQuestion();
                 studySession.CurrentQuestion.Enumerator = 0;
-            studySession.CurrentSubQuestion = null;
+                studySession.CurrentSubQuestion = null;
         }
 
         public void getNextSubQuestion()
@@ -237,11 +244,14 @@ namespace Bot_Application1.Controllers
                 studySession.CurrentQuestion.Enumerator++;
 
             }
-            studySession.CurrentSubQuestion = getSubQuestion(studySession.CurrentQuestion.Enumerator);
-            studySession.CurrentSubQuestion.questionText = studySession.CurrentSubQuestion.questionText;
-            if (studySession.CurrentSubQuestion == null)
+            if (studySession.CurrentQuestion != null)
             {
-                getNextQuestion();
+                studySession.CurrentSubQuestion = getSubQuestion(studySession.CurrentQuestion.Enumerator);
+                studySession.CurrentSubQuestion.questionText = studySession.CurrentSubQuestion.questionText;
+            }
+            else 
+            {
+                getNextSubQuestion();
             }
         }
 
@@ -258,8 +268,22 @@ namespace Bot_Application1.Controllers
             return null;
         }
 
-        public string[] createReplayToUser(string text, UserIntent answerIntent)
+
+
+
+
+
+
+            public string[] createReplayToUser(string text, UserIntent answerIntent)
         {
+
+            //if user pressing category
+            if (getStudyCategory().Contains(text.Trim()))
+            {
+                throw new menuException();
+            }
+
+
             switch (answerIntent)
             {                         
                 case UserIntent.dontKnow:
@@ -278,19 +302,19 @@ namespace Bot_Application1.Controllers
                 case UserIntent.unknown:
                 case UserIntent.historyAnswer:
                 default:
-                    return formatFeedbackPhrases(qac.createFeedBack(checkAnswer(text)));
+                    return formatPhrases(qac.createFeedBack(checkAnswer(text)));
                     
             }
 
            return null;
         }
 
-        private string[] formatFeedbackPhrases(string[] val)
+        private string[] formatPhrases(string[] val)
         {
             var res = new List<string>();
             foreach(var s in val)
             {
-                res.Add(conversationController.formatPhrases(s));
+                res.Add(ConversationController.formatPhrases(s));
             }
             return res.ToArray();
         }

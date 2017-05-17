@@ -186,9 +186,14 @@ namespace Bot_Application1.IDialog
             {
                 StudySession.QuestionAsked = new System.Collections.Generic.List<IQuestion>();
                 setDialogsVars(context);
+                await chooseSubject(context);
+            }
+            else
+            {
+                await StartAsync(context);
+
             }
 
-            await StartAsync(context);
             return;
 
         }
@@ -229,7 +234,7 @@ namespace Bot_Application1.IDialog
                 catch (Exception ex)
                 {
                     await writeMessageToUser(context, conv().getPhrase(Pkey.innerException));
-                    Logger.addErrorLog(getDialogContext().dialog, ex.Message + Environment.NewLine + ex.StackTrace + ex.InnerException);
+                    await generalExceptionError(context, ex);
                     context.Done("menu");
                     return;
                 }

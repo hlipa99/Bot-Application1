@@ -5,7 +5,7 @@ using System.Web;
 using Microsoft.Azure; // Namespace for CloudConfigurationManager
 using Microsoft.WindowsAzure.Storage; // Namespace for CloudStorageAccount
 using Microsoft.WindowsAzure.Storage.Blob; // Namespace for Blob storage types
-using Microsoft.IdentityModel.Protocols;
+//using Microsoft.IdentityModel.Protocols;
 using System.Configuration;
 using System.Globalization;
 

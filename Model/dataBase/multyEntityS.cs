@@ -19,9 +19,9 @@ namespace Model.dataBase
             return newMulEnt;
         }
 
+
         public override bool Equals(Object obj)
         {
-
             var ent = obj as Ientity;
             if (ent == null) return false;
 

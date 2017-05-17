@@ -43,7 +43,7 @@ namespace Model
         earlyDiparture,
         goodSessionEnd,
         badSessionEnd,
-        letsNotLearn,
+        //letsNotLearn,
         MenuLearn,
         MenuNotLearn,
         firstQuestion,
@@ -85,6 +85,20 @@ namespace Model
         goodPartialAnswer,
         shouldWrite,
         goodButNotAllAnswerParts,
-        areYouSureMenu
+        areYouSureMenu,
+        niceToSeeYou,
+        userStatistics,
+        goodSubCategorysStat,
+        badSubCategorysStat,
+        misingSubjectsStat,
+        numOfQuestions,
+        inSubjectOf,
+        midiumSubCategorysStat,
+        goodCategoryStat,
+        badCategoryStat,
+        keepTraning,
+        missingSubCategory,
+        userStatisticsOption,
+        notEnoughAnswersForStat
     }
 }
