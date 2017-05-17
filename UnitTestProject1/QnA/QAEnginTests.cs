@@ -62,7 +62,7 @@ namespace NLP.QnA.Tests
         public void matchAnswersWithUserAnswerTest()
         {
 
-            mockNLP.Setup(x => x.Analize(It.Is<string>(y => y.Contains("user")), It.IsAny<string>())).Returns(list2);
+            mockNLP.Setup(x => x.Analize(It.Is<string>(y => y.Contains("user")), It.IsAny<List<WorldObject>>())).Returns(list2);
             mockNLP.Setup(x => x.Analize(It.Is<string>(y => y.Contains("system")))).Returns(list1);
 
             qae.Nlp = mockNLP.Object;

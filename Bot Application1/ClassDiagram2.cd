@@ -1,0 +1,278 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Bot_Application1.BundleConfig" Collapsed="true">
+    <Position X="26.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>App_Start\BundleConfig.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.FilterConfig" Collapsed="true">
+    <Position X="28.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>App_Start\FilterConfig.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.RouteConfig" Collapsed="true">
+    <Position X="23.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>App_Start\RouteConfig.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.WebApiConfig" Collapsed="true">
+    <Position X="28.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>App_Start\WebApiConfig.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.WebApiApplication" Collapsed="true">
+    <Position X="26.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAA=</HashCode>
+      <FileName>Global.asax.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.RandomNum" Collapsed="true">
+    <Position X="32" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAABAAAAAAA=</HashCode>
+      <FileName>Models\RandomNum.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.Cardatt_achment.ManagerCard" Collapsed="true">
+    <Position X="23.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAEAAAAAAAAAAAAASBAEAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Carda_factory\ManagerCard.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.Controllers.botQuestionRespondException" Collapsed="true">
+    <Position X="25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\botQuestionRespondException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.Controllers.ConversationController" Collapsed="true">
+    <Position X="32" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>cIABAIQBAEAQwCAQEAIIAiIBAAhAkCAARAQGAAYAIQk=</HashCode>
+      <FileName>Controllers\ConversationController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.Controllers.EducationController" Collapsed="true">
+    <Position X="25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAABAABACAQAQABECAAAAAAAgAQAQAAVCEQABYBAQA=</HashCode>
+      <FileName>Controllers\EducationController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.Controllers.insertFunnybreakException" Collapsed="true">
+    <Position X="30.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\insertFunnybreakException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.Controllers.insertIntrestingException" Collapsed="true">
+    <Position X="32" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\insertIntrestingException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.Controllers.MediaController" Collapsed="true">
+    <Position X="25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAAAAAAAAAAAAQAAAACAAAAAAgAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\MediaController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.Controllers.menuException" Collapsed="true">
+    <Position X="26.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\menuException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.Controllers.MessagesController" Collapsed="true">
+    <Position X="28.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAACAACAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\MessagesController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.Controllers.sessionBreakException" Collapsed="true">
+    <Position X="25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\sessionBreakException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.Controllers.swearWordException" Collapsed="true">
+    <Position X="28.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\swearWordException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.Controllers.UnrelatedSubjectException" Collapsed="true">
+    <Position X="32" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\UnrelatedSubjectException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.Controllers.UserControler" Collapsed="true">
+    <Position X="25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAA=</HashCode>
+      <FileName>Controllers\UserControler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.Controllers.botphraseException" Collapsed="true">
+    <Position X="23.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Exceptions\botphraseException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.Exceptions.CategoryOutOfQuestionException" Collapsed="true">
+    <Position X="28.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Exceptions\CategoryOutOfQuestionException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.Exceptions.ContextException" Collapsed="true">
+    <Position X="30.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Exceptions\ContextException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.Exceptions.DBException" Collapsed="true">
+    <Position X="23.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Exceptions\DBException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.Exceptions.EndOfLearningSessionException" Collapsed="true">
+    <Position X="26.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Exceptions\EndOfLearningSessionException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.Exceptions.PhraseFormatException" Collapsed="true">
+    <Position X="30.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Exceptions\PhraseFormatException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.Exceptions.StopSessionException" Collapsed="true">
+    <Position X="26.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Exceptions\StopSessionException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.Exceptions.unknownUserException" Collapsed="true">
+    <Position X="30.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Exceptions\unknownUserException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.IDialog.AbsDialog&lt;T&gt;" Collapsed="true">
+    <Position X="10.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAABAAAAKAAAAACAAAAAEACAEIgkgFAABQABICQABSA=</HashCode>
+      <FileName>IDialog\AbsDialog.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Bot_Application1.IDialog.FarewellDialog" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAAAAAAAAAAAAAAAAAAgAAAAAAQAAABAAAAA=</HashCode>
+      <FileName>IDialog\FarewellDialog.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.IDialog.GreetingDialog" Collapsed="true">
+    <Position X="5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAQAAAAAAAAAAAAIAAAgAAAAAAQAAAAAAAQA=</HashCode>
+      <FileName>IDialog\GreetingDialog.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.IDialog.LerningDialog" Collapsed="true">
+    <Position X="9.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACBAAAAAAAACAMAAQBAAAABAAChAAAAAAQAgAAAAAQA=</HashCode>
+      <FileName>IDialog\LerningDialog.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.IDialog.MainDialog" Collapsed="true">
+    <Position X="14" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EEAACAAAAAAAgAAAAAAAAAAQAAgAAAAIAQAAAAAAACA=</HashCode>
+      <FileName>IDialog\MainDialog.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.IDialog.MenuOptionDialog" Collapsed="true">
+    <Position X="16.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAAEAAAAAAIAAgAAAAIBgAAAAAAQAAAAAIAAA=</HashCode>
+      <FileName>IDialog\MenuOptionDialog.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.IDialog.NewUserDialog" Collapsed="true">
+    <Position X="18.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAABCAAAAAAAACAAAUoAAAAACSAAAAAAAAA=</HashCode>
+      <FileName>IDialog\NewUserDialog.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.IDialog.NotImplamentedDialog" Collapsed="true">
+    <Position X="20.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>IDialog\NotImplamentedDialog.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.IDialog.QuestionDialog" Collapsed="true">
+    <Position X="2.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAQAAACAAkAAAAAAAAAAAAAgAAEAAAQAAAAAAAQA=</HashCode>
+      <FileName>IDialog\QuestionDialog.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.IDialog.SideDialog" Collapsed="true">
+    <Position X="7.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>IDialog\SideDialog.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.IDialog.YesNoQuestionDialog" Collapsed="true">
+    <Position X="11.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAAAAAAAgABAAAAQAAAAAAAAA=</HashCode>
+      <FileName>IDialog\YesNoQuestionDialog.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bot_Application1.Models.UserContext" Collapsed="true">
+    <Position X="23.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAQACAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\UserContext.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

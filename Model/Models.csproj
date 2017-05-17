@@ -98,9 +98,6 @@
     <Compile Include="dataBase\ErrorLog.cs">
       <DependentUpon>botData.tt</DependentUpon>
     </Compile>
-    <Compile Include="dataBase\intent.cs">
-      <DependentUpon>botData.tt</DependentUpon>
-    </Compile>
     <Compile Include="dataBase\media.cs">
       <DependentUpon>botData.tt</DependentUpon>
     </Compile>
@@ -153,6 +150,7 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>botData.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <None Include="ClassDiagram1.cd" />
     <None Include="dataBase\botData.edmx.diagram">
       <DependentUpon>botData.edmx</DependentUpon>
     </None>

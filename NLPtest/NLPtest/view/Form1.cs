@@ -146,6 +146,7 @@ namespace NLP
             QAEngin qna = new QAEngin();
             string str;
             var subQuestion = new SubQuestion();
+            subQuestion.questionText = questionBox.Text;
             subQuestion.answerText = input_TB.Text;
             subQuestion.flags = "needAll";
             var match = qna.matchAnswers(subQuestion,
@@ -253,6 +254,11 @@ namespace NLP
             {
                 return "";
             }
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
 
         }
     }

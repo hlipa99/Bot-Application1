@@ -9,6 +9,7 @@ using static NLP.HebWords.WordObject;
 using NLP.HebWords;
 using System.Runtime.Caching;
 using System.Collections;
+using System.Linq;
 
 namespace NLP.Controllers
 {
@@ -123,17 +124,17 @@ namespace NLP.Controllers
             return Analize(text, null);
         }
 
-        public virtual List<WorldObject> Analize(string text, string systemAnswerText)
+        public virtual List<WorldObject> Analize(string text, List<WorldObject> systemQuestionText)
         {
             ObjectCache cache = MemoryCache.Default;
-            var cachedItem = cache.Get(text + systemAnswerText) as WorldObject[];
+            var cachedItem = cache.Get(text + systemQuestionText) as WorldObject[];
 
             if (cachedItem == null || cachedItem.Length == 0 || true)
             {
 
 
                 // var context = new TextContext();
-                var textAnlz = Ma.meniAnalize(text, systemAnswerText != null);
+                var textAnlz = Ma.meniAnalize(text, systemQuestionText != null);
                 List<WorldObject> input = new List<WorldObject>();
                 List<WorldObject> sentence = new List<WorldObject>();
                 List<WorldObject> last = new List<WorldObject>();
@@ -141,16 +142,13 @@ namespace NLP.Controllers
                 List<ITemplate> context = new List<ITemplate>();
 
 
-                if (systemAnswerText != null && textAnlz.FindAll(x => x.FindAll(y => y.isA(WordType.gufWord)).Count > 0).Count > 0)
+                if (systemQuestionText != null && textAnlz.FindAll(x => x.FindAll(y => y.isA(WordType.gufWord)).Count > 0).Count > 0)
                 {
                     //add mising data to entity DB
-                    var contextAnlz = Ma.meniAnalize(systemAnswerText, true);
-
+                    var contextAnlz = systemQuestionText;
 
                     //create context 
-                    var contextSentences = sa.findGufContext(contextAnlz, context);
-                    contextSentences.ForEach(x => context.AddRange(x));
-                    sentences = sa.findGufContext(textAnlz, context);
+                    sentences = sa.findGufContext(textAnlz, contextAnlz.Cast<ITemplate>().ToList());
                 }
                 else
                 {
@@ -167,7 +165,7 @@ namespace NLP.Controllers
                 }
                 var exp = new CacheItemPolicy();
                 exp.SlidingExpiration = (new TimeSpan(1, 0, 0, 1));
-                cache.Set(text + systemAnswerText, input.ToArray(), exp);
+                cache.Set(text + systemQuestionText, input.ToArray(), exp);
                 return input;
             }
             else

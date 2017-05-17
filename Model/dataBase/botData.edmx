@@ -276,15 +276,6 @@ warning 6002: The table/view 'mindcet.dbo.intent' does not have a primary key de
           <Property Name="UserTimesConnected" Type="Int32" />
           <Property Name="UserOverallTime" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
         </EntityType>
-        <EntityType Name="intent">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="synonymus" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="context" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-        </EntityType>
         <Association Name="FK_SubQuestion_Question">
           <End Role="Question" Type="Self.Question" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -309,7 +300,6 @@ warning 6002: The table/view 'mindcet.dbo.intent' does not have a primary key de
           <EntitySet Name="Question" EntityType="Self.Question" />
           <EntitySet Name="SubQuestion" EntityType="Self.SubQuestion" />
           <EntitySet Name="User" EntityType="Self.User" />
-          <EntitySet Name="intent" EntityType="Self.intent" />
           <AssociationSet Name="FK_SubQuestion_Question" Association="Self.FK_SubQuestion_Question">
             <End Role="Question" EntitySet="Question" />
             <End Role="SubQuestion" EntitySet="SubQuestion" />
@@ -448,16 +438,6 @@ warning 6002: The table/view 'mindcet.dbo.intent' does not have a primary key de
                 <ScalarProperty Name="UserClass" ColumnName="UserClass" />
                 <ScalarProperty Name="UserCreated" ColumnName="UserCreated" />
                 <ScalarProperty Name="UserLastSession" ColumnName="UserLastSession" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="intent">
-            <EntityTypeMapping TypeName="mindcetModel.intent">
-              <MappingFragment StoreEntitySet="intent">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="synonymus" ColumnName="synonymus" />
-                <ScalarProperty Name="context" ColumnName="context" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
