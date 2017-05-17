@@ -98,10 +98,10 @@ namespace UnitTestProject1
         {
             Debug.WriteLine("sendBotStart:" + test);
             var task = sendMessage(test);
-            //  Console.WriteLine(response[0]);
+            Console.WriteLine(test);
             task.Wait();
             Debug.WriteLine("sendBotEnd:");
-
+            //Thread.Sleep(500);
             printRes(task.Result);
             return task.Result;
         }
@@ -111,7 +111,7 @@ namespace UnitTestProject1
             foreach (var s in res)
             {
                 Debug.WriteLine(s);
-
+                Console.WriteLine(s);
             }
         }
 
