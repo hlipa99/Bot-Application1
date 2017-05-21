@@ -450,7 +450,17 @@ namespace NLP.NLP
             {
                 newWord.Amount = amountType.plural;
                 newWord.Gender = genderType.masculine;
+            }else if (ent.entityType == "locationWord")
+                {
+                    newWord.Amount = amountType.singular;
+                    newWord.Gender = genderType.feminine;
+                }
+            else if (ent.entityType == "eventWord")
+            {
+                newWord.Amount = amountType.singular;
+                newWord.Gender = genderType.masculine;
             }
+
 
             IMultyEntity mEnt;
             if (ent.entityValue.Split(' ').Count() > 0) {

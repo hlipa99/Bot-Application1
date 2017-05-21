@@ -21,7 +21,7 @@ namespace Model.Models
         {
             if (f != null)
             {
-                Double d = (score + f.score) / 2.0;
+                Double d = (score* (answersFeedbacks.Count) + f.score) / (answersFeedbacks.Count + 1);
                 score = (int)Math.Ceiling(d);
                 answersFeedbacks.Add(f);
                 missingEntitis.AddRange(f.missingEntitis);

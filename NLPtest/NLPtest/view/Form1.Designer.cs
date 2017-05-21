@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("root");
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("root");
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("root");
+            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("root");
             this.text_TB = new System.Windows.Forms.TextBox();
             this.input_TB = new System.Windows.Forms.TextBox();
             this.send_BTN = new System.Windows.Forms.Button();
@@ -41,6 +41,8 @@
             this.button1 = new System.Windows.Forms.Button();
             this.text_TB3 = new System.Windows.Forms.TextBox();
             this.button2 = new System.Windows.Forms.Button();
+            this.questionBox = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // text_TB
@@ -59,7 +61,7 @@
             // input_TB
             // 
             this.input_TB.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.input_TB.Location = new System.Drawing.Point(164, 537);
+            this.input_TB.Location = new System.Drawing.Point(164, 562);
             this.input_TB.Name = "input_TB";
             this.input_TB.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.input_TB.Size = new System.Drawing.Size(812, 35);
@@ -73,7 +75,7 @@
             // 
             this.send_BTN.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
             this.send_BTN.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.send_BTN.Location = new System.Drawing.Point(56, 537);
+            this.send_BTN.Location = new System.Drawing.Point(58, 562);
             this.send_BTN.Name = "send_BTN";
             this.send_BTN.Size = new System.Drawing.Size(100, 37);
             this.send_BTN.TabIndex = 2;
@@ -86,10 +88,10 @@
             this.treeView.Location = new System.Drawing.Point(999, 18);
             this.treeView.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.treeView.Name = "treeView";
-            treeNode1.Name = "root";
-            treeNode1.Text = "root";
+            treeNode3.Name = "root";
+            treeNode3.Text = "root";
             this.treeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode1});
+            treeNode3});
             this.treeView.Size = new System.Drawing.Size(792, 495);
             this.treeView.TabIndex = 3;
             // 
@@ -98,10 +100,10 @@
             this.treeView2.Location = new System.Drawing.Point(999, 603);
             this.treeView2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.treeView2.Name = "treeView2";
-            treeNode2.Name = "root";
-            treeNode2.Text = "root";
+            treeNode4.Name = "root";
+            treeNode4.Text = "root";
             this.treeView2.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode2});
+            treeNode4});
             this.treeView2.Size = new System.Drawing.Size(792, 495);
             this.treeView2.TabIndex = 7;
             // 
@@ -173,6 +175,26 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
+            // questionBox
+            // 
+            this.questionBox.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.questionBox.Location = new System.Drawing.Point(162, 519);
+            this.questionBox.Name = "questionBox";
+            this.questionBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.questionBox.Size = new System.Drawing.Size(812, 35);
+            this.questionBox.TabIndex = 11;
+            this.questionBox.Text = "שאלה";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(105, 529);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(70, 20);
+            this.label1.TabIndex = 12;
+            this.label1.Text = "question";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
+            // 
             // Form1
             // 
             this.AcceptButton = this.send_BTN;
@@ -181,6 +203,8 @@
             this.AutoScroll = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(1912, 1038);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.questionBox);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.text_TB3);
             this.Controls.Add(this.button1);
@@ -217,6 +241,8 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TextBox text_TB3;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.TextBox questionBox;
+        private System.Windows.Forms.Label label1;
     }
 }
 
