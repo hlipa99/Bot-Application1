@@ -24,6 +24,7 @@ namespace NLP.HebWords
         private timeType time = timeType.unspecified;
         private amountType amount = amountType.unspecified;
         private genderType gender = genderType.unspecified;
+
         internal string TypefromEnum(WordType wordT) {
             string ret = "";
             try { 
@@ -588,6 +589,8 @@ namespace NLP.HebWords
             }
         }
 
+    
+
         private WorldObject getVerbFromWord( )
         {
             var res = new VerbObject(Text);
@@ -778,5 +781,14 @@ namespace NLP.HebWords
 
             return true;
         }
+
+
+        public string getTypeString()
+        {
+            return Enum.GetName(typeof(WordType), WordT);
+        }
+
+
+
     }
 }

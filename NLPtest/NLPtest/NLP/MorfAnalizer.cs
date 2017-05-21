@@ -359,23 +359,13 @@ namespace NLP.NLP
             if (multyEntities == null) { multyEntities = DBctrl1.getMultyEntitys().ToList(); }
             var newSentence = new List<WordObject>();
 
-            var matchedEntity = new List<IEnumerable<IentityBase>>();
-            for (int i = 0; i < sentence.Count; i++)
-            {
-                var tryMatch = findMatch(entities, sentence[i].Lemma.Trim());
-                if (tryMatch != null && tryMatch.Any())
-                {
-                   tryMatch.ToList().ForEach(x => x.entityID = i);
-                    matchedEntity.Add(new List<IentityBase>(tryMatch.Select(x => x.clone())));
-                 //   addMatch(sentence[i], isUserInput, newSentence, match);
-                }
-            }
+            List<IEnumerable<IentityBase>> matchedEntity = findMathedEntities(sentence);
 
             for (int i = 0; i < matchedEntity.Count; i++)
             {
                 var ent = matchedEntity[i];
                 var resEntityPart = new List<IentityBase>();
-                var res = findMultyMatch(multyEntities,matchedEntity, i, resEntityPart).Distinct();
+                var res = findMultyMatch(multyEntities, matchedEntity, i, resEntityPart).Distinct();
                 var max = -1;
                 if (res.Any()) max = res.Max(x => x.entityID);
 
@@ -385,17 +375,18 @@ namespace NLP.NLP
                 {
                     //original index of the first word entity
                     var idx = matchedEntity[i].First().entityID;
-                      matchedEntity.RemoveRange(i, max);
+                    matchedEntity.RemoveRange(i, max);
                     var multyRes = new List<IentityBase>();
-                    foreach (IMultyEntity me  in res)
+                    foreach (IMultyEntity me in res)
                     {
-                        if((me.singleValue != null  && me.singleValue != "")){
+                        if ((me.singleValue != null && me.singleValue != ""))
+                        {
                             var singleValue = entities.Where(x => x.entityValue == me.singleValue);
                             if (singleValue != null && singleValue.Any())
                             {
                                 singleValue.Single().entityID = idx;
                                 multyRes.Add(singleValue.Single().clone());
-                              
+
                             }
                         }
                         else
@@ -403,7 +394,7 @@ namespace NLP.NLP
                             me.entityID = idx;
                             multyRes.Add(me.clone());
                         }
-                  
+
                     }
                     matchedEntity.Insert(i, multyRes);
 
@@ -426,7 +417,7 @@ namespace NLP.NLP
                 }
                 else //in user input, we save all the possibileties
                 {
-                    
+
                     foreach (var w in e)
                     {
                         WordObjectFromEntity(sentence, newSentence, w);
@@ -438,8 +429,24 @@ namespace NLP.NLP
             return newSentence;
         }
 
-        
-        
+        private List<IEnumerable<IentityBase>> findMathedEntities(List<WordObject> sentence)
+        {
+            var matchedEntity = new List<IEnumerable<IentityBase>>();
+            for (int i = 0; i < sentence.Count; i++)
+            {
+                var tryMatch = findMatch(entities, sentence[i].Lemma.Trim());
+                if (tryMatch != null && tryMatch.Any())
+                {
+                    tryMatch.ToList().ForEach(x => x.entityID = i);
+                    matchedEntity.Add(new List<IentityBase>(tryMatch.Select(x => x.clone())));
+                    //   addMatch(sentence[i], isUserInput, newSentence, match);
+                }
+            }
+
+            return matchedEntity;
+        }
+
+
         private void WordObjectFromEntity(List<WordObject> sentence, List<WordObject> newSentence, IentityBase ent)
         {
 
@@ -482,8 +489,75 @@ namespace NLP.NLP
         }
 
 
-        //finds multyEntity match with maximal munch using recursive calls
-        private IEnumerable<IentityBase> findMultyMatch(IEnumerable<IMultyEntity> matchedMultyEntity, List<IEnumerable<IentityBase>> matchedEntity, int i, List<IentityBase> selected)
+        public List<IentityBase> findMatchingEntities(string text)
+        {
+            var res = new List<IentityBase>();
+            if (entities == null) { entities = DBctrl1.getEntitys().ToList(); }
+            if (multyEntities == null) { multyEntities = DBctrl1.getMultyEntitys().ToList(); }
+            var words = getWordsObjectFromParserServer(text);
+            var ent = findMathedEntities(words);
+            var resEntityPart = new List<IentityBase>();
+            findMultyMatch(multyEntities, ent, 0, resEntityPart).Distinct();
+            if (resEntityPart.Any())
+            {
+
+                if (resEntityPart.Any())
+                {
+                    if (ent.Count() > 0 && ent[0].Where(e => resEntityPart.Where(me => ((multyEntity)me).parts.Contains(e.entityValue)).Any()).Any())
+                    {
+                        res.AddRange(multyEntities);
+                    }
+                    else
+                    {
+                        foreach (var w in words)
+                        {
+                            DBctrl.addNewEntity(w.Lemma, w.getTypeString());
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var w in words)
+                    {
+                        DBctrl.addNewEntity(w.Lemma, w.getTypeString());
+                        var newEnt = new entity();
+                        newEnt.entityValue = w.Text.Remove(0, w.Prefixes.Count());
+                        newEnt.entitySynonimus = ";" + w.Lemma + ";";
+                        newEnt.entityType = w.getTypeString();
+                        DBctrl.addUpdateEntity(newEnt);
+                        res.Add(newEnt);
+                    }
+                }
+            }
+            else
+            {
+                res = ent.FirstOrDefault().ToList();
+            }
+            return res;
+        }
+
+        public bool findMatchingEntities(IEnumerable<IentityBase> ent)
+        {
+            try
+            {
+                foreach(var e in ent)
+                {
+                    DBctrl.addUpdateEntity(e);
+                }
+            }catch(Exception ex)
+            {
+                return false;
+            }
+
+
+
+            return true;
+        }
+
+
+
+            //finds multyEntity match with maximal munch using recursive calls,matchedMultyEntity satrt with the full multy list
+            private IEnumerable<IentityBase> findMultyMatch(IEnumerable<IMultyEntity> matchedMultyEntity, List<IEnumerable<IentityBase>> matchedEntity, int i, List<IentityBase> selected)
         {
             List<IentityBase> match = new List<IentityBase>();
 

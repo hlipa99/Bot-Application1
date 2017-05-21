@@ -10,6 +10,7 @@ using NLP.HebWords;
 using System.Runtime.Caching;
 using System.Collections;
 using System.Linq;
+using Model.Models;
 
 namespace NLP.Controllers
 {
@@ -20,7 +21,7 @@ namespace NLP.Controllers
         // static object syncLock = new object();
         MorfAnalizer ma = null;
         SemanticAnalizer sa = new SemanticAnalizer();
-
+       
         public MorfAnalizer Ma
         {
             get
@@ -124,6 +125,12 @@ namespace NLP.Controllers
             return Analize(text, null);
         }
 
+        public virtual List<IentityBase> findMatchingEntities(string text)
+        {
+            return Ma.findMatchingEntities(text);
+        }
+
+        
         public virtual List<WorldObject> Analize(string text, List<WorldObject> systemQuestionText)
         {
             ObjectCache cache = MemoryCache.Default;

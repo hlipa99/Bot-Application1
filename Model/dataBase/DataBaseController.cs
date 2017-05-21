@@ -186,9 +186,6 @@ namespace Model.dataBase
 
             try
             {
-
-               
-
                 if (DB.entity.Count(x => x.entitySynonimus.Contains(value)) == 0)
                 {
                     var entity = new entity();
@@ -198,8 +195,6 @@ namespace Model.dataBase
                     DB.entity.Add(entity);
                     await DB.SaveChangesAsync();
                 }
-              
-
             }
             catch (Exception e)
             {
@@ -210,6 +205,74 @@ namespace Model.dataBase
 
 
         }
+
+        public void addUpdateEntity(entity newEnt)
+        {
+  
+            try
+            {
+            
+                var old = DB.entity.Where(e => e.entityValue == newEnt.entityValue);
+                if (old.Any())
+                {
+                    var oldEnt = old.Single();
+                    foreach(var s in newEnt.entitySynonimus.Split(';'))
+                    {
+                        if (s != "") oldEnt.entitySynonimus += s + ";";
+                    }
+                }
+                else
+                {
+                    DB.entity.Add(newEnt);
+                }
+
+                DB.SaveChanges();
+                
+            }
+            catch (Exception e)
+            {
+                //   Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
+                throw new DBException();
+            }
+
+        }
+
+        public void addUpdateEntity(multyEntity newEnt)
+        {
+
+            try
+            {
+
+                var old = DB.multyEntity.Where(e => e.entityValue == newEnt.entityValue);
+                if (old.Any())
+                {
+                    old.Single().parts = newEnt.parts;
+                    old.Single().singleValue = newEnt.parts;
+                    old.Single().entityType = newEnt.parts;
+                }
+                else
+                {
+                    DB.multyEntity.Add(newEnt);
+                }
+
+                DB.SaveChanges();
+
+            }
+            catch (Exception e)
+            {
+                //   Logger.log(this.GetType().Name, MethodBase.GetCurrentMethod().Name, e.ToString());
+                throw new DBException();
+            }
+
+        }
+
+        public void addUpdateEntity(IentityBase newEnt)
+        { 
+                throw new NotImplementedException();
+        }
+
+
+
 
         public media getRandomMedia(string type, string[] possibleFlags)
         {
@@ -597,5 +660,7 @@ namespace Model.dataBase
         {
             return DB.answersLog.Where(a=>a.userID == "testCase").ToList();
         }
+
+
     }
 }

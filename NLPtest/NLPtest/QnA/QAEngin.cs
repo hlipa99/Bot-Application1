@@ -32,8 +32,9 @@
  
  
              if (subquestion != null && answer != null)
-             {
-                 var userAnswer = Nlp.Analize(answer, subquestion.questionText);
+            {
+                var questionAnlize = Nlp.Analize(subquestion.questionText);
+                var userAnswer = Nlp.Analize(answer, questionAnlize);
                  AnswerFeedback feedback = new AnswerFeedback();
                  feedback.answer = answer;
                  if (subquestion.answerText.Contains("|"))
@@ -45,8 +46,8 @@
                          {
                              if (ans.Trim() != "")
                              {
-                                 var systemAnswerWords = Nlp.Analize(ans);
-                                 var f = matchAnswers(userAnswer, systemAnswerWords, ans);
+                                 var systemAnswerWords = Nlp.Analize(ans).Except(questionAnlize);
+                                 var f = matchAnswers(userAnswer, systemAnswerWords.ToList(), ans);
                                  feedback.addFeedback(f);
                              }
                          }
@@ -84,8 +85,8 @@
                          }
  
                      } else {
-                     var systemAnswer = Nlp.Analize(subquestion.answerText);
-                     var f = matchAnswers(userAnswer, systemAnswer);
+                     var systemAnswer = Nlp.Analize(subquestion.answerText).Except(questionAnlize);
+                     var f = matchAnswers(userAnswer, systemAnswer.ToList());
                      f.answer = subquestion.answerText;
                      feedback.addFeedback(f);
                      feedback.Need = 1;
