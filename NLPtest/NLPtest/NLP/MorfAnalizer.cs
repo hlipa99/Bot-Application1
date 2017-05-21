@@ -497,13 +497,12 @@ namespace NLP.NLP
             var words = getWordsObjectFromParserServer(text);
             var ent = findMathedEntities(words);
             var resEntityPart = new List<IentityBase>();
-            findMultyMatch(multyEntities, ent, 0, resEntityPart).Distinct();
-            if (resEntityPart.Any())
+            var multyMatch = findMultyMatch(multyEntities, ent, 0, resEntityPart).Distinct();
+            if (multyMatch.Any())
             {
 
-                if (resEntityPart.Any())
-                {
-                    if (ent.Count() > 0 && ent[0].Where(e => resEntityPart.Where(me => ((multyEntity)me).parts.Contains(e.entityValue)).Any()).Any())
+              
+                    if (ent.Count() > 0 && ent[0].Where(e => multyMatch.Where(me => ((multyEntity)me).parts.Contains(e.entityValue)).Any()).Any())
                     {
                         res.AddRange(multyEntities);
                     }
@@ -514,25 +513,27 @@ namespace NLP.NLP
                             DBctrl.addNewEntity(w.Lemma, w.getTypeString());
                         }
                     }
-                }
-                else
-                {
-                    foreach (var w in words)
-                    {
-                        DBctrl.addNewEntity(w.Lemma, w.getTypeString());
-                        var newEnt = new entity();
-                        newEnt.entityValue = w.Text.Remove(0, w.Prefixes.Count());
-                        newEnt.entitySynonimus = ";" + w.Lemma + ";";
-                        newEnt.entityType = w.getTypeString();
-                        DBctrl.addUpdateEntity(newEnt);
-                        res.Add(newEnt);
-                    }
-                }
-            }
-            else
+          
+             }
+
+
+            foreach(var e in ent)
             {
-                res = ent.FirstOrDefault().ToList();
+                res.AddRange(e);
             }
+
+            if (ent.Count() + multyMatch.Count() == 0) {
+                foreach (var w in words)
+                {
+                    var newEnt = new entity();
+                    newEnt.entityValue = w.Text.Remove(0, w.Prefixes.Count());
+                    newEnt.entitySynonimus = ";" + w.Lemma + ";";
+                    newEnt.entityType = w.getTypeString();
+                    res.Add(newEnt);
+                }
+            }
+     
+             
             return res;
         }
 
