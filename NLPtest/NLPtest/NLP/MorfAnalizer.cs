@@ -46,6 +46,14 @@ namespace NLP.NLP
             }
         }
 
+        internal void updateEntities(IEnumerable<IentityBase> enumerable)
+        {
+            foreach(var e in enumerable)
+            {
+                DBctrl.addUpdateEntity(e);
+            }
+        }
+
         public DataBaseController DBctrl1
         {
             get
@@ -69,7 +77,8 @@ namespace NLP.NLP
 
         public List<WordObject> getWordsObjectFromParserServer(String str)
         {
-            List<WordObject> sentenceFromServer = new List<WordObject>(); ;
+            List<WordObject> sentenceFromServer = new List<WordObject>();
+            var res = new List<WordObject>();
             try
             {
 
@@ -83,6 +92,32 @@ namespace NLP.NLP
 
                 //may be mispelling for the first time
 
+
+                var firstWord = true;
+                // print tagged sentence by using AnalysisInterface, as follows:
+                foreach (WordObject w in sentenceFromServer)
+                {
+
+
+                    WordObject word = w;
+
+                    //two NRI in a row
+                    //join word if ist part of a name
+                    if (res.Count > 0)
+                    {
+                        var last = res.LastOrDefault();
+                        if (((last.Ner == word.Ner && last.Ner != "O") || (last.isA(properNameWord) && word.isA(properNameWord))) &&
+                            !word.Prefixes.Contains("ו") && !firstWord)
+                        {
+                            res.LastOrDefault().Text = res.LastOrDefault().Text.Remove(0, res.LastOrDefault().Prefixes.Count());
+                            res.LastOrDefault().Text += " " + word.Text;
+                            res.LastOrDefault().Lemma = res.LastOrDefault().Text;
+                            continue;
+                        }
+                    }
+                    firstWord = false;
+                    res.Add(w);
+                }
             }
             catch (Exception ex) //if parser server is down
             {
@@ -93,7 +128,8 @@ namespace NLP.NLP
                     sentenceFromServer.Add(word);
                 }
             }
-            return sentenceFromServer;
+
+            return res;
         }
 
 
@@ -142,27 +178,11 @@ namespace NLP.NLP
 
 
                                     WordObject word = w;
-
-                                    //two NRI in a row
-                                    //join word if ist part of a name
-                                    if (hebDictionary.contains(w.Text))
-                                    {
-                                        word = hebDictionary.get(word.Text);
-                                    }
-
-                                    if (res.Count > 0)
-                                    {
-                                        var last = res.LastOrDefault();
-                                        if (((last.Ner == word.Ner && last.Ner != "O") || (last.isA(properNameWord) && word.isA(properNameWord)))  &&
-                                            !word.Prefixes.Contains("ו") && !firstWord)
-                                        {
-                                            res.LastOrDefault().Text += " " + word.Text;
-                                            res.LastOrDefault().Lemma = res.LastOrDefault().Text;
-                                            continue;
-                                        }
-                                    }
-
-                             
+                                    //         if (hebDictionary.contains(w.Text))
+                                    //       {
+                                    //              word = hebDictionary.get(word.Text);
+                                    //         }
+                    
                                     //joinwords
                                     //if (res.LastOrDefault() != null && word.isA(nounWord) && res.LastOrDefault().isA(nounWord))
                                     //{
@@ -174,7 +194,7 @@ namespace NLP.NLP
                                     //}
 
                                     res.Add(word);
-                                    firstWord = false;
+
                                 }
                                 res.RemoveAll(x => (x.Text.Length <= 1) && (x.Pos == "punctuation") && (x.Text != "|"));
                                 res = tryMatchEntities(res, isUserInput);
@@ -491,20 +511,23 @@ namespace NLP.NLP
 
         public List<IentityBase> findMatchingEntities(string text)
         {
+            text = text.Trim();
             var res = new List<IentityBase>();
             if (entities == null) { entities = DBctrl1.getEntitys().ToList(); }
             if (multyEntities == null) { multyEntities = DBctrl1.getMultyEntitys().ToList(); }
             var words = getWordsObjectFromParserServer(text);
             var ent = findMathedEntities(words);
             var resEntityPart = new List<IentityBase>();
-            var multyMatch = findMultyMatch(multyEntities, ent, 0, resEntityPart).Distinct();
-            if (multyMatch.Any())
-            {
+            IEnumerable<IentityBase> multyMatch = new List<IentityBase>();
+            if (text.Split(' ').Count() > 1) {
+                 multyMatch = findMultyMatch(multyEntities, ent, 0, resEntityPart).Distinct();
+                if (multyMatch.Any())
+                {
 
-              
+
                     if (ent.Count() > 0 && ent[0].Where(e => multyMatch.Where(me => ((multyEntity)me).parts.Contains(e.entityValue)).Any()).Any())
                     {
-                        res.AddRange(multyEntities);
+                        res.AddRange(multyMatch);
                     }
                     else
                     {
@@ -513,8 +536,53 @@ namespace NLP.NLP
                             DBctrl.addNewEntity(w.Lemma, w.getTypeString());
                         }
                     }
-          
-             }
+
+                } else if (words.TrueForAll(x => x.isA(WordType.properNameWord)))
+                {
+
+                    var newEnt = new entity();
+                    newEnt.entityType = "personWord";
+                    var name = "";
+                    if (words.Count > 1)
+                    {
+                        name = words[0].Text.Remove(0, words[0].Prefixes.Where(x => x != "ה").Count());
+                        for (int i = 1; i < words.Count(); i++)
+                        {
+                            name += words[i].Text;
+                        }
+                    }
+                    else
+                    {
+                        name = words[0].Text;
+                    }
+                    newEnt.entityValue = name;
+                    newEnt.entitySynonimus = ";" + name + ";";
+                    res.Add(newEnt);
+                }
+                else
+                {
+                    var multyEntityVal = text.Remove(0, words[0].Prefixes.Where(x => x != "ה").Count());
+
+                    var parts = ";";
+                    foreach (var w in words)
+                    {
+                        parts += w.Lemma + "#";
+
+                        var newEnt = new entity();
+                        newEnt.entityValue = w.Text.Remove(0, w.Prefixes.Count());
+                        newEnt.entitySynonimus = ";" + w.Lemma + ";";
+                        newEnt.entityType = w.getTypeString();
+                        res.Add(newEnt);
+                    }
+
+                    parts = parts.TrimEnd('#') + ";";
+                    var mulEntity = new multyEntity();
+                    mulEntity.entityType = "nounWord";
+                    mulEntity.parts = parts;
+                    mulEntity.entityValue = multyEntityVal;
+                    res.Add(mulEntity);
+                }
+            }
 
 
             foreach(var e in ent)
@@ -522,7 +590,7 @@ namespace NLP.NLP
                 res.AddRange(e);
             }
 
-            if (ent.Count() + multyMatch.Count() == 0) {
+            if (res.Count() == 0) {
                 foreach (var w in words)
                 {
                     var newEnt = new entity();
@@ -533,8 +601,7 @@ namespace NLP.NLP
                 }
             }
      
-             
-            return res;
+            return res.Distinct().ToList();
         }
 
         public bool findMatchingEntities(IEnumerable<IentityBase> ent)

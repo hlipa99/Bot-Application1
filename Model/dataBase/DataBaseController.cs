@@ -92,6 +92,43 @@ namespace Model.dataBase
 
         }
 
+        public void addUpdateQuestion(Question question)
+        {
+       
+
+
+
+            if (question.QuestionID == null)
+            {
+
+                question.QuestionID = (DB.Question.Count()+1).ToString();
+                var c = DB.Question.Count();
+
+                var i = 1;
+                foreach (var sq in question.SubQuestion)
+                {
+                    sq.questionID = question.QuestionID;
+                    sq.Question = question;
+                    sq.subQuestionID = i.ToString();
+                    i++;
+                }
+                DB.Question.Add(question);
+            }
+            else
+            {
+                var qa = DB.Question.Where(q => q.QuestionID == question.QuestionID).Single();
+                qa.Category = question.Category;
+                qa.Flags = question.Flags;
+                qa.questionMedia = question.questionMedia;
+                qa.QuestionText = question.QuestionText;
+                qa.SubCategory = question.SubCategory;
+                qa.SubQuestion = question.SubQuestion;
+            }
+
+                DB.SaveChanges();
+
+        }
+
         public async virtual void saveEntitiesFromQuestions(List<entity> Entities)
         {
             var questions = DB.SubQuestion;
@@ -267,8 +304,9 @@ namespace Model.dataBase
         }
 
         public void addUpdateEntity(IentityBase newEnt)
-        { 
-                throw new NotImplementedException();
+        {
+            if (newEnt is multyEntity) addUpdateEntity((multyEntity) newEnt);
+            if (newEnt is entity) addUpdateEntity((entity)newEnt);
         }
 
 

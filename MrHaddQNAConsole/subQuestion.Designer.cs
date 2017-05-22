@@ -30,14 +30,15 @@
         {
             this.SQAddEntiti_BTN = new System.Windows.Forms.Button();
             this.entitiesDGV = new System.Windows.Forms.DataGridView();
-            this.subQuestionText = new System.Windows.Forms.Label();
-            this.SQanswerTB = new System.Windows.Forms.TextBox();
-            this.subQuestion_Answers_TB = new System.Windows.Forms.TextBox();
-            this.sqAns = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
+            this.idx = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.entityValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.entityType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.entitySynunimus = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.subQuestionText = new System.Windows.Forms.Label();
+            this.SQquestionTB = new System.Windows.Forms.TextBox();
+            this.subQuestion_Answers_TB = new System.Windows.Forms.TextBox();
+            this.sqAns = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.SQ_nedded_LBL = new System.Windows.Forms.Label();
             this.SQ_NeededPicker_UDP = new System.Windows.Forms.DomainUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.entitiesDGV)).BeginInit();
@@ -57,6 +58,7 @@
             // 
             this.entitiesDGV.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.entitiesDGV.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.idx,
             this.entityValue,
             this.entityType,
             this.entitySynunimus});
@@ -65,6 +67,29 @@
             this.entitiesDGV.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.entitiesDGV.Size = new System.Drawing.Size(783, 109);
             this.entitiesDGV.TabIndex = 22;
+            // 
+            // idx
+            // 
+            this.idx.HeaderText = "#";
+            this.idx.Name = "idx";
+            this.idx.ReadOnly = true;
+            this.idx.Width = 30;
+            // 
+            // entityValue
+            // 
+            this.entityValue.HeaderText = "שם היישות";
+            this.entityValue.Name = "entityValue";
+            // 
+            // entityType
+            // 
+            this.entityType.HeaderText = "סוג היישות";
+            this.entityType.Name = "entityType";
+            // 
+            // entitySynunimus
+            // 
+            this.entitySynunimus.HeaderText = "ערכים מקבילים";
+            this.entitySynunimus.Name = "entitySynunimus";
+            this.entitySynunimus.Width = 400;
             // 
             // subQuestionText
             // 
@@ -76,13 +101,13 @@
             this.subQuestionText.TabIndex = 20;
             this.subQuestionText.Text = "טקסט שאלה";
             // 
-            // SQanswerTB
+            // SQquestionTB
             // 
-            this.SQanswerTB.Location = new System.Drawing.Point(40, 25);
-            this.SQanswerTB.Multiline = true;
-            this.SQanswerTB.Name = "SQanswerTB";
-            this.SQanswerTB.Size = new System.Drawing.Size(903, 74);
-            this.SQanswerTB.TabIndex = 19;
+            this.SQquestionTB.Location = new System.Drawing.Point(40, 25);
+            this.SQquestionTB.Multiline = true;
+            this.SQquestionTB.Name = "SQquestionTB";
+            this.SQquestionTB.Size = new System.Drawing.Size(903, 74);
+            this.SQquestionTB.TabIndex = 19;
             // 
             // subQuestion_Answers_TB
             // 
@@ -111,22 +136,6 @@
             this.label1.Text = "_________________________________________________________________________________" +
     "_____________________________________________";
             // 
-            // entityValue
-            // 
-            this.entityValue.HeaderText = "שם היישות";
-            this.entityValue.Name = "entityValue";
-            // 
-            // entityType
-            // 
-            this.entityType.HeaderText = "סוג היישות";
-            this.entityType.Name = "entityType";
-            // 
-            // entitySynunimus
-            // 
-            this.entitySynunimus.HeaderText = "ערכים מקבילים";
-            this.entitySynunimus.Name = "entitySynunimus";
-            this.entitySynunimus.Width = 400;
-            // 
             // SQ_nedded_LBL
             // 
             this.SQ_nedded_LBL.AutoSize = true;
@@ -139,6 +148,7 @@
             // SQ_NeededPicker_UDP
             // 
             this.SQ_NeededPicker_UDP.Items.Add("1");
+            this.SQ_NeededPicker_UDP.Items.Add("10");
             this.SQ_NeededPicker_UDP.Items.Add("2");
             this.SQ_NeededPicker_UDP.Items.Add("3");
             this.SQ_NeededPicker_UDP.Items.Add("4");
@@ -147,11 +157,13 @@
             this.SQ_NeededPicker_UDP.Items.Add("7");
             this.SQ_NeededPicker_UDP.Items.Add("8");
             this.SQ_NeededPicker_UDP.Items.Add("9");
-            this.SQ_NeededPicker_UDP.Items.Add("10");
             this.SQ_NeededPicker_UDP.Location = new System.Drawing.Point(104, 203);
             this.SQ_NeededPicker_UDP.Name = "SQ_NeededPicker_UDP";
             this.SQ_NeededPicker_UDP.Size = new System.Drawing.Size(48, 20);
+            this.SQ_NeededPicker_UDP.Sorted = true;
             this.SQ_NeededPicker_UDP.TabIndex = 24;
+            this.SQ_NeededPicker_UDP.Text = "1";
+            this.SQ_NeededPicker_UDP.Wrap = true;
             // 
             // subQuestion
             // 
@@ -163,7 +175,7 @@
             this.Controls.Add(this.SQAddEntiti_BTN);
             this.Controls.Add(this.entitiesDGV);
             this.Controls.Add(this.subQuestionText);
-            this.Controls.Add(this.SQanswerTB);
+            this.Controls.Add(this.SQquestionTB);
             this.Controls.Add(this.subQuestion_Answers_TB);
             this.Controls.Add(this.sqAns);
             this.Name = "subQuestion";
@@ -178,14 +190,15 @@
         private System.Windows.Forms.Button SQAddEntiti_BTN;
         private System.Windows.Forms.DataGridView entitiesDGV;
         private System.Windows.Forms.Label subQuestionText;
-        private System.Windows.Forms.TextBox SQanswerTB;
+        private System.Windows.Forms.TextBox SQquestionTB;
         private System.Windows.Forms.TextBox subQuestion_Answers_TB;
         private System.Windows.Forms.Label sqAns;
-        private System.Windows.Forms.DataGridViewTextBoxColumn entityValue;
-        private System.Windows.Forms.DataGridViewTextBoxColumn entityType;
-        private System.Windows.Forms.DataGridViewTextBoxColumn entitySynunimus;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label SQ_nedded_LBL;
         private System.Windows.Forms.DomainUpDown SQ_NeededPicker_UDP;
+        private System.Windows.Forms.DataGridViewTextBoxColumn idx;
+        private System.Windows.Forms.DataGridViewTextBoxColumn entityValue;
+        private System.Windows.Forms.DataGridViewTextBoxColumn entityType;
+        private System.Windows.Forms.DataGridViewTextBoxColumn entitySynunimus;
     }
 }

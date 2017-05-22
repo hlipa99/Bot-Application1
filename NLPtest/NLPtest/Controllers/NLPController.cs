@@ -40,6 +40,11 @@ namespace NLP.Controllers
             this.Ma = new MorfAnalizer();
         }
 
+        public void updateEntities(IEnumerable<IentityBase> enumerable)
+        {
+            ma.updateEntities(enumerable);
+        }
+
         //public static NLPControler getInstence()
         //{
         //    lock (syncLock)

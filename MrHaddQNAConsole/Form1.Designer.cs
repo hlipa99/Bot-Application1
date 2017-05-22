@@ -40,7 +40,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.pictureName_LBL = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.loadPic = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.questionType_CB = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -79,7 +79,7 @@
             this.tabPage1.Controls.Add(this.label4);
             this.tabPage1.Controls.Add(this.label3);
             this.tabPage1.Controls.Add(this.pictureName_LBL);
-            this.tabPage1.Controls.Add(this.button1);
+            this.tabPage1.Controls.Add(this.loadPic);
             this.tabPage1.Controls.Add(this.label2);
             this.tabPage1.Controls.Add(this.questionType_CB);
             this.tabPage1.Controls.Add(this.label1);
@@ -174,14 +174,15 @@
             this.pictureName_LBL.Text = "תמונה";
             this.pictureName_LBL.Visible = false;
             // 
-            // button1
+            // loadPic
             // 
-            this.button1.Location = new System.Drawing.Point(16, 130);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(209, 23);
-            this.button1.TabIndex = 4;
-            this.button1.Text = "טען תמונה לשאלת מקור";
-            this.button1.UseVisualStyleBackColor = true;
+            this.loadPic.Location = new System.Drawing.Point(16, 130);
+            this.loadPic.Name = "loadPic";
+            this.loadPic.Size = new System.Drawing.Size(209, 23);
+            this.loadPic.TabIndex = 4;
+            this.loadPic.Text = "טען תמונה לשאלת מקור";
+            this.loadPic.UseVisualStyleBackColor = true;
+            this.loadPic.Visible = false;
             // 
             // label2
             // 
@@ -194,6 +195,11 @@
             // 
             // questionType_CB
             // 
+            this.questionType_CB.AutoCompleteCustomSource.AddRange(new string[] {
+            "שאלה רגילה",
+            "שאלת מקור",
+            "",
+            ""});
             this.questionType_CB.FormattingEnabled = true;
             this.questionType_CB.Items.AddRange(new object[] {
             "רגיל",
@@ -202,6 +208,7 @@
             this.questionType_CB.Name = "questionType_CB";
             this.questionType_CB.Size = new System.Drawing.Size(144, 21);
             this.questionType_CB.TabIndex = 2;
+            this.questionType_CB.SelectedIndexChanged += new System.EventHandler(this.questionType_CB_SelectedIndexChanged);
             // 
             // label1
             // 
@@ -250,7 +257,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label pictureName_LBL;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button loadPic;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button addQuestion_BTN;
