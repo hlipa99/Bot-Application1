@@ -123,6 +123,7 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="adHokMessage.cs" />
     <Compile Include="AssertNLP.cs" />
     <Compile Include="Dialogs\LearningDialogTest.cs" />
     <Compile Include="Dialogs\GreetingFerwallDialogTest.cs" />

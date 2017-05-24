@@ -28,9 +28,10 @@ namespace Bot_Application1.Controllers
 
         public async Task<HttpResponseMessage> Post([FromBody]Activity activity)
         {
-   
             try
             {
+                //sendMessageToAllUsers();
+
                 if (activity.Conversation.IsGroup == null || !activity.Conversation.IsGroup.GetValueOrDefault())
                 {
                   
@@ -90,9 +91,8 @@ namespace Bot_Application1.Controllers
       
         }
 
-
-
-        private Activity HandleSystemMessage(Activity message)
+     
+    private Activity HandleSystemMessage(Activity message)
         {
             if (message.Type == ActivityTypes.DeleteUserData)
             {
@@ -119,5 +119,9 @@ namespace Bot_Application1.Controllers
 
             return null;
         }
+
+
+
+
     }
 }

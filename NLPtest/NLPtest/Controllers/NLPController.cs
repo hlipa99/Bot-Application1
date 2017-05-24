@@ -135,7 +135,7 @@ namespace NLP.Controllers
             return Ma.findMatchingEntities(text);
         }
 
-        
+
         public virtual List<WorldObject> Analize(string text, List<WorldObject> systemQuestionText)
         {
             ObjectCache cache = MemoryCache.Default;
