@@ -485,7 +485,6 @@ namespace NLP.NLP
             else if (ent.entityType == "eventWord")
             {
                 newWord.Amount = amountType.singular;
-                newWord.Gender = genderType.masculine;
             }
 
 

@@ -33,8 +33,12 @@
  
              if (subquestion != null && answer != null)
             {
-                var questionAnlize = Nlp.Analize(subquestion.questionText);
-                var userAnswer = Nlp.Analize(answer, questionAnlize);
+                var questionAnlize = new List<WorldObject>();
+                if (subquestion.questionText != null)
+                {
+                    questionAnlize = Nlp.Analize(subquestion.questionText); //TODO : fix double computing
+                }
+                var userAnswer = Nlp.Analize(answer, subquestion.questionText);
                  AnswerFeedback feedback = new AnswerFeedback();
                  feedback.answer = answer;
                  if (subquestion.answerText.Contains("|"))
@@ -120,8 +124,6 @@
  
          public AnswerFeedback matchAnswers(List<WorldObject> userAnswer, List<WorldObject> systemAnswer)
          {
-          
- 
              if (userAnswer != null && systemAnswer != null)
              {
                  var userEntities = userAnswer.Distinct();

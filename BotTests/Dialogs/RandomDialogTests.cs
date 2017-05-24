@@ -19,8 +19,6 @@ namespace BotTests.Integration_Tests
 
         DataBaseController db = new DataBaseController();
 
-        
-
 
         [TestMethod]
         public void RandomDialogTest()
@@ -28,7 +26,7 @@ namespace BotTests.Integration_Tests
             Random seedRand = new Random();
             int seed = seedRand.Next();
             Random rand = new Random(seed);
-            Console.WriteLine("seed:" + seedRand);
+            Console.WriteLine("seed:" + seed);
 
             var res = sendBot("היי");
             if(rand.Next(2) == 0)
@@ -113,8 +111,6 @@ namespace BotTests.Integration_Tests
             }
 
             res = sendBot(categories[rand.Next(categories.Length)]);
-
-
 
 
         }

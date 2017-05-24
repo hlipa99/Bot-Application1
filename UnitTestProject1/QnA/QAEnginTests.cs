@@ -62,11 +62,11 @@ namespace NLP.QnA.Tests
         public void matchAnswersWithUserAnswerTest()
         {
 
-            mockNLP.Setup(x => x.Analize(It.Is<string>(y => y.Contains("user")), It.IsAny<List<WorldObject>>())).Returns(list2);
+            mockNLP.Setup(x => x.Analize(It.Is<string>(y => y.Contains("user")), It.IsAny<String>())).Returns(list2);
             mockNLP.Setup(x => x.Analize(It.Is<string>(y => y.Contains("system")))).Returns(list1);
 
             qae.Nlp = mockNLP.Object;
-
+           
             mockSubQqestion1.Setup(x => x.answerText).Returns("system דוד בן גוריון הודיע שהאו\"ם הכריז על סיום המנדט");
             var feedback = qae.matchAnswers(mockSubQqestion1.Object, "user דוד בן גוריון הקריא את הכרזת העצמאות לאחר האישור באו\"ם");
             Assert.AreEqual(feedback.answersFeedbacks[0].score, 68);

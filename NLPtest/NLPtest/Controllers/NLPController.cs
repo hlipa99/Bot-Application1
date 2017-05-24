@@ -136,7 +136,7 @@ namespace NLP.Controllers
         }
 
 
-        public virtual List<WorldObject> Analize(string text, List<WorldObject> systemQuestionText)
+        public virtual List<WorldObject> Analize(string text, string systemQuestionText)
         {
             ObjectCache cache = MemoryCache.Default;
             var cachedItem = cache.Get(text + systemQuestionText) as WorldObject[];
@@ -157,10 +157,10 @@ namespace NLP.Controllers
                 if (systemQuestionText != null && textAnlz.FindAll(x => x.FindAll(y => y.isA(WordType.gufWord)).Count > 0).Count > 0)
                 {
                     //add mising data to entity DB
-                    var contextAnlz = systemQuestionText;
+                    var contextAnlz = Ma.meniAnalize(systemQuestionText, true);
 
                     //create context 
-                    sentences = sa.findGufContext(textAnlz, contextAnlz.Cast<ITemplate>().ToList());
+                    sentences = sa.findGufContext(textAnlz, contextAnlz[0].Cast<ITemplate>().ToList());
                 }
                 else
                 {

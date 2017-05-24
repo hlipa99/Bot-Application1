@@ -44,7 +44,7 @@ namespace NLP.Controllers.Tests
             Assert.AreEqual(outerAPICtrl.getIntentApiAi("קללל ברור בטח", "yesNoQuestionDialog"), "yes");
             Assert.AreEqual(outerAPICtrl.getIntentApiAi("ממצב גבר?", "GreetingDialog"), "howAreYou");
             Assert.AreEqual(outerAPICtrl.getIntentApiAi("תספר לי משהו מעניין", ""), "intresting");
-            Assert.AreEqual(outerAPICtrl.getIntentApiAi("תחזור לתפריט הראשי", ""), "menu");
+            Assert.AreEqual(outerAPICtrl.getIntentApiAi("תחזור לתפריט הראשי", ""), "stopSession");
             Assert.AreEqual(outerAPICtrl.getIntentApiAi("?אתה מכיר בדיחות טובות", ""), "funny");
             Assert.AreEqual(outerAPICtrl.getIntentApiAi("להתראות גבר, כל טוב", "farewell"), "goodbye");
             Assert.AreEqual(outerAPICtrl.getIntentApiAi("שלום לך, אני יוחאי", "startConv"), "hello");

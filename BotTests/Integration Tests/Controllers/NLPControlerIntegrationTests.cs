@@ -51,7 +51,7 @@ namespace NLP.Controllers.Tests
         [TestMethod()]
         public void AnalizeTestWithGufContextIntegration()
         {
-            var res = nlpCtrl.Analize("הוא הקריא את מגילת העצמאות בהכרזת העצמאות והם היו מחתרת לוחמת", nlpCtrl.Analize("ההגנה ובן גוריון"));
+            var res = nlpCtrl.Analize("הוא הקריא את מגילת העצמאות בהכרזת העצמאות והם היו מחתרת לוחמת", "ההגנה ובן גוריון");
             //good
             Assert.IsTrue(res.Contains(new PersonObject("דוד בן גוריון")));
             Assert.IsTrue(res.Contains(new ConceptObject("מגילת העצמאות")));
