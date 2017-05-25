@@ -94,16 +94,15 @@ namespace UnitTestProject1
             return res.ToArray();
         }
 
-        public List<string> sendBot(string test)
+        public async Task<List<string>> sendBot(string test)
         {
-            Debug.WriteLine("sendBotStart:" + test);
-            var task = sendMessage(test);
+            Debug.WriteLine("await sendBotStart:" + test);
+            var task = await sendMessage(test);
             Console.WriteLine(test);
-            task.Wait();
-            Debug.WriteLine("sendBotEnd:");
+            Debug.WriteLine("await sendBotEnd:");
             //Thread.Sleep(500);
-            printRes(task.Result);
-            return task.Result;
+            printRes(task);
+            return task;
         }
 
         public void printRes(List<string> res)
@@ -115,14 +114,14 @@ namespace UnitTestProject1
             }
         }
 
-        public List<string> getToLearningMenu()
+        public async Task<List<string>> getToLearningMenu()
         {
-            var res = sendBot("היי");
-            res = sendBot("יוחאי");
-            res = sendBot("בן");
-            res = sendBot("יא'");
+            var res = await sendBot("היי");
+            res = await sendBot("יוחאי");
+            res = await sendBot("בן");
+            res = await sendBot("יא'");
             var options = getOptions(res[2]);
-            res = sendBot(options[1]);
+            res = await sendBot(options[1]);
             return res;
         }
 
@@ -135,7 +134,7 @@ namespace UnitTestProject1
         }
 
 
-        public List<string> sendBot(string test1, string test2)
+        public async Task<List<string>> sendBot(string test1, string test2)
         {
             var task1 = sendMessage(test1);
             var task2 = sendMessage(test2);
@@ -232,31 +231,31 @@ namespace UnitTestProject1
 
         }
 
-        public List<string> endLearning()
+        public async  Task<List<string>> endLearning()
         {
-            var res = sendBot("טוב מספיק");
-            res = sendBot("");
+            var res = await sendBot("טוב מספיק");
+            res = await sendBot("");
             return res;
         }
 
-        public List<string> endConversation()
+        public async  Task<List<string>> endConversation()
         {
-            var res = sendBot("ביי");
-            res = sendBot("מספיק");
-            res = sendBot("כן");
+            var res = await sendBot("ביי");
+            res = await sendBot("מספיק");
+            res = await sendBot("כן");
 
-            res = sendBot("ביי");
-            res = sendBot("לילה טוב");
+            res = await sendBot("ביי");
+            res = await sendBot("לילה טוב");
             return res;
         }
 
-        public List<string> createUser(string name, string gender, string classVal)
+        public async  Task<List<string>> createUser(string name, string gender, string classVal)
         {
-            var res = sendBot("היי");
+            var res = await sendBot("היי");
             
-            res = sendBot(name);
-            res = sendBot(gender);
-            res = sendBot(classVal);
+            res = await sendBot(name);
+            res = await sendBot(gender);
+            res = await sendBot(classVal);
             return res;
         }
 

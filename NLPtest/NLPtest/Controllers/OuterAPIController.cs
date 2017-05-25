@@ -99,7 +99,7 @@ namespace NLP.Controllers
                 text = text.Replace(".", ""); //server fins the answer until the. we can save calls
                 text = text.Replace("|", ","); //server sentence azalizer dont know |
                 WebRequest request = WebRequest.Create("http://TextAPI2.azurewebsites.net/TextAPI/Api");
-                request.Timeout = 10000;
+                request.Timeout = text.Length*250;
                 string responseFromServer = "";
                 request.Method = "POST";
                 byte[] byteArray = Encoding.UTF8.GetBytes(text);

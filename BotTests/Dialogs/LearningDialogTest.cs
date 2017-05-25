@@ -19,13 +19,13 @@ namespace UnitTestProject1
     {
 
         [TestInitialize]
-        public void TestInitializeAttribute()
+        public async void testInitializeAttribute()
         {
             deleteProfile();
         }
 
         [TestCleanup]
-        public void TestCleanup()
+        public async void testCleanup()
         {
             ConvID = "";
             // client = null;
@@ -37,10 +37,10 @@ namespace UnitTestProject1
 
         Random r = new Random();
         [TestMethod]
-        public void testLearningMenu() {
+        public async void testLearningMenu() {
             var db = new DataBaseController();
 
-            var optionsRes = getToLearningMenu();
+            var optionsRes = await getToLearningMenu();
             AssertNLP.contains(optionsRes, DBbotPhrase(Pkey.chooseStudyUnits));
 
 
@@ -52,15 +52,15 @@ namespace UnitTestProject1
                 AssertNLP.contains(optionsRes, category);
 
                 //bad - try somthing else
-                var res = sendBot("ביולוגיה");
+                var res = await sendBot("ביולוגיה");
                 AssertNLP.contains(res, DBbotPhrase(Pkey.NotAnOption));
 
                 //ugly
-              //  res = sendBot("");
+              //  res = await sendBot("");
               //  Assert.AreEqual(res.Count,0);
 
                 //good - lets learn
-                res = sendBot(category);
+                res = await sendBot(category);
                 AssertNLP.contains(res, DBbotPhrase(Pkey.letsLearn));
                 AssertNLP.contains(res, DBbotPhrase(Pkey.firstQuestion));
 
@@ -95,22 +95,22 @@ namespace UnitTestProject1
                     {
 
                         case 0:
-                            res = sendBot("הפסקה");
+                            res = await sendBot("הפסקה");
                             AssertNLP.contains(res, DBbotPhrase(Pkey.suggestBreak));
-                            res = sendBot("כן");
+                            res = await sendBot("כן");
                             //AssertNLP.contains(res, DBbotPhrase(Pkey.ok));
                             AssertNLP.contains(res, DBbotPhrase(Pkey.imWaiting));
                             Thread.Sleep(10000);
-                            res = sendBot("חזרתי");
+                            res = await sendBot("חזרתי");
                             AssertNLP.contains(res, DBbotPhrase(Pkey.letsContinue));
                             AssertNLP.contains(res, subQuestion.questionText);
                             break;
 
                         case 1:
-                            res = sendBot("מספיק");
+                            res = await sendBot("מספיק");
                             AssertNLP.contains(res, DBbotPhrase(Pkey.earlyDiparture));
                             AssertNLP.contains(res, DBbotPhrase(Pkey.areYouSure));
-                            res = sendBot("לא");
+                            res = await sendBot("לא");
                             AssertNLP.contains(res, DBbotPhrase(Pkey.keepLearning));
                             AssertNLP.contains(res, subQuestion.questionText);
                             break;
@@ -119,7 +119,7 @@ namespace UnitTestProject1
                             break;
                     }
 
-                    res = sendBot(subQuestion.answerText);
+                    res = await sendBot(subQuestion.answerText);
 
                     AssertNLP.contains(res, DBbotPhrase(Pkey.veryGood));
 
@@ -127,8 +127,8 @@ namespace UnitTestProject1
 
                     }
 
-                    res = sendBot("תפריט");
-                 //   res = sendBot("כן");
+                    res = await sendBot("תפריט");
+                 //   res = await sendBot("כן");
 
                   
                 
@@ -136,20 +136,20 @@ namespace UnitTestProject1
         }
 
 
-        public void testLearningMenuStopSession()
+        public async void testLearningMenuStopSession()
         {
             var db = new DataBaseController();
 
-            var res = getToLearningMenu();
+            var res = await getToLearningMenu();
             AssertNLP.contains(res, DBbotPhrase(Pkey.chooseStudyUnits));
             var options = getOptions(res[1]);
-            res = sendBot("תשובה כלשהי");
-            res = sendBot("מספיק");
+            res = await sendBot("תשובה כלשהי");
+            res = await sendBot("מספיק");
             AssertNLP.contains(res, DBbotPhrase(Pkey.earlyDiparture));
             AssertNLP.contains(res, DBbotPhrase(Pkey.areYouSure));
-            res = sendBot("כן");
+            res = await sendBot("כן");
             AssertNLP.contains(res, DBbotPhrase(Pkey.goodbye));
-            res = sendBot("בי");
+            res = await sendBot("בי");
             Assert.AreEqual(res, new string[] { });
         }
 

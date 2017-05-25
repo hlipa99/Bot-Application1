@@ -50,6 +50,8 @@ namespace NLP.Controllers.Tests
             Assert.AreEqual(outerAPICtrl.getIntentApiAi("שלום לך, אני יוחאי", "startConv"), "hello");
             Assert.AreEqual(outerAPICtrl.getIntentApiAi("וואלה אין לי שמץ", "QuestionDialog"), "dontKnow");
             Assert.AreEqual(outerAPICtrl.getIntentApiAi("טוב די מספיק עם השאלות", "LerningDialog"), "stopSession");
+            Assert.AreEqual(outerAPICtrl.getIntentApiAi("לך תזדיין", ""), "swearword");
+            Assert.AreEqual(outerAPICtrl.getIntentApiAi("בוט מסריח", ""), "swearword");
 
             //ugly
             Assert.AreEqual(outerAPICtrl.getIntentApiAi("", ""), null);

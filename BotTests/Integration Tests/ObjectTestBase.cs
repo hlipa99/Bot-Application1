@@ -101,6 +101,8 @@ namespace UnitTestProject1
 
             WordObject2.Text = "ירושלים";
             WordObject2.WordT = WordObject.WordType.locationWord;
+            WordObject2.Amount = amountType.singular;
+            WordObject2.Gender = genderType.feminine;
 
             Entity2.entityValue = "ירושלים";
             Entity2.entityType = "locationWord";

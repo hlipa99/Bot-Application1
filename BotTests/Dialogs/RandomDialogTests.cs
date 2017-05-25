@@ -12,7 +12,7 @@ namespace BotTests.Integration_Tests
     {
 
         [TestInitialize]
-        public void TestInitializeAttribute()
+        public async void testInitializeAttribute()
         {
             deleteProfile();
         }
@@ -21,41 +21,41 @@ namespace BotTests.Integration_Tests
 
 
         [TestMethod]
-        public void RandomDialogTest()
+        public async void RandomDialogTest()
         {
             Random seedRand = new Random();
             int seed = seedRand.Next();
             Random rand = new Random(seed);
             Console.WriteLine("seed:" + seed);
 
-            var res = sendBot("היי");
+            var res = await sendBot("היי");
             if(rand.Next(2) == 0)
             {
-                res = sendBot(randomAnswer(rand));
+                res = await sendBot(randomAnswer(rand));
                 AssertNLP.contains(res, DBbotPhrase(Pkey.MissingUserInfo));
-                res = sendBot("יוחאי");
+                res = await sendBot("יוחאי");
             }
             else
             {
-                res = sendBot("יוחאי");
+                res = await sendBot("יוחאי");
             }
 
             if (rand.Next(2) == 0)
             {
-                res = sendBot(randomAnswer(rand));
+                res = await sendBot(randomAnswer(rand));
                 AssertNLP.contains(res, DBbotPhrase(Pkey.MissingUserInfo));
             }
 
-            res = sendBot("יוחאי");
+            res = await sendBot("יוחאי");
             if (rand.Next(2) == 0)
             {
-                res = sendBot(randomAnswer(rand));
+                res = await sendBot(randomAnswer(rand));
 
-                res = sendBot("בן");
+                res = await sendBot("בן");
             }
             else
             {
-                res = sendBot("בת");
+                res = await sendBot("בת");
             }
             AssertNLP.contains(res, DBbotPhrase(Pkey.ok));
             Assert.IsTrue(res.Count == 3);
@@ -63,24 +63,24 @@ namespace BotTests.Integration_Tests
 
             if (rand.Next(2) == 0)
             {
-                res = sendBot(randomAnswer(rand));
+                res = await sendBot(randomAnswer(rand));
                 AssertNLP.contains(res, DBbotPhrase(Pkey.MissingUserInfo));
             }
 
-            res = sendBot("יוחאי");
+            res = await sendBot("יוחאי");
             if (rand.Next(2) == 0)
             {
-                res = sendBot(randomAnswer(rand));
+                res = await sendBot(randomAnswer(rand));
 
-                res = sendBot("י");
+                res = await sendBot("י");
             }
             else if(rand.Next(2) == 0)
             {
-                res = sendBot("יא");
+                res = await sendBot("יא");
             }
             else
             {
-                res = sendBot("יב");
+                res = await sendBot("יב");
             }
             AssertNLP.contains(res, DBbotPhrase(Pkey.ok));
             Assert.IsTrue(res.Count == 3);
@@ -90,27 +90,27 @@ namespace BotTests.Integration_Tests
 
             if (rand.Next(2) == 0)
             {
-                res = sendBot(res[2]);
+                res = await sendBot(res[2]);
             }
             else if (rand.Next(2) == 0)
             {
-                res = sendBot(res[1]);
+                res = await sendBot(res[1]);
             }
             else if (rand.Next(2) == 0)
             {
-                res = sendBot(randomAnswer(rand));
+                res = await sendBot(randomAnswer(rand));
             }
 
-            res = sendBot(res[1]);
+            res = await sendBot(res[1]);
             AssertNLP.contains(res, DBbotPhrase(Pkey.letsLearn));
             var categories = db.getAllCategory();
 
             if (rand.Next(2) == 0)
             {
-                res = sendBot(randomAnswer(rand));
+                res = await sendBot(randomAnswer(rand));
             }
 
-            res = sendBot(categories[rand.Next(categories.Length)]);
+            res = await sendBot(categories[rand.Next(categories.Length)]);
 
 
         }

@@ -13,7 +13,7 @@ namespace BotTests.Integration_Tests
         DataBaseController db = new DataBaseController();
 
         [TestMethod]
-        public void TestEntityDB()
+        public async void testEntityDB()
         {
             var entities = db.getEntitys();
             foreach (var e in entities) {
@@ -31,7 +31,7 @@ namespace BotTests.Integration_Tests
         }
 
             [TestMethod]
-        public void TestMultyEntityDB()
+        public async void testMultyEntityDB()
         {
             var entities = db.getEntitys();
             var multyEntities = db.getMultyEntitys();
@@ -60,7 +60,7 @@ namespace BotTests.Integration_Tests
         }
 
         [TestMethod]
-        public void TestQuestionDB()
+        public async void testQuestionDB()
         {
             MediaController mc = new MediaController();
             foreach (var subject in db.getAllCategory())
@@ -98,7 +98,7 @@ namespace BotTests.Integration_Tests
      
 
         [TestMethod]
-        public void TestBotPrasesDB()
+        public async void testBotPrasesDB()
         {
 
             foreach (Model.Pkey k in Enum.GetValues(typeof(Model.Pkey)))
@@ -109,7 +109,7 @@ namespace BotTests.Integration_Tests
         }
 
         [TestMethod]
-        public void TestmediaForCategory()
+        public async void testmediaForCategory()
         {
             foreach(var s in db.getAllCategory())
             {

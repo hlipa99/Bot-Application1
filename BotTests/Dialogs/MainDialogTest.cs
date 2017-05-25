@@ -16,95 +16,95 @@ namespace UnitTestProject1
     {
 
         [TestInitialize]
-        public void TestInitializeAttribute()
+        public async void testInitializeAttribute()
         {
             deleteProfile();
         }
 
         [TestCleanup]
-        public void TestCleanup()
+        public async void testCleanup()
         {
             ConvID = "";
             // client = null;
         }
 
         [TestMethod]
-        public void testDeleteProfileDialog()
+        public async void testDeleteProfileDialog()
         {
 
             createUser("יוחאי", "בן", "יא");
 
-            var response = sendBot("/deleteprofile");
+            var response = await sendBot("/deleteprofile");
             AssertNLP.contains(response, "User profile deleted!");
-            response = sendBot("היי");
+            response = await sendBot("היי");
             AssertNLP.contains(response, DBbotPhrase(Pkey.selfIntroduction));
         }
 
-        private void startLearning(string v1, string v2, string v3)
+        private async void startLearning(string v1, string v2, string v3)
         {
-            var res = createUser("יוחאי", "בן", "יא");
+            var res = await createUser("יוחאי", "בן", "יא");
             var options = getOptions(res[2]);
          
-            res = sendBot(options[1]);
-            res = sendBot("בונים מדינה");
+            res = await sendBot(options[1]);
+            res = await sendBot("בונים מדינה");
    
 
 
         }
 
         [TestMethod]
-        public void testMainDialogTest()
+        public async void testMainDialogTest()
         {
-            var response = createUser("יוחאי", "בן", "יא'");
+            var response = await createUser("יוחאי", "בן", "יא'");
             AssertNLP.contains(response, DBbotPhrase(Pkey.MainMenuText));
             AssertNLP.contains(response, DBbotPhrase(Pkey.MenuLearn));
             AssertNLP.contains(response, DBbotPhrase(Pkey.MenuNotLearn));
 
             var options = getOptions(response[2]);
             //bad - try not learn
-            var res = sendBot(options[1]);
+            var res = await sendBot(options[1]);
             AssertNLP.contains(res, DBbotPhrase(Pkey.NotImplamented));
 
             //ugly
-            res = sendBot("משהו שלא נמצא בתפריט");
+            res = await sendBot("משהו שלא נמצא בתפריט");
             AssertNLP.contains(res, DBbotPhrase(Pkey.NotAnOption));
 
             //good - lets learn
-            res = sendBot(options[0]);
+            res = await sendBot(options[0]);
             AssertNLP.contains(res, DBbotPhrase(Pkey.letsLearn));
 
             //[TestMethod]
-            //public void testLearningDialog()
+            //public async void testLearningDialog()
             //{
-            //    options = getOptions(response[2]);
-            //    response = sendBot(options[1]);   //learning options
+            //    options = await getOptions(response[2]);
+            //    response = await sendBot(options[1]);   //learning options
             //    Assert.IsTrue(response.Count > 2); //learning options number
 
-            //    response = sendBot("בלה בלה");   //learning topic options
+            //    response = await sendBot("בלה בלה");   //learning topic options
             //    AssertNLP.contains(response, DBbotPhrase(Pkey.NotAnOption))); 
 
-            //    response = sendBot("לאומיות");   //learning topic options
+            //    response = await sendBot("לאומיות");   //learning topic options
             //    AssertNLP.contains(response, DBbotPhrase(Pkey.letsLearn))); //class assert
 
-            //    response = sendBot("תשובה 1");   //class options
+            //    response = await sendBot("תשובה 1");   //class options
             //    AssertNLP.contains(response, DBbotPhrase(Pkey.notAnAnswer))); //class assert
 
-            //    response = sendBot("sdsdds");   //evaluation wrong option
+            //    response = await sendBot("sdsdds");   //evaluation wrong option
             //    AssertNLP.contains(response, DBbotPhrase(Pkey.notNumber)));
 
-            //    response = sendBot("100");   //evaluation wrong option
+            //    response = await sendBot("100");   //evaluation wrong option
             //    AssertNLP.contains(response, DBbotPhrase(Pkey.GeneralAck)));
 
-            //    response = sendBot(" תשובה תשובה 2 2");   //class options
+            //    response = await sendBot(" תשובה תשובה 2 2");   //class options
             //    AssertNLP.contains(response, DBbotPhrase(Pkey.goodAnswer))); //class assert
 
-            //    response = sendBot("100");   //evaluation wrong option
+            //    response = await sendBot("100");   //evaluation wrong option
             //    AssertNLP.contains(response, DBbotPhrase(Pkey.GeneralAck)));
 
-            //    response = sendBot(" תשובה תשובה 3 3");   //class options
+            //    response = await sendBot(" תשובה תשובה 3 3");   //class options
             //    AssertNLP.contains(response, DBbotPhrase(Pkey.goodAnswer))); //class assert
 
-            //    response = sendBot("100");   //evaluation wrong option
+            //    response = await sendBot("100");   //evaluation wrong option
             //    AssertNLP.contains(response, DBbotPhrase(Pkey.GeneralAck)));
             //    AssertNLP.contains(response, DBbotPhrase(Pkey.endOfSession)));
             //    AssertNLP.contains(response, DBbotPhrase(Pkey.goodSessionEnd)));
@@ -115,24 +115,24 @@ namespace UnitTestProject1
 
 
         [TestMethod]
-        public void testDialogMenuFreeText()
+        public async void testDialogMenuFreeText()
         {
-            var response = createUser("יוחאי", "בן", "יא'");
+            var response = await createUser("יוחאי", "בן", "יא'");
             AssertNLP.contains(response, DBbotPhrase(Pkey.MainMenuText));
             AssertNLP.contains(response, DBbotPhrase(Pkey.MenuLearn));
             AssertNLP.contains(response, DBbotPhrase(Pkey.MenuNotLearn));
 
             var options = getOptions(response[2]);
             //bad - try not learn
-            var res = sendBot(options[0]);
+            var res = await sendBot(options[0]);
             AssertNLP.contains(res, DBbotPhrase(Pkey.NotImplamented));
 
             //ugly
-            res = sendBot("משהו שלא נמצא בתפריט");
+            res = await sendBot("משהו שלא נמצא בתפריט");
             AssertNLP.contains(res, DBbotPhrase(Pkey.NotAnOption));
 
             //good - lets learn
-            res = sendBot(options[1]);
+            res = await sendBot(options[1]);
             AssertNLP.contains(res, DBbotPhrase(Pkey.letsLearn));
 
         }
