@@ -23,7 +23,8 @@ namespace BotTests.Integration_Tests.QnA
                 q.questionText = "";
                 q.flags = "";
                 var score = qna.matchAnswers(q, a.userAnswer).score;
-                var logScore = int.Parse(a.entities);
+                db.updateSampleQuestion(a,score);
+                var logScore = int.Parse(a.entities); 
                 Assert.IsTrue(score > logScore - 10 && score < logScore + 10, "id: " + a.id+"\nlogScore:" +logScore + " != score:" + score + "\n1:" + a.question + "\n2:" + a.userAnswer);
             }
         }

@@ -62,11 +62,12 @@
                          {
                              throw new Exception(subquestion.answerText);
                          }
-                         var flags = subquestion.flags.Trim();
+
+                         var flags = subquestion.flags;
                     
  
  
-                         if (flags == "needAll" || flags == "" || flags == null)
+                         if (flags == null || flags.Trim() == "" || flags.Trim() == "needAll")
                          {
                            feedback.Need = feedback.answersFeedbacks.Count;
                            feedback.score = (int) feedback.answersFeedbacks.Average(x=>x.score); 
