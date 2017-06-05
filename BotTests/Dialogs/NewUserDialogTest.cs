@@ -16,7 +16,7 @@ namespace UnitTestProject1
     {
 
         [TestInitialize]
-        public async void testInitializeAttribute()
+        public void testInitializeAttribute()
         {
             deleteProfile();
 
@@ -24,14 +24,14 @@ namespace UnitTestProject1
 
 
         [TestCleanup]
-        public async void testCleanup()
+        public void testCleanup()
         {
             ConvID = "";
             // client = null;
         }
 
         [TestMethod]
-        public async void testcreateUserDialog()
+        public async Task testcreateUserDialog()
         {
             var res = await sendBot("היי");
             Assert.IsTrue(res.Count == 3);
@@ -59,7 +59,7 @@ namespace UnitTestProject1
         }
 
         [TestMethod]
-        public async void testNewUserDialogMenu()
+        public async Task testNewUserDialogMenu()
         {
             var response = await createUser("יוחאי", "בן", "יא'");
             AssertNLP.contains(response, DBbotPhrase(Pkey.MainMenuText));

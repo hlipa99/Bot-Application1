@@ -17,7 +17,7 @@ namespace UnitTestProject1
     {
 
         [TestInitialize]
-        public async void testInitializeAttribute()
+        public void testInitializeAttribute()
         {
             deleteProfile();
         }
@@ -25,14 +25,14 @@ namespace UnitTestProject1
        
 
         [TestCleanup]
-        public async void testCleanup()
+        public async Task testCleanup()
         {
             ConvID = "";
             // client = null;
         }
 
         [TestMethod]
-        public async void testGreetingDialog()
+        public async Task testGreetingDialog()
         {
             var res = await getToLearningMenu();
            res = await sendBot("לאומיות");

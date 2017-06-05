@@ -18,11 +18,14 @@ namespace UnitTestProject1
     public class LearningDialogTest : DialogsTestsBase
     {
 
+
         [TestInitialize]
-        public async void testInitializeAttribute()
+        public void testInitializeAttribute()
         {
             deleteProfile();
+
         }
+
 
         [TestCleanup]
         public async void testCleanup()
@@ -37,7 +40,7 @@ namespace UnitTestProject1
 
         Random r = new Random();
         [TestMethod]
-        public async void testLearningMenu() {
+        public async Task testLearningMenu() {
             var db = new DataBaseController();
 
             var optionsRes = await getToLearningMenu();

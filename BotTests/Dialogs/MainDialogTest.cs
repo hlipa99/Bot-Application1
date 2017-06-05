@@ -15,21 +15,24 @@ namespace UnitTestProject1
     public class MainDialogTest : DialogsTestsBase
     {
 
+
         [TestInitialize]
-        public async void testInitializeAttribute()
+        public void testInitializeAttribute()
         {
             deleteProfile();
+
         }
 
+
         [TestCleanup]
-        public async void testCleanup()
+        public async Task testCleanup()
         {
             ConvID = "";
             // client = null;
         }
 
         [TestMethod]
-        public async void testDeleteProfileDialog()
+        public async Task testDeleteProfileDialog()
         {
 
             createUser("יוחאי", "בן", "יא");
@@ -53,7 +56,7 @@ namespace UnitTestProject1
         }
 
         [TestMethod]
-        public async void testMainDialogTest()
+        public async Task testMainDialogTest()
         {
             var response = await createUser("יוחאי", "בן", "יא'");
             AssertNLP.contains(response, DBbotPhrase(Pkey.MainMenuText));
