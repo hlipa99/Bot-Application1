@@ -35,6 +35,13 @@ namespace Model.dataBase
         //    DB.Configuration.LazyLoadingEnabled = false;
         }
 
+        public void updateSampleQuestion(answersLog a, int score)
+        {
+            var log = DB.answersLog.Where(l => l.id == a.id).Single();
+            log.entities = score.ToString();
+            DB.SaveChanges();
+        }
+
 
         public void setStubInstance(Entities8 text)
         {

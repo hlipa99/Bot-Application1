@@ -215,6 +215,9 @@ namespace NLP.NLP
             return allRes;
         }
 
+
+        //after adding question toi the DB, automaticlly add all entity in the question to the DB 
+        //and then tag them by hand
         internal void updateEntities()
         {
             var db = DBctrl1.updateDBmanual();

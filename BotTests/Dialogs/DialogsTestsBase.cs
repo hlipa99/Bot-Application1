@@ -11,6 +11,7 @@ using System.Threading;
 using BotTests;
 using System.Diagnostics;
 
+
 namespace UnitTestProject1
 {
     public class DialogsTestsBase
@@ -258,6 +259,9 @@ namespace UnitTestProject1
             res = await sendBot(classVal);
             return res;
         }
+
+
+
 
 
     }

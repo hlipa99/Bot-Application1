@@ -95,6 +95,7 @@ namespace NLP.Controllers
             try
             {
                 text = text.Trim();
+                text = text.Replace("?", ""); //fix ? bug in the server (finish where there is ?)
                 text = text.Replace("%", "אחוז"); //java url escape char bug fix TODO - fix in the server
                 text = text.Replace(".", ""); //server fins the answer until the. we can save calls
                 text = text.Replace("|", ","); //server sentence azalizer dont know |

@@ -160,7 +160,14 @@ namespace NLP.Controllers
                     var contextAnlz = Ma.meniAnalize(systemQuestionText, true);
 
                     //create context 
-                    sentences = sa.findGufContext(textAnlz, contextAnlz[0].Cast<ITemplate>().ToList());
+                    if (contextAnlz.Any())
+                    {
+                        sentences = sa.findGufContext(textAnlz, contextAnlz[0].Cast<ITemplate>().ToList());
+                    }
+                    else
+                    {
+                        sentences = sa.findGufContext(textAnlz,null);
+                    }
                 }
                 else
                 {

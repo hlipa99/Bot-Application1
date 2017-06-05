@@ -98,6 +98,9 @@ namespace Bot_Application1.Controllers.Tests
                         {
 
 
+
+                            feedback = eduCtrl.checkAnswer(sq.answerText);
+
                             //debug
                             feedback = eduCtrl.checkAnswer(sq.answerText);
                             feedback = eduCtrl.checkAnswer(sq.answerText);
@@ -107,10 +110,7 @@ namespace Bot_Application1.Controllers.Tests
                             feedback = eduCtrl.checkAnswer(sq.answerText);
                             feedback = eduCtrl.checkAnswer(sq.answerText);
 
-                            feedback = eduCtrl.checkAnswer(sq.answerText);
 
-
-                         
                         }
                         Assert.IsTrue(feedback.score >= 95);
 
