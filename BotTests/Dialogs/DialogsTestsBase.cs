@@ -24,6 +24,16 @@ namespace UnitTestProject1
         List<string> response = null;
         DataBaseController db;
 
+        public Random rand;
+
+        public void initRand()
+        {
+            Random seedRand = new Random();
+            int seed = seedRand.Next();
+            rand = new Random(seed);
+            Console.WriteLine("seed:" + seed);
+        }
+
 
         public DirectLineClient Client
         {
@@ -95,10 +105,11 @@ namespace UnitTestProject1
             return res.ToArray();
         }
 
-        public async Task<List<string>> sendBot(string test)
+        public async Task<List<string>> sendBot(string test,bool userS = false, string user = null)
         {
             Debug.WriteLine("await sendBotStart:" + test);
-            var task = await sendMessage(test);
+            var task = userS ? await sendMessage(test, user) : await sendMessage(test);
+
             Console.WriteLine(test);
             Debug.WriteLine("await sendBotEnd:");
             //Thread.Sleep(500);
@@ -162,12 +173,12 @@ namespace UnitTestProject1
         }
 
 
-        public async Task<List<string>> sendMessage(string message)
+        public async Task<List<string>> sendMessage(string message,string user = "testUser")
         {
            
             Activity userMessage = new Activity
             {
-                From = new ChannelAccount(id: "testUser"),
+                From = new ChannelAccount(id: user),
                 Text = message,
                 Type = ActivityTypes.Message
             };

@@ -25,7 +25,7 @@ namespace UnitTestProject1
        
 
         [TestCleanup]
-        public async Task testCleanup()
+        public void testCleanup()
         {
             ConvID = "";
             // client = null;

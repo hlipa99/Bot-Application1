@@ -22,6 +22,7 @@ namespace UnitTestProject1
         [TestInitialize]
         public void testInitializeAttribute()
         {
+            initRand();
             deleteProfile();
 
         }
@@ -36,9 +37,6 @@ namespace UnitTestProject1
 
 
 
-      
-
-        Random r = new Random();
         [TestMethod]
         public async Task testLearningMenu() {
             var db = new DataBaseController();
@@ -46,9 +44,8 @@ namespace UnitTestProject1
             var optionsRes = await getToLearningMenu();
             AssertNLP.contains(optionsRes, DBbotPhrase(Pkey.chooseStudyUnits));
 
-
-
-            foreach (var category in db.getAllCategory()) {
+            var allCategory = db.getAllCategory();
+            var category = allCategory[rand.Next(allCategory.Length)];
 
                 //subject is avialabale
 
@@ -93,7 +90,7 @@ namespace UnitTestProject1
                     {
                         AssertNLP.contains(res, subQuestion.questionText);
 
-                    var rnd = r.Next(5);
+                    var rnd = rand.Next(5);
                     switch (rnd)
                     {
 
@@ -130,13 +127,40 @@ namespace UnitTestProject1
 
                     }
 
-                    res = await sendBot("תפריט");
-                 //   res = await sendBot("כן");
 
-                  
-                
-            }
         }
+
+        [TestMethod]
+        public async Task testLearningSpecialValues()
+        {
+            var db = new DataBaseController();
+
+            var optionsRes = await getToLearningMenu();
+            AssertNLP.contains(optionsRes, DBbotPhrase(Pkey.chooseStudyUnits));
+
+            var allCategory = db.getAllCategory();
+            var category = allCategory[rand.Next(allCategory.Length)];
+            var res = await sendBot(category);
+
+             res = await sendBot("ספר לי משהו מצחיק");
+            AssertNLP.contains(res, DBbotPhrase(Pkey.mightHaveSomthing));
+            res = await sendBot("ספר לי משהו מעניין");
+            AssertNLP.contains(res, DBbotPhrase(Pkey.mightHaveSomthing));
+            res = await sendBot("לך תזדיין");
+            AssertNLP.contains(res, DBbotPhrase(Pkey.swearResponse));
+            res = await sendBot("בן זונה");
+            AssertNLP.contains(res, DBbotPhrase(Pkey.swearResponse));
+            res = await sendBot("שרמוטה");
+            AssertNLP.contains(res, DBbotPhrase(Pkey.swearSuspention));
+            res = await sendBot("טוב בא נמשיך");
+            AssertNLP.contains(res, DBbotPhrase(Pkey.duringSwearSuspention));
+            res = await sendBot("סליחה");
+
+            AssertNLP.contains(res, DBbotPhrase(Pkey.letsContinue));
+                
+
+        }
+
 
 
         public async void testLearningMenuStopSession()

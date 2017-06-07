@@ -12,20 +12,15 @@ namespace BotTests.Integration_Tests
     [TestClass]
     public class RandomDialogTests : DialogsTestsBase
     {
-        Random rand;
-
+ 
+        DataBaseController db = new DataBaseController();
         [TestInitialize]
         public void testInitializeAttribute()
         {
+            initRand();
             deleteProfile();
-            Random seedRand = new Random();
-            int seed = seedRand.Next();
-            Random rand = new Random(seed);
-            Console.WriteLine("seed:" + seed);
+
         }
-
-        DataBaseController db = new DataBaseController();
-
 
         [TestMethod]
         public async Task RandomDialogTest()

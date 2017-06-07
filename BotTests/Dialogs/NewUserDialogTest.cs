@@ -68,7 +68,7 @@ namespace UnitTestProject1
 
              var options = getOptions(response[2]);
             //bad - try not learn
-            var res = await sendBot(options[1]);
+            var res = await sendBot(options[2]);
             AssertNLP.contains(res, DBbotPhrase(Pkey.NotImplamented));
 
             //ugly
@@ -76,46 +76,10 @@ namespace UnitTestProject1
             AssertNLP.contains(res, DBbotPhrase(Pkey.NotAnOption));
 
             //good - lets learn
-            res = await sendBot(options[0]);
+            res = await sendBot(options[1]);
             AssertNLP.contains(res, DBbotPhrase(Pkey.letsLearn));
 
-            //[TestMethod]
-            //public async void testLearningDialog()
-            //{
-            //    options = await getOptions(response[2]);
-            //    response = await sendBot(options[1]);   //learning options
-            //    Assert.IsTrue(response.Count > 2); //learning options number
-
-            //    response = await sendBot("בלה בלה");   //learning topic options
-            //    AssertNLP.contains(response, DBbotPhrase(Pkey.NotAnOption)); 
-
-            //    response = await sendBot("לאומיות");   //learning topic options
-            //    AssertNLP.contains(response, DBbotPhrase(Pkey.letsLearn)); //class assert
-
-            //    response = await sendBot("תשובה 1");   //class options
-            //    AssertNLP.contains(response, DBbotPhrase(Pkey.notAnAnswer)); //class assert
-
-            //    response = await sendBot("sdsdds");   //evaluation wrong option
-            //    AssertNLP.contains(response, DBbotPhrase(Pkey.notNumber));
-
-            //    response = await sendBot("100");   //evaluation wrong option
-            //    AssertNLP.contains(response, DBbotPhrase(Pkey.GeneralAck));
-
-            //    response = await sendBot(" תשובה תשובה 2 2");   //class options
-            //    AssertNLP.contains(response, DBbotPhrase(Pkey.goodAnswer)); //class assert
-
-            //    response = await sendBot("100");   //evaluation wrong option
-            //    AssertNLP.contains(response, DBbotPhrase(Pkey.GeneralAck));
-
-            //    response = await sendBot(" תשובה תשובה 3 3");   //class options
-            //    AssertNLP.contains(response, DBbotPhrase(Pkey.goodAnswer)); //class assert
-
-            //    response = await sendBot("100");   //evaluation wrong option
-            //    AssertNLP.contains(response, DBbotPhrase(Pkey.GeneralAck));
-            //    AssertNLP.contains(response, DBbotPhrase(Pkey.endOfSession));
-            //    AssertNLP.contains(response, DBbotPhrase(Pkey.goodSessionEnd));
-            //    AssertNLP.contains(response, DBbotPhrase(Pkey.MainMenuText));
-            //}
+            
 
         }
 

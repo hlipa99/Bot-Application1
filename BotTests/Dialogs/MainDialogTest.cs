@@ -25,7 +25,7 @@ namespace UnitTestProject1
 
 
         [TestCleanup]
-        public async Task testCleanup()
+        public void testCleanup()
         {
             ConvID = "";
             // client = null;
@@ -40,7 +40,7 @@ namespace UnitTestProject1
             var response = await sendBot("/deleteprofile");
             AssertNLP.contains(response, "User profile deleted!");
             response = await sendBot("היי");
-            AssertNLP.contains(response, DBbotPhrase(Pkey.selfIntroduction));
+            AssertNLP.contains(response, DBbotPhrase(Pkey.NewUserGetName));
         }
 
         private async void startLearning(string v1, string v2, string v3)
@@ -76,43 +76,25 @@ namespace UnitTestProject1
             res = await sendBot(options[0]);
             AssertNLP.contains(res, DBbotPhrase(Pkey.letsLearn));
 
-            //[TestMethod]
-            //public async void testLearningDialog()
-            //{
-            //    options = await getOptions(response[2]);
-            //    response = await sendBot(options[1]);   //learning options
-            //    Assert.IsTrue(response.Count > 2); //learning options number
+  
+        }
 
-            //    response = await sendBot("בלה בלה");   //learning topic options
-            //    AssertNLP.contains(response, DBbotPhrase(Pkey.NotAnOption))); 
 
-            //    response = await sendBot("לאומיות");   //learning topic options
-            //    AssertNLP.contains(response, DBbotPhrase(Pkey.letsLearn))); //class assert
+        [TestMethod]
+        public async Task testGetUserStatistics()
+        {
+            var response = await createUser("יוחאי", "בן", "יא'");
+            AssertNLP.contains(response, DBbotPhrase(Pkey.MainMenuText));
+            AssertNLP.contains(response, DBbotPhrase(Pkey.MenuLearn));
+            AssertNLP.contains(response, DBbotPhrase(Pkey.MenuNotLearn));
 
-            //    response = await sendBot("תשובה 1");   //class options
-            //    AssertNLP.contains(response, DBbotPhrase(Pkey.notAnAnswer))); //class assert
+            var options = getOptions(response[3]);
 
-            //    response = await sendBot("sdsdds");   //evaluation wrong option
-            //    AssertNLP.contains(response, DBbotPhrase(Pkey.notNumber)));
-
-            //    response = await sendBot("100");   //evaluation wrong option
-            //    AssertNLP.contains(response, DBbotPhrase(Pkey.GeneralAck)));
-
-            //    response = await sendBot(" תשובה תשובה 2 2");   //class options
-            //    AssertNLP.contains(response, DBbotPhrase(Pkey.goodAnswer))); //class assert
-
-            //    response = await sendBot("100");   //evaluation wrong option
-            //    AssertNLP.contains(response, DBbotPhrase(Pkey.GeneralAck)));
-
-            //    response = await sendBot(" תשובה תשובה 3 3");   //class options
-            //    AssertNLP.contains(response, DBbotPhrase(Pkey.goodAnswer))); //class assert
-
-            //    response = await sendBot("100");   //evaluation wrong option
-            //    AssertNLP.contains(response, DBbotPhrase(Pkey.GeneralAck)));
-            //    AssertNLP.contains(response, DBbotPhrase(Pkey.endOfSession)));
-            //    AssertNLP.contains(response, DBbotPhrase(Pkey.goodSessionEnd)));
-            //    AssertNLP.contains(response, DBbotPhrase(Pkey.MainMenuText)));
-            //}
+            //good - statistic unknown user
+            var res = await sendBot(options[3],true,"testuser2");
+            AssertNLP.contains(res, DBbotPhrase(Pkey.notEnoughAnswersForStat));
+            res = await sendBot(options[3]);
+            AssertNLP.contains(res, DBbotPhrase(Pkey.userStatistics));
 
         }
 
