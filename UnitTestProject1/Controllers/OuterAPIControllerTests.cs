@@ -77,23 +77,6 @@ namespace NLP.Controllers.Tests
 
         }
 
-        [TestMethod()]
-        public void correctSpellingTest()
-        {
-
-
-            //good
-            Assert.AreEqual(outerAPICtrl.correctSpelling("עירגון האצל השתתף בהרבה פאולות"), "ארגון האצ ל השתתף בהרבה פעולות");
-            Assert.AreEqual(outerAPICtrl.correctSpelling("איגון ההגנ לחם באלף מלחמות"), "ארגון ההגנה לחם באלף מלחמות");
-
-            //bad
-            Assert.AreEqual(outerAPICtrl.correctSpelling("חגדליגדכ לחגכד לחגד"), "חגדליגדכ לחגכד לחגד");
-
-
-            //ugly
-            Assert.AreEqual(outerAPICtrl.correctSpelling(""), null);
-            Assert.AreEqual(outerAPICtrl.correctSpelling(null), null);
-        }
 
 
         [TestMethod()]
