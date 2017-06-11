@@ -127,7 +127,8 @@ namespace BotTests.Integration_Tests
             }
             else
             {
-                res = await sendBot("ךלדגילחךדגיגדלחיגכלחיגכדלגדכיג");
+                res = await sendBot(randomAnswer());
+                res = await sendBot("יוחאי");
             }
 
             if (rand.Next(2) == 0)
@@ -144,9 +145,9 @@ namespace BotTests.Integration_Tests
 
             if (rand.Next(2) == 0)
             {
-                res = await sendBot(randomAnswer());
+                //res = await sendBot(randomAnswer());
 
-                res = await sendBot("'י");
+                res = await sendBot("י");
             }
             else if (rand.Next(2) == 0)
             {
@@ -161,32 +162,34 @@ namespace BotTests.Integration_Tests
 
             AssertNLP.contains(res, DBbotPhrase(Pkey.ok));
 
-            Assert.IsTrue(res.Count == 3);
+            Assert.IsTrue(res.Count == 2);
             return res;
         }
 
         private string randomAnswer()
         {
-            var len = rand.Next(5000);
+            return ("להלהלה");
+            var len = rand.Next(500);
             StringBuilder strBuild = new StringBuilder();
 
             for(int i =0;i<len;i++)
             {
                 int val = 0;
-                var wordLen = rand.Next(50);
-                if (i % wordLen == 0)
-                {
-                    val = rand.Next(0x20, 0x7F);
-                }
-                if (i % wordLen == 1)
+                var wordLen = rand.Next(40) + 1;
+                if(i%7 == rand.Next(7))
                 {
                     val = ' ';
                 }
+                else if (i % 2 == 0)
+                {
+                    val = rand.Next(0x00020, 0x0007D);
+                }
                 else
                 {
-                    val = rand.Next(0x05BE, 0x05F4);
-                   
+                    val = rand.Next(0x005D0, 0x005EA);
+
                 }
+                
 
                 strBuild.Append((char)val, 1);
              }

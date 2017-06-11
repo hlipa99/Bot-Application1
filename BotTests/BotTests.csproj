@@ -125,6 +125,7 @@
   <ItemGroup>
     <Compile Include="adHokMessage.cs" />
     <Compile Include="AssertNLP.cs" />
+    <Compile Include="DB\DBintegrationTest - Copy.cs" />
     <Compile Include="Dialogs\LearningDialogTest.cs" />
     <Compile Include="Dialogs\GreetingFerwallDialogTest.cs" />
     <Compile Include="Dialogs\NewUserDialogTest.cs" />
@@ -137,7 +138,7 @@
     <Compile Include="Integration Tests\NLP\NLPIntegrationTest.cs" />
     <Compile Include="Integration Tests\NLP\SemanticAnalizerIntegrationTests.cs" />
     <Compile Include="Integration Tests\QnA\QAEnginIntegrationTests.cs" />
-    <Compile Include="DB\DBintegrationTest.cs" />
+    <Compile Include="DB\LogsTests.cs" />
     <Compile Include="Dialogs\RandomDialogTests.cs" />
     <Compile Include="Integration Tests\QnA\answerQualityTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

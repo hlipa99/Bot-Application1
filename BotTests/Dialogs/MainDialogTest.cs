@@ -83,17 +83,25 @@ namespace UnitTestProject1
         [TestMethod]
         public async Task testGetUserStatistics()
         {
-            var response = await createUser("יוחאי", "בן", "יא'");
+            var newUser = "testuser2";
+            var response = await createUser("יוחאי", "בן", "יא'", newUser);
             AssertNLP.contains(response, DBbotPhrase(Pkey.MainMenuText));
             AssertNLP.contains(response, DBbotPhrase(Pkey.MenuLearn));
             AssertNLP.contains(response, DBbotPhrase(Pkey.MenuNotLearn));
 
-            var options = getOptions(response[3]);
+            var options = getOptions(response[2]);
 
             //good - statistic unknown user
-            var res = await sendBot(options[3],true,"testuser2");
+            var res = await sendBot(options[3],true,newUser);
             AssertNLP.contains(res, DBbotPhrase(Pkey.notEnoughAnswersForStat));
-            res = await sendBot(options[3]);
+
+             response = await createUser("יוחאי", "בן", "יא'");
+
+             options = getOptions(response[2]);
+
+            //good - statistic unknown user
+             res = await sendBot(options[3]);
+
             AssertNLP.contains(res, DBbotPhrase(Pkey.userStatistics));
 
         }

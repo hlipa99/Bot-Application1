@@ -261,13 +261,12 @@ namespace UnitTestProject1
             return res;
         }
 
-        public async  Task<List<string>> createUser(string name, string gender, string classVal)
+        public async  Task<List<string>> createUser(string name, string gender, string classVal,string user = null)
         {
-            var res = await sendBot("היי");
-            
-            res = await sendBot(name);
-            res = await sendBot(gender);
-            res = await sendBot(classVal);
+            var res = await sendBot("היי", user!=null, user);
+            res = await sendBot(name, user != null, user);
+            res = await sendBot(gender, user != null, user);
+            res = await sendBot(classVal, user != null, user);
             return res;
         }
 
