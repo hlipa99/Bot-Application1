@@ -29,39 +29,42 @@ namespace BotTests.Integration_Tests
             var res = await RandomCreateAccount();
             Assert.IsTrue(res.Count > 0);
             res = await chooseMainMenu(res);
-            
+
         }
 
         private async Task<List<string>> chooseMainMenu(List<string> res)
         {
-            var options = getOptions(res[2]);
+            var options = getOptions(res[res.Count - 1]);
 
             if (rand.Next(2) == 0)
             {
-                res = await sendBot(res[0]);
+                res = await sendBot(options[0]);
                 AssertNLP.contains(res, DBbotPhrase(Pkey.NotImplamented));
-                await chooseMainMenu(res);
+                res = await chooseMainMenu(res);
             }
             else if (rand.Next(2) == 0)
             {
-                res = await sendBot(res[1]);
+                res = await sendBot(options[1]);
                 AssertNLP.contains(res, DBbotPhrase(Pkey.letsLearn));
                 res = await LearningMenu(res);
             }
             else if (rand.Next(2) == 0)
             {
-                res = await sendBot(res[3]);
+                res = await sendBot(options[3]);
+                AssertNLP.contains(res, DBbotPhrase(Pkey.userStatistics));
+                res = await chooseMainMenu(res);
             }
             else if (rand.Next(2) == 0)
             {
                 res = await randomRequest();
                 await chooseMainMenu(res);
+                res = await chooseMainMenu(res);
             }
             else
             {
                 res = await sendBot(randomAnswer());
                 AssertNLP.contains(res, DBbotPhrase(Pkey.NotAnOption));
-                await chooseMainMenu(res);
+                res = await chooseMainMenu(res);
             }
 
             return res;
@@ -111,11 +114,113 @@ namespace BotTests.Integration_Tests
 
             AssertNLP.contains(res, DBbotPhrase(Pkey.areUReaddyToLearn));
             var categories = db.getAllCategory();
-            AssertNLP.contains(res, categories);
+            foreach(var c in categories)
+            {
+                AssertNLP.contains(res, c);
+            }
+            
             res = await sendBot(categories[rand.Next(categories.Length)]);
             AssertNLP.contains(res, DBbotPhrase(Pkey.letsLearn));
+            res = await answerQuestion(res);
+
             return res;
 
+        }
+
+        private async Task<List<string>> answerQuestion(List<string> res)
+        {
+
+            try
+            {
+                AssertNLP.contains(res, DBbotPhrase(Pkey.suggestBreak));
+                if (rand.Next(2) == 0)
+                {
+                    res = await sendBot("כן");
+
+                    return res;
+                }
+                else
+                {
+                    res = await sendBot("לא");
+                    AssertNLP.contains(res, DBbotPhrase(Pkey.letsContinueWitoutBreak));
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            if (rand.Next(2) == 0)
+            {
+                res = await randomRequest();
+                AssertNLP.contains(res, DBbotPhrase(Pkey.letsContinue));
+                res = await answerQuestion(res);
+            }
+            else if (rand.Next(2) == 0)
+            {
+                res = await sendBot("מספיק");
+                AssertNLP.contains(res, DBbotPhrase(Pkey.stopLearningSession));
+                if (rand.Next(2) == 0)
+                {
+                    res = await sendBot("כן");
+                    res = await chooseMainMenu(res);
+                }
+                else
+                {
+                    res = await sendBot("לא");
+                    res = await answerQuestion(res);
+                }
+                
+            }
+            else if (rand.Next(2) == 0)
+            {
+                res = await sendBot("תפריט ראשי");
+                AssertNLP.contains(res, DBbotPhrase(Pkey.areYouSureMenu));
+                if (rand.Next(2) == 0)
+                {
+                    res = await sendBot("כן");
+                    res = await LearningMenu(res);
+                }
+                else
+                {
+                    res = await sendBot("לא");
+                    res = await answerQuestion(res);
+                }
+            }
+            else if (rand.Next(2) == 0)
+            {
+                res = await trySwear(res);
+            }
+            else
+            {
+                res = await sendBot(randomAnswer());
+                AssertNLP.contains(res, DBbotPhrase(Pkey.wrongAnswer));
+                return await answerQuestion(res);
+            }
+
+            return res;
+
+        }
+
+        private async Task<List<string>> trySwear(List<string> res)
+        {
+            res = await sendBot("לך תזדיין");
+            AssertNLP.contains(res, DBbotPhrase(Pkey.swearResponse));
+
+            res = await sendBot("ילד מטומטם");
+            AssertNLP.contains(res, DBbotPhrase(Pkey.swearResponse));
+
+            res = await sendBot("בן שרמוטה");
+            AssertNLP.contains(res, DBbotPhrase(Pkey.swearResponse));
+            AssertNLP.contains(res, DBbotPhrase(Pkey.swearSuspention));
+
+            res = await sendBot("וןב בא נמשיך");
+            AssertNLP.contains(res, DBbotPhrase(Pkey.duringSwearSuspention));
+
+            res = await sendBot("סליחה");
+            AssertNLP.contains(res, DBbotPhrase(Pkey.letsContinue));
+            return res;
         }
 
         private async Task<List<string>> RandomCreateAccount()
@@ -153,7 +258,7 @@ namespace BotTests.Integration_Tests
             {
                 res = await sendBot(randomAnswer());
 
-                res = await sendBot("י\"ב");
+                res = await sendBot("יב");
             }
             else
             {
@@ -162,14 +267,13 @@ namespace BotTests.Integration_Tests
 
             AssertNLP.contains(res, DBbotPhrase(Pkey.ok));
 
-            Assert.IsTrue(res.Count == 2);
             return res;
         }
 
         private string randomAnswer()
         {
-            return ("להלהלה");
-            var len = rand.Next(500);
+            //return ("להלהלה");
+            var len = rand.Next(50);
             StringBuilder strBuild = new StringBuilder();
 
             for(int i =0;i<len;i++)

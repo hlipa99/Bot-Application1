@@ -64,7 +64,7 @@ namespace NLP.Controllers
 
         //}
 
-        public List<WorldObject> testAnalizer(string inputText, out string log)
+        public List<WorldObject> testAnalizer(string inputText, out string log, string context = null)
         {
             log = "";
             //    var a = MorfAnalizer.createSentence(inputText);
@@ -72,7 +72,14 @@ namespace NLP.Controllers
 
             //  sa.findGufContext(sen);
             log += "intent:" + getUserIntent(inputText, "QuestionDialog") + Environment.NewLine;
-            return Analize(inputText);
+            if (context == null)
+            {
+                return Analize(inputText);
+            }
+            else
+            {
+                return Analize(inputText,context);
+            }
         }
 
         public virtual int matchStrings(string target, string matchString)

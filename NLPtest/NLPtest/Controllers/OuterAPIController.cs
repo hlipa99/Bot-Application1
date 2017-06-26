@@ -135,9 +135,11 @@ namespace NLP.Controllers
     {
         try
         {
+                if(text.Contains("\"") ) return text;
                 text = text.Trim();
                 if (text.Trim() != "" && text != null)
                 {
+                    text = text.Replace("\"", "");
                     WebRequest request = WebRequest.Create("http://xspell.ga/?token=57d1b5fd8f45189c136d0b99c628d4e1&check=" + text);
                     request.Timeout = 2000;
                     string responseFromServer = "";

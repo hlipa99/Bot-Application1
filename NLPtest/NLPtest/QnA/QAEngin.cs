@@ -130,7 +130,7 @@
                  var userEntities = userAnswer.Distinct();
                  var systemEntities = systemAnswer.Distinct();
                  var systemEntitisFiltered = systemAnswer.Where(o => o is EntityObject);
-                 if (systemEntitisFiltered.Count() > 1)
+                 if (systemEntitisFiltered.Count() >= 1)
                  {
                      systemEntities = systemEntitisFiltered;
                  }

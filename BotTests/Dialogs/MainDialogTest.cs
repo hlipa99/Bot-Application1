@@ -89,7 +89,7 @@ namespace UnitTestProject1
             AssertNLP.contains(response, DBbotPhrase(Pkey.MenuLearn));
             AssertNLP.contains(response, DBbotPhrase(Pkey.MenuNotLearn));
 
-            var options = getOptions(response[2]);
+            var options = getOptions(response[1]);
 
             //good - statistic unknown user
             var res = await sendBot(options[3],true,newUser);
@@ -97,7 +97,7 @@ namespace UnitTestProject1
 
              response = await createUser("יוחאי", "בן", "יא'");
 
-             options = getOptions(response[2]);
+             options = getOptions(response[1]);
 
             //good - statistic unknown user
              res = await sendBot(options[3]);
