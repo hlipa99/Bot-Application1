@@ -15,7 +15,7 @@ namespace Model.Models
         public string answer;
         private int need;
 
-        public int Need { get => need; set => need = value; }
+        public int Need { get ; set; }
 
         public void addFeedback(AnswerFeedback f)
         {

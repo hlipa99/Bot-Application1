@@ -158,57 +158,61 @@ namespace NLP.NLP
 
             do {
                 original = resualtObjList.ToArray();
-                for(int k =0;k<= tc.TEMPLATE_RANGE; k++) { 
-                for (int i = 1; i <= 3; i++)
-                {
-                        for (int j = resualtObjList.Count - i; j >= 0; j--)
-                        {
-                            if (i == 1)
+                for(int k =0;k<= tc.TEMPLATE_RANGE; k++) {
+                    if (k == 4)
+                    {
+                        var a = 1;
+                    }
+                    for (int i = 1; i <= 3; i++)
+                    {
+                            for (int j = resualtObjList.Count - i; j >= 0; j--)
                             {
-                                //template of 1 words
-                                var testPart = new ITemplate[] { resualtObjList[j] };
-                                ITemplate o;
-                                if ((o = tc.checkObjects(testPart,k)) != null)
+                                if (i == 1)
                                 {
-                                    resualtObjList.RemoveAt(j);
-                                    resualtObjList.Insert(j, o);
-                                    k = 0;
+                                    //template of 1 words
+                                    var testPart = new ITemplate[] { resualtObjList[j] };
+                                    ITemplate o;
+                                    if ((o = tc.checkObjects(testPart,k)) != null)
+                                    {
+                                        resualtObjList.RemoveAt(j);
+                                        resualtObjList.Insert(j, o);
+                                        k = 0;
+                                    }
                                 }
-                            }
-                            else if (i == 2)
-                            {
-                                //template of 2 words
-                                var testPart = new ITemplate[] { resualtObjList[j], resualtObjList[j + 1] };
-                                ITemplate o;
-                                if ((o = tc.checkObjects(testPart,k)) != null)
+                                else if (i == 2)
                                 {
-                                    resualtObjList.RemoveAt(j);
-                                    resualtObjList.RemoveAt(j);
-                                    resualtObjList.Insert(j, o);
-                                    k = 0;
-                                    //      j = j + 1;
-                                }
+                                    //template of 2 words
+                                    var testPart = new ITemplate[] { resualtObjList[j], resualtObjList[j + 1] };
+                                    ITemplate o;
+                                    if ((o = tc.checkObjects(testPart,k)) != null)
+                                    {
+                                        resualtObjList.RemoveAt(j);
+                                        resualtObjList.RemoveAt(j);
+                                        resualtObjList.Insert(j, o);
+                                        k = 0;
+                                        //      j = j + 1;
+                                    }
 
-                            }
-
-                            else
-                            {
-                                //template of 3 words
-                                var testPart = new ITemplate[] { resualtObjList[j], resualtObjList[j + 1], resualtObjList[j + 2] };
-                                ITemplate o;
-                                if ((o = tc.checkObjects(testPart,k)) != null)
-                                {
-                                    resualtObjList.RemoveAt(j);
-                                    resualtObjList.RemoveAt(j);
-                                    resualtObjList.RemoveAt(j);
-                                    resualtObjList.Insert(j, o);
-                                    k = 0;
-                                    //   j = j + 2;
                                 }
 
+                                else
+                                {
+                                    //template of 3 words
+                                    var testPart = new ITemplate[] { resualtObjList[j], resualtObjList[j + 1], resualtObjList[j + 2] };
+                                    ITemplate o;
+                                    if ((o = tc.checkObjects(testPart,k)) != null)
+                                    {
+                                        resualtObjList.RemoveAt(j);
+                                        resualtObjList.RemoveAt(j);
+                                        resualtObjList.RemoveAt(j);
+                                        resualtObjList.Insert(j, o);
+                                        k = 0;
+                                        //   j = j + 2;
+                                    }
+
+                                }
                             }
                         }
-                    }
                    
                 }
 

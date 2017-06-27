@@ -12,7 +12,7 @@ namespace NLP.WorldObj
     {
         int value;
 
-        public int Value { get => value; set => this.value = value; }
+        public int Value { get ; set ; }
 
         public override IWorldObject Clone()
         {

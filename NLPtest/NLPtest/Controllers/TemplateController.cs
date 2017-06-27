@@ -12,7 +12,7 @@ namespace NLP.Controllers
 {
     class TemplateController
     {
-        public int TEMPLATE_RANGE = 10;
+        public int TEMPLATE_RANGE = 4;
 
         HebTemplate[] templateList;
         private string[] templatsStrings;
@@ -45,6 +45,7 @@ namespace NLP.Controllers
                 new HebTemplate(new ITemplate[] { new WordObject("",eventWord) },new EventObject("0"),1),
 
 
+
                 
                 //two object template
 
@@ -70,7 +71,7 @@ namespace NLP.Controllers
 
                  //לא עושה
                 new HebTemplate(new ITemplate[] {new WordObject("", negationWord) , new WorldObject("")},
-                 negate(new VerbObject("1")),2),
+                 negate(new VerbObject("1")),4),
 
                ////לא רחוק
                //      new HebTemplate(new ITemplate[] {new WordObject("", negationWord) , new AdjObject("")},

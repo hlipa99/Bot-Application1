@@ -34,6 +34,8 @@ namespace BotTests
             }
             catch (Exception ex)
             {
+
+
             }
         }
 

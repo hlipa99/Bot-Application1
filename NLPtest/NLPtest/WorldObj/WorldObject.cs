@@ -175,7 +175,7 @@ namespace NLP.WorldObj
         {
             if (templateType == null) return false;
             else if (type == templateType) return true;
-            else return instanceOf(type, templateType.BaseType);
+            else return instanceOf(type.BaseType, templateType);
         }
 
 

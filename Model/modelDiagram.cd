@@ -11,8 +11,7 @@
     <Position X="1.25" Y="3.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>BQAABAEAAAAAAAAEgAAAAAAACAAAAIwEAAQAAAAACAA=</HashCode>
-      <FileName>dataBase\QuestionS.cs</FileName>
-      <NewMemberFileName>dataBase\Question.cs</NewMemberFileName>
+      <FileName>dataBase\Question.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
@@ -20,48 +19,30 @@
     <Position X="3" Y="4" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAQAAAAAAAAAAAAEgAAAAIAAAAAEAIAEAAAAAAAAAAQ=</HashCode>
-      <FileName>dataBase\SubQuestionS.cs</FileName>
-      <NewMemberFileName>dataBase\SubQuestion.cs</NewMemberFileName>
+      <FileName>dataBase\SubQuestion.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Model.dataBase.User" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="6.5" Y="4" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AgIAAIAAAAAAAAAAgAAAAAgABAAAAAAAAQAAAAAAAAA=</HashCode>
-      <FileName>dataBase\UsersS.cs</FileName>
-      <NewMemberFileName>dataBase\User.cs</NewMemberFileName>
+      <HashCode>AgIAAIAACCAAAAgAgAAAAAgABAAEAABARQAgAAAQAAA=</HashCode>
+      <FileName>dataBase\User.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Model.dataBase.DataBaseController">
     <Position X="8.5" Y="4" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAAAEAAAIAACAAEAAAAAAFkIAAAAAARAQBAAABIAwBQ=</HashCode>
+      <HashCode>AAQAEAAAIABCAAAABIAAiFlIAAAIAABAQBAAABIC4BQ=</HashCode>
       <FileName>dataBase\DataBaseController.cs</FileName>
     </TypeIdentifier>
-  </Class>
-  <Class Name="Model.Models.AnswerFeedback">
-    <Position X="1.25" Y="2" Width="2.25" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAACAAAAAAAAAIAAAAAAAAAAAAAAEAAAAAACA=</HashCode>
-      <FileName>Models\AnswerFeedback.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Model.Models.StudySession" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="4.75" Y="4" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>EAAAEBAAAAAAAAAAAAAACAAACAgAAIAAAACAAAAACBA=</HashCode>
-      <FileName>Models\StudySession.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Model.dataBase.entity">
     <Position X="8.25" Y="1.75" Width="2" />
     <TypeIdentifier>
-      <HashCode>gAAAAAAAAAAAAAAAgAAAAAAAAgAAAgAAAAAAAAAAQAA=</HashCode>
-      <FileName>dataBase\entityS.cs</FileName>
-      <NewMemberFileName>dataBase\entity.cs</NewMemberFileName>
+      <HashCode>gAAAAAAAAAAAAAAAgAAAAAAAAgAAAgAAAAAAEAAAQAA=</HashCode>
+      <FileName>dataBase\entity.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
@@ -71,6 +52,21 @@
       <HashCode>AAACBAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAACAAAAAA=</HashCode>
       <FileName>dataBase\botphrase.cs</FileName>
     </TypeIdentifier>
+  </Class>
+  <Class Name="Model.Models.AnswerFeedback">
+    <Position X="1.25" Y="2" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAABABIAAAAAAAAAAAAAAAAAEAAAiI=</HashCode>
+      <FileName>Models\AnswerFeedback.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Model.Models.StudySession" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAEBAAAAAAAAAAAAAgCAAACAgAAIAQAACAEAAACBA=</HashCode>
+      <FileName>Models\StudySession.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Interface Name="Model.Models.IQuestion">
     <Position X="1.25" Y="4.5" Width="1.5" />
@@ -89,7 +85,7 @@
   <Interface Name="Model.Models.IUser">
     <Position X="6.5" Y="4.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AgIAAIAAAAAAAAAAAAAAAAgABAAAAAAAAQAAAAAAAAA=</HashCode>
+      <HashCode>AgIAAIAAACAAAAAAAAAAAAgABAAAAABARQAgAAAQAAA=</HashCode>
       <FileName>Interfaces\IUser.cs</FileName>
     </TypeIdentifier>
   </Interface>

@@ -92,6 +92,6 @@ namespace Model.Models
         }
 
         public DateTime startTime { get ; set ; }
-        public int SwearCounter { get => swearCounter; set => swearCounter = value; }
+        public int SwearCounter { get ; set ; }
     }
 }
